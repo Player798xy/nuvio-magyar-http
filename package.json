@@ -1,0 +1,18 @@
+{
+  "name": "nuvio-magyar-http",
+  "version": "2.0.0",
+  "description": "Magyar HTTP Streaming Addon Nuvio & Stremio kliensekhez (14 magyar forrás + beépített HTTP/HLS Proxy Vercelre)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node scripts/verify.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

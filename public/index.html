@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🇭🇺 Nuvio Magyar HTTP Streaming Addon (Vercel)</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #131b2e;
+      --border: #23304d;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --hu-red: #ef4444;
+      --hu-green: #22c55e;
+      --accent: #3b82f6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top, #172554 0%, var(--bg) 55%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+      line-height: 1.5;
+    }
+    .container { max-width: 880px; margin: 0 auto; }
+    .hero {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1.75rem;
+      background: rgba(19, 27, 46, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    }
+    .flag-bar {
+      height: 6px;
+      width: 140px;
+      margin: 0 auto 1rem;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ce2939 0%, #ce2939 33%, #ffffff 33%, #ffffff 66%, #477050 66%, #477050 100%);
+    }
+    h1 { font-size: 1.85rem; margin-bottom: 0.5rem; }
+    .subtitle { color: var(--muted); font-size: 0.98rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .card h2 {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 0.75rem;
+    }
+    .prov-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.7rem 0.9rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .prov-item:hover { border-color: var(--accent); background: rgba(59, 130, 246, 0.08); }
+    .prov-item input { width: 17px; height: 17px; accent-color: var(--hu-green); }
+    .controls-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    label.field-label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.4rem; }
+    select, input[type="text"] {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0b1120;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    .url-box {
+      background: #070b14;
+      border: 1px solid var(--border);
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 0.88rem;
+      word-break: break-all;
+      color: #60a5fa;
+      margin-bottom: 1rem;
+    }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    button, a.btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.72rem 1.25rem;
+      border-radius: 10px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.93rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.1s, opacity 0.15s;
+    }
+    button:active, a.btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--hu-green); color: #052e16; }
+    .btn-secondary { background: var(--accent); color: #fff; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .test-output {
+      margin-top: 1rem;
+      background: #070b14;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      max-height: 320px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 0.83rem;
+      white-space: pre-wrap;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <div class="flag-bar"></div>
+      <h1>Nuvio Magyar HTTP Streaming Addon</h1>
+      <p class="subtitle">12 magyar HTTP videóforrás • Közvetlen MP4 &amp; HLS kicsomagolás • Beépített Vercel Stream &amp; HLS Proxy</p>
+    </div>
+
+    <div class="card">
+      <h2>📡 Magyar HTTP Források Kiválasztása</h2>
+      <div id="providersGrid" class="grid"></div>
+    </div>
+
+    <div class="card">
+      <h2>⚙️ Lejátszás &amp; Vercel HTTP Proxy Beállítások</h2>
+      <div class="controls-row">
+        <div>
+          <label class="field-label" for="proxyMode">Beépített Vercel HTTP/HLS Proxy</label>
+          <select id="proxyMode">
+            <option value="auto" selected>Automatikus (Élő TV + Geo-védett streamekhez)</option>
+            <option value="always">Mindig aktív (Minden MP4 &amp; HLS stream Vercel proxyn át)</option>
+            <option value="off">Kikapcsolva (Közvetlen kliensoldali lejátszás + fejlécek)</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label" for="minQuality">Minimum Felbontás</label>
+          <select id="minQuality">
+            <option value="0" selected>Összes felbontás (1080p, 720p, 480p, 360p)</option>
+            <option value="720">Csak HD (720p és 1080p)</option>
+            <option value="1080">Csak Full HD (1080p)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🚀 Telepítés Nuvio &amp; Stremio Kliensbe</h2>
+      <div id="manifestUrlBox" class="url-box"></div>
+      <div class="btn-row">
+        <button class="btn-primary" id="copyBtn">📋 Manifest URL Másolása (Nuvio-hoz)</button>
+        <a class="btn btn-secondary" id="stremioBtn" href="#">⚡ Megnyitás Stremio / Nuvio Appban</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🧪 Élő Stream Kereső Tesztelő</h2>
+      <div class="controls-row" style="margin-bottom: 0.85rem;">
+        <div>
+          <label class="field-label" for="testTarget">Teszt Тartalom</label>
+          <select id="testTarget">
+            <option value="movie/tt0179955">🎬 Macskafogó (1986 - Magyar film)</option>
+            <option value="movie/tt0499549">🎬 Avatar (2009 - Szinkronos film)</option>
+            <option value="movie/tt0257290">🎬 Üvegtigris (2001 - Magyar vígjáték)</option>
+            <option value="series/tt3032476:1:1">📺 Better Call Saul S01E01 (Sorozat)</option>
+            <option value="movie/mediaklikk-live-m4">🔴 M4 Sport Élő (1080p FHD HLS)</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-outline" id="runTestBtn">▶️ Streamek Lekérdezése Most</button>
+      <div id="testOutput" class="test-output"></div>
+    </div>
+  </div>
+
+  <script>
+    const PROVIDERS = [
+      { id: 'videa', name: 'Videa.hu (Direct MP4)' },
+      { id: 'netmozi', name: 'NetMozi.com (Multi-Hoster)' },
+      { id: 'hdmozi', name: 'HDMozi.hu (1080p RPM HLS)' },
+      { id: 'filmezek', name: 'Filmezek.com (Videa / OK.ru / VOE)' },
+      { id: 'onlinefilmek', name: 'OnlineFilmekIngyen (DooPlay)' },
+      { id: 'sorozatoknet', name: 'Sorozatok.net (Sorozat adatbázis)' },
+      { id: 'mediaklikk', name: 'MédiaKlikk / MTVA (Élő TV & Archívum)' },
+      { id: 'indavideo', name: 'Indavideo.hu (Direct MP4)' },
+      { id: 'videakid', name: 'Videakid.hu (Mese & Családi)' },
+      { id: 'jobbmintatv', name: 'JobbMintATV (Filmek & Sorozatok)' },
+      { id: 'dmdamedia', name: 'DMDAMedia.hu (Szinkronos tárhely)' },
+      { id: 'mesefilm', name: 'MeseKincstár & MeseFilmek.hu' }
+    ];
+
+    const grid = document.getElementById('providersGrid');
+    const proxyModeEl = document.getElementById('proxyMode');
+    const minQualityEl = document.getElementById('minQuality');
+    const manifestBox = document.getElementById('manifestUrlBox');
+    const stremioBtn = document.getElementById('stremioBtn');
+
+    PROVIDERS.forEach(p => {
+      const lbl = document.createElement('label');
+      lbl.className = 'prov-item';
+      lbl.innerHTML = `<input type="checkbox" value="${p.id}" checked /> <span>${p.name}</span>`;
+      lbl.querySelector('input').addEventListener('change', updateUrls);
+      grid.appendChild(lbl);
+    });
+
+    proxyModeEl.addEventListener('change', updateUrls);
+    minQualityEl.addEventListener('change', updateUrls);
+
+    function getEncodedConfig() {
+      const checked = [...grid.querySelectorAll('input:checked')].map(i => i.value);
+      const px = proxyModeEl.value;
+      const q = parseInt(minQualityEl.value, 10) || 0;
+      if (checked.length === PROVIDERS.length && px === 'auto' && q === 0) {
+        return '';
+      }
+      const json = JSON.stringify({ p: checked, px, q });
+      return btoa(json).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    function updateUrls() {
+      const cfg = getEncodedConfig();
+      const base = window.location.origin;
+      const manifestUrl = cfg ? `${base}/${cfg}/manifest.json` : `${base}/manifest.json`;
+      manifestBox.textContent = manifestUrl;
+      stremioBtn.href = manifestUrl.replace(/^https?:\/\//, 'stremio://');
+    }
+
+    document.getElementById('copyBtn').addEventListener('click', async () => {
+      await navigator.clipboard.writeText(manifestBox.textContent);
+      const btn = document.getElementById('copyBtn');
+      const old = btn.textContent;
+      btn.textContent = '✅ Másolva a vágólapra!';
+      setTimeout(() => { btn.textContent = old; }, 2000);
+    });
+
+    document.getElementById('runTestBtn').addEventListener('click', async () => {
+      const out = document.getElementById('testOutput');
+      out.style.display = 'block';
+      out.textContent = '⏳ Keresés a magyar HTTP forrásokon...';
+      const target = document.getElementById('testTarget').value;
+      const cfg = getEncodedConfig();
+      const url = cfg ? `/stream/${target}.json` : `/stream/${target}.json`;
+      const fullUrl = cfg ? `/${cfg}/stream/${target}.json` : `/stream/${target}.json`;
+      try {
+        const t0 = performance.now();
+        const r = await fetch(fullUrl);
+        const data = await r.json();
+        const dt = ((performance.now() - t0) / 1000).toFixed(2);
+        out.textContent = `✅ Találatok: ${(data.streams || []).length} db (${dt} mp)\n\n` + JSON.stringify(data.streams, null, 2);
+      } catch (e) {
+        out.textContent = '❌ Hiba: ' + e.message;
+      }
+    });
+
+    updateUrls();
+  </script>
+</body>
+</html>
