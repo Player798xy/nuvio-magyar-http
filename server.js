@@ -141,7 +141,7 @@ async function handleMeta(req, res) {
   try {
     const metaObj = await getMeta(type, rawId);
     if (metaObj) {
-      return res.json({ meta: metaObj });
+      return res.json(metaObj.meta ? metaObj : { meta: metaObj });
     }
     res.json({ meta: null });
   } catch (err) {

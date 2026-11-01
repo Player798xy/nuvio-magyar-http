@@ -619,7 +619,7 @@ async function searchAndScrapeNetMozi(cleanTitle, targetYear, isSeries, season, 
           const hashMatch = loc.match(/(?:video\/|v\/)([a-zA-Z0-9]+)/);
           if (hashMatch) {
             const iData = await extractIndavideoStreams(hashMatch[1]);
-            const iSources = iData?.sources || [];
+            const iSources = iData?.streams || iData?.sources || [];
             if (iSources.length > 0) {
               for (const is of iSources) {
                 const qualLabel = is.height >= 1080 ? '1080p FHD' : is.height >= 720 ? '720p HD' : `${is.height}p`;
@@ -647,12 +647,6 @@ async function searchAndScrapeNetMozi(cleanTitle, targetYear, isSeries, season, 
             streams.push(...okStreams);
             return;
           }
-        }
-
-        // 4. Normalized Hoster Streams (Filemoon, VOE, Vidmoly, StreamRuby, Vinovo, Vidara, Mixdrop, etc.)
-        const hosterStream = formatNetMoziStream(loc, cleanTitle);
-        if (hosterStream) {
-          streams.push(hosterStream);
         }
       } catch (err) {
         // Individual route failed

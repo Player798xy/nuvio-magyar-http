@@ -4,6 +4,7 @@
  */
 
 const { extractOkRuStreams, resolveVideaEmbed } = require('./filmezek');
+const { extractIndavideoStreams } = require('./indavideo');
 
 function normalize(str) {
   return (str || '')
@@ -298,17 +299,38 @@ async function scrapeOnlineFilmek(meta) {
           if (vSources.length > 0) continue;
         }
 
-        // 2. Check if OK.ru embed -> decode to direct MP4/HLS
+        // 2. Check if Indavideo embed -> decode to direct MP4
+        if (embedUrl.includes('indavideo.hu')) {
+          const iMatch = embedUrl.match(/(?:video\/|v\/)([a-zA-Z0-9]+)/);
+          if (iMatch) {
+            const iData = await extractIndavideoStreams(iMatch[1]);
+            for (const is of (iData?.streams || [])) {
+              const qualLabel = is.height >= 1080 ? '1080p FHD' : is.height >= 720 ? '720p HD' : `${is.height}p`;
+              streams.push({
+                name: `[HU] OnlineFilmek (Indavideo) ${qualLabel}`,
+                title: `${postTitle || hu}\n🇭🇺 OnlineFilmekIngyen (Indavideo) • ${qualLabel} • Szinkron`,
+                url: is.url,
+                quality: is.height >= 1080 ? '1080p' : is.height >= 720 ? '720p' : '480p',
+                height: is.height,
+                source: 'onlinefilmek',
+                behaviorHints: { bingeGroup: `hu-onlinefilmek-indavideo-${qualLabel}` }
+              });
+            }
+          }
+          continue;
+        }
+
+        // 3. Check if OK.ru embed -> decode to direct MP4/HLS
         if (embedUrl.includes('ok.ru/videoembed/') || embedUrl.includes('ok.ru/video/')) {
           const okStreams = await extractOkRuStreams(embedUrl, 'OnlineFilmek');
           streams.push(...okStreams);
           continue;
         }
 
-        // 3. Direct video file (.mp4, .m3u8)
+        // 4. Direct video file (.mp4, .m3u8) only — never return HTML iframe embeds that cause infinite buffering in Nuvio
         if (embedUrl.includes('.mp4') || embedUrl.includes('.m3u8')) {
           streams.push({
-            name: `[HU] OnlineFilmek 720p`,
+            name: `[HU] OnlineFilmek 720p HD`,
             title: `${postTitle || hu}\n🇭🇺 OnlineFilmekIngyen • 720p HD • Szinkron`,
             url: embedUrl,
             quality: '720p',
@@ -317,9 +339,6 @@ async function scrapeOnlineFilmek(meta) {
           });
           continue;
         }
-
-        // 4. Any Hoster embed (VOE, Filemoon, Vidmoly, StreamRuby, Streamwish, Mixdrop, etc.)
-        streams.push(formatHosterStream(embedUrl, postTitle || hu, 'OnlineFilmek'));
       }
 
       if (streams.length > 0) break;

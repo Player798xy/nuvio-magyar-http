@@ -263,15 +263,29 @@ async function getStreams(type, rawId, config = {}) {
     });
   }
 
-  // Deduplicate by stream URL and apply resolution filter
+  // Deduplicate by stream URL, reject non-direct HTML embed hosters, and apply resolution filter
   const seenUrls = new Set();
   const uniqueStreams = [];
   const activeQualities = config.qualities || config.resolutions;
   const hasQualityFilter = Array.isArray(activeQualities) && activeQualities.length > 0 && activeQualities.length < 4;
   const qualSet = hasQualityFilter ? new Set(activeQualities.map(q => String(q).toLowerCase())) : null;
 
+  const HTML_EMBED_PATTERNS = [
+    'filemoon.', 'voe.sx', 'voe.to', 'vidmoly.', 'streamwish.', 'streamruby.', 'rubystream.',
+    'dood.', 'd000d.', 'mixdrop.', 'byse', 'vinovo.', 'vidara.', 'luluvdo.', 'vidoza.',
+    'speedfiles.', 'supervideo.', 'embed.indavideo.hu/player', 'videa.hu/player'
+  ];
+
   for (const s of allStreams) {
     if (!s || !s.url || seenUrls.has(s.url)) continue;
+    const urlLower = String(s.url).toLowerCase();
+    // Reject webpage iframe embed URLs that cause infinite buffering in Nuvio's native video player
+    if (
+      HTML_EMBED_PATTERNS.some(pat => urlLower.includes(pat)) ||
+      (!urlLower.includes('.mp4') && !urlLower.includes('.m3u8') && !urlLower.includes('videa.hu/static/video/') && !urlLower.includes('videakid.hu/static/video/') && !urlLower.includes('indavideo.hu/') && !urlLower.includes('okcdn.ru') && !urlLower.includes('vkuser') && (urlLower.includes('/e/') || urlLower.includes('/embed-')))
+    ) {
+      continue;
+    }
     seenUrls.add(s.url);
 
     if (qualSet) {

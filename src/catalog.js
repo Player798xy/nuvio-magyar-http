@@ -776,8 +776,46 @@ async function getMeta(type, id) {
     } catch (e) {}
   }
 
-  // If standard IMDb id, fetch from Cinemeta and decorate with Hungarian title
+  // If standard IMDb id, check curated Hungarian classic series episodes first, then Cinemeta
   if (id.startsWith('tt')) {
+    const HUNGARIAN_CLASSIC_SERIES_IDS = new Set([
+      'tt0154077', 'tt0861751', 'tt0129719', 'tt0056789', 'tt0136650',
+      'tt1225872', 'tt0167595', 'tt0168342', 'tt0166931', 'tt0168343'
+    ]);
+
+    if (type === 'series' && HUNGARIAN_CLASSIC_SERIES_IDS.has(id)) {
+      try {
+        const { getSeriesEpisodes } = require('./utils/meta');
+        const seriesData = await getSeriesEpisodes(id);
+        if (seriesData && seriesData.seasons) {
+          const allVids = Object.values(seriesData.seasons || {}).flat().map(e => ({
+            id: e.id,
+            title: e.name,
+            name: e.name,
+            season: e.season,
+            episode: e.episode,
+            overview: e.overview,
+            thumbnail: e.thumbnail
+          }));
+          if (allVids.length > 0) {
+            return {
+              meta: {
+                id: seriesData.id,
+                type: 'series',
+                name: seriesData.name,
+                poster: seriesData.poster,
+                background: seriesData.background,
+                description: seriesData.description,
+                releaseInfo: seriesData.year,
+                genres: seriesData.genres,
+                videos: allVids
+              }
+            };
+          }
+        }
+      } catch (e) {}
+    }
+
     try {
       let res = await fetch(`https://v3-cinemeta.strem.io/meta/${type}/${id}.json`, {
         signal: AbortSignal.timeout(3500)

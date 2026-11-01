@@ -1,6 +1,8 @@
 const { cfRequest } = require('../utils/http');
-const { decodeHunter, unpackPacker, decodeVoePayload } = require('../utils/crypto_decoders');
+const { decodeHunter } = require('../utils/crypto_decoders');
 const { extractVideaStreams } = require('./videa');
+const { extractIndavideoStreams } = require('./indavideo');
+const { extractOkRuStreams } = require('./filmezek');
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
@@ -36,6 +38,10 @@ async function getSorozatokIndex() {
   return searchIndexCache || [];
 }
 
+/**
+ * Only extracts non-IP-locked direct streams (Videa, Videakid, Indavideo, OK.ru)
+ * Avoids VOE/Filemoon/Streamwish/Vidmoly server-IP-bound tokens that cause infinite buffering on client devices.
+ */
 async function resolveHosterStream(rawUrl, epLabel) {
   const streams = [];
   if (!rawUrl || typeof rawUrl !== 'string') return streams;
@@ -43,7 +49,7 @@ async function resolveHosterStream(rawUrl, epLabel) {
   const lower = url.toLowerCase();
 
   try {
-    // 1. Videa / Videakid
+    // 1. Videa / Videakid (Direct non-IP-bound MP4)
     if (lower.includes('videa.hu') || lower.includes('videakid.hu')) {
       const vMatch = url.match(/[?&]v=([a-zA-Z0-9]{16})/) || url.match(/-([a-zA-Z0-9]{16})(?:$|[/?#])/);
       if (vMatch) {
@@ -66,95 +72,35 @@ async function resolveHosterStream(rawUrl, epLabel) {
       return streams;
     }
 
-    // 2. VOE
-    if (
-      lower.includes('voe.sx') ||
-      lower.includes('voe.') ||
-      lower.includes('shanelocaldog') ||
-      lower.includes('walterprettytheir') ||
-      lower.includes('yodelswart') ||
-      lower.includes('launchreliant') ||
-      lower.includes('diananatureforeign')
-    ) {
-      let currentUrl = url;
-      let html = await fetch(currentUrl, {
-        headers: { 'User-Agent': UA, Referer: 'https://voe.sx/' },
-        signal: AbortSignal.timeout(6000)
-      }).then((r) => r.text());
-
-      const jsRedirect = html.match(/window\.location\.href\s*=\s*['"](https?:\/\/[^'"]+)['"]/i);
-      if (jsRedirect) {
-        currentUrl = jsRedirect[1];
-        html = await fetch(currentUrl, {
-          headers: { 'User-Agent': UA, Referer: url },
-          signal: AbortSignal.timeout(6000)
-        }).then((r) => r.text());
-      }
-
-      const jsonScriptMatch = html.match(/<script type="application\/json">\["([^"]+)"\]<\/script>/i);
-      if (jsonScriptMatch) {
-        const data = decodeVoePayload(jsonScriptMatch[1]);
-        if (data) {
-          if (data.source && data.source.startsWith('http')) {
-            streams.push({
-              name: `[HU] Sorozatok.net 1080p FHD`,
-              title: `${epLabel}\n🇭🇺 Sorozatok.net (VOE HLS) • 1080p FHD`,
-              url: data.source,
-              quality: '1080p',
-              height: 1080,
-              source: 'sorozatoknet',
-              behaviorHints: { bingeGroup: 'hu-sorozatoknet-1080p' }
-            });
-          }
-          if (data.direct_access_url && data.direct_access_url.startsWith('http')) {
-            streams.push({
-              name: `[HU] Sorozatok.net 720p HD`,
-              title: `${epLabel}\n🇭🇺 Sorozatok.net (VOE MP4) • 720p HD`,
-              url: data.direct_access_url,
-              quality: '720p',
-              height: 720,
-              source: 'sorozatoknet',
-              behaviorHints: { bingeGroup: 'hu-sorozatoknet-720p' }
-            });
-          }
+    // 2. Indavideo (Direct non-IP-bound MP4)
+    if (lower.includes('indavideo.hu')) {
+      const iMatch = url.match(/(?:video\/|v\/)([a-zA-Z0-9]+)/);
+      if (iMatch) {
+        const iData = await extractIndavideoStreams(iMatch[1]);
+        for (const is of (iData?.streams || [])) {
+          const qualLabel = is.height >= 1080 ? '1080p FHD' : is.height >= 720 ? '720p HD' : `${is.height}p`;
+          streams.push({
+            name: `[HU] Sorozatok.net ${qualLabel}`,
+            title: `${epLabel}\n🇭🇺 Sorozatok.net (Indavideo) • ${qualLabel}`,
+            url: is.url,
+            quality: is.height >= 1080 ? '1080p' : is.height >= 720 ? '720p' : '480p',
+            height: is.height,
+            source: 'sorozatoknet',
+            behaviorHints: { bingeGroup: `hu-sorozatoknet-${qualLabel}` }
+          });
         }
       }
       return streams;
     }
 
-    // 3. Packer hosters (Filemoon, Streamwish, Vidmoly, Vidoza, Goodstream, etc.)
-    const r = await fetch(url, {
-      headers: { 'User-Agent': UA, Referer: url },
-      signal: AbortSignal.timeout(6000)
-    });
-    if (r.ok) {
-      const html = await r.text();
-      const unpacked = unpackPacker(html) || html;
-      const m3u8Match = unpacked.match(/(https?:\/\/[^\s"'<>\\]+\.m3u8[^\s"'<>\\]*)/i);
-      if (m3u8Match) {
-        streams.push({
-          name: `[HU] Sorozatok.net 1080p FHD`,
-          title: `${epLabel}\n🇭🇺 Sorozatok.net (HLS) • 1080p FHD`,
-          url: m3u8Match[1].replace(/\\+/g, ''),
-          quality: '1080p',
-          height: 1080,
-          source: 'sorozatoknet',
-          behaviorHints: { bingeGroup: 'hu-sorozatoknet-1080p' }
-        });
-      } else {
-        const mp4Match = unpacked.match(/(https?:\/\/[^\s"'<>\\]+\.mp4[^\s"'<>\\]*)/i);
-        if (mp4Match && !mp4Match[1].includes('Big_Buck_Bunny')) {
-          streams.push({
-            name: `[HU] Sorozatok.net 720p HD`,
-            title: `${epLabel}\n🇭🇺 Sorozatok.net (MP4) • 720p HD`,
-            url: mp4Match[1].replace(/\\+/g, ''),
-            quality: '720p',
-            height: 720,
-            source: 'sorozatoknet',
-            behaviorHints: { bingeGroup: 'hu-sorozatoknet-720p' }
-          });
-        }
+    // 3. OK.ru (Direct MP4/HLS)
+    if (lower.includes('ok.ru')) {
+      const okStreams = await extractOkRuStreams(url, 'Sorozatok.net');
+      for (const os of okStreams) {
+        os.source = 'sorozatoknet';
+        streams.push(os);
       }
+      return streams;
     }
   } catch {}
   return streams;

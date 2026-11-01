@@ -306,12 +306,6 @@ async function scrapeDMDAMedia(meta) {
                 continue;
               }
             }
-
-            // 3. Supported hosters (Filemoon, Byse, VOE, Vidmoly, StreamRuby, etc.)
-            const hosterStream = formatDMDAMediaHosterStream(iframeSrc, cleanItemTitle);
-            if (hosterStream) {
-              streams.push(hosterStream);
-            }
           }
         } catch (e) {}
       }));

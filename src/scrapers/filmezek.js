@@ -227,34 +227,6 @@ async function scrapeFilmezek(meta) {
           }
           continue;
         }
-
-        // C. Other video hosters (Filemoon, VOE, Streamruby, Vidmoly, etc.)
-        const locLower = embed.toLowerCase();
-        let hosterName = null;
-        if (locLower.includes('filemoon')) hosterName = 'Filemoon';
-        else if (locLower.includes('voe.sx')) hosterName = 'VOE';
-        else if (locLower.includes('vidmoly')) hosterName = 'Vidmoly';
-        else if (locLower.includes('streamruby') || locLower.includes('rubystream')) hosterName = 'StreamRuby';
-        else if (locLower.includes('streamwish')) hosterName = 'Streamwish';
-        else if (locLower.includes('dood')) hosterName = 'DoodStream';
-        else if (locLower.includes('mixdrop')) hosterName = 'Mixdrop';
-
-        if (hosterName) {
-          const cleanEmbed = embed.replace(/&amp;/g, '&');
-          if (!seenUrls.has(cleanEmbed)) {
-            seenUrls.add(cleanEmbed);
-            streams.push({
-              name: `[HU] Filmezek (${hosterName}) 720p HD`,
-              title: `${matchingItem.MovieTitle} [720p HD]\n🇭🇺 Filmezek.com (${hosterName}) • Szinkron • Közvetlen Lejátszó`,
-              url: cleanEmbed,
-              playerUrl: cleanEmbed,
-              quality: '720p',
-              height: 720,
-              source: 'filmezek',
-              behaviorHints: { bingeGroup: `hu-filmezek-${hosterName.toLowerCase()}` }
-            });
-          }
-        }
       }
 
       if (streams.length > 0) break;
