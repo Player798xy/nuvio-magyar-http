@@ -1,79 +1,126 @@
-const { resolveMeta } = require('./utils/meta');
-const { CATALOG_DEFINITIONS, getCatalogMetas, getCustomMeta } = require('./catalog');
-const { buildProxyUrl, buildHlsProxyUrl } = require('./utils/proxy');
+const { getMediaMeta } = require('./utils/meta');
+const { searchCatalog, getMeta } = require('./catalog');
+const { CATALOG_DEFINITIONS, getEnabledManifestCatalogs } = require('./catalogs');
+const { scrapeVidea } = require('./scrapers/videa');
+const { scrapeIndavideo } = require('./scrapers/indavideo');
+const { scrapeJobbMintATV } = require('./scrapers/jobbmintatv');
+const { scrapeFilmvilag } = require('./scrapers/filmvilag');
+const { scrapeDMDAMedia } = require('./scrapers/dmdamedia');
+const { scrapeMeseFilm } = require('./scrapers/mesefilm');
+const { scrapeFilmezek } = require('./scrapers/filmezek');
+const { scrapeOnlineFilmek } = require('./scrapers/onlinefilmek');
+const { scrapeHDMozi } = require('./scrapers/hdmozi');
+const { scrapeMediaKlikk, getLiveChannelStreams, LIVE_CHANNELS } = require('./scrapers/mediaklikk');
+const { scrapeNetMozi } = require('./scrapers/netmozi');
+const { scrapeVideakid } = require('./scrapers/videakid');
+const { scrapeSorozatokNet } = require('./scrapers/sorozatok_net');
 
-const { searchVidea } = require('./scrapers/videa');
-const { searchVideakid } = require('./scrapers/videakid');
-const { searchIndavideo } = require('./scrapers/indavideo');
-const { searchNetMozi } = require('./scrapers/netmozi');
-const { searchHdMozi } = require('./scrapers/hdmozi');
-const { searchFilmezek } = require('./scrapers/filmezek');
-const { searchOnlineFilmek } = require('./scrapers/onlinefilmek');
-const { searchSorozatokNet } = require('./scrapers/sorozatok_net');
-const { searchJobbMintATV } = require('./scrapers/jobbmintatv');
-const { searchDMDAMedia } = require('./scrapers/dmdamedia');
-const { searchMeseFilm } = require('./scrapers/mesefilm');
-const { searchMediaKlikk } = require('./scrapers/mediaklikk');
+const FAST_SCRAPER_IDS = new Set([
+  'videa',
+  'indavideo',
+  'jobbmintatv',
+  'filmvilag2',
+  'mediaklikk',
+  'netmozi',
+  'hdmozi',
+  'filmezek',
+  'onlinefilmek',
+  'mesefilm',
+  'videakid',
+  'sorozatoknet'
+]);
 
-const PROVIDERS = [
-  { id: 'videa', name: 'Videa.hu (Direct MP4)', fn: searchVidea, defaultEnabled: true },
-  { id: 'netmozi', name: 'NetMozi.com (Multi-Hoster)', fn: searchNetMozi, defaultEnabled: true },
-  { id: 'hdmozi', name: 'HDMozi.hu (1080p RPM HLS)', fn: searchHdMozi, defaultEnabled: true },
-  { id: 'filmezek', name: 'Filmezek.com (Videa / OK.ru / VOE)', fn: searchFilmezek, defaultEnabled: true },
-  { id: 'onlinefilmek', name: 'OnlineFilmekIngyen (DooPlay)', fn: searchOnlineFilmek, defaultEnabled: true },
-  { id: 'sorozatoknet', name: 'Sorozatok.net (Sorozat adatbázis)', fn: searchSorozatokNet, defaultEnabled: true },
-  { id: 'mediaklikk', name: 'MédiaKlikk / MTVA (Élő TV & Archívum)', fn: searchMediaKlikk, defaultEnabled: true },
-  { id: 'indavideo', name: 'Indavideo.hu (Direct MP4)', fn: searchIndavideo, defaultEnabled: true },
-  { id: 'videakid', name: 'Videakid.hu (Mese & Családi)', fn: searchVideakid, defaultEnabled: true },
-  { id: 'jobbmintatv', name: 'JobbMintATV (Filmek & Sorozatok)', fn: searchJobbMintATV, defaultEnabled: true },
-  { id: 'dmdamedia', name: 'DMDAMedia.hu (Szinkronos tárhely)', fn: searchDMDAMedia, defaultEnabled: true },
-  { id: 'mesefilm', name: 'MeseKincstár & MeseFilmek.hu', fn: searchMeseFilm, defaultEnabled: true }
+const ALL_SCRAPERS = [
+  { id: 'videa', name: 'Videa', fn: scrapeVidea, fast: true },
+  { id: 'indavideo', name: 'Indavideo', fn: scrapeIndavideo, fast: true },
+  { id: 'jobbmintatv', name: 'JobbMintATV', fn: scrapeJobbMintATV, fast: true },
+  { id: 'hdmozi', name: 'HDMozi', fn: scrapeHDMozi, fast: true },
+  { id: 'filmvilag2', name: 'Filmvilág2', fn: scrapeFilmvilag, fast: true },
+  { id: 'mediaklikk', name: 'MédiaKlikk', fn: scrapeMediaKlikk, fast: true },
+  { id: 'netmozi', name: 'NetMozi', fn: scrapeNetMozi, fast: true },
+  { id: 'filmezek', name: 'Filmezek', fn: scrapeFilmezek, fast: true },
+  { id: 'onlinefilmek', name: 'OnlineFilmek', fn: scrapeOnlineFilmek, fast: true },
+  { id: 'dmdamedia', name: 'DMDAMedia', fn: scrapeDMDAMedia, fast: false },
+  { id: 'mesefilm', name: 'MeseFilm', fn: scrapeMeseFilm, fast: true },
+  { id: 'videakid', name: 'Videakid', fn: scrapeVideakid, fast: true },
+  { id: 'sorozatoknet', name: 'Sorozatok.net', fn: scrapeSorozatokNet, fast: true }
 ];
 
-function parseUserConfig(configStr) {
-  const defaults = {
-    providers: PROVIDERS.map((p) => p.id),
-    proxyMode: 'auto', // 'off' | 'auto' | 'always'
-    minQuality: 0 // 0 | 720 | 1080
-  };
-  if (!configStr) return defaults;
+const DEFAULT_CONFIG = {
+  sources: ALL_SCRAPERS.map(s => s.id),
+  catalogs: CATALOG_DEFINITIONS.filter(c => c.defaultEnabled).map(c => c.id),
+  qualities: ['1080p', '720p', '480p'],
+  maxResults: 25
+};
 
+function parseConfig(configStr) {
+  if (!configStr) return { ...DEFAULT_CONFIG };
   try {
-    const clean = decodeURIComponent(configStr);
-    if (clean.startsWith('{')) {
-      return { ...defaults, ...JSON.parse(clean) };
-    }
-    const b64 = clean.replace(/-/g, '+').replace(/_/g, '/');
-    const json = JSON.parse(Buffer.from(b64, 'base64').toString('utf8'));
+    const decoded = Buffer.from(configStr, 'base64url').toString('utf-8');
+    const parsed = JSON.parse(decoded);
     return {
-      providers: Array.isArray(json.p) ? json.p : (Array.isArray(json.providers) ? json.providers : defaults.providers),
-      proxyMode: json.px || json.proxyMode || defaults.proxyMode,
-      minQuality: Number(json.q || json.minQuality || 0)
+      sources: Array.isArray(parsed.sources) && parsed.sources.length ? parsed.sources : DEFAULT_CONFIG.sources,
+      catalogs: Array.isArray(parsed.catalogs) && parsed.catalogs.length ? parsed.catalogs : DEFAULT_CONFIG.catalogs,
+      qualities: Array.isArray(parsed.qualities) && parsed.qualities.length ? parsed.qualities : DEFAULT_CONFIG.qualities,
+      maxResults: Number(parsed.maxResults) || DEFAULT_CONFIG.maxResults
     };
-  } catch {
-    return defaults;
+  } catch (e) {
+    return { ...DEFAULT_CONFIG };
   }
 }
 
-function getManifest(configStr = null) {
-  const cfg = parseUserConfig(configStr);
-  const enabledNames = PROVIDERS.filter((p) => cfg.providers.includes(p.id)).map((p) => p.name.split(' ')[0]);
+function getManifest(config = {}) {
+  let name = 'Magyar Streaming Pro (HU)';
+  let desc = 'Magyar szinkronos filmek, sorozatok, mesék és élő TV csatornák 1080p & 720p minőségben (MédiaKlikk 490+ műsor + Élő TV, Videa, Indavideo, HDMozi, Filmvilág2, JobbMintATV, NetMozi, Filmezek, OnlineFilmek, DMDAMedia, MeseFilm, Videakid, Sorozatok.net).';
+
+  if (config.sources && Array.isArray(config.sources) && config.sources.length > 0 && config.sources.length < ALL_SCRAPERS.length) {
+    name = `Magyar Streaming Pro [${config.sources.length} forrás]`;
+  }
+
+  const hostUrl = config.hostUrl || process.env.HOST_URL || 'https://nuvio-magyar-http.vercel.app';
+
+  const supportedIdPrefixes = [
+    'tt',
+    'tmdb:',
+    'tvdb:',
+    'kitsu:',
+    'mal:',
+    'anilist:',
+    'anidb:',
+    'tvmaze:',
+    'mediaklikk-live-',
+    'mediaklikk:',
+    'netmozi:',
+    'title:'
+  ];
 
   return {
-    id: 'org.nuvio.magyar.http.vercel',
-    version: '2.0.0',
-    name: '🇭🇺 Nuvio Magyar HTTP Streaming',
-    description: `Magyar szinkronos és feliratos közvetlen HTTP streaming kiegészítő Nuvio és Stremio kliensekhez Vercel HTTP/HLS Proxy támogatással. Aktív források (${enabledNames.length}): ${enabledNames.join(', ')}.`,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Flag_of_Hungary.svg/512px-Flag_of_Hungary.svg.png',
-    background: 'https://images.unsplash.com/photo-1541849546-216549ae216d?auto=format&fit=crop&w=1600&q=80',
-    types: ['movie', 'series'],
-    idPrefixes: ['tt', 'mediaklikk'],
+    id: 'org.nuvio.magyar.http',
+    version: '2.5.0',
+    name,
+    description: desc,
+    logo: `${hostUrl}/logo.png`,
+    icon: `${hostUrl}/logo.png`,
+    background: `${hostUrl}/logo.png`,
     resources: [
-      'catalog',
-      'stream',
-      { name: 'meta', types: ['movie', 'series'], idPrefixes: ['mediaklikk'] }
+      {
+        name: 'stream',
+        types: ['movie', 'series', 'tv', 'channel'],
+        idPrefixes: supportedIdPrefixes
+      },
+      {
+        name: 'meta',
+        types: ['movie', 'series', 'tv', 'channel'],
+        idPrefixes: ['tt', 'tmdb:', 'mediaklikk-live-', 'mediaklikk:', 'netmozi:']
+      },
+      {
+        name: 'catalog',
+        types: ['movie', 'series', 'tv']
+      }
     ],
-    catalogs: CATALOG_DEFINITIONS,
+    types: ['movie', 'series', 'tv', 'channel'],
+    idPrefixes: supportedIdPrefixes,
+    catalogs: getEnabledManifestCatalogs(config.catalogs),
     behaviorHints: {
       configurable: true,
       configurationRequired: false
@@ -81,92 +128,121 @@ function getManifest(configStr = null) {
   };
 }
 
-function formatStreamForNuvio(stream, baseUrl, proxyMode = 'auto') {
-  const headers = stream.headers || {};
-  const hasHeaders = Object.keys(headers).length > 0;
-  const isHls = Boolean(stream.isHls || /\.m3u8(\?|$)/i.test(stream.url));
+async function getStreams(type, rawId, config = {}) {
+  const id = decodeURIComponent(rawId || '').replace(/\.json$/, '');
 
-  let finalUrl = stream.url;
-  const isIpBoundCdn = stream.url.includes('connectmedia.hu');
-  const shouldProxy = proxyMode === 'always' && !isIpBoundCdn;
+  // 1. Handle Live TV channels (M4 Sport, M1, M2, Duna, M5, etc.)
+  if (type === 'tv' || type === 'channel' || (id && id.startsWith('mediaklikk-live-'))) {
+    const liveStreams = await getLiveChannelStreams(id, config.clientIp, config.hostUrl);
+    return { streams: liveStreams };
+  }
 
-  if (shouldProxy && baseUrl) {
-    if (isHls) {
-      finalUrl = buildHlsProxyUrl(baseUrl, stream.url, headers, false);
-    } else {
-      finalUrl = buildProxyUrl(baseUrl, stream.url, headers);
+  if (!id) {
+    return { streams: [] };
+  }
+
+  // 2. Handle direct MédiaKlikk video tokens & program episode IDs immediately
+  if (id.startsWith('mediaklikk:video:') || id.startsWith('mediaklikk:program:')) {
+    const streams = await scrapeMediaKlikk({ id, clientIp: config.clientIp });
+    if (streams && streams.length > 0) {
+      return { streams };
     }
   }
 
-  const behaviorHints = {
-    notWebReady: false,
-    bingeGroup: `nuvio-hu-${stream.quality || 720}`
-  };
+  // 3. Resolve Hungarian & English metadata from IMDb/TMDB
+  const meta = await getMediaMeta(type, id);
+  if (!meta) {
+    return { streams: [] };
+  }
+  meta.clientIp = config.clientIp || null;
+  meta.hostUrl = config.hostUrl || null;
 
-  if (hasHeaders) {
-    behaviorHints.proxyHeaders = {
-      request: headers
-    };
+  let candidateScrapers = ALL_SCRAPERS;
+  let timeoutMs = config.timeoutMs || 15000;
+
+  if (config.stage === 'fast') {
+    candidateScrapers = ALL_SCRAPERS.filter(s => FAST_SCRAPER_IDS.has(s.id));
+    timeoutMs = Math.min(timeoutMs, 4500);
   }
 
-  return {
-    name: stream.name || `🇭🇺 Magyar\n${stream.quality || 720}p`,
-    title: stream.title || '🇭🇺 Magyar HTTP Stream',
-    url: finalUrl,
-    headers: hasHeaders ? headers : undefined,
-    behaviorHints
-  };
-}
+  const activeScrapers = candidateScrapers.filter(s => {
+    if (!config.sources || config.sources.length === 0) return true;
+    return config.sources.includes(s.id);
+  });
 
-async function getStreams(type, id, configStr = null, baseUrl = '') {
-  const cfg = parseUserConfig(configStr);
-  const meta = await resolveMeta(type, id);
+  const fastScrapers = activeScrapers.filter(s => s.fast);
+  const otherScrapers = activeScrapers.filter(s => !s.fast);
+  const allStreams = [];
 
-  // Fast-path for live TV channels
-  if (id.startsWith('mediaklikk-live-') || id.startsWith('mediaklikk:video:')) {
-    const liveStreams = await searchMediaKlikk(meta);
-    return liveStreams.map((s) => formatStreamForNuvio(s, baseUrl, cfg.proxyMode));
-  }
-
-  const activeProviders = PROVIDERS.filter((p) => cfg.providers.includes(p.id));
-
-  const results = await Promise.allSettled(
-    activeProviders.map((prov) =>
-      Promise.race([
-        prov.fn(meta),
-        new Promise((_, reject) => setTimeout(() => reject(new Error(`${prov.id} timeout`)), 9500))
-      ])
-    )
+  const fastPromises = fastScrapers.map(scraper =>
+    Promise.race([
+      scraper.fn(meta),
+      new Promise(resolve => setTimeout(() => resolve([]), Math.max(9500, timeoutMs)))
+    ]).catch(() => [])
   );
 
-  const rawStreams = [];
-  for (const res of results) {
+  const otherPromises = otherScrapers.map(scraper =>
+    Promise.race([
+      scraper.fn(meta),
+      new Promise(resolve => setTimeout(() => resolve([]), timeoutMs))
+    ]).catch(() => [])
+  );
+
+  const fastResults = await Promise.allSettled(fastPromises);
+  fastResults.forEach(res => {
     if (res.status === 'fulfilled' && Array.isArray(res.value)) {
-      rawStreams.push(...res.value);
+      allStreams.push(...res.value);
     }
+  });
+
+  const hasGoodStreams = allStreams.some(s => s.height >= 720) || allStreams.length >= 3;
+  if (!hasGoodStreams && otherScrapers.length > 0 && config.stage !== 'fast') {
+    const otherResults = await Promise.allSettled(otherPromises);
+    otherResults.forEach(res => {
+      if (res.status === 'fulfilled' && Array.isArray(res.value)) {
+        allStreams.push(...res.value);
+      }
+    });
   }
 
-  // Deduplicate by URL and apply minimum quality filter
+  // Deduplicate by stream URL
   const seenUrls = new Set();
-  const filtered = [];
-  for (const s of rawStreams) {
-    if (!s || !s.url || !s.url.startsWith('http')) continue;
-    if (seenUrls.has(s.url)) continue;
-    if (cfg.minQuality && (s.quality || 0) < cfg.minQuality) continue;
+  const uniqueStreams = [];
+  for (const s of allStreams) {
+    if (!s || !s.url || seenUrls.has(s.url)) continue;
     seenUrls.add(s.url);
-    filtered.push(s);
+    uniqueStreams.push(s);
   }
 
-  filtered.sort((a, b) => (b.quality || 0) - (a.quality || 0));
+  // Priority sorting: 1. Resolution height (1080p -> 720p -> 480p), 2. Direct MP4/MédiaKlikk
+  uniqueStreams.sort((a, b) => {
+    const heightA = a.height || 0;
+    const heightB = b.height || 0;
+    if (heightB !== heightA) return heightB - heightA;
+    const isDirectA = a.source === 'mediaklikk' || a.source === 'videa' || a.source === 'indavideo' || (a.url && a.url.includes('.mp4'));
+    const isDirectB = b.source === 'mediaklikk' || b.source === 'videa' || b.source === 'indavideo' || (b.url && b.url.includes('.mp4'));
+    if (isDirectA && !isDirectB) return -1;
+    if (isDirectB && !isDirectA) return 1;
+    return 0;
+  });
 
-  return filtered.map((s) => formatStreamForNuvio(s, baseUrl, cfg.proxyMode));
+  return {
+    streams: uniqueStreams,
+    metaInfo: {
+      hungarianTitle: meta.hungarianTitle,
+      englishTitle: meta.englishTitle,
+      year: meta.year
+    }
+  };
 }
 
 module.exports = {
-  PROVIDERS,
-  parseUserConfig,
+  DEFAULT_CONFIG,
+  parseConfig,
   getManifest,
-  getCatalogMetas,
-  getCustomMeta,
-  getStreams
+  getStreams,
+  handleStreamRequest: getStreams,
+  searchCatalog,
+  getMeta,
+  ALL_SCRAPERS
 };

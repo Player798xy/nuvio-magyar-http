@@ -1,227 +1,848 @@
-const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-
 /**
- * Hungarian title normalizer, Roman numeral helper, and similarity matcher.
+ * Metadata resolver: fetches Cinemeta info and resolves localized Hungarian titles via Wikipedia / Wikidata.
  */
-function stripAccents(str) {
-  return String(str || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase();
-}
-
-function normalizeTitle(str) {
-  return stripAccents(str)
-    .replace(/[^a-z0-9\s]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-const ROMAN_MAP = {
-  1: 'i', 2: 'ii', 3: 'iii', 4: 'iv', 5: 'v',
-  6: 'vi', 7: 'vii', 8: 'viii', 9: 'ix', 10: 'x'
-};
-
-function toRoman(num) {
-  return ROMAN_MAP[num] || String(num);
-}
-
-/**
- * Checks whether a candidate title from a Hungarian streaming site matches
- * the target Hungarian or English title and optional release year.
- */
-function isTitleMatch(candidateRaw, targetTitles = [], targetYear = null) {
-  if (!candidateRaw) return false;
-  const candNorm = normalizeTitle(candidateRaw);
-  if (!candNorm) return false;
-
-  const yearInCand = (String(candidateRaw).match(/\b(19\d{2}|20\d{2})\b/) || [])[1];
-  if (targetYear && yearInCand) {
-    const diff = Math.abs(parseInt(yearInCand, 10) - parseInt(targetYear, 10));
-    if (diff > 2) return false;
-  }
-
-  for (const t of targetTitles) {
-    if (!t) continue;
-    const tNorm = normalizeTitle(t);
-    if (!tNorm || tNorm.length < 2) continue;
-
-    if (candNorm === tNorm) return true;
-    if (candNorm.includes(tNorm) || tNorm.includes(candNorm)) {
-      const wordsT = tNorm.split(' ').filter(Boolean);
-      const wordsC = candNorm.split(' ').filter(Boolean);
-      if (wordsT.length === 1) {
-        if (wordsC.includes(wordsT[0])) return true;
-      } else {
-        const hitCount = wordsT.filter(w => wordsC.includes(w)).length;
-        if (hitCount / wordsT.length >= 0.65) return true;
-      }
-    }
-  }
-  return false;
-}
-
-/**
- * Resolves IMDb ID (e.g. tt0499549) or custom prefix ID into metadata:
- * - English title (`enTitle`)
- * - Hungarian localized title (`huTitle`) via Wikidata SPARQL / Wikipedia / Cinemeta
- * - Release year (`year`)
- * - Type (`movie` or `series`), `season`, `episode`
- */
-const metaCache = new Map();
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY || 'ffe7ef8916c61835264d2df68276ddc2';
+const metaCache = new Map();
+let magyarNepmesekData = null;
+try {
+  magyarNepmesekData = require('../data/magyar_nepmesek_episodes.json');
+} catch (e) {}
 
-async function fetchTmdbTitles(imdbId) {
+async function resolveHungarianTitle(englishTitle, imdbId) {
+  // 1. Primary: Query TMDB (Official Hungarian database, 100% accurate, ~100ms)
+  if (imdbId && imdbId.startsWith('tt')) {
+    try {
+      const tmdbUrl = `https://api.themoviedb.org/3/find/${imdbId}?api_key=${TMDB_API_KEY}&external_source=imdb_id&language=hu-HU`;
+      const res = await fetch(tmdbUrl, { signal: AbortSignal.timeout(3000) });
+      if (res.ok) {
+        const data = await res.json();
+        const item = data.movie_results?.[0] || data.tv_results?.[0];
+        const title = item?.title || item?.name;
+        if (title && title.trim()) {
+          return title.replace(/\s*\([^)]+\)\s*$/g, '').trim();
+        }
+      }
+    } catch (e) {}
+  }
+
+  if (englishTitle && englishTitle.trim()) {
+    try {
+      const searchUrl = `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(englishTitle.trim())}&language=hu-HU`;
+      const res = await fetch(searchUrl, { signal: AbortSignal.timeout(3000) });
+      if (res.ok) {
+        const data = await res.json();
+        const item = data.results?.[0];
+        const title = item?.title || item?.name;
+        if (title && title.trim()) {
+          return title.replace(/\s*\([^)]+\)\s*$/g, '').trim();
+        }
+      }
+    } catch (e) {}
+  }
+
+  // 2. Secondary fallback: Wikipedia langlinks
   try {
-    const r = await fetch(
-      `https://api.themoviedb.org/3/find/${encodeURIComponent(imdbId)}?api_key=${TMDB_API_KEY}&external_source=imdb_id&language=hu-HU`,
-      { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(4000) }
-    );
-    if (!r.ok) return null;
-    const data = await r.json();
-    const hit = (data.movie_results || [])[0] || (data.tv_results || [])[0];
-    if (!hit) return null;
-    const yearStr = (hit.release_date || hit.first_air_date || '').slice(0, 4);
-    return {
-      huTitle: hit.title || hit.name || null,
-      enTitle: hit.original_title || hit.original_name || null,
-      year: yearStr ? parseInt(yearStr, 10) : null,
-      poster: hit.poster_path ? `https://image.tmdb.org/t/p/w500${hit.poster_path}` : null
+    const wikiUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=langlinks&titles=${encodeURIComponent((englishTitle || '').trim().replace(/ /g, '_'))}&lllang=hu&format=json`;
+    const res = await fetch(wikiUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+      signal: AbortSignal.timeout(3000)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const pages = data.query?.pages;
+      if (pages) {
+        const page = Object.values(pages)[0];
+        const rawTitle = page?.langlinks?.[0]?.['*'];
+        if (rawTitle) {
+          // Clean "(film)", "(sorozat)", "(televíziós sorozat)", etc.
+          return rawTitle.replace(/\s*\([^)]+\)\s*$/g, '').trim();
+        }
+      }
+    }
+  } catch (err) {
+    // Continue to Wikidata fallback
+  }
+
+  // 2. Fallback to Wikidata by IMDb ID claim (P345)
+  try {
+    const sparql = `SELECT ?label WHERE {
+      ?item wdt:P345 "${imdbId}" .
+      ?item rdfs:label ?label .
+      FILTER (LANG(?label) = "hu")
+    } LIMIT 1`;
+    const wikiUrl = `https://query.wikidata.org/sparql?query=${encodeURIComponent(sparql)}&format=json`;
+    const res = await fetch(wikiUrl, {
+      headers: {
+        'User-Agent': 'NuvioHungarianAddon/1.0',
+        'Accept': 'application/json'
+      },
+      signal: AbortSignal.timeout(4000)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const binding = data?.results?.bindings?.[0];
+      if (binding && binding.label && binding.label.value) {
+        return binding.label.value.trim();
+      }
+    }
+  } catch (err) {
+    // Return empty on failure
+  }
+
+  return '';
+}
+
+const TENKES_KAPITANYA_EPISODES = {
+  1: 'A vérdíj',
+  2: 'Az embervadászat',
+  3: 'Buga Jakab',
+  4: 'A tőzsér',
+  5: 'A fejvadász',
+  6: 'A katona szerencséje',
+  7: 'Kettős kém',
+  8: 'A kémszemle',
+  9: 'A meglepetés',
+  10: 'A vörös ördögök',
+  11: 'A hadicsel',
+  12: 'A fogoly',
+  13: 'A vár ostroma'
+};
+
+const HOHO_HORGASZ_EPISODES = {
+  1: {
+    1: 'Reszkessetek halacskák',
+    2: 'A csalafinta csali',
+    3: 'A repülő hal',
+    4: 'A sötétlelkű orvhorgász',
+    5: 'Születésnapi ajándék',
+    6: 'A gumihal',
+    7: 'A falánk pelikán',
+    8: 'Az éjszakai horgászat',
+    9: 'Teknősháton lovagolva',
+    10: 'A mindentvágó rákolló',
+    11: 'A titokzatos békaember',
+    12: 'Nászajándék',
+    13: 'Virágcsokor a horgon'
+  },
+  2: {
+    1: 'Horgász a tetőn',
+    2: 'Horgász a kéményben',
+    3: 'Szálka hal nélkül',
+    4: 'A megszökött műhal',
+    5: 'Csecsemőaltató horgászbot',
+    6: 'Horgász a halpiacon',
+    7: 'Mit hozott a Mikulás',
+    8: 'A karácsonyi hal',
+    9: 'A holló és a hal',
+    10: 'Hová tűnt a horgászzsinór',
+    11: 'Kétoldali horgászláz',
+    12: 'A fagyasztott hal',
+    13: 'Az eldugult mosogató'
+  }
+};
+
+const PRELOADED_HUNGARIAN_TITLES = {
+  'tt0129719': { hu: 'Süsü, a sárkány kalandjai', en: 'Süsü, the Dragon', year: '1977', runtime: 30 },
+  'tt0056789': { hu: 'A Tenkes kapitánya', en: 'Captain Tenkes', year: '1964', runtime: 25 },
+  'tt0861751': { hu: 'Magyar népmesék', en: 'Hungarian Folk Tales', year: '1980', runtime: 10 },
+  'tt0136650': { hu: 'Üzenet a jövőből - A Mézga család', en: 'The Mézga Family', year: '1969', runtime: 25 },
+  'tt1225872': { hu: 'Vakáción a Mézga család', en: 'The Mézga Family on Holiday', year: '1978', runtime: 25 },
+  'tt0167595': { hu: 'Frakk, a macskák réme', en: 'Frakk, the Cats\' Nightmare', year: '1971', runtime: 10 },
+  'tt0168342': { hu: 'Kukori és Kotkoda', en: 'Kukori and Kotkoda', year: '1971', runtime: 10 },
+  'tt0154077': { hu: 'A nagy ho-ho-horgász', en: 'The Great Ho-ho-ho-angler', year: '1982', runtime: 10 },
+  'tt0166931': { hu: 'Pom-Pom meséi', en: 'Tales of Pom Pom', year: '1980', runtime: 10 },
+  'tt0168343': { hu: 'Kérem a következőt! (Dr. Bubó)', en: 'Next, Please!', year: '1974', runtime: 10 },
+  'tt0179955': { hu: 'Macskafogó', en: 'Cat City', year: '1986', runtime: 96 },
+  'tt0257290': { hu: 'Üvegtigris', en: 'Glass Tiger', year: '2001', runtime: 104 },
+  'tt0065067': { hu: 'A tanú', en: 'The Witness', year: '1969', runtime: 103 },
+  'tt0121403': { hu: 'Indul a bakterház', en: 'The Station Master', year: '1980', runtime: 66 },
+  'tt0303184': { hu: 'Valami Amerika', en: 'A Kind of America', year: '2002', runtime: 115 },
+  'tt0069697': { hu: 'Különben dühbe jövünk', en: 'Watch Out, We\'re Mad', year: '1974', runtime: 102 },
+  'tt0085327': { hu: 'Kincs, ami nincs', en: 'Who Finds a Friend Finds a Treasure', year: '1981', runtime: 102 },
+  'tt0131636': { hu: 'Vuk', en: 'The Little Fox', year: '1981', runtime: 76 },
+  'tt8111088': { hu: 'A Mandalóri', en: 'The Mandalorian', year: '2019', runtime: 40 },
+  'tt0268380': { hu: 'Jégkorszak', en: 'Ice Age', year: '2002', runtime: 81 },
+  'tt0060196': { hu: 'A Jó, a Rossz és a Csúf', en: 'The Good, the Bad and the Ugly', year: '1966', runtime: 161 },
+  'tt0848228': { hu: 'Bosszúállók', en: 'The Avengers', year: '2012', runtime: 143 }
+};
+
+async function resolveTmdbToImdb(tmdbId, isSeries = false) {
+  if (!tmdbId) return null;
+
+  // 1. Direct TMDB external_ids lookup (Fast, accurate)
+  try {
+    const endpoint = isSeries ? `tv/${tmdbId}` : `movie/${tmdbId}`;
+    const url = `https://api.themoviedb.org/3/${endpoint}?api_key=${TMDB_API_KEY}&language=hu-HU&append_to_response=external_ids`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(3000) });
+    if (res.ok) {
+      const data = await res.json();
+      const imdbId = data.external_ids?.imdb_id || data.imdb_id || null;
+      const huTitle = data.title || data.name || null;
+      return { imdbId, huTitle, enTitle: data.original_title || data.original_name || huTitle };
+    }
+  } catch (e) {}
+
+  // 2. Query Wikidata SPARQL (Fast, unauthenticated, maps TMDB -> IMDb & Hungarian title)
+  try {
+    const prop = isSeries ? 'wdt:P4983' : 'wdt:P4947';
+    const sparql = `SELECT ?imdb ?label WHERE {
+      ?item ${prop} "${tmdbId}" .
+      OPTIONAL { ?item wdt:P345 ?imdb }
+      OPTIONAL { ?item rdfs:label ?label . FILTER(LANG(?label) = "hu") }
+    } LIMIT 1`;
+    const url = 'https://query.wikidata.org/sparql?query=' + encodeURIComponent(sparql) + '&format=json';
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'NuvioAddon/1.0', 'Accept': 'application/json' },
+      signal: AbortSignal.timeout(4000)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const binding = data?.results?.bindings?.[0];
+      const imdbId = binding?.imdb?.value || null;
+      const huTitle = binding?.label?.value || null;
+      return { imdbId, huTitle };
+    }
+  } catch (e) {}
+
+  return null;
+}
+
+async function resolveTvdbToImdb(tvdbId) {
+  if (!tvdbId) return null;
+
+  // 1. First try TheTVDB dereferrer (Fast redirect ~200ms directly to show slug / page)
+  try {
+    const derefUrl = `https://thetvdb.com/dereferrer/series/${tvdbId}`;
+    const res = await fetch(derefUrl, {
+      redirect: 'manual',
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+      signal: AbortSignal.timeout(3000)
+    });
+    const location = res.headers.get('location');
+    if (location) {
+      const pageRes = await fetch(location, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+        signal: AbortSignal.timeout(3500)
+      });
+      if (pageRes.ok) {
+        const html = await pageRes.text();
+        const titleMatch = html.match(/<title>([^<]+)\s*-\s*TheTVDB\.com<\/title>/i);
+        const imdbMatch = html.match(/imdb\.com\/title\/(tt\d+)/i);
+        let showTitle = titleMatch ? titleMatch[1].trim() : '';
+        showTitle = showTitle
+          .replace(/&aacute;/g, 'á').replace(/&eacute;/g, 'é').replace(/&iacute;/g, 'í')
+          .replace(/&oacute;/g, 'ó').replace(/&ouml;/g, 'ö').replace(/&uacute;/g, 'ú')
+          .replace(/&uuml;/g, 'ü').replace(/&Aacute;/g, 'Á').replace(/&Eacute;/g, 'É')
+          .replace(/&Iacute;/g, 'Í').replace(/&Oacute;/g, 'Ó').replace(/&Ouml;/g, 'Ö')
+          .replace(/&Uacute;/g, 'Ú').replace(/&Uuml;/g, 'Ü').replace(/&#039;/g, "'").replace(/&amp;/g, '&');
+        const imdbId = imdbMatch ? imdbMatch[1] : null;
+        if (showTitle) {
+          return { imdbId, huTitle: showTitle, enTitle: showTitle };
+        }
+      }
+    }
+  } catch (err) {}
+
+  // 2. Fallback to Wikidata SPARQL
+  try {
+    const sparql = `SELECT ?imdb ?label WHERE {
+      ?item wdt:P4835 "${tvdbId}" .
+      OPTIONAL { ?item wdt:P345 ?imdb }
+      OPTIONAL { ?item rdfs:label ?label . FILTER(LANG(?label) = "hu") }
+    } LIMIT 1`;
+    const url = 'https://query.wikidata.org/sparql?query=' + encodeURIComponent(sparql) + '&format=json';
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'NuvioAddon/1.0', 'Accept': 'application/json' },
+      signal: AbortSignal.timeout(4000)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const binding = data?.results?.bindings?.[0];
+      const imdbId = binding?.imdb?.value || null;
+      const huTitle = binding?.label?.value || null;
+      return { imdbId, huTitle, enTitle: huTitle };
+    }
+  } catch (e) {}
+
+  return null;
+}
+
+async function resolveKitsuMeta(kitsuId, episode = null) {
+  try {
+    const url = `https://kitsu.io/api/edge/anime/${kitsuId}`;
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+      signal: AbortSignal.timeout(4000)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const attrs = data?.data?.attributes;
+      if (attrs) {
+        const canonical = attrs.canonicalTitle || '';
+        const en = attrs.titles?.en || attrs.titles?.en_jp || canonical;
+        const year = (attrs.startDate || '').slice(0, 4);
+        const hu = await resolveHungarianTitle(en);
+        return {
+          imdbId: `kitsu:${kitsuId}`,
+          type: 'series',
+          englishTitle: en,
+          hungarianTitle: hu || en,
+          year,
+          season: 1,
+          episode: episode || 1
+        };
+      }
+    }
+  } catch (e) {}
+  return null;
+}
+
+async function getMediaMeta(type, rawId) {
+  if (!rawId) return { type, hungarianTitle: '', englishTitle: '' };
+
+  const id = decodeURIComponent(rawId);
+  const cacheKey = `${type}:${id}`;
+  if (metaCache.has(cacheKey)) {
+    const cached = metaCache.get(cacheKey);
+    return cached;
+  }
+
+  let imdbId = null;
+  let season = null;
+  let episode = null;
+  let initialHuTitle = '';
+
+  // 0. Handle NetMozi ID format: netmozi:series:mid:season:episode[:title] or netmozi:movie:mid[:title]
+  if (id.startsWith('netmozi:')) {
+    const parts = id.split(':');
+    const itemType = parts[1] || type || 'movie';
+    const mid = parts[2] || '';
+    let netmoziTitle = '';
+    let netmoziYear = '';
+
+    if (parts.length >= 6 && !/^\d+$/.test(parts[3]) && /^\d+$/.test(parts[4]) && /^\d+$/.test(parts[5])) {
+      // Format: netmozi:series:mid:slugOrTitle:season:episode
+      try { netmoziTitle = decodeURIComponent(parts[3]).replace(/-/g, ' '); } catch (e) { netmoziTitle = parts[3]; }
+      season = parseInt(parts[4], 10);
+      episode = parseInt(parts[5], 10);
+    } else if (parts.length >= 5 && /^\d+$/.test(parts[3]) && /^\d+$/.test(parts[4])) {
+      // Format: netmozi:series:mid:season:episode[:title]
+      season = parseInt(parts[3], 10);
+      episode = parseInt(parts[4], 10);
+      if (parts[5]) {
+        try { netmoziTitle = decodeURIComponent(parts[5]); } catch (e) { netmoziTitle = parts[5]; }
+      }
+    } else {
+      season = parts[3] && /^\d+$/.test(parts[3]) ? parseInt(parts[3], 10) : (itemType === 'series' ? 1 : null);
+      episode = parts[4] && /^\d+$/.test(parts[4]) ? parseInt(parts[4], 10) : (itemType === 'series' ? 1 : null);
+    }
+
+    // Check in-memory cache
+    if (!netmoziTitle) {
+      try {
+        const { getNetMoziTitle } = require('../scrapers/netmozi');
+        netmoziTitle = getNetMoziTitle(mid);
+      } catch (e) {}
+    }
+
+    // Fallback: Resolve asynchronously from NetMozi if in-memory cache is empty (e.g. cold serverless instance)
+    if (!netmoziTitle && mid) {
+      try {
+        const { getNetMoziSeriesEpisodes, netmoziFetchWithRedirects, netmoziTitleCache } = require('../scrapers/netmozi');
+        if (itemType === 'series') {
+          const seriesData = await getNetMoziSeriesEpisodes(`netmozi:series:${mid}`);
+          if (seriesData && seriesData.name) {
+            netmoziTitle = seriesData.name;
+            netmoziYear = seriesData.year || '';
+            netmoziTitleCache.set(String(mid), netmoziTitle);
+          }
+        } else {
+          const res = await netmoziFetchWithRedirects(`https://netmozi.com/filmek/${mid}/_`);
+          if (res && res.body) {
+            const m = res.body.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i);
+            if (m) {
+              try {
+                const data = JSON.parse(m[1]);
+                netmoziTitle = data.name || '';
+                netmoziTitleCache.set(String(mid), netmoziTitle);
+              } catch (e) {}
+            }
+          }
+        }
+      } catch (e) {}
+    }
+
+    const result = {
+      imdbId: id,
+      type: itemType,
+      englishTitle: netmoziTitle || 'NetMozi Média',
+      hungarianTitle: netmoziTitle || 'NetMozi Média',
+      year: netmoziYear,
+      season,
+      episode,
+      episodeTitle: season && episode ? `${episode}. Rész` : ''
     };
-  } catch {
+    metaCache.set(cacheKey, result);
+    return result;
+  }
+
+  // Handle MédiaKlikk direct video token IDs
+  if (id.startsWith('mediaklikk:video:')) {
+    let token = id.replace('mediaklikk:video:', '').trim();
+    while (token.includes('%')) {
+      try { token = decodeURIComponent(token); } catch(e) { break; }
+    }
+    const result = {
+      id,
+      imdbId: id,
+      token,
+      type: type || 'series',
+      englishTitle: 'MédiaKlikk Videó',
+      hungarianTitle: 'MédiaKlikk Videó',
+      year: '',
+      season: 1,
+      episode: 1,
+      episodeTitle: '1. Rész'
+    };
+    metaCache.set(cacheKey, result);
+    return result;
+  }
+
+  // Handle MédiaKlikk program episode IDs: mediaklikk:program:slug:season:episode
+  if (id.startsWith('mediaklikk:program:')) {
+    const parts = id.split(':');
+    const slug = parts[2] || '';
+    season = parts[3] && /^\d+$/.test(parts[3]) ? parseInt(parts[3], 10) : 1;
+    episode = parts[4] && /^\d+$/.test(parts[4]) ? parseInt(parts[4], 10) : 1;
+    
+    let progName = slug.replace(/-/g, ' ');
+    try {
+      const { getMediaKlikkPrograms } = require('../scrapers/mediaklikk');
+      const allP = getMediaKlikkPrograms();
+      const p = allP.find(item => item.slug === slug || item.id === `mediaklikk:program:${slug}`);
+      if (p) progName = p.name;
+    } catch(e) {}
+
+    const result = {
+      id,
+      imdbId: id,
+      slug,
+      type: 'series',
+      englishTitle: progName,
+      hungarianTitle: progName,
+      year: '',
+      season,
+      episode,
+      episodeTitle: `${episode}. Rész`
+    };
+    metaCache.set(cacheKey, result);
+    return result;
+  }
+
+  // Handle synthetic title IDs: title:Some+Title:season:episode or title:Some+Title
+  if (id.startsWith('title:')) {
+    const parts = id.split(':');
+    const rawTitle = decodeURIComponent(parts[1] || '').replace(/\+/g, ' ').trim();
+    season = parts[2] ? parseInt(parts[2], 10) : (type === 'series' ? 1 : null);
+    episode = parts[3] ? parseInt(parts[3], 10) : (type === 'series' ? 1 : null);
+
+    const result = {
+      imdbId: id,
+      type: type || (season ? 'series' : 'movie'),
+      englishTitle: rawTitle,
+      hungarianTitle: rawTitle,
+      year: '',
+      season,
+      episode,
+      episodeTitle: season && episode ? `${episode}. Rész` : ''
+    };
+    metaCache.set(cacheKey, result);
+    return result;
+  }
+
+  // 1. Resolve TMDB ID format: tmdb:12345 (movie) or tmdb:12345:season:episode (series)
+  if (id.startsWith('tmdb:')) {
+    const parts = id.split(':');
+    const tmdbId = parts[1];
+    season = parts[2] ? parseInt(parts[2], 10) : null;
+    episode = parts[3] ? parseInt(parts[3], 10) : null;
+    const isSeries = type === 'series' || type === 'tv' || Boolean(season);
+    const resolved = await resolveTmdbToImdb(tmdbId, isSeries);
+    if (resolved) {
+      if (resolved.imdbId) imdbId = resolved.imdbId;
+      if (resolved.huTitle) initialHuTitle = resolved.huTitle;
+    }
+  } else if (id.startsWith('tvdb:')) {
+    // 2. Resolve TVDB ID format: tvdb:12345 or tvdb:12345:season:episode
+    const parts = id.split(':');
+    const tvdbId = parts[1];
+    season = parts[2] ? parseInt(parts[2], 10) : null;
+    episode = parts[3] ? parseInt(parts[3], 10) : null;
+    const resolved = await resolveTvdbToImdb(tvdbId);
+    if (resolved) {
+      if (resolved.imdbId) imdbId = resolved.imdbId;
+      if (resolved.huTitle) initialHuTitle = resolved.huTitle;
+    }
+  } else if (id.startsWith('kitsu:')) {
+    // 3. Resolve Kitsu Anime format: kitsu:1234 or kitsu:1234:episode
+    const parts = id.split(':');
+    const kitsuId = parts[1];
+    episode = parts[2] ? parseInt(parts[2], 10) : null;
+    const resKitsu = await resolveKitsuMeta(kitsuId, episode);
+    if (resKitsu) {
+      metaCache.set(cacheKey, resKitsu);
+      return resKitsu;
+    }
+  } else if (!id.startsWith('tt')) {
+    // Raw title string fallback (e.g. "ingatlanvadaszok" or "ingatlanvadaszok:1:1")
+    const parts = id.split(':');
+    const rawTitle = decodeURIComponent(parts[0] || '').trim();
+    season = parts[1] ? parseInt(parts[1], 10) : (type === 'series' ? 1 : null);
+    episode = parts[2] ? parseInt(parts[2], 10) : (type === 'series' ? 1 : null);
+
+    const result = {
+      imdbId: id,
+      type: type || (season ? 'series' : 'movie'),
+      englishTitle: rawTitle,
+      hungarianTitle: rawTitle,
+      year: '',
+      season,
+      episode,
+      episodeTitle: season && episode ? `${episode}. Rész` : ''
+    };
+    metaCache.set(cacheKey, result);
+    return result;
+  } else {
+    // 4. Standard IMDb format: tt1234567 or tt1234567:season:episode
+    const parts = id.split(':');
+    imdbId = parts[0];
+    season = parts[1] ? parseInt(parts[1], 10) : null;
+    episode = parts[2] ? parseInt(parts[2], 10) : null;
+  }
+
+  // Fast-path: Check static pre-loaded dictionary
+  const preloaded = imdbId ? PRELOADED_HUNGARIAN_TITLES[imdbId] : null;
+  if (preloaded) {
+    let episodeTitle = '';
+    if (imdbId === 'tt0861751' && season && episode && magyarNepmesekData) {
+      const sEpisodes = magyarNepmesekData[season] || [];
+      const matched = sEpisodes.find(item => item.ep === episode);
+      if (matched && matched.title) episodeTitle = matched.title;
+    } else if (imdbId === 'tt0056789' && episode && TENKES_KAPITANYA_EPISODES[episode]) {
+      episodeTitle = TENKES_KAPITANYA_EPISODES[episode];
+    } else if (imdbId === 'tt0154077' && season && episode && HOHO_HORGASZ_EPISODES[season]?.[episode]) {
+      episodeTitle = HOHO_HORGASZ_EPISODES[season][episode];
+    }
+
+    const result = {
+      imdbId,
+      type,
+      englishTitle: preloaded.en,
+      hungarianTitle: preloaded.hu,
+      year: preloaded.year,
+      runtimeMinutes: preloaded.runtime,
+      season,
+      episode,
+      episodeTitle
+    };
+    metaCache.set(cacheKey, result);
+    return result;
+  }
+
+  let englishTitle = '';
+  let year = '';
+  let runtimeMinutes = null;
+
+  // Fetch Cinemeta metadata if we have an IMDb ID
+  if (imdbId) {
+    try {
+      const cinemetaType = type === 'series' || type === 'tv' ? 'series' : 'movie';
+      const cinemetaUrl = `https://v3-cinemeta.strem.io/meta/${cinemetaType}/${imdbId}.json`;
+      const res = await fetch(cinemetaUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+        signal: AbortSignal.timeout(5000)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.meta) {
+          englishTitle = data.meta.name || '';
+          year = (data.meta.year || '').toString().slice(0, 4);
+          if (data.meta.runtime) {
+            const rMatch = data.meta.runtime.toString().match(/(\d+)/);
+            if (rMatch) {
+              runtimeMinutes = parseInt(rMatch[1], 10);
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.warn(`[Meta] Cinemeta fetch failed for ${imdbId}:`, err.message);
+    }
+  }
+
+  // Resolve Hungarian title
+  const huTitle = initialHuTitle || (await resolveHungarianTitle(englishTitle, imdbId));
+
+  let episodeTitle = '';
+  if (imdbId === 'tt0861751' && season && episode && magyarNepmesekData) {
+    const sEpisodes = magyarNepmesekData[season] || [];
+    const matched = sEpisodes.find(item => item.ep === episode);
+    if (matched && matched.title) {
+      episodeTitle = matched.title;
+    }
+  } else if (imdbId === 'tt0056789' && episode && TENKES_KAPITANYA_EPISODES[episode]) {
+    episodeTitle = TENKES_KAPITANYA_EPISODES[episode];
+  } else if (imdbId === 'tt0154077' && season && episode && HOHO_HORGASZ_EPISODES[season]?.[episode]) {
+    episodeTitle = HOHO_HORGASZ_EPISODES[season][episode];
+  }
+
+  const result = {
+    imdbId: imdbId || id,
+    type,
+    englishTitle: englishTitle || huTitle || id,
+    hungarianTitle: huTitle || englishTitle || id,
+    year,
+    runtimeMinutes,
+    season,
+    episode,
+    episodeTitle
+  };
+
+  metaCache.set(cacheKey, result);
+  return result;
+}
+
+/**
+ * Generate search queries tailored for Hungarian streaming platforms.
+ */
+function generateSearchQueries(meta) {
+  const queries = new Set();
+  const hu = meta.hungarianTitle;
+  const en = meta.englishTitle;
+  const year = meta.year;
+  const s = meta.season;
+  const e = meta.episode;
+
+  if (meta.season && meta.episode) {
+    const sPad = String(s).padStart(2, '0');
+    const ePad = String(e).padStart(2, '0');
+
+    if (hu) {
+      if (meta.episodeTitle) {
+        queries.add(`${hu} ${meta.episodeTitle}`);
+        queries.add(`${meta.episodeTitle}`);
+        queries.add(`${hu} - ${meta.episodeTitle}`);
+      }
+      queries.add(`${hu} S${sPad}E${ePad}`);
+      queries.add(`${hu} ${s}x${e}`);
+      queries.add(`${hu} ${s}x${ePad}`);
+      queries.add(`${hu} ${s}. evad ${e}. resz`);
+      queries.add(`${hu} ${e}. resz`);
+      queries.add(`${hu}`);
+    }
+    if (en && en !== hu) {
+      queries.add(`${en} S${sPad}E${ePad}`);
+      queries.add(`${en} ${s}x${e}`);
+      queries.add(`${en}`);
+    }
+  } else {
+    // Movies
+    if (hu) {
+      queries.add(`${hu} teljes film`);
+      if (year) queries.add(`${hu} ${year}`);
+      queries.add(`${hu} teljes film magyarul`);
+      queries.add(hu);
+    }
+    if (en && en !== hu) {
+      queries.add(`${en} teljes film`);
+      if (year) queries.add(`${en} ${year}`);
+      queries.add(en);
+    }
+  }
+
+  return Array.from(queries);
+}
+
+const seriesEpisodesCache = new Map();
+
+async function getSeriesEpisodes(imdbId) {
+  if (!imdbId) return null;
+
+  // Handle MédiaKlikk programs
+  if (imdbId.startsWith('mediaklikk:program:') || imdbId.startsWith('mediaklikk:series:')) {
+    try {
+      const { getMediaKlikkSeriesEpisodes } = require('../scrapers/mediaklikk');
+      return await getMediaKlikkSeriesEpisodes(imdbId);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Handle NetMozi series
+  if (imdbId.startsWith('netmozi:')) {
+    try {
+      const { getNetMoziSeriesEpisodes } = require('../scrapers/netmozi');
+      return await getNetMoziSeriesEpisodes(imdbId);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const cleanId = imdbId.split(':')[0];
+  if (seriesEpisodesCache.has(cleanId)) {
+    return seriesEpisodesCache.get(cleanId);
+  }
+
+  // Fast-path: Static pre-loaded episodes for A nagy ho-ho-horgász (tt0154077)
+  if (cleanId === 'tt0154077') {
+    const seasonsMap = {};
+    for (const [sNum, eps] of Object.entries(HOHO_HORGASZ_EPISODES)) {
+      seasonsMap[sNum] = Object.entries(eps).map(([epNum, epTitle]) => ({
+        id: `tt0154077:${sNum}:${epNum}`,
+        season: parseInt(sNum, 10),
+        episode: parseInt(epNum, 10),
+        name: epTitle,
+        overview: `A nagy ho-ho-horgász ${sNum}. Évad ${epNum}. Rész - ${epTitle}`,
+        thumbnail: 'https://images.metahub.space/poster/medium/tt0154077/img'
+      }));
+    }
+    const result = {
+      id: 'tt0154077',
+      name: 'A nagy ho-ho-horgász',
+      englishName: 'The Great Ho-ho-ho-angler',
+      year: '1982',
+      poster: 'https://images.metahub.space/poster/medium/tt0154077/img',
+      background: 'https://images.metahub.space/poster/medium/tt0154077/img',
+      description: 'A nagy ho-ho-horgász és hű társa, a Főkukac kalandjai Balázs Péter és Mikó István legendás hangjával az MTVA archívumából.',
+      genres: ['Animáció', 'Mese', 'Klasszikus'],
+      seasons: seasonsMap
+    };
+    seriesEpisodesCache.set(cleanId, result);
+    return result;
+  }
+
+  // Fast-path: Static pre-loaded episodes for A Tenkes kapitánya (tt0056789)
+  if (cleanId === 'tt0056789') {
+    const s1Eps = Object.entries(TENKES_KAPITANYA_EPISODES).map(([epNum, epTitle]) => ({
+      id: `tt0056789:1:${epNum}`,
+      season: 1,
+      episode: parseInt(epNum, 10),
+      name: epTitle,
+      overview: `A Tenkes kapitánya 1. Évad ${epNum}. Rész - ${epTitle}`,
+      thumbnail: 'https://images.metahub.space/poster/medium/tt0056789/img'
+    }));
+    const result = {
+      id: 'tt0056789',
+      name: 'A Tenkes kapitánya',
+      englishName: 'Captain of the Tenkes',
+      year: '1964',
+      poster: 'https://images.metahub.space/poster/medium/tt0056789/img',
+      background: 'https://images.metahub.space/background/medium/tt0056789/img',
+      description: 'Történelmi kalandfilmsorozat a kuruc korból Zenthe Ferenc főszereplésével.',
+      genres: ['Kaland', 'Történelmi', 'Akció'],
+      seasons: { '1': s1Eps }
+    };
+    seriesEpisodesCache.set(cleanId, result);
+    return result;
+  }
+
+  // Fast-path: Static pre-loaded episodes for Magyar népmesék (tt0861751)
+  if (cleanId === 'tt0861751' && magyarNepmesekData) {
+    const seasonsMap = {};
+    for (const [sNum, eps] of Object.entries(magyarNepmesekData)) {
+      seasonsMap[sNum] = eps.map(e => ({
+        id: `tt0861751:${sNum}:${e.ep}`,
+        season: parseInt(sNum, 10),
+        episode: e.ep,
+        name: e.title,
+        overview: `Magyar népmesék ${sNum}. Évad ${e.ep}. Rész (${e.title})`,
+        thumbnail: 'https://images.metahub.space/poster/medium/tt0861751/img'
+      }));
+    }
+    const result = {
+      id: 'tt0861751',
+      name: 'Magyar népmesék',
+      englishName: 'Hungarian Folk Tales',
+      year: '1980–2012',
+      poster: 'https://images.metahub.space/poster/medium/tt0861751/img',
+      background: 'https://images.metahub.space/background/medium/tt0861751/img',
+      description: 'Klasszikus magyar népmesék animációs sorozat Jankovics Marcell rendezésében.',
+      genres: ['Animáció', 'Gyerek', 'Klasszikus'],
+      seasons: seasonsMap
+    };
+    seriesEpisodesCache.set(cleanId, result);
+    return result;
+  }
+
+  try {
+    const cinemetaUrl = `https://v3-cinemeta.strem.io/meta/series/${cleanId}.json`;
+    const res = await fetch(cinemetaUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+      signal: AbortSignal.timeout(8000)
+    });
+    if (!res.ok) return null;
+
+    const data = await res.json();
+    if (!data || !data.meta) return null;
+
+    const huTitle = await resolveHungarianTitle(data.meta.name, cleanId);
+
+    // Group videos by season
+    const videos = data.meta.videos || [];
+    const seasonsMap = {};
+    for (const v of videos) {
+      const sNum = v.season != null ? v.season : 1;
+      if (!seasonsMap[sNum]) {
+        seasonsMap[sNum] = [];
+      }
+      seasonsMap[sNum].push({
+        id: v.id || `${cleanId}:${sNum}:${v.episode || v.number}`,
+        season: sNum,
+        episode: v.episode != null ? v.episode : v.number,
+        name: v.name || `${v.episode || v.number}. rész`,
+        overview: v.overview || v.description || '',
+        thumbnail: v.thumbnail || ''
+      });
+    }
+
+    // Sort episodes within each season & enrich with Magyar népmesék canonical titles
+    for (const sNum of Object.keys(seasonsMap)) {
+      seasonsMap[sNum].sort((a, b) => a.episode - b.episode);
+
+      if (cleanId === 'tt0861751' && magyarNepmesekData && magyarNepmesekData[sNum]) {
+        const sEpisodes = magyarNepmesekData[sNum] || [];
+        seasonsMap[sNum].forEach(ep => {
+          const matched = sEpisodes.find(item => item.ep === ep.episode);
+          if (matched && matched.title) {
+            ep.name = matched.title;
+          }
+        });
+      }
+    }
+
+    const result = {
+      id: cleanId,
+      name: huTitle || data.meta.name,
+      englishName: data.meta.name,
+      year: data.meta.year,
+      poster: data.meta.poster,
+      background: data.meta.background,
+      description: data.meta.description,
+      genres: data.meta.genres || [],
+      seasons: seasonsMap
+    };
+
+    seriesEpisodesCache.set(cleanId, result);
+    return result;
+  } catch (err) {
+    console.warn(`[Meta] getSeriesEpisodes failed for ${cleanId}:`, err.message);
     return null;
   }
 }
 
-async function resolveMeta(type, idRaw) {
-  const parts = String(idRaw || '').split(':');
-  const imdbId = parts[0];
-  const season = parts[1] ? parseInt(parts[1], 10) : null;
-  const episode = parts[2] ? parseInt(parts[2], 10) : null;
-
-  const cacheKey = `${type}:${imdbId}`;
-  if (metaCache.has(cacheKey)) {
-    const cached = metaCache.get(cacheKey);
-    return { ...cached, season, episode };
-  }
-
-  if (!imdbId.startsWith('tt')) {
-    return {
-      imdbId,
-      enTitle: imdbId,
-      huTitle: imdbId,
-      year: null,
-      type,
-      season,
-      episode,
-      titles: [imdbId]
-    };
-  }
-
-  const [cinemetaRes, wikidataRes, tmdbRes] = await Promise.allSettled([
-    fetchCinemeta(type, imdbId),
-    fetchWikidataHungarianTitle(imdbId),
-    fetchTmdbTitles(imdbId)
-  ]);
-
-  const cinemeta = cinemetaRes.status === 'fulfilled' ? cinemetaRes.value : null;
-  const wikidata = wikidataRes.status === 'fulfilled' ? wikidataRes.value : null;
-  const tmdb = tmdbRes.status === 'fulfilled' ? tmdbRes.value : null;
-
-  const enTitle = cinemeta?.name || tmdb?.enTitle || wikidata?.enTitle || imdbId;
-  const huTitle = tmdb?.huTitle || wikidata?.huTitle || cinemeta?.name || enTitle;
-  const year = cinemeta?.year || tmdb?.year || wikidata?.year || null;
-
-  const titles = [...new Set([huTitle, tmdb?.huTitle, wikidata?.huTitle, enTitle, ...(wikidata?.aliases || [])].filter(Boolean))];
-
-  const result = {
-    imdbId,
-    enTitle,
-    huTitle,
-    year,
-    poster: cinemeta?.poster || tmdb?.poster || null,
-    background: cinemeta?.background || null,
-    description: wikidata?.huDescription || cinemeta?.description || '',
-    type,
-    titles
-  };
-
-  metaCache.set(cacheKey, result);
-  return { ...result, season, episode };
-}
-
-async function fetchCinemeta(type, imdbId) {
-  const mediaType = type === 'series' ? 'series' : 'movie';
-  const url = `https://v3-cinemeta.strem.io/meta/${mediaType}/${imdbId}.json`;
-  const r = await fetch(url, {
-    headers: { 'User-Agent': UA },
-    signal: AbortSignal.timeout(5000)
-  });
-  if (!r.ok) return null;
-  const data = await r.json();
-  const meta = data?.meta;
-  if (!meta) return null;
-  const yearMatch = String(meta.releaseInfo || meta.year || '').match(/\b(19\d{2}|20\d{2})\b/);
-  return {
-    name: meta.name,
-    year: yearMatch ? parseInt(yearMatch[1], 10) : null,
-    poster: meta.poster,
-    background: meta.background,
-    description: meta.description
-  };
-}
-
-async function fetchWikidataHungarianTitle(imdbId) {
-  const sparql = `
-    SELECT ?itemLabel_hu ?itemLabel_en ?huWikiTitle ?pubYear WHERE {
-      ?item wdt:P345 "${imdbId}".
-      OPTIONAL { ?item rdfs:label ?itemLabel_hu FILTER(LANG(?itemLabel_hu) = "hu") }
-      OPTIONAL { ?item rdfs:label ?itemLabel_en FILTER(LANG(?itemLabel_en) = "en") }
-      OPTIONAL {
-        ?huWiki schema:about ?item;
-                schema:isPartOf <https://hu.wikipedia.org/>;
-                schema:name ?huWikiTitle.
-      }
-      OPTIONAL { ?item wdt:P577 ?pubDate. BIND(YEAR(?pubDate) AS ?pubYear) }
-    }
-    LIMIT 3
-  `;
-  const url = `https://query.wikidata.org/sparql?format=json&query=${encodeURIComponent(sparql)}`;
-  const r = await fetch(url, {
-    headers: {
-      'User-Agent': 'NuvioMagyarAddon/2.0 (https://nuvio.app)',
-      'Accept': 'application/sparql-results+json'
-    },
-    signal: AbortSignal.timeout(4500)
-  });
-  if (!r.ok) return null;
-  const data = await r.json();
-  const bindings = data?.results?.bindings || [];
-  if (!bindings.length) return null;
-
-  const first = bindings[0];
-  const rawWiki = first.huWikiTitle?.value
-    ? first.huWikiTitle.value.replace(/\s*\([^)]*\)\s*$/, '').trim()
-    : null;
-  const huLabel = first.itemLabel_hu?.value || null;
-  const enLabel = first.itemLabel_en?.value || null;
-  const year = first.pubYear?.value ? parseInt(first.pubYear.value, 10) : null;
-
-  const aliases = [huLabel, rawWiki, enLabel].filter(Boolean);
-  return {
-    huTitle: huLabel || rawWiki || enLabel,
-    enTitle: enLabel,
-    year,
-    aliases
-  };
-}
-
 module.exports = {
-  UA,
-  stripAccents,
-  normalizeTitle,
-  toRoman,
-  isTitleMatch,
-  resolveMeta
+  getMediaMeta,
+  generateSearchQueries,
+  getSeriesEpisodes
 };

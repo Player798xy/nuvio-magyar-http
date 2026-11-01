@@ -1,61 +1,185 @@
-const { UA, isTitleMatch } = require('../utils/meta');
-const { extractIndavideoStreams } = require('../utils/videa_indavideo');
+/**
+ * Indavideo.hu Scraper
+ * Extracts direct MP4 streams with authenticated CDN tokens from Indavideo.
+ */
 
-async function searchIndavideo(meta) {
-  const { titles, year, type, season, episode } = meta;
-  const queries = [];
+const { isTitleMatch } = require('./videa');
 
-  for (const hu of titles.slice(0, 2)) {
-    if (type === 'series' && season && episode) {
-      const ePad = String(episode).padStart(2, '0');
-      queries.push(`${hu} S${season}E${ePad}`);
-      queries.push(`${hu} ${season}x${episode}`);
-      queries.push(`${hu} ${season} evad ${episode} resz`);
-    } else {
-      queries.push(`${hu} teljes film`);
-      if (year) queries.push(`${hu} ${year}`);
+function normalize(str) {
+  return (str || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+async function extractIndavideoStreams(embHash) {
+  try {
+    const rnd = Math.floor(Math.random() * 2147483647);
+    const dataUrl = `https://amfphp.indavideo.hu/SYm0json.php/player.playerHandler.getVideoData/${embHash}/12/?callback=json&_=${rnd}`;
+
+    const res = await fetch(dataUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Referer': 'https://embed.indavideo.hu/'
+      },
+      signal: AbortSignal.timeout(5000)
+    });
+
+    if (!res.ok) return null;
+    let text = await res.text();
+    if (text.startsWith('json(')) {
+      text = text.slice(5, text.lastIndexOf(')'));
     }
+    const json = JSON.parse(text);
+    const data = json?.data;
+    if (!data) return null;
+
+    const title = data.title || '';
+    const filesh = data.filesh || {};
+    const videoFiles = [];
+
+    if (Array.isArray(data.video_files)) {
+      videoFiles.push(...data.video_files);
+    } else if (data.video_files && typeof data.video_files === 'object') {
+      videoFiles.push(...Object.values(data.video_files));
+    }
+    if (data.video_file && !videoFiles.includes(data.video_file)) {
+      videoFiles.push(data.video_file);
+    }
+
+    const streams = [];
+    const seenHeights = new Set();
+
+    for (const vUrl of videoFiles) {
+      if (!vUrl || typeof vUrl !== 'string') continue;
+      const heightMatch = vUrl.match(/\.(\d{3,4})\.mp4/);
+      const height = heightMatch ? parseInt(heightMatch[1], 10) : 360;
+
+      if (seenHeights.has(height)) continue;
+      seenHeights.add(height);
+
+      let token = filesh[height.toString()] || filesh[height];
+      if (!token) {
+        token = Object.values(filesh)[0] || '';
+      }
+
+      let finalUrl = vUrl.replace('??', '?');
+      if (token) {
+        finalUrl += `&token=${token}`;
+      }
+
+      streams.push({
+        height,
+        url: finalUrl,
+        title
+      });
+    }
+
+    streams.sort((a, b) => b.height - a.height);
+    return { title, streams };
+  } catch (err) {
+    return null;
+  }
+}
+
+async function scrapeIndavideo(meta) {
+  const streams = [];
+  const hu = meta.hungarianTitle || meta.englishTitle;
+  if (!hu) return streams;
+
+  const searchTerms = [];
+  if (meta.season && meta.episode) {
+    const s = meta.season;
+    const e = meta.episode;
+    const ePad = e.toString().padStart(2, '0');
+    searchTerms.push(`${hu} S${s}E${ePad}`);
+    searchTerms.push(`${hu} ${s}x${e}`);
+    searchTerms.push(`${hu} ${s} evad ${e} resz`);
+  } else {
+    searchTerms.push(`${hu} teljes film`);
+    if (meta.year) searchTerms.push(`${hu} ${meta.year}`);
+    searchTerms.push(hu);
   }
 
-  const seenSlugs = new Set();
-  const streams = [];
+  const seenVideoSlugs = new Set();
 
-  for (const term of queries.slice(0, 2)) {
+  for (const term of searchTerms.slice(0, 2)) {
     try {
       const searchUrl = `https://indavideo.hu/search?search=${encodeURIComponent(term)}&view=detailed&sort_mode=magic`;
       const res = await fetch(searchUrl, {
-        headers: { 'User-Agent': UA, Referer: 'https://indavideo.hu/' },
-        signal: AbortSignal.timeout(5500)
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        },
+        signal: AbortSignal.timeout(5000)
       });
       if (!res.ok) continue;
 
       const html = await res.text();
-      const videoLinks = [...html.matchAll(/href="https?:\/\/indavideo\.hu\/video\/([^"#\s]+)"/g)].map((m) => m[1]);
-      const slugs = [];
-      for (const s of videoLinks) {
-        if (!seenSlugs.has(s)) {
-          seenSlugs.add(s);
-          slugs.push(s);
-          if (slugs.length >= 3) break;
+      const videoLinks = [...html.matchAll(/href="https?:\/\/indavideo\.hu\/video\/([^"#\s]+)"/g)].map(m => m[1]);
+
+      const slugsToProcess = [];
+      for (const slug of videoLinks) {
+        if (!seenVideoSlugs.has(slug)) {
+          seenVideoSlugs.add(slug);
+          slugsToProcess.push(slug);
+          if (slugsToProcess.length >= 3) break;
         }
       }
 
-      await Promise.allSettled(
-        slugs.map(async (slug) => {
-          const extracted = await extractIndavideoStreams(`https://indavideo.hu/video/${slug}`, 'Indavideo.hu');
-          for (const item of extracted) {
-            if (isTitleMatch(item.title, titles, type === 'series' ? null : year)) {
-              streams.push(item);
-            }
+      await Promise.all(slugsToProcess.map(async (slug) => {
+        try {
+          const pageRes = await fetch(`https://indavideo.hu/video/${slug}`, {
+            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+            signal: AbortSignal.timeout(3500)
+          });
+          if (!pageRes.ok) return;
+
+          const pHtml = await pageRes.text();
+          const hashMatch = pHtml.match(/id=['"]emb_hash['"][^>]+value=['"]([^'"]+)['"]/i) ||
+                            pHtml.match(/value=['"]([^'"]+)['"][^>]+id=['"]emb_hash['"]/i) ||
+                            pHtml.match(/embed\.indavideo\.hu\/player\/video\/([a-zA-Z0-9]+)/);
+
+          if (!hashMatch) return;
+          const embHash = hashMatch[1];
+
+          const vData = await extractIndavideoStreams(embHash);
+          if (!vData || !vData.streams || vData.streams.length === 0) return;
+
+          // Check title match
+          const isSeries = Boolean(meta.season);
+          if (!isTitleMatch(hu, vData.title, meta.year, isSeries)) {
+            return;
           }
-        })
-      );
+
+          for (const s of vData.streams) {
+            const qualLabel = s.height >= 1080 ? '1080p FHD' : s.height >= 720 ? '720p HD' : `${s.height}p`;
+            streams.push({
+              name: `[HU] Indavideo ${qualLabel}`,
+              title: `${vData.title}\n🇭🇺 Indavideo.hu • ${qualLabel} • Közvetlen MP4`,
+              url: s.url,
+              quality: s.height >= 1080 ? '1080p' : s.height >= 720 ? '720p' : '480p',
+              height: s.height,
+              source: 'indavideo'
+            });
+          }
+        } catch (e) {
+          // ignore
+        }
+      }));
 
       if (streams.length > 0) break;
-    } catch {}
+    } catch (err) {
+      // Continue
+    }
   }
 
   return streams;
 }
 
-module.exports = { searchIndavideo };
+module.exports = {
+  scrapeIndavideo,
+  extractIndavideoStreams
+};

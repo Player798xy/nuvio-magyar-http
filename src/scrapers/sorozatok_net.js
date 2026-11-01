@@ -1,16 +1,19 @@
 const { cfRequest } = require('../utils/http');
-const { normalizeTitle } = require('../utils/meta');
-const { decodeHunter } = require('../utils/crypto_decoders');
-const { resolveAnyEmbed } = require('../utils/hosters');
+const { decodeHunter, unpackPacker, decodeVoePayload } = require('../utils/crypto_decoders');
+const { extractVideaStreams } = require('./videa');
 
-/**
- * Sorozatok.net Scraper (Hungarian TV Series Catalog & Direct Hoster Extractor)
- * 1. Queries `https://sorozatok.net/api/search.json` (cached in memory)
- * 2. Matches Hungarian or English title
- * 3. Finds target season & episode (`/watch.php?v=...`)
- * 4. Follows `/go.php?id=...&key=...` -> `streambot.click` -> `hunter(...)` deobfuscation -> `videoplayback.php`
- * 5. Unpacks direct HLS / MP4 from VOE / Filemoon / Videa / etc.
- */
+const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+
+function normalizeTitle(str) {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 let searchIndexCache = null;
 let searchIndexTime = 0;
@@ -33,8 +36,134 @@ async function getSorozatokIndex() {
   return searchIndexCache || [];
 }
 
-async function searchSorozatokNet(meta) {
-  const { titles, type, season, episode } = meta;
+async function resolveHosterStream(rawUrl, epLabel) {
+  const streams = [];
+  if (!rawUrl || typeof rawUrl !== 'string') return streams;
+  const url = rawUrl.startsWith('//') ? 'https:' + rawUrl : rawUrl;
+  const lower = url.toLowerCase();
+
+  try {
+    // 1. Videa / Videakid
+    if (lower.includes('videa.hu') || lower.includes('videakid.hu')) {
+      const vMatch = url.match(/[?&]v=([a-zA-Z0-9]{16})/) || url.match(/-([a-zA-Z0-9]{16})(?:$|[/?#])/);
+      if (vMatch) {
+        const vd = await extractVideaStreams(vMatch[1]);
+        if (vd && vd.sources) {
+          for (const vs of vd.sources) {
+            const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
+            streams.push({
+              name: `[HU] Sorozatok.net ${qualLabel}`,
+              title: `${epLabel}\n🇭🇺 Sorozatok.net (Videa) • ${qualLabel}`,
+              url: vs.url,
+              quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
+              height: vs.height,
+              source: 'sorozatoknet',
+              behaviorHints: { bingeGroup: `hu-sorozatoknet-${qualLabel}` }
+            });
+          }
+        }
+      }
+      return streams;
+    }
+
+    // 2. VOE
+    if (
+      lower.includes('voe.sx') ||
+      lower.includes('voe.') ||
+      lower.includes('shanelocaldog') ||
+      lower.includes('walterprettytheir') ||
+      lower.includes('yodelswart') ||
+      lower.includes('launchreliant') ||
+      lower.includes('diananatureforeign')
+    ) {
+      let currentUrl = url;
+      let html = await fetch(currentUrl, {
+        headers: { 'User-Agent': UA, Referer: 'https://voe.sx/' },
+        signal: AbortSignal.timeout(6000)
+      }).then((r) => r.text());
+
+      const jsRedirect = html.match(/window\.location\.href\s*=\s*['"](https?:\/\/[^'"]+)['"]/i);
+      if (jsRedirect) {
+        currentUrl = jsRedirect[1];
+        html = await fetch(currentUrl, {
+          headers: { 'User-Agent': UA, Referer: url },
+          signal: AbortSignal.timeout(6000)
+        }).then((r) => r.text());
+      }
+
+      const jsonScriptMatch = html.match(/<script type="application\/json">\["([^"]+)"\]<\/script>/i);
+      if (jsonScriptMatch) {
+        const data = decodeVoePayload(jsonScriptMatch[1]);
+        if (data) {
+          if (data.source && data.source.startsWith('http')) {
+            streams.push({
+              name: `[HU] Sorozatok.net 1080p FHD`,
+              title: `${epLabel}\n🇭🇺 Sorozatok.net (VOE HLS) • 1080p FHD`,
+              url: data.source,
+              quality: '1080p',
+              height: 1080,
+              source: 'sorozatoknet',
+              behaviorHints: { bingeGroup: 'hu-sorozatoknet-1080p' }
+            });
+          }
+          if (data.direct_access_url && data.direct_access_url.startsWith('http')) {
+            streams.push({
+              name: `[HU] Sorozatok.net 720p HD`,
+              title: `${epLabel}\n🇭🇺 Sorozatok.net (VOE MP4) • 720p HD`,
+              url: data.direct_access_url,
+              quality: '720p',
+              height: 720,
+              source: 'sorozatoknet',
+              behaviorHints: { bingeGroup: 'hu-sorozatoknet-720p' }
+            });
+          }
+        }
+      }
+      return streams;
+    }
+
+    // 3. Packer hosters (Filemoon, Streamwish, Vidmoly, Vidoza, Goodstream, etc.)
+    const r = await fetch(url, {
+      headers: { 'User-Agent': UA, Referer: url },
+      signal: AbortSignal.timeout(6000)
+    });
+    if (r.ok) {
+      const html = await r.text();
+      const unpacked = unpackPacker(html) || html;
+      const m3u8Match = unpacked.match(/(https?:\/\/[^\s"'<>\\]+\.m3u8[^\s"'<>\\]*)/i);
+      if (m3u8Match) {
+        streams.push({
+          name: `[HU] Sorozatok.net 1080p FHD`,
+          title: `${epLabel}\n🇭🇺 Sorozatok.net (HLS) • 1080p FHD`,
+          url: m3u8Match[1].replace(/\\+/g, ''),
+          quality: '1080p',
+          height: 1080,
+          source: 'sorozatoknet',
+          behaviorHints: { bingeGroup: 'hu-sorozatoknet-1080p' }
+        });
+      } else {
+        const mp4Match = unpacked.match(/(https?:\/\/[^\s"'<>\\]+\.mp4[^\s"'<>\\]*)/i);
+        if (mp4Match && !mp4Match[1].includes('Big_Buck_Bunny')) {
+          streams.push({
+            name: `[HU] Sorozatok.net 720p HD`,
+            title: `${epLabel}\n🇭🇺 Sorozatok.net (MP4) • 720p HD`,
+            url: mp4Match[1].replace(/\\+/g, ''),
+            quality: '720p',
+            height: 720,
+            source: 'sorozatoknet',
+            behaviorHints: { bingeGroup: 'hu-sorozatoknet-720p' }
+          });
+        }
+      }
+    }
+  } catch {}
+  return streams;
+}
+
+async function scrapeSorozatokNet(meta) {
+  const rawTitles = meta.searchTitles || meta.titles || [meta.hungarianTitle, meta.englishTitle];
+  const titles = [...new Set(rawTitles.filter(Boolean))];
+  const { type, season, episode } = meta;
   if (type !== 'series' || !season || !episode) return [];
 
   const index = await getSorozatokIndex();
@@ -125,7 +254,7 @@ async function searchSorozatokNet(meta) {
       if (!loc || seen.has(loc)) return;
       seen.add(loc);
 
-      const resolved = await resolveAnyEmbed(loc, 'Sorozatok.net', targetEpTitle || matchedSeries.cat_name);
+      const resolved = await resolveHosterStream(loc, targetEpTitle || `${matchedSeries.cat_name} S${season}E${episode}`);
       streams.push(...resolved);
     })
   );
@@ -133,4 +262,4 @@ async function searchSorozatokNet(meta) {
   return streams;
 }
 
-module.exports = { searchSorozatokNet, getSorozatokIndex };
+module.exports = { scrapeSorozatokNet, searchSorozatokNet: scrapeSorozatokNet, getSorozatokIndex };

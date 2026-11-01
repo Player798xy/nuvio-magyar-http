@@ -1,84 +1,113 @@
-const { UA, isTitleMatch } = require('../utils/meta');
-const { resolveAnyEmbed } = require('../utils/hosters');
-
 /**
- * MeseKincstár.tv & MeseFilmek.hu Scraper
- * Dedicated Hungarian kids, fairy tale, and animated movie/series scraper.
+ * MeseFilm Scraper (Mesekincstar.tv & Retromesek.hu)
+ * Dedicated scraper for Hungarian animations, cartoons, and fairy tales.
  */
-async function searchMeseFilm(meta) {
-  const { titles, year } = meta;
-  const streams = [];
 
-  for (const q of titles.slice(0, 2)) {
-    // 1. MeseKincstár.tv
+const { extractVideaStreams } = require('./videa');
+const { extractIndavideoStreams } = require('./indavideo');
+
+function normalize(str) {
+  return (str || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+async function scrapeMeseFilm(meta) {
+  const streams = [];
+  const hu = meta.hungarianTitle || meta.englishTitle;
+  if (!hu) return streams;
+
+  const normTarget = normalize(hu);
+
+  const searchQueries = [];
+  if (meta.episodeTitle) {
+    searchQueries.push(meta.episodeTitle);
+    searchQueries.push(`${hu} ${meta.episodeTitle}`);
+  }
+  searchQueries.push(hu);
+
+  // 1. Search Mesekincstar.tv
+  for (const q of searchQueries) {
     try {
       const sUrl = `https://mesekincstar.tv/mesekereso/${encodeURIComponent(q)}`;
-      const r = await fetch(sUrl, {
-        headers: { 'User-Agent': UA },
-        signal: AbortSignal.timeout(4500)
+      const sRes = await fetch(sUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+        signal: AbortSignal.timeout(4000)
       });
-      if (r.ok) {
-        const html = await r.text();
+      if (sRes.ok) {
+        const html = await sRes.text();
         const links = [...html.matchAll(/<a[^>]+href="([^"]+)"[^>]*title="([^"]+)"/gi)]
-          .map((m) => ({ url: m[1], title: m[2].trim() }))
-          .filter((l) => !l.url.includes('/tag/') && !l.url.includes('/mesekereso/') && isTitleMatch(l.title, titles, year));
+          .map(m => ({ url: m[1], title: m[2] }))
+          .filter(l => !l.url.includes('/tag/') && !l.url.includes('/mesekereso/'));
 
-        await Promise.allSettled(
-          links.slice(0, 2).map(async (item) => {
-            const pRes = await fetch(item.url, {
-              headers: { 'User-Agent': UA },
-              signal: AbortSignal.timeout(4500)
+        for (const item of links.slice(0, 3)) {
+          try {
+            const pageRes = await fetch(item.url, {
+              headers: { 'User-Agent': 'Mozilla/5.0' },
+              signal: AbortSignal.timeout(3500)
             });
-            if (!pRes.ok) return;
-            const pHtml = await pRes.text();
-            const iframes = [...pHtml.matchAll(/<iframe[^>]+src=["']([^"']+)["']/gi)].map((m) => m[1]);
-            for (const ifr of iframes.slice(0, 3)) {
-              const resolved = await resolveAnyEmbed(ifr, 'MeseKincstár', item.title);
-              streams.push(...resolved);
+            if (pageRes.ok) {
+              const pHtml = await pageRes.text();
+              const iframes = [...pHtml.matchAll(/<iframe[^>]+src=["']([^"']+)["']/gi)].map(m => m[1]);
+              for (const ifr of iframes) {
+                let iframeSrc = ifr.startsWith('//') ? 'https:' + ifr : ifr;
+
+                // Videa embed
+                if (iframeSrc.includes('videa.hu/player?v=')) {
+                  const vcodeMatch = iframeSrc.match(/v=([a-zA-Z0-9]{16})/);
+                  if (vcodeMatch) {
+                    const vData = await extractVideaStreams(vcodeMatch[1]);
+                    const vStreams = vData?.sources || [];
+                    for (const vs of vStreams) {
+                      const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
+                      streams.push({
+                        name: `[HU] MeseFilm ${qualLabel}`,
+                        title: `${item.title}\n🇭🇺 MeseKincstár (Videa) • ${qualLabel} • Magyar Rajzfilm`,
+                        url: vs.url,
+                        quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
+                        height: vs.height,
+                        source: 'mesefilm'
+                      });
+                    }
+                  }
+                }
+
+                // Indavideo embed
+                if (iframeSrc.includes('embed.indavideo.hu/player/video/')) {
+                  const ihashMatch = iframeSrc.match(/video\/([a-zA-Z0-9]+)/);
+                  if (ihashMatch) {
+                    const iData = await extractIndavideoStreams(ihashMatch[1]);
+                    const iStreams = iData?.streams || [];
+                    for (const is of iStreams) {
+                      const qualLabel = is.height >= 1080 ? '1080p FHD' : is.height >= 720 ? '720p HD' : `${is.height}p`;
+                      streams.push({
+                        name: `[HU] MeseFilm ${qualLabel}`,
+                        title: `${item.title}\n🇭🇺 MeseKincstár (Indavideo) • ${qualLabel} • Magyar Rajzfilm`,
+                        url: is.url,
+                        quality: is.height >= 1080 ? '1080p' : is.height >= 720 ? '720p' : '480p',
+                        height: is.height,
+                        source: 'mesefilm'
+                      });
+                    }
+                  }
+                }
+              }
             }
-          })
-        );
+          } catch (e) {}
+          if (streams.length >= 3) break;
+        }
       }
-    } catch {}
-
-    // 2. MeseFilmek.hu (with Cookie: mesefilmek=1)
-    try {
-      const mfUrl = `https://mesefilmek.hu/?s=${encodeURIComponent(q)}`;
-      const mfRes = await fetch(mfUrl, {
-        headers: { 'User-Agent': UA, Cookie: 'mesefilmek=1' },
-        signal: AbortSignal.timeout(4500)
-      });
-      if (mfRes.ok) {
-        const mfHtml = await mfRes.text();
-        const posts = [...mfHtml.matchAll(/<h2[^>]*>\s*<a[^>]+href="(https?:\/\/mesefilmek\.hu\/[^"]+)"[^>]*>([^<]+)<\/a>/gi)]
-          .map((m) => ({ url: m[1], title: m[2].trim() }))
-          .filter((p) => isTitleMatch(p.title, titles, year));
-
-        await Promise.allSettled(
-          posts.slice(0, 2).map(async (post) => {
-            const pRes = await fetch(post.url, {
-              headers: { 'User-Agent': UA, Cookie: 'mesefilmek=1' },
-              signal: AbortSignal.timeout(4500)
-            });
-            if (!pRes.ok) return;
-            const pHtml = await pRes.text();
-            const iframes = [...pHtml.matchAll(/<iframe[^>]+src=["']([^"']+)["']/gi)].map((m) => m[1]);
-            const scriptVidea = [...pHtml.matchAll(/videa\.hu\/player\?v=([a-zA-Z0-9]+)/gi)].map((m) => `https://videa.hu/player?v=${m[1]}`);
-            const scriptInda = [...pHtml.matchAll(/indavideo\.hu\/video\/([a-zA-Z0-9]+)/gi)].map((m) => `https://indavideo.hu/video/${m[1]}`);
-            const allSources = [...new Set([...iframes, ...scriptVidea, ...scriptInda])];
-            for (const src of allSources.slice(0, 3)) {
-              const resolved = await resolveAnyEmbed(src, 'MeseFilmek.hu', post.title);
-              streams.push(...resolved);
-            }
-          })
-        );
-      }
-    } catch {}
-
-    if (streams.length > 0) break;
+    } catch (e) {}
+    if (streams.length >= 3) break;
   }
 
   return streams;
 }
 
-module.exports = { searchMeseFilm };
+module.exports = {
+  scrapeMeseFilm
+};

@@ -1,16 +1,20 @@
-const { UA, isTitleMatch } = require('../utils/meta');
-const { extractVideaStreams } = require('../utils/videa_indavideo');
+const { extractVideaStreams, isTitleMatch } = require('./videa');
+
+const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
 /**
  * Videakid.hu Scraper (Hungarian Kids, Animation, Family Movies & Cartoons)
  * Uses Videakid's search engine and Videa's RC4 XML decryptor for direct MP4 links.
  */
-async function searchVideakid(meta) {
-  const { titles, year, type, season, episode } = meta;
+async function scrapeVideakid(meta) {
+  const rawTitles = meta.searchTitles || meta.titles || [meta.hungarianTitle, meta.englishTitle];
+  const titles = [...new Set(rawTitles.filter(Boolean))];
+  const { year, type, season, episode } = meta;
+  const isMovie = type === 'movie';
   const queries = [];
 
   for (const t of titles.slice(0, 2)) {
-    if (type === 'series' && season && episode) {
+    if (!isMovie && season && episode) {
       queries.push(`${t} ${season}. évad ${episode}. rész`);
       queries.push(`${t} ${episode}. rész`);
     } else {
@@ -38,7 +42,7 @@ async function searchVideakid(meta) {
         const vcode = m[2];
         const title = m[3].trim();
         if (seen.has(vcode)) continue;
-        if (!isTitleMatch(title, titles, year)) continue;
+        if (!titles.some(t => isTitleMatch(t, title, year, !isMovie))) continue;
         seen.add(vcode);
         candidates.push({ url: href, vcode, title });
       }
@@ -47,13 +51,31 @@ async function searchVideakid(meta) {
 
   const streams = [];
   await Promise.allSettled(
-    candidates.slice(0, 3).map(async (c) => {
-      const extracted = await extractVideaStreams(c.url, 'Videakid.hu', c.title);
-      streams.push(...extracted);
+    candidates.slice(0, 4).map(async (c) => {
+      const videoData = await extractVideaStreams(c.vcode);
+      if (!videoData || !videoData.sources || videoData.sources.length === 0) return;
+      if (isMovie && videoData.duration < 2400) return;
+      if (!isMovie && videoData.duration < 300) return;
+
+      const durationMins = Math.round((videoData.duration || 0) / 60);
+      for (const vs of videoData.sources) {
+        const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
+        streams.push({
+          name: `[HU] Videakid ${qualLabel}`,
+          title: `${videoData.videoTitle || c.title}\n🇭🇺 Videakid.hu • ${qualLabel}${durationMins ? ` • ${durationMins} perc` : ''}`,
+          url: vs.url,
+          quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
+          height: vs.height,
+          source: 'videakid',
+          behaviorHints: {
+            bingeGroup: `hu-videakid-${qualLabel}`
+          }
+        });
+      }
     })
   );
 
   return streams;
 }
 
-module.exports = { searchVideakid };
+module.exports = { scrapeVideakid, searchVideakid: scrapeVideakid };

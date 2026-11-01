@@ -3,282 +3,431 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🇭🇺 Nuvio Magyar HTTP Streaming Addon (Vercel)</title>
+  <title>Magyar Streaming Pro (HU) — Nuvio & Stremio HTTP Addon</title>
+  <link rel="icon" type="image/png" href="/logo.png" />
   <style>
     :root {
-      --bg: #0b0f19;
-      --card: #131b2e;
-      --border: #23304d;
+      --bg: #0b0f17;
+      --card: #151c28;
+      --border: #263248;
+      --hu-red: #ce2939;
+      --hu-white: #ffffff;
+      --hu-green: #477050;
       --text: #f1f5f9;
       --muted: #94a3b8;
-      --hu-red: #ef4444;
-      --hu-green: #22c55e;
-      --accent: #3b82f6;
+      --accent: #e11d48;
+      --green: #10b981;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: radial-gradient(circle at top, #172554 0%, var(--bg) 55%);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #172033 0%, var(--bg) 70%);
       color: var(--text);
       min-height: 100vh;
-      padding: 2rem 1rem 4rem;
-      line-height: 1.5;
+      padding: 0 16px 48px;
     }
-    .container { max-width: 880px; margin: 0 auto; }
+    /* Vízszintes magyar trikolór sáv (Piros - Fehér - Zöld felülről lefelé) */
+    .hu-top-stripe {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 960px;
+      height: 12px;
+      margin: 0 auto 28px;
+      border-radius: 0 0 8px 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.45);
+    }
+    .hu-top-stripe .stripe-red { flex: 1; background: #ce2939; }
+    .hu-top-stripe .stripe-white { flex: 1; background: #ffffff; }
+    .hu-top-stripe .stripe-green { flex: 1; background: #477050; }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
     .hero {
-      text-align: center;
-      margin-bottom: 2rem;
-      padding: 1.75rem;
-      background: rgba(19, 27, 46, 0.85);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
-    }
-    .flag-bar {
-      height: 6px;
-      width: 140px;
-      margin: 0 auto 1rem;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #ce2939 0%, #ce2939 33%, #ffffff 33%, #ffffff 66%, #477050 66%, #477050 100%);
-    }
-    h1 { font-size: 1.85rem; margin-bottom: 0.5rem; }
-    .subtitle { color: var(--muted); font-size: 0.98rem; }
-    .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.5rem;
-      margin-bottom: 1.25rem;
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
     }
-    .card h2 {
-      font-size: 1.15rem;
-      margin-bottom: 1rem;
+    .hero-header {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 18px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 0.75rem;
+    .addon-logo {
+      width: 68px;
+      height: 68px;
+      border-radius: 16px;
+      object-fit: cover;
+      border: 2px solid var(--border);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
     }
-    .prov-item {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      padding: 0.7rem 0.9rem;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      cursor: pointer;
-      user-select: none;
-      transition: border-color 0.15s, background 0.15s;
+    .hu-flag-svg {
+      width: 42px;
+      height: 28px;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.2);
+      flex-shrink: 0;
     }
-    .prov-item:hover { border-color: var(--accent); background: rgba(59, 130, 246, 0.08); }
-    .prov-item input { width: 17px; height: 17px; accent-color: var(--hu-green); }
-    .controls-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-    }
-    label.field-label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.4rem; }
-    select, input[type="text"] {
-      width: 100%;
-      padding: 0.65rem 0.85rem;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: #0b1120;
-      color: var(--text);
-      font-size: 0.95rem;
-    }
-    .url-box {
-      background: #070b14;
-      border: 1px solid var(--border);
-      padding: 0.85rem 1rem;
-      border-radius: 10px;
-      font-family: monospace;
-      font-size: 0.88rem;
-      word-break: break-all;
-      color: #60a5fa;
-      margin-bottom: 1rem;
-    }
-    .btn-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-    button, a.btn {
+    .badge {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.72rem 1.25rem;
-      border-radius: 10px;
-      border: none;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
       font-weight: 600;
-      font-size: 0.93rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform 0.1s, opacity 0.15s;
+      margin-bottom: 8px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
     }
-    button:active, a.btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--hu-green); color: #052e16; }
-    .btn-secondary { background: var(--accent); color: #fff; }
-    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-    .test-output {
-      margin-top: 1rem;
-      background: #070b14;
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    p.subtitle {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 22px;
+      font-size: 15px;
+    }
+    .manifest-box {
+      background: #090d14;
       border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .manifest-url {
+      font-family: 'Consolas', monospace;
+      font-size: 14px;
+      color: #38bdf8;
+      word-break: break-all;
+    }
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    button, .btn {
+      cursor: pointer;
+      border: none;
       border-radius: 10px;
-      padding: 1rem;
-      max-height: 320px;
+      padding: 11px 18px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary {
+      background: var(--hu-red);
+      color: #fff;
+    }
+    .btn-primary:hover { background: #b01e2d; }
+    .btn-secondary {
+      background: #1e293b;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: #283548; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .source-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .source-card input[type="checkbox"] {
+      margin-top: 3px;
+      width: 17px;
+      height: 17px;
+      accent-color: var(--hu-red);
+      cursor: pointer;
+    }
+    .source-card h3 {
+      font-size: 14px;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .source-card p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      display: inline-block;
+    }
+    .tester {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .tester h2 {
+      font-size: 18px;
+      margin-bottom: 14px;
+    }
+    .preset-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .pill {
+      background: #1e293b;
+      border: 1px solid var(--border);
+      color: #cbd5e1;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .pill:hover {
+      background: #334155;
+      color: #fff;
+    }
+    .test-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    input, select {
+      background: #090d14;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+    input { flex: 1; min-width: 200px; }
+    .results {
+      background: #090d14;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'Consolas', monospace;
+      font-size: 13px;
+      max-height: 420px;
       overflow-y: auto;
-      font-family: monospace;
-      font-size: 0.83rem;
       white-space: pre-wrap;
-      display: none;
+    }
+    .stream-item {
+      padding: 12px;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .stream-item:last-child { border-bottom: none; }
+    .qual-badge {
+      display: inline-block;
+      background: rgba(206, 41, 57, 0.2);
+      border: 1px solid #ce2939;
+      color: #fda4af;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-left: 8px;
     }
   </style>
 </head>
 <body>
+  <!-- Vízszintes magyar zászló csík: Piros felül, Fehér középen, Zöld alul -->
+  <div class="hu-top-stripe" title="Magyarország zászlaja (Piros-Fehér-Zöld)">
+    <div class="stripe-red"></div>
+    <div class="stripe-white"></div>
+    <div class="stripe-green"></div>
+  </div>
+
   <div class="container">
     <div class="hero">
-      <div class="flag-bar"></div>
-      <h1>Nuvio Magyar HTTP Streaming Addon</h1>
-      <p class="subtitle">12 magyar HTTP videóforrás • Közvetlen MP4 &amp; HLS kicsomagolás • Beépített Vercel Stream &amp; HLS Proxy</p>
+      <div class="hero-header">
+        <img src="/logo.png" alt="Magyar Streaming Pro Ikon" class="addon-logo" />
+        <div>
+          <div class="badge">● NUVIO & STREMIO DIRECT HTTP ADDON • v2.5.0</div>
+          <h1>
+            <!-- Valódi vízszintes magyar zászló SVG (nem olasz, nem Windows HU betűk!) -->
+            <svg class="hu-flag-svg" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-label="Magyar zászló">
+              <rect width="60" height="13.34" y="0" fill="#CE2939"/>
+              <rect width="60" height="13.34" y="13.33" fill="#FFFFFF"/>
+              <rect width="60" height="13.34" y="26.66" fill="#477050"/>
+            </svg>
+            Magyar Streaming Pro (HU)
+          </h1>
+        </div>
+      </div>
+
+      <p class="subtitle">
+        Közvetlen <strong>Direct MP4 és HLS (.m3u8)</strong> magyar szinkronos és feliratos streamek felbontás-kijelzéssel (<code>1080p FHD</code> / <code>720p HD</code>),
+        490+ <strong>MédiaKlikk (MTVA)</strong> archív műsorral és 7 élő TV csatornával (M4 Sport, M1, M2, Duna, M5).
+        Tökéletesen működik a <strong>Nuvio</strong> és <strong>Stremio</strong> lejátszókkal végtelen töltés (buffering) nélkül.
+      </p>
+
+      <div class="manifest-box">
+        <span class="manifest-url" id="manifestUrl">Betöltés...</span>
+        <div class="btn-row">
+          <button class="btn-primary" onclick="copyManifest()">📋 Manifest URL másolása (Nuvio)</button>
+          <a class="btn btn-secondary" id="stremioInstallBtn" href="#">🚀 Megnyitás Stremio-ban</a>
+        </div>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>📡 Magyar HTTP Források Kiválasztása</h2>
-      <div id="providersGrid" class="grid"></div>
-    </div>
-
-    <div class="card">
-      <h2>⚙️ Lejátszás &amp; Vercel HTTP Proxy Beállítások</h2>
-      <div class="controls-row">
-        <div>
-          <label class="field-label" for="proxyMode">Beépített Vercel HTTP/HLS Proxy</label>
-          <select id="proxyMode">
-            <option value="auto" selected>Automatikus (Élő TV + Geo-védett streamekhez)</option>
-            <option value="always">Mindig aktív (Minden MP4 &amp; HLS stream Vercel proxyn át)</option>
-            <option value="off">Kikapcsolva (Közvetlen kliensoldali lejátszás + fejlécek)</option>
-          </select>
-        </div>
-        <div>
-          <label class="field-label" for="minQuality">Minimum Felbontás</label>
-          <select id="minQuality">
-            <option value="0" selected>Összes felbontás (1080p, 720p, 480p, 360p)</option>
-            <option value="720">Csak HD (720p és 1080p)</option>
-            <option value="1080">Csak Full HD (1080p)</option>
-          </select>
-        </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+      <h2 style="font-size:17px;">📡 13 Aktív Magyar Forrás (Kattints a szűréshez)</h2>
+      <div style="display:flex;gap:8px;">
+        <button class="pill" onclick="toggleAllSources(true)">Összes bekapcsolása</button>
+        <button class="pill" onclick="toggleAllSources(false)">Összes kikapcsolása</button>
       </div>
     </div>
 
-    <div class="card">
-      <h2>🚀 Telepítés Nuvio &amp; Stremio Kliensbe</h2>
-      <div id="manifestUrlBox" class="url-box"></div>
-      <div class="btn-row">
-        <button class="btn-primary" id="copyBtn">📋 Manifest URL Másolása (Nuvio-hoz)</button>
-        <a class="btn btn-secondary" id="stremioBtn" href="#">⚡ Megnyitás Stremio / Nuvio Appban</a>
-      </div>
+    <div class="grid" id="sourcesGrid">
+      <label class="source-card"><input type="checkbox" value="mediaklikk" checked onchange="updateManifestUrl()"><div><h3><span class="dot"></span> MédiaKlikk (MTVA)</h3><p>490+ magyar műsor, retro mesék + 7 Élő TV (M4 Sport, M1, Duna 1080p)</p></div></label>
+      <label class="source-card"><input type="checkbox" value="videa" checked onchange="updateManifestUrl()"><div><h3><span class="dot"></span> Videa.hu</h3><p>RC4 XML dekódoló — 1080p FHD & 720p HD MP4 streamek</p></div></label>
+      <label class="source-card"><input type="checkbox" value="indavideo" checked onchange="updateManifestUrl()"><div><h3><span class="dot"></span> Indavideo.hu</h3><p>Dinamikus amfphp token feloldó — 720p/360p MP4</p></div></label>
+      <label class="source-card"><input type="checkbox" value="hdmozi" checked onchange="updateManifestUrl()"><div><h3><span class="dot"></span> HDMozi</h3><p>1080p FHD magyar szinkronos mozifilmek és sorozatok</p></div></label>
+      <label class="source-card"><input type="checkbox" value="filmvilag2" checked onchange="updateManifestUrl()"><div><h3><span class="dot"></span> Filmvilág2</h3><p>Magyar szinkronos teljes filmek és klasszikusok</p></div></label>
+      <label class="source-card"><input type="checkbox" value="jobbmintatv" checked onchange="updateManifestUrl()"><div><h3><span class="dot"></span> JobbMintATv</h3><p>Sorozat epizódok és mozifilmek közvetlen lejátszással</p></div></label>
+      <label class="source-card"><input type="checkbox" value="netmozi" checked onchange="updateManifestUrl()"><div><h3><span class="dot"></span> NetMozi</h3><p>Szinkronos és feliratos filmek és sorozatok</p></div></label>
+      <label class="source-card"><input type="checkbox" value="filmezek" checked onchange="updateManifestUrl()"><div><h3><span class="dot"></span> Filmezek.com</h3><p>Több tárhelyes magyar film- és sorozatgyűjtemény</p></div></label>
+      <label class="source-card"><input type="checkbox" value="onlinefilmek" checked onchange="updateManifestUrl()"><div><h3><span class="dot"></span> Online-Filmek.me</h3><p>Közvetlen Videa, OK.ru és HLS folyamok</p></div></label>
+      <label class="source-card"><input type="checkbox" value="dmdamedia" checked onchange="updateManifestUrl()"><div><h3><span class="dot"></span> DMDamedia</h3><p>Magyar szinkronos sorozatok és filmek</p></div></label>
+      <label class="source-card"><input type="checkbox" value="mesefilm" checked onchange="updateManifestUrl()"><div><h3><span class="dot"></span> MeseFilm.hu</h3><p>Családi animációk, bábfilmek és mesék</p></div></label>
+      <label class="source-card"><input type="checkbox" value="videakid" checked onchange="updateManifestUrl()"><div><h3><span class="dot"></span> Videakid.hu</h3><p>Gyerekfilmek, rajzfilmek és mesék közvetlen MP4-ben</p></div></label>
+      <label class="source-card"><input type="checkbox" value="sorozatoknet" checked onchange="updateManifestUrl()"><div><h3><span class="dot"></span> Sorozatok.net</h3><p>Streambot dekódoló sorozat epizódokhoz</p></div></label>
     </div>
 
-    <div class="card">
-      <h2>🧪 Élő Stream Kereső Tesztelő</h2>
-      <div class="controls-row" style="margin-bottom: 0.85rem;">
-        <div>
-          <label class="field-label" for="testTarget">Teszt Тartalom</label>
-          <select id="testTarget">
-            <option value="movie/tt0179955">🎬 Macskafogó (1986 - Magyar film)</option>
-            <option value="movie/tt0499549">🎬 Avatar (2009 - Szinkronos film)</option>
-            <option value="movie/tt0257290">🎬 Üvegtigris (2001 - Magyar vígjáték)</option>
-            <option value="series/tt3032476:1:1">📺 Better Call Saul S01E01 (Sorozat)</option>
-            <option value="movie/mediaklikk-live-m4">🔴 M4 Sport Élő (1080p FHD HLS)</option>
-          </select>
-        </div>
+    <div class="tester">
+      <h2>🔍 Élő Stream & Felbontás Tesztelő</h2>
+      <div class="preset-pills">
+        <span class="pill" onclick="runPreset('movie', 'mediaklikk-live-m4')">⚽ M4 Sport Élő (1080p)</span>
+        <span class="pill" onclick="runPreset('series', 'tt0154077:1:1')">🎣 A nagy ho-ho-horgász S1E1 (MédiaKlikk)</span>
+        <span class="pill" onclick="runPreset('series', 'tt0861751:1:1')">📖 Magyar népmesék S1E1</span>
+        <span class="pill" onclick="runPreset('movie', 'tt0179955')">🐭 Macskafogó (1986)</span>
+        <span class="pill" onclick="runPreset('movie', 'tt0131636')">🦊 Vuk (1981)</span>
+        <span class="pill" onclick="runPreset('movie', 'tt0499549')">🎬 Avatar (2009)</span>
       </div>
-      <button class="btn-outline" id="runTestBtn">▶️ Streamek Lekérdezése Most</button>
-      <div id="testOutput" class="test-output"></div>
+      <div class="test-controls">
+        <select id="mediaType">
+          <option value="movie">Film / Élő TV (movie)</option>
+          <option value="series">Sorozat (series)</option>
+        </select>
+        <input type="text" id="imdbInput" value="tt0179955" placeholder="pl. tt0179955, tt0154077:1:1 vagy mediaklikk-live-m4" />
+        <button class="btn-primary" onclick="testStreams()">Streamek keresése</button>
+      </div>
+      <div class="results" id="testOutput">Kattints a "Streamek keresése" gombra vagy válassz a fenti gyorsgombok közül!</div>
     </div>
   </div>
 
   <script>
-    const PROVIDERS = [
-      { id: 'videa', name: 'Videa.hu (Direct MP4)' },
-      { id: 'netmozi', name: 'NetMozi.com (Multi-Hoster)' },
-      { id: 'hdmozi', name: 'HDMozi.hu (1080p RPM HLS)' },
-      { id: 'filmezek', name: 'Filmezek.com (Videa / OK.ru / VOE)' },
-      { id: 'onlinefilmek', name: 'OnlineFilmekIngyen (DooPlay)' },
-      { id: 'sorozatoknet', name: 'Sorozatok.net (Sorozat adatbázis)' },
-      { id: 'mediaklikk', name: 'MédiaKlikk / MTVA (Élő TV & Archívum)' },
-      { id: 'indavideo', name: 'Indavideo.hu (Direct MP4)' },
-      { id: 'videakid', name: 'Videakid.hu (Mese & Családi)' },
-      { id: 'jobbmintatv', name: 'JobbMintATV (Filmek & Sorozatok)' },
-      { id: 'dmdamedia', name: 'DMDAMedia.hu (Szinkronos tárhely)' },
-      { id: 'mesefilm', name: 'MeseKincstár & MeseFilmek.hu' }
+    const origin = window.location.origin;
+    const ALL_SOURCE_IDS = [
+      'mediaklikk','videa','indavideo','hdmozi','filmvilag2','jobbmintatv',
+      'netmozi','filmezek','onlinefilmek','dmdamedia','mesefilm','videakid','sorozatoknet'
     ];
 
-    const grid = document.getElementById('providersGrid');
-    const proxyModeEl = document.getElementById('proxyMode');
-    const minQualityEl = document.getElementById('minQuality');
-    const manifestBox = document.getElementById('manifestUrlBox');
-    const stremioBtn = document.getElementById('stremioBtn');
+    function getSelectedSources() {
+      return [...document.querySelectorAll('#sourcesGrid input[type="checkbox"]:checked')].map(cb => cb.value);
+    }
 
-    PROVIDERS.forEach(p => {
-      const lbl = document.createElement('label');
-      lbl.className = 'prov-item';
-      lbl.innerHTML = `<input type="checkbox" value="${p.id}" checked /> <span>${p.name}</span>`;
-      lbl.querySelector('input').addEventListener('change', updateUrls);
-      grid.appendChild(lbl);
-    });
-
-    proxyModeEl.addEventListener('change', updateUrls);
-    minQualityEl.addEventListener('change', updateUrls);
-
-    function getEncodedConfig() {
-      const checked = [...grid.querySelectorAll('input:checked')].map(i => i.value);
-      const px = proxyModeEl.value;
-      const q = parseInt(minQualityEl.value, 10) || 0;
-      if (checked.length === PROVIDERS.length && px === 'auto' && q === 0) {
-        return '';
+    function updateManifestUrl() {
+      const selected = getSelectedSources();
+      let manifestUrl = `${origin}/manifest.json`;
+      if (selected.length > 0 && selected.length < ALL_SOURCE_IDS.length) {
+        const cfgObj = { sources: selected };
+        const b64 = btoa(JSON.stringify(cfgObj)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        manifestUrl = `${origin}/${b64}/manifest.json`;
       }
-      const json = JSON.stringify({ p: checked, px, q });
-      return btoa(json).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      document.getElementById('manifestUrl').textContent = manifestUrl;
+      document.getElementById('stremioInstallBtn').href = manifestUrl.replace(/^https?:\/\//, 'stremio://');
     }
 
-    function updateUrls() {
-      const cfg = getEncodedConfig();
-      const base = window.location.origin;
-      const manifestUrl = cfg ? `${base}/${cfg}/manifest.json` : `${base}/manifest.json`;
-      manifestBox.textContent = manifestUrl;
-      stremioBtn.href = manifestUrl.replace(/^https?:\/\//, 'stremio://');
+    function toggleAllSources(state) {
+      document.querySelectorAll('#sourcesGrid input[type="checkbox"]').forEach(cb => { cb.checked = state; });
+      updateManifestUrl();
     }
 
-    document.getElementById('copyBtn').addEventListener('click', async () => {
-      await navigator.clipboard.writeText(manifestBox.textContent);
-      const btn = document.getElementById('copyBtn');
-      const old = btn.textContent;
-      btn.textContent = '✅ Másolva a vágólapra!';
-      setTimeout(() => { btn.textContent = old; }, 2000);
-    });
+    function copyManifest() {
+      const url = document.getElementById('manifestUrl').textContent;
+      navigator.clipboard.writeText(url);
+      alert('Manifest URL kimásolva:\n' + url + '\n\nIlleszd be a Nuvio Addonok hozzáadása mezőbe!');
+    }
 
-    document.getElementById('runTestBtn').addEventListener('click', async () => {
+    function runPreset(type, id) {
+      document.getElementById('mediaType').value = type;
+      document.getElementById('imdbInput').value = id;
+      testStreams();
+    }
+
+    async function testStreams() {
+      const type = document.getElementById('mediaType').value;
+      const id = document.getElementById('imdbInput').value.trim();
       const out = document.getElementById('testOutput');
-      out.style.display = 'block';
-      out.textContent = '⏳ Keresés a magyar HTTP forrásokon...';
-      const target = document.getElementById('testTarget').value;
-      const cfg = getEncodedConfig();
-      const url = cfg ? `/stream/${target}.json` : `/stream/${target}.json`;
-      const fullUrl = cfg ? `/${cfg}/stream/${target}.json` : `/stream/${target}.json`;
-      try {
-        const t0 = performance.now();
-        const r = await fetch(fullUrl);
-        const data = await r.json();
-        const dt = ((performance.now() - t0) / 1000).toFixed(2);
-        out.textContent = `✅ Találatok: ${(data.streams || []).length} db (${dt} mp)\n\n` + JSON.stringify(data.streams, null, 2);
-      } catch (e) {
-        out.textContent = '❌ Hiba: ' + e.message;
-      }
-    });
+      out.textContent = '⏳ Magyar források lekérdezése folyamatban (Videa, MédiaKlikk, Indavideo, HDMozi, Filmvilág2, NetMozi, stb.)...';
 
-    updateUrls();
+      try {
+        const res = await fetch(`${origin}/stream/${type}/${encodeURIComponent(id)}.json`);
+        const data = await res.json();
+        if (!data.streams || data.streams.length === 0) {
+          out.textContent = 'Nem található közvetlen magyar stream ehhez az azonosítóhoz.';
+          return;
+        }
+        out.innerHTML = data.streams.map((s, idx) => `
+          <div class="stream-item">
+            <div>
+              <strong>#${idx + 1} ${(s.name || '').replace(/\n/g, ' — ')}</strong>
+              <span class="qual-badge">${s.quality || (s.height ? s.height + 'p' : 'HD')}</span><br/>
+              <span style="color:#94a3b8">${(s.title || '').replace(/\n/g, ' | ')}</span>
+            </div>
+            <a class="btn btn-secondary" href="${s.url}" target="_blank" rel="noopener">▶ Megnyitás</a>
+          </div>
+        `).join('');
+      } catch (e) {
+        out.textContent = 'Hiba történt: ' + e.message;
+      }
+    }
+
+    updateManifestUrl();
   </script>
 </body>
 </html>

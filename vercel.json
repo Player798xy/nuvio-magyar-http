@@ -6,6 +6,13 @@
     }
   },
   "rewrites": [
+    { "source": "/logo.png", "destination": "/api/index.js" },
+    { "source": "/icon.png", "destination": "/api/index.js" },
+    { "source": "/logo.svg", "destination": "/api/index.js" },
+    { "source": "/channels/:path*", "destination": "/api/index.js" },
+    { "source": "/api/live/:path*", "destination": "/api/index.js" },
+    { "source": "/hls/live/:path*", "destination": "/api/index.js" },
+    { "source": "/api/:path*", "destination": "/api/index.js" },
     { "source": "/manifest.json", "destination": "/api/index.js" },
     { "source": "/:config/manifest.json", "destination": "/api/index.js" },
     { "source": "/catalog/:path*", "destination": "/api/index.js" },
@@ -14,22 +21,8 @@
     { "source": "/:config/meta/:path*", "destination": "/api/index.js" },
     { "source": "/stream/:path*", "destination": "/api/index.js" },
     { "source": "/:config/stream/:path*", "destination": "/api/index.js" },
-    { "source": "/api/proxy", "destination": "/api/index.js" },
-    { "source": "/api/hls", "destination": "/api/index.js" },
-    { "source": "/api/hls/:path*", "destination": "/api/index.js" },
-    { "source": "/api/:path*", "destination": "/api/index.js" },
-    { "source": "/configure", "destination": "/index.html" },
-    { "source": "/:config/configure", "destination": "/index.html" }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, HEAD, OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Range, Authorization, Accept, Origin, Referer" },
-        { "key": "Access-Control-Expose-Headers", "value": "Content-Length, Content-Range, Accept-Ranges, Content-Type" }
-      ]
-    }
+    { "source": "/configure", "destination": "/api/index.js" },
+    { "source": "/:config/configure", "destination": "/api/index.js" },
+    { "source": "/", "destination": "/api/index.js" }
   ]
 }
