@@ -2,6 +2,8 @@
 
 Magyar szinkronos és feliratos közvetlen HTTP streaming kiegészítő **Nuvio** és **Stremio** kliensekhez, **Vercel Serverless** környezetre optimalizálva.
 
+Hivatalos vercel link: https://nuvio-magyar-http.vercel.app/
+
 ## ✨ Főbb funkciók
 - **12 Magyar HTTP Forrás**:
   - **Videa.hu** (`_xt` nonce + RC4 XML dekódolás + `fcode` noembed fallback -> közvetlen `1080p`/`720p`/`480p` MP4)
