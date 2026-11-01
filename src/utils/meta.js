@@ -440,6 +440,43 @@ async function getMediaMeta(type, rawId) {
     return result;
   }
 
+  // Helper: Resolve plain Hungarian/English title via TMDB (hu-HU)
+  async function resolvePlainTitleViaTmdb(rawTitle, itemType, sNum, eNum) {
+    let huTitle = rawTitle;
+    let enTitle = rawTitle;
+    let year = '';
+    let resolvedImdb = null;
+
+    try {
+      const searchType = itemType === 'series' ? 'tv' : itemType === 'movie' ? 'movie' : 'multi';
+      const url = `https://api.themoviedb.org/3/search/${searchType}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(rawTitle)}&language=hu-HU&include_adult=false`;
+      const res = await fetch(url, { signal: AbortSignal.timeout(3000) });
+      if (res.ok) {
+        const data = await res.json();
+        const top = data.results?.[0];
+        if (top) {
+          huTitle = top.title || top.name || rawTitle;
+          enTitle = top.original_title || top.original_name || huTitle;
+          year = (top.release_date || top.first_air_date || '').slice(0, 4);
+          const mType = top.media_type === 'tv' || itemType === 'series' ? 'tv' : 'movie';
+          const ext = await resolveTmdbToImdb(top.id, mType === 'tv');
+          if (ext?.imdbId) resolvedImdb = ext.imdbId;
+        }
+      }
+    } catch (e) {}
+
+    return {
+      imdbId: resolvedImdb || id,
+      type: itemType || (sNum ? 'series' : 'movie'),
+      englishTitle: enTitle,
+      hungarianTitle: huTitle,
+      year,
+      season: sNum,
+      episode: eNum,
+      episodeTitle: sNum && eNum ? `${eNum}. Rész` : ''
+    };
+  }
+
   // Handle synthetic title IDs: title:Some+Title:season:episode or title:Some+Title
   if (id.startsWith('title:')) {
     const parts = id.split(':');
@@ -447,16 +484,7 @@ async function getMediaMeta(type, rawId) {
     season = parts[2] ? parseInt(parts[2], 10) : (type === 'series' ? 1 : null);
     episode = parts[3] ? parseInt(parts[3], 10) : (type === 'series' ? 1 : null);
 
-    const result = {
-      imdbId: id,
-      type: type || (season ? 'series' : 'movie'),
-      englishTitle: rawTitle,
-      hungarianTitle: rawTitle,
-      year: '',
-      season,
-      episode,
-      episodeTitle: season && episode ? `${episode}. Rész` : ''
-    };
+    const result = await resolvePlainTitleViaTmdb(rawTitle, type || (season ? 'series' : 'movie'), season, episode);
     metaCache.set(cacheKey, result);
     return result;
   }
@@ -495,22 +523,13 @@ async function getMediaMeta(type, rawId) {
       return resKitsu;
     }
   } else if (!id.startsWith('tt')) {
-    // Raw title string fallback (e.g. "ingatlanvadaszok" or "ingatlanvadaszok:1:1")
+    // Raw title string fallback (e.g. "A vad robot" or "Stranger Things:1:1")
     const parts = id.split(':');
     const rawTitle = decodeURIComponent(parts[0] || '').trim();
     season = parts[1] ? parseInt(parts[1], 10) : (type === 'series' ? 1 : null);
     episode = parts[2] ? parseInt(parts[2], 10) : (type === 'series' ? 1 : null);
 
-    const result = {
-      imdbId: id,
-      type: type || (season ? 'series' : 'movie'),
-      englishTitle: rawTitle,
-      hungarianTitle: rawTitle,
-      year: '',
-      season,
-      episode,
-      episodeTitle: season && episode ? `${episode}. Rész` : ''
-    };
+    const result = await resolvePlainTitleViaTmdb(rawTitle, type || (season ? 'series' : 'movie'), season, episode);
     metaCache.set(cacheKey, result);
     return result;
   } else {

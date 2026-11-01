@@ -53,21 +53,71 @@ const DEFAULT_CONFIG = {
   maxResults: 25
 };
 
-function parseConfig(configStr) {
-  if (!configStr) return { ...DEFAULT_CONFIG };
+function parseConfig(configStr, query = {}) {
+  const config = {
+    sources: [...DEFAULT_CONFIG.sources],
+    catalogs: [...DEFAULT_CONFIG.catalogs],
+    qualities: [...DEFAULT_CONFIG.qualities],
+    timeoutMs: 20000,
+    maxResults: 25
+  };
+
+  if (query.sources) {
+    config.sources = String(query.sources).split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  }
+  if (query.resolutions || query.qualities) {
+    config.qualities = String(query.resolutions || query.qualities).split(',').map(r => r.trim().toLowerCase()).filter(Boolean);
+  }
+  if (query.catalogs) {
+    config.catalogs = String(query.catalogs).split(',').map(c => c.trim()).filter(Boolean);
+  }
+  if (query.stage) {
+    config.stage = String(query.stage).trim().toLowerCase();
+  }
+  if (query.timeout) {
+    const t = parseInt(query.timeout, 10);
+    if (!isNaN(t)) config.timeoutMs = t <= 60 ? t * 1000 : t;
+  }
+
+  if (!configStr) return config;
+
+  // 1. Base64 / Base64url JSON
   try {
     const decoded = Buffer.from(configStr, 'base64url').toString('utf-8');
-    const parsed = JSON.parse(decoded);
-    const qualities = parsed.qualities || parsed.resolutions;
-    return {
-      sources: Array.isArray(parsed.sources) && parsed.sources.length ? parsed.sources : DEFAULT_CONFIG.sources,
-      catalogs: Array.isArray(parsed.catalogs) && parsed.catalogs.length ? parsed.catalogs : DEFAULT_CONFIG.catalogs,
-      qualities: Array.isArray(qualities) && qualities.length ? qualities : DEFAULT_CONFIG.qualities,
-      maxResults: Number(parsed.maxResults) || DEFAULT_CONFIG.maxResults
-    };
-  } catch (e) {
-    return { ...DEFAULT_CONFIG };
+    if (decoded.startsWith('{') && decoded.endsWith('}')) {
+      const parsed = JSON.parse(decoded);
+      const qualities = parsed.qualities || parsed.resolutions;
+      if (Array.isArray(parsed.sources) && parsed.sources.length) config.sources = parsed.sources;
+      if (Array.isArray(parsed.catalogs) && parsed.catalogs.length) config.catalogs = parsed.catalogs;
+      if (Array.isArray(qualities) && qualities.length) config.qualities = qualities;
+      if (parsed.timeout) {
+        const t = parseInt(parsed.timeout, 10);
+        if (!isNaN(t)) config.timeoutMs = t <= 60 ? t * 1000 : t;
+      }
+      return config;
+    }
+  } catch (e) {}
+
+  // 2. Pipe/ampersand delimited key=value (e.g. sources=videa,mediaklikk|res=1080p,720p|timeout=20|cat=...)
+  const parts = decodeURIComponent(configStr).split(/[|&;]/);
+  for (const part of parts) {
+    const [rawKey, rawVal] = part.split(/[=:]/);
+    if (!rawKey || !rawVal) continue;
+    const key = rawKey.trim().toLowerCase();
+    const val = rawVal.trim();
+    if (key === 'sources') {
+      config.sources = val.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+    } else if (key === 'catalogs' || key === 'cat') {
+      config.catalogs = val.split(',').map(c => c.trim()).filter(Boolean);
+    } else if (key === 'resolutions' || key === 'res' || key === 'qualities') {
+      config.qualities = val.split(',').map(r => r.trim().toLowerCase()).filter(Boolean);
+    } else if (key === 'timeout') {
+      const t = parseInt(val, 10);
+      if (!isNaN(t)) config.timeoutMs = t <= 60 ? t * 1000 : t;
+    }
   }
+
+  return config;
 }
 
 function getManifest(config = {}) {

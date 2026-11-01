@@ -50,19 +50,7 @@ app.get('/channels/:file', (req, res) => {
  * Helper to parse optional configuration from URL segment or query string
  */
 function parseConfig(configParam, query = {}) {
-  const base = parseAddonConfig(configParam);
-
-  if (query.sources) {
-    base.sources = String(query.sources).split(',').map(s => s.trim()).filter(Boolean);
-  }
-  if (query.catalogs) {
-    base.catalogs = String(query.catalogs).split(',').map(s => s.trim()).filter(Boolean);
-  }
-  if (query.qualities) {
-    base.qualities = String(query.qualities).split(',').map(s => s.trim()).filter(Boolean);
-  }
-
-  return base;
+  return parseAddonConfig(configParam, query);
 }
 
 /**

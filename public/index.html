@@ -1,730 +1,3860 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Magyar Streaming Pro (HU) — Nuvio & Stremio HTTP Addon</title>
-  <link rel="icon" type="image/png" href="/logo.png" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hungarian Streams - Stremio & Nuvio Kiegészítő</title>
+  <link rel="icon" type="image/svg+xml" href="/logo.svg">
+  <link rel="alternate icon" href="/logo.png">
+  <link rel="apple-touch-icon" href="/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
   <style>
     :root {
-      --bg: #0b0f17;
-      --card: #131b27;
-      --card-hover: #192334;
-      --border: #243247;
-      --hu-red: #ce2939;
-      --hu-white: #ffffff;
-      --hu-green: #477050;
-      --text: #f1f5f9;
-      --muted: #94a3b8;
-      --green: #10b981;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at top, #172238 0%, var(--bg) 70%);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 0 16px 56px;
+      --bg: #090a0d;
+      --bg-surface: #0f1115;
+      --card: #121419;
+      --card-surface: #16181f;
+      --card-border: rgba(255, 255, 255, 0.07);
+      --card-border-top: rgba(255, 255, 255, 0.12);
+      --card-border-hover: rgba(255, 255, 255, 0.18);
+      --text: #f0f2f5;
+      --text-muted: #8b92a0;
+      --text-dim: #555b67;
+      --accent: #ffffff;
+      --accent-bg: #1e222b;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --radius: 12px;
+      --radius-sm: 8px;
     }
 
-    /* Vízszintes magyar trikolór sáv (Piros - Fehér - Zöld felülről lefelé) */
-    .hu-top-stripe {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      max-width: 980px;
-      height: 12px;
-      margin: 0 auto 28px;
-      border-radius: 0 0 8px 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.45);
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    .hu-top-stripe .stripe-red { flex: 1; background: #ce2939; }
-    .hu-top-stripe .stripe-white { flex: 1; background: #ffffff; }
-    .hu-top-stripe .stripe-green { flex: 1; background: #477050; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      background-image: radial-gradient(1200px 700px at 50% -10%, #171922 0%, #090a0d 75%);
+      background-attachment: fixed;
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2.5rem 1rem;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
 
     .container {
-      max-width: 980px;
+      max-width: 960px;
       margin: 0 auto;
     }
 
-    .hero {
-      background: var(--card);
-      border: 1px solid var(--border);
+    /* Top Navigation / Status Header */
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #12141a;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #9aa0ac;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-pill .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    }
+
+    .app-logo {
+      width: 76px;
+      height: 76px;
       border-radius: 18px;
-      padding: 28px;
-      margin-bottom: 24px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
-    }
-    .hero-header {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-    }
-    .addon-logo {
-      width: 68px;
-      height: 68px;
-      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      margin-bottom: 1rem;
       object-fit: cover;
-      border: 2px solid var(--border);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-      flex-shrink: 0;
     }
-    .hu-flag-svg {
-      width: 42px;
-      height: 28px;
-      border-radius: 4px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.45);
-      border: 1px solid rgba(255,255,255,0.2);
-      flex-shrink: 0;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      padding: 5px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
+
     h1 {
-      font-size: 26px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+      font-size: 2.3rem;
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
     }
-    p.subtitle {
-      color: var(--muted);
+
+    .subtitle {
+      color: #8b92a0;
+      font-size: 0.98rem;
+      max-width: 620px;
+      margin: 0 auto 1.5rem auto;
+      font-weight: 400;
       line-height: 1.6;
-      margin-bottom: 22px;
-      font-size: 15px;
     }
-    .manifest-box {
-      background: #090d14;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
+
+    .feature-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.45rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag-item {
+      font-size: 0.75rem;
+      color: #8b92a0;
+      background: #111318;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-weight: 500;
+    }
+
+    /* Card System */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-top: 1px solid var(--card-border-top);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 36px -8px rgba(0, 0, 0, 0.6);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #ffffff;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      flex-wrap: wrap;
+      gap: 0.5rem;
     }
-    .manifest-url {
-      font-family: 'Consolas', monospace;
-      font-size: 13.5px;
-      color: #38bdf8;
-      word-break: break-all;
-      flex: 1;
-      min-width: 220px;
+
+    .card-desc {
+      color: #8b92a0;
+      font-size: 0.86rem;
+      margin-bottom: 1.25rem;
+      line-height: 1.55;
     }
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+
+    /* Installation Action Bar */
+    .install-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
     }
-    button, .btn {
-      cursor: pointer;
-      border: none;
-      border-radius: 10px;
-      padding: 11px 18px;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all 0.15s ease;
-      text-decoration: none;
+
+    .btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      color: var(--text);
-    }
-    .btn-primary {
-      background: var(--hu-red);
-      color: #fff;
-    }
-    .btn-primary:hover { background: #b01e2d; }
-    .btn-secondary {
-      background: #1e293b;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .btn-secondary:hover { background: #283548; }
-
-    /* Section Headers */
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .section-header h2 {
-      font-size: 17px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .section-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    /* Resolution Selector Grid */
-    .res-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 12px;
-      margin-bottom: 26px;
-    }
-    .res-card {
-      background: var(--card);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
       cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid transparent;
       user-select: none;
-      transition: all 0.15s ease;
+      white-space: nowrap;
     }
-    .res-card:hover {
-      background: var(--card-hover);
-      border-color: #3b4f6e;
+
+    .btn-stremio {
+      background: #ffffff;
+      color: #090a0d;
+      border-color: #ffffff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
-    .res-card:has(input:checked) {
-      border-color: var(--hu-red);
-      background: rgba(206, 41, 57, 0.08);
+
+    .btn-stremio:hover {
+      background: #e2e4e9;
+      border-color: #e2e4e9;
+      color: #000000;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(255, 255, 255, 0.12);
     }
-    .res-card input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      min-width: 18px;
-      flex: 0 0 18px;
-      accent-color: var(--hu-red);
-      cursor: pointer;
+
+    .btn-nuvio {
+      background: #181b23;
+      border-color: rgba(255, 255, 255, 0.12);
+      color: #f0f2f5;
     }
-    .res-info {
-      flex: 1;
-      min-width: 0;
+
+    .btn-nuvio:hover {
+      background: #212530;
+      border-color: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
     }
-    .res-info h3 {
-      font-size: 14.5px;
-      font-weight: 700;
-      margin-bottom: 2px;
+
+    .btn-secondary {
+      background: #13151b;
+      border-color: rgba(255, 255, 255, 0.08);
+      color: #c2c7d2;
+    }
+
+    .btn-secondary:hover {
+      background: #1a1d26;
+      border-color: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+    }
+
+    .btn-primary {
+      background: #ffffff;
+      color: #090a0d;
+      border-color: #ffffff;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: #e2e4e9;
+      border-color: #e2e4e9;
+      color: #000000;
+      transform: translateY(-1px);
+    }
+
+    /* URL Box */
+    .url-box {
       display: flex;
+      gap: 0.5rem;
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.35rem 0.45rem 0.35rem 0.9rem;
+      margin: 1rem 0;
+    }
+
+    .url-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #8b92a0;
+      font-size: 0.85rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      outline: none;
+    }
+
+    /* Preset Tabs / Segmented Control */
+    .segmented-control {
+      display: flex;
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 3px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .preset-btn {
+      flex: 1;
+      min-width: 130px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: #8b92a0;
+      padding: 0.45rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      gap: 0.4rem;
     }
-    .res-info p {
-      font-size: 12px;
-      color: var(--muted);
+
+    .preset-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.03);
     }
-    .res-tag {
-      font-size: 10.5px;
-      font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 5px;
-      background: rgba(206, 41, 57, 0.22);
-      color: #fda4af;
-      border: 1px solid rgba(206, 41, 57, 0.45);
+
+    .preset-btn.active {
+      background: #1f232d;
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      font-weight: 600;
     }
 
     /* Sources Grid */
     .sources-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
-      gap: 12px;
-      margin-bottom: 26px;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.65rem;
+      margin-top: 0.75rem;
     }
-    .source-card {
-      background: var(--card);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 15px;
+
+    .source-item {
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      padding: 0.75rem 0.85rem;
+      border-radius: 8px;
+      cursor: pointer;
       display: flex;
       align-items: flex-start;
-      gap: 12px;
+      gap: 0.65rem;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .source-item:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+      background: #13161e;
+    }
+
+    .source-item.selected {
+      border-color: rgba(255, 255, 255, 0.28);
+      background: #161922;
+    }
+
+    .source-checkbox {
+      width: 1rem;
+      height: 1rem;
+      accent-color: #ffffff;
+      cursor: pointer;
+      margin-top: 0.2rem;
+    }
+
+    .source-details {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .source-name {
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: #f0f2f5;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .source-tag {
+      font-size: 0.68rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .tag-fast {
+      background: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .tag-rich {
+      background: rgba(255, 255, 255, 0.05);
+      color: #9aa0ac;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .source-desc {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 0.2rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Quality & Timeout Section */
+    .config-section {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .config-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .config-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .config-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .res-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .res-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 0.75rem;
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
       cursor: pointer;
       user-select: none;
       transition: all 0.15s ease;
     }
-    .source-card:hover {
-      background: var(--card-hover);
-      border-color: #3b4f6e;
-    }
-    .source-card:has(input:checked) {
-      border-color: rgba(16, 185, 129, 0.45);
-    }
-    .source-card input[type="checkbox"] {
-      margin-top: 2px;
-      width: 18px;
-      height: 18px;
-      min-width: 18px;
-      flex: 0 0 18px;
-      accent-color: var(--hu-red);
-      cursor: pointer;
-    }
-    .source-info {
-      flex: 1;
-      min-width: 0;
-    }
-    .source-info h3 {
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--text);
-    }
-    .source-info p {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.4;
-    }
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--green);
-      display: inline-block;
-      flex-shrink: 0;
+
+    .res-item:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+      background: #13161e;
     }
 
-    /* Stream Tester */
-    .tester {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 24px;
+    .res-item.selected {
+      border-color: rgba(255, 255, 255, 0.28);
+      background: #161922;
     }
-    .tester h2 {
-      font-size: 18px;
-      margin-bottom: 14px;
+
+    .badge-quality {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
     }
-    .preset-pills {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
+
+    .badge-1080 {
+      background: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
-    .pill {
-      background: #1e293b;
-      border: 1px solid var(--border);
+
+    .badge-720 {
+      background: rgba(255, 255, 255, 0.06);
       color: #cbd5e1;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .badge-480 {
+      background: rgba(255, 255, 255, 0.04);
+      color: #8b92a0;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mini-presets-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.65rem;
+    }
+
+    .mini-btn {
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      color: #8b92a0;
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .mini-btn:hover {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .mini-btn.active {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: #1f232d;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .slider-box {
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .custom-slider {
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background: #1e222b;
+      outline: none;
+      -webkit-appearance: none;
+      margin: 0.6rem 0 0.4rem 0;
+      cursor: pointer;
+    }
+
+    .custom-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #ffffff;
+      cursor: pointer;
+      border: 2px solid #0c0e12;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    .slider-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #555b67;
+      font-weight: 500;
+    }
+
+    .speed-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    /* How to Install Steps Accordion */
+    .steps-list {
+      padding-left: 1.25rem;
+      color: #9aa0ac;
+      font-size: 0.88rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .steps-list li strong {
+      color: #ffffff;
+    }
+
+    /* Live Search & Catalog Section */
+    .filter-tabs {
+      display: flex;
+      gap: 0.35rem;
+      margin: 0.85rem 0;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      color: #8b92a0;
+      padding: 0.38rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .filter-btn:hover {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .filter-btn.active {
+      background: #ffffff;
+      border-color: #ffffff;
+      color: #090a0d;
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+
+    .tester-controls {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      position: relative;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input-wrapper .search-icon {
+      position: absolute;
+      left: 0.95rem;
+      color: #555b67;
+      font-size: 0.9rem;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input-wrapper .input-field {
+      padding-left: 2.35rem;
+      padding-right: 4.8rem;
+    }
+
+    .search-kbd-hint {
+      position: absolute;
+      right: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      background: #161820;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 0.68rem;
+      color: #717886;
+      font-family: inherit;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .input-field {
+      width: 100%;
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: #ffffff;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .input-field:focus {
+      border-color: rgba(255, 255, 255, 0.28);
+      background: #11141b;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+    }
+
+    .chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.75rem;
+    }
+
+    .chip {
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      color: #9aa0ac;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .chip:hover {
+      background: #181b23;
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Catalog Grid */
+    .catalog-results {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 0.85rem;
+      margin-top: 1.5rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 1024px) {
+      .catalog-results {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.75rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .catalog-results {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.6rem;
+        margin-top: 1.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .catalog-results {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.55rem;
+        margin-top: 1rem;
+      }
+    }
+
+    .catalog-card {
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      min-width: 0;
+    }
+
+    .catalog-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+
+    .catalog-card.active {
+      border-color: #ffffff;
+      box-shadow: 0 0 0 1px #ffffff;
+    }
+
+    .poster-container {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      background: #0c0e12;
+      overflow: hidden;
+      position: relative;
+      border-radius: 6px 6px 0 0;
+    }
+
+    .catalog-poster {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      background: #0c0e12;
+      border: 0;
+    }
+
+    .catalog-badge {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      backdrop-filter: blur(8px);
+      z-index: 2;
+      background: rgba(10, 12, 16, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
+    .badge-film {
+      border-left: 2px solid #ef4444;
+    }
+
+    .badge-sorozat {
+      border-left: 2px solid #38bdf8;
+    }
+
+    .badge-tv {
+      border-left: 2px solid #10b981;
+    }
+
+    .catalog-info {
+      padding: 0.55rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.2rem;
+    }
+
+    .catalog-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-word;
+    }
+
+    @media (max-width: 640px) {
+      .catalog-info {
+        padding: 0.45rem;
+      }
+      .catalog-title {
+        font-size: 0.78rem;
+        line-height: 1.2;
+      }
+      .catalog-badge {
+        font-size: 0.62rem;
+        padding: 0.12rem 0.35rem;
+        top: 4px;
+        left: 4px;
+      }
+    }
+
+    .catalog-year {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    /* Pagination */
+    .pagination-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-top: 1.25rem;
+    }
+
+    .page-btn, .page-number-btn {
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      color: #8b92a0;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.15s ease;
     }
-    .pill:hover {
-      background: #334155;
-      color: #fff;
+
+    .page-btn:hover:not(:disabled), .page-number-btn:hover {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.2);
     }
-    .pill.active {
-      background: var(--hu-red);
-      border-color: var(--hu-red);
-      color: #fff;
+
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
     }
-    .test-controls {
+
+    .page-number-btn.active {
+      background: #ffffff;
+      border-color: #ffffff;
+      color: #090a0d;
+      font-weight: 600;
+    }
+
+    /* Series View & Modern Episode Picker */
+    .series-view {
+      margin-top: 1.5rem;
+      background: #0d0f14;
+      border: 1px solid var(--card-border);
+      border-top: 1px solid var(--card-border-top);
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .series-header {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
+      gap: 1.15rem;
+      align-items: center;
+      padding-bottom: 1.15rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 1.15rem;
     }
-    .select-input, .text-input {
-      background: #090d14;
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 11px 14px;
-      border-radius: 10px;
-      font-size: 14px;
+
+    .series-header-poster, .series-poster-thumb {
+      width: 72px;
+      height: 108px;
+      border-radius: 8px;
+      object-fit: cover;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
     }
-    .text-input {
+
+    .series-header-details {
       flex: 1;
-      min-width: 220px;
+      min-width: 0;
     }
-    .filter-tabs {
+
+    .series-header-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.3;
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.02em;
+    }
+
+    .series-header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+      margin-bottom: 0.45rem;
+    }
+
+    .series-tag {
+      font-size: 0.74rem;
+      font-weight: 500;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      background: #161821;
+      color: #c2c7d2;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .series-header-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Season Tabs */
+    .season-bar-container {
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+      gap: 0.75rem;
       flex-wrap: wrap;
-      margin-bottom: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
+      margin-bottom: 1rem;
     }
-    .filter-tabs span.label {
-      font-size: 12.5px;
-      color: var(--muted);
-      margin-right: 4px;
+
+    .season-tabs {
+      display: flex;
+      gap: 0.45rem;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+      scrollbar-width: thin;
+      flex: 1;
+      min-width: 240px;
     }
-    .results {
-      background: #090d14;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-family: 'Consolas', monospace;
-      font-size: 13px;
-      max-height: 460px;
+
+    .season-tab-btn {
+      background: #14171f;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #8b92a0;
+      padding: 0.45rem 0.95rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .season-tab-btn:hover {
+      color: #ffffff;
+      background: #1c202a;
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .season-tab-btn.active {
+      background: #ffffff;
+      color: #090a0d;
+      border-color: #ffffff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+
+    .series-filter-wrap {
+      min-width: 200px;
+      max-width: 300px;
+      flex: 1;
+    }
+
+    .series-filter-input {
+      width: 100%;
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      color: #f0f2f5;
+      font-size: 0.82rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .series-filter-input:focus {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: #11141b;
+    }
+
+    /* Episodes Grid & Cards */
+    .episodes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 0.65rem;
+      max-height: 380px;
       overflow-y: auto;
+      padding-right: 0.35rem;
+      scrollbar-width: thin;
     }
-    .stream-item {
-      padding: 12px 4px;
-      border-bottom: 1px solid #1e293b;
+
+    .episode-card, .ep-card {
+      background: #11141a;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 0.7rem 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .episode-card:hover, .ep-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      background: #161922;
+      transform: translateY(-1px);
+    }
+
+    .episode-card.active, .ep-card.active {
+      border-color: rgba(255, 255, 255, 0.35);
+      background: #191e28;
+    }
+
+    .ep-left-content {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .ep-badge {
+      background: #161922;
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.76rem;
+      font-family: ui-monospace, monospace;
+      padding: 0.3rem 0.5rem;
+      min-width: 44px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .episode-card.active .ep-badge, .ep-card.active .ep-badge {
+      background: #ffffff;
+      color: #090a0d;
+      border-color: #ffffff;
+    }
+
+    .ep-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .ep-title, .episode-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+
+    .ep-sub, .episode-num {
+      font-size: 0.72rem;
+      color: #555b67;
+      margin-top: 0.15rem;
+    }
+
+    .ep-play-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #181b23;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8b92a0;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+
+    .episode-card:hover .ep-play-btn, .ep-card:hover .ep-play-btn {
+      background: #ffffff;
+      border-color: #ffffff;
+      color: #090a0d;
+      transform: scale(1.08);
+    }
+
+    .episode-card.active .ep-play-btn, .ep-card.active .ep-play-btn {
+      background: #ffffff;
+      border-color: #ffffff;
+      color: #090a0d;
+    }
+
+    /* Streams List */
+    .streams-preview {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .stream-card {
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: border-color 0.15s ease;
+    }
+
+    .stream-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      background: #12151c;
+    }
+
+    .stream-card-fhd {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .stream-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #ffffff;
+      margin-bottom: 0.15rem;
+    }
+
+    .stream-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      white-space: pre-line;
+      line-height: 1.4;
+    }
+
+    /* Search Progress Box */
+    .progress-box {
+      margin-top: 1rem;
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+    }
+
+    .progress-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+      margin-bottom: 0.5rem;
     }
-    .stream-item:last-child { border-bottom: none; }
-    .qual-badge {
+
+    .progress-bar-container {
+      width: 100%;
+      height: 4px;
+      background: #1a1e26;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: #ffffff;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 0.4rem;
+    }
+
+    .source-scanning-pill {
+      font-size: 0.72rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      background: #14171f;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #717886;
+      margin-right: 0.35rem;
       display: inline-block;
-      background: rgba(206, 41, 57, 0.22);
-      border: 1px solid #ce2939;
-      color: #fda4af;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 8px;
+    }
+
+    .source-scanning-pill.highlight {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.25);
+      color: #34d399;
+    }
+
+    /* Stream Filter Bar */
+    .stream-filter-bar {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .stream-filter-btn {
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      color: #8b92a0;
+      padding: 0.35rem 0.7rem;
       border-radius: 6px;
-      margin-left: 8px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
     }
-    .qual-badge.q1080 {
-      background: rgba(16, 185, 129, 0.2);
-      border-color: #10b981;
-      color: #6ee7b7;
+
+    .stream-filter-btn:hover {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.2);
     }
-    .qual-badge.q720 {
-      background: rgba(56, 189, 248, 0.2);
-      border-color: #38bdf8;
-      color: #7dd3fc;
+
+    .stream-filter-btn.active {
+      background: #ffffff;
+      border-color: #ffffff;
+      color: #090a0d;
+      font-weight: 600;
     }
+
+    /* Toast Notification */
+    .toast-notification {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #181b22;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #f3f4f6;
+      padding: 0.65rem 1.25rem;
+      border-radius: 9999px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
+      opacity: 0;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .toast-notification.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Modal Player */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 1rem;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 900px;
+      background: #0d0f14;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .modal-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #ffffff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .video-viewport {
+      width: 100%;
+      background: #000000;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-actions {
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      border-top: 1px solid var(--card-border);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--card-border);
+      color: var(--text-dim);
+      font-size: 0.82rem;
+    }
+
+    footer a {
+      color: #8b92a0;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    footer a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    /* Mobile Responsive Optimizations */
+    @media (max-width: 640px) {
+      body {
+        padding: 1.25rem 0.65rem;
+        overflow-x: hidden;
+      }
+
+      header {
+        margin-bottom: 1.5rem;
+      }
+
+      .app-logo {
+        width: 60px;
+        height: 60px;
+        border-radius: 14px;
+        margin-bottom: 0.6rem;
+      }
+
+      .brand-pill {
+        font-size: 0.72rem;
+        padding: 0.25rem 0.65rem;
+        margin-bottom: 0.85rem;
+      }
+
+      h1 {
+        font-size: 1.65rem;
+        line-height: 1.25;
+        margin-bottom: 0.4rem;
+        word-break: break-word;
+      }
+
+      .subtitle {
+        font-size: 0.88rem;
+        line-height: 1.45;
+        margin-bottom: 1rem;
+        padding: 0 0.25rem;
+      }
+
+      .feature-tags {
+        gap: 0.35rem;
+      }
+
+      .tag-item {
+        font-size: 0.72rem;
+        padding: 0.2rem 0.5rem;
+      }
+
+      .card {
+        padding: 1rem 0.85rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+      }
+
+      .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+      }
+
+      .card-title {
+        font-size: 1.05rem;
+      }
+
+      .card-desc {
+        font-size: 0.82rem;
+        margin-bottom: 0.85rem;
+      }
+
+      .install-actions {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+      }
+
+      .install-actions .btn {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+        justify-content: center;
+      }
+
+      .url-box {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+        padding: 0.6rem;
+      }
+
+      .url-input {
+        width: 100%;
+        font-size: 0.76rem;
+        padding: 0.25rem 0;
+      }
+
+      .url-box .btn {
+        width: 100%;
+        padding: 0.65rem 1rem;
+        font-size: 0.82rem;
+        justify-content: center;
+      }
+
+      .segmented-control {
+        gap: 3px;
+        padding: 3px;
+      }
+
+      .preset-btn {
+        flex: 1 1 30%;
+        min-width: 0;
+        padding: 0.45rem 0.35rem;
+        font-size: 0.75rem;
+        text-align: center;
+        justify-content: center;
+      }
+
+      .sources-grid {
+        grid-template-columns: 1fr;
+        gap: 0.45rem;
+      }
+
+      .source-item {
+        padding: 0.65rem 0.75rem;
+      }
+
+      .source-name {
+        font-size: 0.85rem;
+      }
+
+      .source-desc {
+        font-size: 0.72rem;
+      }
+
+      .config-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+      }
+
+      .catalog-results {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(130px, 1fr);
+        overflow-x: auto;
+        padding-bottom: 0.75rem;
+        gap: 0.65rem;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .catalog-card {
+        scroll-snap-align: start;
+        min-width: 130px;
+      }
+
+      .catalog-card-title {
+        font-size: 0.78rem;
+      }
+
+      .catalog-card-meta {
+        font-size: 0.68rem;
+      }
+
+      .series-view {
+        padding: 0.85rem;
+        margin-top: 1rem;
+      }
+
+      .series-header {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+
+      .series-header-poster, .series-poster-thumb {
+        width: 54px;
+        height: 81px;
+        flex-shrink: 0;
+      }
+
+      .series-header-title {
+        font-size: 1.05rem;
+      }
+
+      .season-bar-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
+      }
+
+      .series-filter-wrap {
+        max-width: 100%;
+      }
+
+      .episodes-grid {
+        grid-template-columns: 1fr;
+        max-height: 320px;
+        gap: 0.5rem;
+      }
+
+      .episode-card, .ep-card {
+        padding: 0.6rem 0.75rem;
+      }
+
+      .ep-title, .episode-title {
+        font-size: 0.8rem;
+      }
+
+      .stream-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding: 0.8rem;
+      }
+
+      .stream-card > div:last-child {
+        display: flex;
+        gap: 0.5rem;
+        width: 100%;
+      }
+
+      .stream-card > div:last-child .btn {
+        flex: 1;
+        padding: 0.65rem 0.5rem;
+        font-size: 0.8rem;
+        justify-content: center;
+      }
+
+      .stream-name {
+        font-size: 0.85rem;
+      }
+
+      .stream-desc {
+        font-size: 0.74rem;
+      }
+
+      .modal-backdrop {
+        padding: 0;
+      }
+
+      .modal-box {
+        border-radius: 0;
+        height: 100%;
+        max-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        border: none;
+      }
+
+      .modal-header {
+        padding: 0.65rem 0.85rem;
+      }
+
+      .video-viewport {
+        max-height: 48vh;
+      }
+
+      .modal-actions {
+        padding: 0.65rem 0.85rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+      }
+
+      .modal-actions .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      footer {
+        margin-top: 2rem;
+        padding-top: 1.25rem;
+        font-size: 0.78rem;
+      }
+    }
+
+    /* Provider Matrix Inspector Styles */
+    .provider-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    @media (max-width: 640px) {
+      .provider-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+      .provider-card {
+        padding: 0.85rem;
+      }
+    }
+
+    .provider-card {
+      background: #0c0e12;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .provider-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .provider-card.card-loading {
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .provider-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+
+    .provider-info {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .provider-icon {
+      font-size: 1.5rem;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: #161921;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      flex-shrink: 0;
+    }
+
+    .provider-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #ffffff;
+    }
+
+    .provider-desc {
+      font-size: 0.76rem;
+      color: #8b92a0;
+      margin-top: 0.15rem;
+    }
+
+    .provider-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+
+    .badge-idle {
+      background: rgba(255, 255, 255, 0.04);
+      color: #8b92a0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .badge-loading {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      animation: pulse 1.5s infinite;
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .badge-empty {
+      background: rgba(251, 191, 36, 0.1);
+      color: #fbbf24;
+      border: 1px solid rgba(251, 191, 36, 0.25);
+    }
+
+    .badge-blocked {
+      background: rgba(248, 113, 113, 0.1);
+      color: #f87171;
+      border: 1px solid rgba(248, 113, 113, 0.25);
+    }
+
+    .provider-streams-list {
+      margin-top: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      max-height: 240px;
+      overflow-y: auto;
+      padding-right: 0.25rem;
+    }
+
+    .provider-stream-item {
+      background: #12151b;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      padding: 0.5rem 0.65rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .provider-stream-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      overflow: hidden;
+      margin-right: 0.5rem;
+    }
+
+    .provider-stream-title {
+      color: #e2e8f0;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 170px;
+    }
+
+    .provider-stream-actions {
+      display: flex;
+      gap: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    .provider-btn-action {
+      padding: 0.25rem 0.55rem;
+      font-size: 0.74rem;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .provider-btn-play {
+      background: #ffffff;
+      color: #090a0d;
+      font-weight: 600;
+    }
+    .provider-btn-play:hover {
+      background: #e2e4e9;
+    }
+
+    .provider-btn-copy {
+      background: #181b22;
+      color: #c2c7d2;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .provider-btn-copy:hover {
+      background: #222630;
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .provider-diagnostic-text {
+      font-size: 0.76rem;
+      color: #8b92a0;
+      background: #101217;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      padding: 0.55rem 0.75rem;
+      margin-top: 0.5rem;
+      line-height: 1.45;
+    }
+
+    .provider-retry-btn {
+      background: #14171f;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #8b92a0;
+      font-size: 0.72rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .provider-retry-btn:hover {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.2);
+      background: #1c202a;
+    }
+
   </style>
 </head>
 <body>
-  <!-- Vízszintes magyar zászló csík: Piros felül, Fehér középen, Zöld alul -->
-  <div class="hu-top-stripe" title="Magyarország zászlaja (Piros-Fehér-Zöld)">
-    <div class="stripe-red"></div>
-    <div class="stripe-white"></div>
-    <div class="stripe-green"></div>
-  </div>
 
   <div class="container">
-    <div class="hero">
-      <div class="hero-header">
-        <img src="/logo.png" alt="Magyar Streaming Pro Ikon" class="addon-logo" />
-        <div>
-          <div class="badge">● NUVIO & STREMIO DIRECT HTTP ADDON • v2.5.0</div>
-          <h1>
-            <!-- Valódi vízszintes magyar zászló SVG -->
-            <svg class="hu-flag-svg" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-label="Magyar zászló">
-              <rect width="60" height="13.34" y="0" fill="#CE2939"/>
-              <rect width="60" height="13.34" y="13.33" fill="#FFFFFF"/>
-              <rect width="60" height="13.34" y="26.66" fill="#477050"/>
-            </svg>
-            Magyar Streaming Pro (HU)
-          </h1>
+    <!-- Vízszintes magyar zászló csík: Piros felül, Fehér középen, Zöld alul -->
+    <div style="display:flex;flex-direction:column;width:100%;height:10px;border-radius:6px;overflow:hidden;margin-bottom:1.75rem;box-shadow:0 4px 14px rgba(0,0,0,0.5);" title="Magyarország zászlaja (Piros-Fehér-Zöld)">
+      <div style="flex:1;background:#ce2939;"></div>
+      <div style="flex:1;background:#ffffff;"></div>
+      <div style="flex:1;background:#477050;"></div>
+    </div>
+    <header>
+      <img src="/logo.svg" alt="Magyar Streaming Pro Logo" class="app-logo" onerror="this.onerror=null; this.src='/logo.png';">
+      <div class="brand-pill">
+        <span class="live-dot"></span>
+        <span>v2.5.0 • Stremio &amp; Nuvio Kiegészítő • Mafab.hu &amp; TMDB Katalógus</span>
+      </div>
+      <h1 style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
+        <svg width="40" height="27" viewBox="0 0 60 40" style="border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.2);" xmlns="http://www.w3.org/2000/svg" aria-label="Magyar zászló">
+          <rect width="60" height="13.34" y="0" fill="#CE2939"/>
+          <rect width="60" height="13.34" y="13.33" fill="#FFFFFF"/>
+          <rect width="60" height="13.34" y="26.66" fill="#477050"/>
+        </svg>
+        Magyar Streaming Pro (HU)
+      </h1>
+      <p class="subtitle">Magyar szinkronos filmek, klasszikus sorozatok és MTVA élő TV adások (M1, M2, M4 Sport, Duna) közvetlen lejátszása Full HD minőségben, Mafab.hu és TMDB magyar katalógussal.</p>
+    </header>
+
+    <!-- 1. Telepítés & Manifest Kártya (Legfelül, átláthatóan) -->
+    <div class="card" id="installCard">
+      <div class="card-header">
+        <div class="card-title">
+          <span>Telepítés &amp; Hozzáadás</span>
+        </div>
+      </div>
+      <div class="url-box">
+        <input type="text" id="manifestUrl" class="url-input" readonly>
+        <button class="btn btn-secondary" style="padding: 0.45rem 0.85rem; font-size: 0.82rem;" onclick="copyManifest()">Másolás</button>
+      </div>
+
+      <div class="install-actions">
+        <a id="stremioInstallBtn" href="#" class="btn btn-stremio">
+          Telepítés Stremio-ba
+        </a>
+        <a id="nuvioInstallBtn" href="#" class="btn btn-nuvio" onclick="installNuvio(event)">
+          Telepítés Nuvio-ba
+        </a>
+        <button class="btn btn-secondary" onclick="copyManifest()">
+          Nuvio Link Másolása
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Források & Beállítások Kártya -->
+    <div class="card" id="configCard">
+      <div class="card-header">
+        <div class="card-title">
+          <span>Források &amp; Beállítások</span>
+        </div>
+        <span class="speed-badge" id="speedBadge">Gyors mód (~600ms)</span>
+      </div>
+      <!-- Presets Segmented Control -->
+      <div class="segmented-control">
+        <button class="preset-btn" id="btnPresetFast" onclick="applyPreset('fast')">
+          Gyors (7 forrás)
+        </button>
+        <button class="preset-btn active" id="btnPresetAll" onclick="applyPreset('all')">
+          Minden forrás (13 megosztó - Alapértelmezett)
+        </button>
+        <button class="preset-btn" id="btnPresetKids" onclick="applyPreset('kids')">
+          Mesék &amp; Gyerekek
+        </button>
+      </div>
+
+      <!-- Sources Grid -->
+      <div class="sources-grid" id="sourcesGrid"></div>
+
+      <!-- Felbontás Szűrő -->
+      <div class="config-section">
+        <div class="config-header-row">
+          <div class="config-title">Felbontás szűrés</div>
+          <div class="config-subtitle" id="resolutionSummary">1080p, 720p, 480p engedélyezve</div>
+        </div>
+        <div class="res-grid">
+          <div class="res-item selected" id="resItem1080" onclick="toggleResolution('1080p')">
+            <input type="checkbox" id="res1080" class="source-checkbox" checked onchange="event.stopPropagation(); onResolutionToggle();">
+            <span class="badge-quality badge-1080">1080p Full HD</span>
+          </div>
+          <div class="res-item selected" id="resItem720" onclick="toggleResolution('720p')">
+            <input type="checkbox" id="res720" class="source-checkbox" checked onchange="event.stopPropagation(); onResolutionToggle();">
+            <span class="badge-quality badge-720">720p HD</span>
+          </div>
+          <div class="res-item selected" id="resItem480" onclick="toggleResolution('480p')">
+            <input type="checkbox" id="res480" class="source-checkbox" checked onchange="event.stopPropagation(); onResolutionToggle();">
+            <span class="badge-quality badge-480">480p SD</span>
+          </div>
+          <div class="res-item" id="resItem360" onclick="toggleResolution('360p')">
+            <input type="checkbox" id="res360" class="source-checkbox" onchange="event.stopPropagation(); onResolutionToggle();">
+            <span class="badge-quality" style="background: rgba(148, 163, 184, 0.15); color: #94a3b8;">360p / Egyéb</span>
+          </div>
+        </div>
+        <div class="mini-presets-row">
+          <button type="button" class="mini-btn" id="btnRes1080Only" onclick="setResolutionPreset('1080only')">Csak 1080p FHD</button>
+          <button type="button" class="mini-btn" id="btnResHD" onclick="setResolutionPreset('hd')">1080p + 720p HD</button>
+          <button type="button" class="mini-btn" id="btnResAll" onclick="setResolutionPreset('all')">Minden felbontás</button>
         </div>
       </div>
 
-      <p class="subtitle">
-        Közvetlen <strong>Direct MP4 és HLS (.m3u8)</strong> magyar szinkronos és feliratos streamek felbontás-szűréssel (<code>1080p FHD</code> / <code>720p HD</code> / <code>480p SD</code>),
-        490+ <strong>MédiaKlikk (MTVA)</strong> archív műsorral és 7 élő TV csatornával (M4 Sport, M1, M2, Duna, M5).
-        Tökéletesen működik a <strong>Nuvio</strong> és <strong>Stremio</strong> lejátszókkal végtelen töltés (buffering) nélkül.
+      <!-- Keresési Időkorlát (Másodperc) -->
+      <div class="config-section">
+        <div class="config-header-row">
+          <div class="config-title">Keresési időkorlát</div>
+          <div class="speed-badge" id="timeoutBadge" style="background: #161922; color: #f0f2f5; border: 1px solid rgba(255, 255, 255, 0.1);">
+            <strong id="timeoutValText">20</strong>&nbsp;másodperc
+          </div>
+        </div>
+        <div class="slider-box">
+          <input type="range" id="timeoutSlider" min="3" max="25" value="20" step="1" oninput="onTimeoutChange(this.value)" class="custom-slider">
+          <div class="slider-ticks">
+            <span>3 mp (Villám)</span>
+            <span>5 mp</span>
+            <span>10 mp</span>
+            <span>15 mp</span>
+            <span>20 mp (Alapértelmezett)</span>
+            <span>25 mp (Mély)</span>
+          </div>
+        </div>
+        <div class="mini-presets-row">
+          <button type="button" class="mini-btn" id="btnTimeout5" onclick="setTimeoutPreset(5)">5 mp (Gyors)</button>
+          <button type="button" class="mini-btn" id="btnTimeout10" onclick="setTimeoutPreset(10)">10 mp (Közepes)</button>
+          <button type="button" class="mini-btn" id="btnTimeout15" onclick="setTimeoutPreset(15)">15 mp (Több 1080p)</button>
+          <button type="button" class="mini-btn active" id="btnTimeout20" onclick="setTimeoutPreset(20)">20 mp (Alapértelmezett)</button>
+        </div>
+      </div>
+
+      <!-- 📚 Katalógusok & Ajánlások (Stremio & Nuvio Polcok) -->
+      <div class="config-section" style="margin-top: 1.5rem; border-top: 1px solid var(--card-border); padding-top: 1.25rem;">
+        <div class="config-header-row">
+          <div>
+            <div class="config-title">📚 Katalógusok &amp; Ajánlások (Polcok)</div>
+            <div class="config-subtitle" id="catalogsSummary">7 polc bekapcsolva a kezdőlapon</div>
+          </div>
+          <div class="speed-badge" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);">
+            Flix-Catalogs &amp; Mafab
+          </div>
+        </div>
+
+        <!-- Catalog Presets -->
+        <div class="mini-presets-row" style="margin-bottom: 0.75rem;">
+          <button type="button" class="mini-btn active" id="btnCatDefault" onclick="applyCatalogPreset('default')">Alapértelmezett (Ajánlott)</button>
+          <button type="button" class="mini-btn" id="btnCatAll" onclick="applyCatalogPreset('all')">Minden polc (+Netflix, Max, Disney+)</button>
+          <button type="button" class="mini-btn" id="btnCatTvOnly" onclick="applyCatalogPreset('tvonly')">Csak Élő TV &amp; MTVA</button>
+        </div>
+
+        <div class="sources-grid" id="catalogsGrid"></div>
+      </div>
+    </div>
+
+    <!-- 4. Kereső & Élő TV Lejátszó -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Kereső &amp; Stream Lejátszó</div>
+      </div>
+      <div class="filter-tabs">
+        <button class="filter-btn active" id="tabAll" onclick="setFilter('all')">Mind</button>
+        <button class="filter-btn" id="tabLive" onclick="setFilter('tv')">Élő TV (MédiaKlikk)</button>
+        <button class="filter-btn" id="tabMovies" onclick="setFilter('movie')">Filmek</button>
+        <button class="filter-btn" id="tabClassics" onclick="setFilter('classics')">🏛️ MédiaKlikk Klasszikusok</button>
+        <button class="filter-btn" id="tabSeries" onclick="setFilter('series')">Sorozatok &amp; Mesék</button>
+      </div>
+
+      <div class="tester-controls">
+        <div class="search-input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="testId" class="input-field" placeholder="Keresés filmekre, sorozatokra vagy TV adásokra..." value="" onkeydown="if(event.key==='Enter') runSearch()">
+          <span class="search-kbd-hint">↵ Enter</span>
+        </div>
+        <button class="btn btn-primary" id="testBtn" onclick="runSearch()">Keresés</button>
+      </div>
+
+      <div class="chips-container">
+        <span style="font-size: 0.78rem; color: #64748b; align-self: center;">Gyors keresés:</span>
+        <span class="chip" onclick="quickSearch('M4 Sport')">M4 Sport Élő</span>
+        <span class="chip" onclick="quickSearch('Duna')">Duna TV Élő</span>
+        <span class="chip" onclick="quickSearch('M1')">M1 Híradó</span>
+        <span class="chip" onclick="quickSearch('A nagy ho-ho-ho-horgász')">🎣 A nagy ho-ho-ho-horgász</span>
+        <span class="chip" onclick="quickSearch('Süsü a sárkány')">🐉 Süsü, a sárkány</span>
+        <span class="chip" onclick="quickSearch('Magyar népmesék')">Magyar népmesék</span>
+        <span class="chip" onclick="quickSearch('A Mandalóri')">A Mandalóri</span>
+        <span class="chip" onclick="quickSearch('Macskafogó')">Macskafogó</span>
+        <span class="chip" onclick="quickSearch('Indul a bakterház')">Indul a bakterház</span>
+      </div>
+
+      <div id="loadingIndicator" style="display: none; margin-top: 1rem; color: #9aa0ac; font-size: 0.88rem; font-weight: 500;">
+        Keresés folyamatban a katalógusban...
+      </div>
+
+      <!-- Catalog Cards Grid (1 soros, 6 db / oldal) -->
+      <div id="catalogList" class="catalog-results" style="display: none;"></div>
+
+      <!-- Pagination -->
+      <div id="catalogPagination" class="pagination-bar" style="display: none;"></div>
+
+      <!-- Series Episode Selector -->
+      <div id="seriesView" class="series-view" style="display: none;"></div>
+
+      <!-- Search Progress Box -->
+      <div id="searchProgressBox" class="progress-box" style="display: none;">
+        <div class="progress-header">
+          <div class="progress-title-row" id="progressTitle">
+            <span>Keresés folyamatban...</span>
+          </div>
+          <span class="speed-badge" id="progressBadge">10 mp hátralévő</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="progressBarFill"></div>
+        </div>
+        <div class="progress-meta-row">
+          <div id="progressSourcesRow"></div>
+          <div id="progressTimerText" style="font-weight: 500;">Még kb. 10 másodperc</div>
+        </div>
+      </div>
+
+      <!-- Stream Quality Filter Bar -->
+      <div id="streamFilterBar" class="stream-filter-bar" style="display: none;"></div>
+
+      <!-- Streams List -->
+      <div id="streamsList" class="streams-preview"></div>
+    </div>
+
+    <!-- Built-in Cinema Video Player Modal -->
+    <div id="playerModal" class="modal-backdrop" onclick="if(event.target===this) closePlayerModal()">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div class="modal-title" id="playerModalTitle">Lejátszás</div>
+          <button type="button" onclick="closePlayerModal()" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; padding: 0 0.5rem; line-height: 1;">&times;</button>
+        </div>
+        <div class="video-viewport" style="position: relative; width: 100%; min-height: 380px; max-height: 75vh; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+          <video id="modalVideoPlayer" controls playsinline style="width: 100%; height: 100%; max-height: 75vh; background: #000; outline: none;"></video>
+          <iframe id="modalIframePlayer" src="about:blank" style="display: none; width: 100%; height: 60vh; min-height: 400px; max-height: 75vh; border: 0; background: #000;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          <div id="modalExternalCard" style="display: none; width: 100%; text-align: center; padding: 3rem 1.5rem; background: #0d0f14;">
+            <div style="font-size: 3.5rem; margin-bottom: 1rem; filter: drop-shadow(0 0 16px rgba(56,189,248,0.4));">🎬</div>
+            <h3 id="modalExternalCardTitle" style="color: #f8fafc; font-size: 1.35rem; font-weight: 700; margin-bottom: 0.75rem;">Hivatalos Mozi Lejátszó</h3>
+            <p style="color: #94a3b8; font-size: 0.95rem; max-width: 520px; margin: 0 auto 1.75rem auto; line-height: 1.6;">
+              Ez a forrás védett harmadik féltől származó webes lejátszó. Kattints az alábbi gombra az azonnali indításhoz új lapon:
+            </p>
+            <a id="modalExternalCardBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 2rem; font-size: 1.05rem; font-weight: 600; box-shadow: 0 4px 20px rgba(59,130,246,0.5);">
+              <span>Megnyitás a Lejátszóban</span>
+              <span style="font-size: 1.3rem;">↗</span>
+            </a>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <div id="playerModalMeta" style="font-size: 0.8rem; color: #94a3b8;">Full HD közvetlen lejátszás</div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button type="button" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" onclick="copyCurrentStreamUrl()">Stream Link Másolása</button>
+            <a id="playerOfficialBtn" href="#" target="_blank" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; display: none;">Hivatalos Oldal</a>
+            <button type="button" class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" onclick="closePlayerModal()">Bezárás</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="toast-notification"></div>
+
+    <footer>
+      <p>
+        <strong>Hungarian Streams Addon</strong> • Nyílt forráskódú közösségi projekt • 
+        <a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener">GitHub Forráskód</a>
       </p>
-
-      <div class="manifest-box">
-        <span class="manifest-url" id="manifestUrl">Betöltés...</span>
-        <div class="btn-row">
-          <button class="btn-primary" onclick="copyManifest()">📋 Manifest URL másolása (Nuvio)</button>
-          <a class="btn btn-secondary" id="stremioInstallBtn" href="#">🚀 Megnyitás Stremio-ban</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- 1. FELBONTÁS SZŰRŐ (RESOLUTION FILTER) -->
-    <div class="section-header">
-      <h2>🎞️ Felbontás Szűrő (Nuvio Manifest & Kereső)</h2>
-      <div class="section-actions">
-        <button class="pill" onclick="setResolutions(['1080p','720p','480p','360p'])">Összes felbontás</button>
-        <button class="pill" onclick="setResolutions(['1080p','720p'])">Csak HD (1080p + 720p)</button>
-        <button class="pill" onclick="setResolutions(['1080p'])">Csak 1080p FHD</button>
-      </div>
-    </div>
-
-    <div class="res-grid" id="resolutionsGrid">
-      <label class="res-card">
-        <input type="checkbox" value="1080p" checked onchange="onConfigChange()" />
-        <div class="res-info">
-          <h3>1080p Full HD <span class="res-tag">FHD</span></h3>
-          <p>Legjobb képminőség (MédiaKlikk, Videa, HDMozi)</p>
-        </div>
-      </label>
-      <label class="res-card">
-        <input type="checkbox" value="720p" checked onchange="onConfigChange()" />
-        <div class="res-info">
-          <h3>720p HD <span class="res-tag">HD</span></h3>
-          <p>Gyors betöltés, HD minőség</p>
-        </div>
-      </label>
-      <label class="res-card">
-        <input type="checkbox" value="480p" checked onchange="onConfigChange()" />
-        <div class="res-info">
-          <h3>480p SD <span class="res-tag">SD</span></h3>
-          <p>Normál felbontás, retro filmekhez</p>
-        </div>
-      </label>
-      <label class="res-card">
-        <input type="checkbox" value="360p" checked onchange="onConfigChange()" />
-        <div class="res-info">
-          <h3>360p / Alacsony <span class="res-tag">LQ</span></h3>
-          <p>Mobilnet-takarékos és archív felvételek</p>
-        </div>
-      </label>
-    </div>
-
-    <!-- 2. FORRÁSOK SZŰRŐJE (13 MAGYAR FORRÁS) -->
-    <div class="section-header">
-      <h2>📡 13 Aktív Magyar Forrás (Kattints a szűréshez)</h2>
-      <div class="section-actions">
-        <button class="pill" onclick="toggleAllSources(true)">Összes bekapcsolása</button>
-        <button class="pill" onclick="toggleAllSources(false)">Összes kikapcsolása</button>
-      </div>
-    </div>
-
-    <div class="sources-grid" id="sourcesGrid">
-      <label class="source-card"><input type="checkbox" value="mediaklikk" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> MédiaKlikk (MTVA)</h3><p>490+ magyar műsor, retro mesék + 7 Élő TV (M4 Sport, M1, Duna 1080p)</p></div></label>
-      <label class="source-card"><input type="checkbox" value="videa" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Videa.hu</h3><p>RC4 XML dekódoló — 1080p FHD & 720p HD MP4 streamek</p></div></label>
-      <label class="source-card"><input type="checkbox" value="indavideo" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Indavideo.hu</h3><p>Dinamikus amfphp token feloldó — 720p/360p MP4</p></div></label>
-      <label class="source-card"><input type="checkbox" value="hdmozi" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> HDMozi</h3><p>1080p FHD magyar szinkronos mozifilmek és sorozatok</p></div></label>
-      <label class="source-card"><input type="checkbox" value="filmvilag2" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Filmvilág2</h3><p>Magyar szinkronos teljes filmek és klasszikusok</p></div></label>
-      <label class="source-card"><input type="checkbox" value="jobbmintatv" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> JobbMintATv</h3><p>Sorozat epizódok és mozifilmek közvetlen lejátszással</p></div></label>
-      <label class="source-card"><input type="checkbox" value="netmozi" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> NetMozi</h3><p>Szinkronos és feliratos filmek és sorozatok</p></div></label>
-      <label class="source-card"><input type="checkbox" value="filmezek" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Filmezek.com</h3><p>Több tárhelyes magyar film- és sorozatgyűjtemény</p></div></label>
-      <label class="source-card"><input type="checkbox" value="onlinefilmek" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Online-Filmek.me</h3><p>Közvetlen Videa, OK.ru és HLS folyamok</p></div></label>
-      <label class="source-card"><input type="checkbox" value="dmdamedia" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> DMDamedia</h3><p>Magyar szinkronos sorozatok és filmek</p></div></label>
-      <label class="source-card"><input type="checkbox" value="mesefilm" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> MeseFilm.hu</h3><p>Családi animációk, bábfilmek és mesék</p></div></label>
-      <label class="source-card"><input type="checkbox" value="videakid" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Videakid.hu</h3><p>Gyerekfilmek, rajzfilmek és mesék közvetlen MP4-ben</p></div></label>
-      <label class="source-card"><input type="checkbox" value="sorozatoknet" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Sorozatok.net</h3><p>Streambot dekódoló sorozat epizódokhoz</p></div></label>
-    </div>
-
-    <!-- 3. ÉLŐ STREAM & FELBONTÁS TESZTELŐ -->
-    <div class="tester">
-      <h2>🔍 Élő Stream & Felbontás Tesztelő</h2>
-      <div class="preset-pills">
-        <span class="pill" onclick="runPreset('movie', 'mediaklikk-live-m4')">⚽ M4 Sport Élő (1080p)</span>
-        <span class="pill" onclick="runPreset('series', 'tt0154077:1:1')">🎣 A nagy ho-ho-horgász S1E1 (MédiaKlikk)</span>
-        <span class="pill" onclick="runPreset('series', 'tt0861751:1:1')">📖 Magyar népmesék S1E1</span>
-        <span class="pill" onclick="runPreset('movie', 'tt0179955')">🐭 Macskafogó (1986)</span>
-        <span class="pill" onclick="runPreset('movie', 'tt0131636')">🦊 Vuk (1981)</span>
-        <span class="pill" onclick="runPreset('movie', 'tt0499549')">🎬 Avatar (2009)</span>
-      </div>
-
-      <div class="test-controls">
-        <select id="mediaType" class="select-input">
-          <option value="movie">Film / Élő TV (movie)</option>
-          <option value="series">Sorozat (series)</option>
-        </select>
-        <input type="text" id="imdbInput" class="text-input" value="tt0179955" placeholder="pl. tt0179955, tt0154077:1:1 vagy mediaklikk-live-m4" />
-        <button class="btn-primary" onclick="testStreams()">Streamek keresése</button>
-      </div>
-
-      <div class="filter-tabs" id="liveResTabs">
-        <span class="label">Találatok szűrése felbontás szerint:</span>
-        <button class="pill active" data-res="all" onclick="setActiveResTab('all')">Összes</button>
-        <button class="pill" data-res="1080p" onclick="setActiveResTab('1080p')">1080p FHD</button>
-        <button class="pill" data-res="720p" onclick="setActiveResTab('720p')">720p HD</button>
-        <button class="pill" data-res="480p" onclick="setActiveResTab('480p')">480p SD</button>
-        <button class="pill" data-res="360p" onclick="setActiveResTab('360p')">360p</button>
-      </div>
-
-      <div class="results" id="testOutput">Kattints a "Streamek keresése" gombra vagy válassz a fenti gyorsgombok közül!</div>
-    </div>
+      <p style="margin-top: 0.35rem; font-size: 0.75rem; color: #475569;">
+        A projekt nem tárol és nem sugároz médiafájlokat; kizárólag nyilvánosan elérhető webes forrásokat indexel.
+      </p>
+    </footer>
   </div>
 
   <script>
-    const origin = window.location.origin;
-    const ALL_SOURCE_IDS = [
-      'mediaklikk','videa','indavideo','hdmozi','filmvilag2','jobbmintatv',
-      'netmozi','filmezek','onlinefilmek','dmdamedia','mesefilm','videakid','sorozatoknet'
+
+    // Supported sources catalog
+    const AVAILABLE_SOURCES = [
+      { id: 'videa', name: 'Videa.hu', desc: '1080p / 720p Direct MP4 (FCode Noembed bypass)', fast: true },
+      { id: 'mediaklikk', name: 'MédiaKlikk (MTVA)', desc: 'Élő TV (M1, M2, M4 Sport, Duna) & 490+ HLS VOD archívum', fast: true },
+      { id: 'netmozi', name: 'NetMozi.com', desc: 'NetMozi (Kodi forrás) 1080p & 720p filmek/sorozatok', fast: true },
+      { id: 'indavideo', name: 'Indavideo.hu', desc: 'Közvetlen MP4 CDN tokenekkel', fast: true },
+      { id: 'jobbmintatv', name: 'JobbMintATV', desc: 'Videa & OK.ru 1080p streamek', fast: true },
+      { id: 'filmvilag2', name: 'Filmvilág2', desc: 'Videa 1080p / 720p források', fast: true },
+      { id: 'hdmozi', name: 'HDMozi.hu', desc: 'HDMozi / RPM közvetlen 1080p HLS', fast: true },
+      { id: 'dmdamedia', name: 'DMDAMedia', desc: 'HD Filmek & Sorozatok', fast: false },
+      { id: 'mesefilm', name: 'MeseFilm / Kincstár', desc: 'Magyar Népmesék & Rajzfilmek', fast: true, kids: true },
+      { id: 'videakid', name: 'Videakid.hu', desc: 'Gyerekfilmek, rajzfilmek és mesék MP4-ben', fast: true, kids: true },
+      { id: 'filmezek', name: 'Filmezek.com', desc: 'Videa & OK.ru lejátszók', fast: false },
+      { id: 'onlinefilmek', name: 'OnlineFilmekIngyen', desc: 'HD szinkronos filmek', fast: false },
+      { id: 'sorozatoknet', name: 'Sorozatok.net', desc: 'Streambot dekódoló sorozat epizódokhoz', fast: true }
     ];
-    const ALL_RES_IDS = ['1080p', '720p', '480p', '360p'];
 
-    let lastFetchedStreams = [];
-    let activeResTab = 'all';
+    // State (Default: minden forrás és 20 mp)
+    let selectedSources = AVAILABLE_SOURCES.map(s => s.id);
+    let selectedResolutions = ['1080p', '720p', '480p'];
+    let selectedTimeoutSec = 20;
 
-    function getSelectedSources() {
-      return [...document.querySelectorAll('#sourcesGrid input[type="checkbox"]:checked')].map(cb => cb.value);
-    }
+    // Catalogs & Shelves (Flix-Catalogs & Mafab / TMDB)
+    const AVAILABLE_CATALOGS = [
+      // Élő TV & MTVA
+      { id: 'hu-live-tv', name: '🔴 Magyar Élő TV', desc: 'M4 Sport, M1, Duna, TV2, RTL és 25+ élő csatorna', group: 'tv', default: true },
+      { id: 'hu-mediaklikk-classics', name: '🏛️ MédiaKlikk Klasszikusok (MTVA)', desc: '1080p felújított magyar sorozatok és archívum', group: 'tv', default: true },
 
-    function getSelectedResolutions() {
-      return [...document.querySelectorAll('#resolutionsGrid input[type="checkbox"]:checked')].map(cb => cb.value);
-    }
+      // Toplisták & Ajánlások (Mafab / TMDB)
+      { id: 'hu-trending-movies', name: '🔥 Heti legnézettebb filmek', desc: 'Magyarországi heti népszerűségi toplista', group: 'top', default: true },
+      { id: 'hu-trending-series', name: '🔥 Heti legnézettebb sorozatok', desc: 'Magyarországi heti legnépszerűbb sorozatok', group: 'top', default: true },
+      { id: 'hu-cinema-movies', name: '🍿 Jelenleg a mozikban', desc: 'Friss mozibemutatók és premierek', group: 'top', default: true },
+      { id: 'hu-hungarian-movies', name: '🇭🇺 Magyar filmek toplistája', desc: 'A legnépszerűbb és legjobb magyar filmek', group: 'top', default: true },
+      { id: 'hu-hungarian-series', name: '🇭🇺 Magyar sorozatok toplistája', desc: 'Hazai sorozatok (A mi kis falunk, Aranyélet, stb.)', group: 'top', default: true },
+      { id: 'hu-top-rated-movies', name: '⭐ Legjobbra értékelt filmek', desc: 'Minden idők legmagasabb nézői értékelésű filmjei', group: 'top', default: false },
 
-    function onConfigChange() {
-      updateManifestUrl();
-      if (lastFetchedStreams.length > 0) {
-        renderStreams();
+      // Streaming Szolgáltatók (Flix-Catalogs stílus)
+      { id: 'hu-stream-netflix', name: '🔴 Netflix Magyarország', desc: 'Népszerű szinkronos filmek a Netflixről', group: 'stream', default: false },
+      { id: 'hu-stream-max', name: '🟣 Max (HBO Max)', desc: 'Max Magyarország népszerű kínálata', group: 'stream', default: false },
+      { id: 'hu-stream-disney', name: '🔵 Disney+ Magyarország', desc: 'Disney, Marvel, Star Wars és NatGeo', group: 'stream', default: false },
+      { id: 'hu-stream-skyshowtime', name: '🟡 SkyShowtime', desc: 'Universal, Paramount és Showtime sikerfilmek', group: 'stream', default: false },
+      { id: 'hu-stream-appletv', name: '⚪ Apple TV+', desc: 'Apple Original filmek és sorozatok magyar szinkronnal', group: 'stream', default: false },
+      { id: 'hu-stream-prime', name: '🔷 Amazon Prime Video', desc: 'Prime Video magyarországi kínálata', group: 'stream', default: false }
+    ];
+
+    let selectedCatalogs = AVAILABLE_CATALOGS.filter(c => c.default).map(c => c.id);
+
+    let currentStreamQualityFilter = 'all';
+    let activeFilter = 'all';
+    let currentSeriesMeta = null;
+    let currentActiveSeason = null;
+    let currentActiveEpisodeId = null;
+
+    // Inline SVG poster placeholder for missing / broken images (zero network call, zero jitter)
+    const NO_POSTER_SVG = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="450" viewBox="0 0 300 450" fill="none">
+  <rect width="300" height="450" fill="#0f172a"/>
+  <rect x="4" y="4" width="292" height="442" rx="10" stroke="#1e293b" stroke-dasharray="6 6" stroke-width="2"/>
+  <circle cx="150" cy="180" r="38" fill="#1e293b"/>
+  <path d="M136 166h28v28h-28z" fill="#475569"/>
+  <circle cx="142" cy="172" r="3" fill="#0f172a"/>
+  <circle cx="158" cy="172" r="3" fill="#0f172a"/>
+  <circle cx="142" cy="188" r="3" fill="#0f172a"/>
+  <circle cx="158" cy="188" r="3" fill="#0f172a"/>
+  <text x="150" y="250" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="14" font-weight="700" fill="#64748b" text-anchor="middle">Nincs Poszter</text>
+  <text x="150" y="272" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="11" fill="#475569" text-anchor="middle">Hungarian Streams</text>
+</svg>
+`);
+
+    // Non-blocking Toast Notification
+    function showToast(msg, duration = 3800) {
+      let toast = document.getElementById('toastNotification');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toastNotification';
+        toast.className = 'toast-notification';
+        document.body.appendChild(toast);
       }
+      toast.innerHTML = msg;
+      toast.classList.add('show');
+      if (window._toastTimer) clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, duration);
+    }
+
+    // Resolution Controls
+    function toggleResolution(res) {
+      if (selectedResolutions.includes(res)) {
+        if (selectedResolutions.length === 1) {
+          showToast('⚠️ Legalább egy felbontást engedélyezve kell hagyni!');
+          return;
+        }
+        selectedResolutions = selectedResolutions.filter(r => r !== res);
+      } else {
+        selectedResolutions.push(res);
+      }
+      updateResolutionUI();
+      updateManifestUrl();
+    }
+
+    function onResolutionToggle() {
+      const resList = [];
+      if (document.getElementById('res1080').checked) resList.push('1080p');
+      if (document.getElementById('res720').checked) resList.push('720p');
+      if (document.getElementById('res480').checked) resList.push('480p');
+      if (document.getElementById('res360').checked) resList.push('360p');
+
+      if (resList.length === 0) {
+        showToast('⚠️ Legalább egy felbontást engedélyezve kell hagyni!');
+        updateResolutionUI();
+        return;
+      }
+      selectedResolutions = resList;
+      updateResolutionUI();
+      updateManifestUrl();
+    }
+
+    function setResolutionPreset(preset) {
+      if (preset === '1080only') {
+        selectedResolutions = ['1080p'];
+      } else if (preset === 'hd') {
+        selectedResolutions = ['1080p', '720p'];
+      } else if (preset === 'all') {
+        selectedResolutions = ['1080p', '720p', '480p', '360p'];
+      }
+      updateResolutionUI();
+      updateManifestUrl();
+    }
+
+    function updateResolutionUI() {
+      ['1080p', '720p', '480p', '360p'].forEach(r => {
+        const key = r.replace('p', '');
+        const chk = document.getElementById(`res${key}`);
+        const item = document.getElementById(`resItem${key}`);
+        const isSel = selectedResolutions.includes(r);
+        if (chk) chk.checked = isSel;
+        if (item) item.className = 'res-item' + (isSel ? ' selected' : '');
+      });
+
+      const summary = document.getElementById('resolutionSummary');
+      if (summary) {
+        summary.textContent = `${selectedResolutions.join(', ')} engedélyezve`;
+      }
+
+      const is1080Only = selectedResolutions.length === 1 && selectedResolutions[0] === '1080p';
+      const isHD = selectedResolutions.length === 2 && selectedResolutions.includes('1080p') && selectedResolutions.includes('720p');
+      const isAll = selectedResolutions.length === 4;
+
+      document.getElementById('btnRes1080Only').className = 'mini-btn' + (is1080Only ? ' active' : '');
+      document.getElementById('btnResHD').className = 'mini-btn' + (isHD ? ' active' : '');
+      document.getElementById('btnResAll').className = 'mini-btn' + (isAll ? ' active' : '');
+    }
+
+    // Timeout (Seconds) Controls
+    function onTimeoutChange(val) {
+      selectedTimeoutSec = parseInt(val, 10);
+      document.getElementById('timeoutValText').textContent = selectedTimeoutSec;
+      
+      const badge = document.getElementById('timeoutBadge');
+      if (selectedTimeoutSec <= 5) {
+        badge.style.color = '#34d399';
+        badge.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+        badge.style.background = 'rgba(16, 185, 129, 0.15)';
+      } else if (selectedTimeoutSec <= 12) {
+        badge.style.color = '#ededed';
+        badge.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+        badge.style.background = '#181b22';
+      } else {
+        badge.style.color = '#fbbf24';
+        badge.style.borderColor = 'rgba(251, 191, 36, 0.3)';
+        badge.style.background = 'rgba(251, 191, 36, 0.1)';
+      }
+
+      [5, 10, 15, 20].forEach(sec => {
+        const btn = document.getElementById(`btnTimeout${sec}`);
+        if (btn) btn.className = 'mini-btn' + (selectedTimeoutSec === sec ? ' active' : '');
+      });
+
+      updateManifestUrl();
+    }
+
+    function setTimeoutPreset(sec) {
+      selectedTimeoutSec = sec;
+      const slider = document.getElementById('timeoutSlider');
+      if (slider) slider.value = sec;
+      onTimeoutChange(sec);
+    }
+
+    // Initialize Sources Grid
+    function renderSourcesGrid() {
+      const grid = document.getElementById('sourcesGrid');
+      grid.innerHTML = '';
+
+      AVAILABLE_SOURCES.forEach(source => {
+        const isChecked = selectedSources.includes(source.id);
+        const item = document.createElement('div');
+        item.className = 'source-item' + (isChecked ? ' selected' : '');
+        item.onclick = (e) => {
+          if (e.target.tagName !== 'INPUT') {
+            toggleSource(source.id);
+          }
+        };
+
+        const tagHtml = source.fast 
+          ? `<span class="source-tag tag-fast">⚡ Gyors</span>`
+          : `<span class="source-tag tag-rich">Bővített</span>`;
+
+        item.innerHTML = `
+          <input type="checkbox" id="src_${source.id}" class="source-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleSource('${source.id}')">
+          <div class="source-details">
+            <div class="source-name">
+              ${source.name}
+              ${tagHtml}
+            </div>
+            <div class="source-desc">${source.desc}</div>
+          </div>
+        `;
+        grid.appendChild(item);
+      });
+    }
+
+    function toggleSource(id) {
+      if (selectedSources.includes(id)) {
+        if (selectedSources.length === 1) {
+          showToast('⚠️ Legalább egy forrást bekapcsolva kell hagyni!');
+          return;
+        }
+        selectedSources = selectedSources.filter(s => s !== id);
+      } else {
+        selectedSources.push(id);
+      }
+      renderSourcesGrid();
+      updateManifestUrl();
+      highlightActivePreset();
+    }
+
+    function applyPreset(preset) {
+      if (preset === 'fast') {
+        selectedSources = ['videa', 'mediaklikk', 'netmozi', 'indavideo', 'jobbmintatv', 'filmvilag2', 'hdmozi'];
+      } else if (preset === 'all') {
+        selectedSources = AVAILABLE_SOURCES.map(s => s.id);
+      } else if (preset === 'kids') {
+        selectedSources = ['mesefilm', 'mediaklikk', 'videa', 'netmozi', 'indavideo', 'jobbmintatv'];
+      }
+      renderSourcesGrid();
+      updateManifestUrl();
+      highlightActivePreset();
+    }
+
+    function highlightActivePreset() {
+      const isFast = selectedSources.length === 7 && ['videa', 'mediaklikk', 'netmozi', 'indavideo', 'jobbmintatv', 'filmvilag2', 'hdmozi'].every(s => selectedSources.includes(s));
+      const isAll = selectedSources.length === AVAILABLE_SOURCES.length;
+      const isKids = selectedSources.length === 6 && ['mesefilm', 'mediaklikk', 'videa', 'netmozi', 'indavideo', 'jobbmintatv'].every(s => selectedSources.includes(s));
+
+      document.getElementById('btnPresetFast').className = 'preset-btn' + (isFast ? ' active' : '');
+      document.getElementById('btnPresetAll').className = 'preset-btn' + (isAll ? ' active' : '');
+      document.getElementById('btnPresetKids').className = 'preset-btn' + (isKids ? ' active' : '');
+
+      const speedBadge = document.getElementById('speedBadge');
+      if (selectedSources.length <= 7) {
+        speedBadge.textContent = '⚡ Szupergyors mód (~500ms - 1s)';
+        speedBadge.style.color = '#34d399';
+        speedBadge.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+        speedBadge.style.background = 'rgba(16, 185, 129, 0.15)';
+      } else {
+        speedBadge.textContent = '⏱️ Bővített forrásmód (~2.5s)';
+        speedBadge.style.color = '#fbbf24';
+        speedBadge.style.borderColor = 'rgba(251, 191, 36, 0.3)';
+        speedBadge.style.background = 'rgba(251, 191, 36, 0.15)';
+      }
+    }
+
+    function renderCatalogsGrid() {
+      const grid = document.getElementById('catalogsGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      AVAILABLE_CATALOGS.forEach(cat => {
+        const isChecked = selectedCatalogs.includes(cat.id);
+        const item = document.createElement('div');
+        item.className = 'source-item' + (isChecked ? ' selected' : '');
+        item.onclick = (e) => {
+          if (e.target.tagName !== 'INPUT') {
+            toggleCatalog(cat.id);
+          }
+        };
+
+        let tagClass = 'tag-fast';
+        let tagText = 'Élő adás';
+        if (cat.group === 'top') {
+          tagClass = 'tag-rich';
+          tagText = 'Toplista';
+        } else if (cat.group === 'stream') {
+          tagClass = 'tag-rich';
+          tagText = 'Streaming';
+        }
+
+        item.innerHTML = `
+          <input type="checkbox" id="cat_${cat.id}" class="source-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCatalog('${cat.id}')">
+          <div class="source-details">
+            <div class="source-name">
+              ${cat.name}
+              <span class="source-tag ${tagClass}">${tagText}</span>
+            </div>
+            <div class="source-desc">${cat.desc}</div>
+          </div>
+        `;
+        grid.appendChild(item);
+      });
+
+      const summary = document.getElementById('catalogsSummary');
+      if (summary) {
+        summary.textContent = `${selectedCatalogs.length} polc bekapcsolva a kezdőlapon`;
+      }
+    }
+
+    function toggleCatalog(id) {
+      if (selectedCatalogs.includes(id)) {
+        if (selectedCatalogs.length === 1) {
+          showToast('⚠️ Legalább egy katalógus polcot bekapcsolva kell hagyni!');
+          return;
+        }
+        selectedCatalogs = selectedCatalogs.filter(c => c !== id);
+      } else {
+        selectedCatalogs.push(id);
+      }
+      renderCatalogsGrid();
+      updateManifestUrl();
+      highlightActiveCatalogPreset();
+    }
+
+    function applyCatalogPreset(preset) {
+      if (preset === 'default') {
+        selectedCatalogs = AVAILABLE_CATALOGS.filter(c => c.default).map(c => c.id);
+      } else if (preset === 'all') {
+        selectedCatalogs = AVAILABLE_CATALOGS.map(c => c.id);
+      } else if (preset === 'tvonly') {
+        selectedCatalogs = ['hu-live-tv', 'hu-mediaklikk-classics'];
+      }
+      renderCatalogsGrid();
+      updateManifestUrl();
+      highlightActiveCatalogPreset();
+    }
+
+    function highlightActiveCatalogPreset() {
+      const defaultIds = AVAILABLE_CATALOGS.filter(c => c.default).map(c => c.id);
+      const isDefault = selectedCatalogs.length === defaultIds.length && defaultIds.every(id => selectedCatalogs.includes(id));
+      const isAll = selectedCatalogs.length === AVAILABLE_CATALOGS.length;
+      const isTvOnly = selectedCatalogs.length === 2 && ['hu-live-tv', 'hu-mediaklikk-classics'].every(id => selectedCatalogs.includes(id));
+
+      const btnDefault = document.getElementById('btnCatDefault');
+      const btnAll = document.getElementById('btnCatAll');
+      const btnTv = document.getElementById('btnCatTvOnly');
+
+      if (btnDefault) btnDefault.className = 'mini-btn' + (isDefault ? ' active' : '');
+      if (btnAll) btnAll.className = 'mini-btn' + (isAll ? ' active' : '');
+      if (btnTv) btnTv.className = 'mini-btn' + (isTvOnly ? ' active' : '');
     }
 
     function updateManifestUrl() {
-      const selectedSources = getSelectedSources();
-      const selectedRes = getSelectedResolutions();
+      const origin = window.location.origin;
+      const isAllSources = selectedSources.length === AVAILABLE_SOURCES.length;
+      const isDefaultRes = selectedResolutions.length === 3 && ['1080p', '720p', '480p'].every(r => selectedResolutions.includes(r));
+      const isDefaultTimeout = selectedTimeoutSec === 20;
+      const defaultCatalogIds = AVAILABLE_CATALOGS.filter(c => c.default).map(c => c.id);
+      const isDefaultCatalogs = selectedCatalogs.length === defaultCatalogIds.length && defaultCatalogIds.every(id => selectedCatalogs.includes(id));
 
-      let manifestUrl = `${origin}/manifest.json`;
-      const cfgObj = {};
-      if (selectedSources.length > 0 && selectedSources.length < ALL_SOURCE_IDS.length) {
-        cfgObj.sources = selectedSources;
-      }
-      if (selectedRes.length > 0 && selectedRes.length < ALL_RES_IDS.length) {
-        cfgObj.qualities = selectedRes;
+      let configPath = '';
+      if (!isAllSources || !isDefaultRes || !isDefaultTimeout || !isDefaultCatalogs) {
+        const parts = [];
+        if (!isAllSources) {
+          parts.push(`sources=${selectedSources.join(',')}`);
+        }
+        if (!isDefaultRes) {
+          parts.push(`res=${selectedResolutions.join(',')}`);
+        }
+        if (!isDefaultTimeout) {
+          parts.push(`timeout=${selectedTimeoutSec}`);
+        }
+        if (!isDefaultCatalogs) {
+          parts.push(`cat=${selectedCatalogs.join(',')}`);
+        }
+        configPath = '/' + parts.join('|');
       }
 
-      if (Object.keys(cfgObj).length > 0) {
-        const b64 = btoa(JSON.stringify(cfgObj)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-        manifestUrl = `${origin}/${b64}/manifest.json`;
-      }
+      const manifestUrl = `${origin}${configPath}/manifest.json`;
+      document.getElementById('manifestUrl').value = manifestUrl;
 
-      document.getElementById('manifestUrl').textContent = manifestUrl;
-      document.getElementById('stremioInstallBtn').href = manifestUrl.replace(/^https?:\/\//, 'stremio://');
+      // Update Stremio Deep Link
+      const stremioScheme = manifestUrl.replace(/^https?:\/\//, 'stremio://');
+      const stremioBtn = document.getElementById('stremioInstallBtn');
+      if (stremioBtn) stremioBtn.href = stremioScheme;
+
+      // Update Nuvio Deep Link
+      const nuvioScheme = manifestUrl.replace(/^https?:\/\//, 'nuvio://');
+      const nuvioBtn = document.getElementById('nuvioInstallBtn');
+      if (nuvioBtn) nuvioBtn.href = nuvioScheme;
     }
 
-    function setResolutions(resList) {
-      const set = new Set(resList);
-      document.querySelectorAll('#resolutionsGrid input[type="checkbox"]').forEach(cb => {
-        cb.checked = set.has(cb.value);
-      });
-      onConfigChange();
-    }
+    function installNuvio(event) {
+      if (event) event.preventDefault();
+      const input = document.getElementById('manifestUrl');
+      const manifestUrl = input ? input.value : '';
+      const nuvioScheme = manifestUrl.replace(/^https?:\/\//, 'nuvio://');
 
-    function toggleAllSources(state) {
-      document.querySelectorAll('#sourcesGrid input[type="checkbox"]').forEach(cb => {
-        cb.checked = state;
-      });
-      onConfigChange();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(manifestUrl).catch(() => {});
+      }
+
+      showToast('🚀 <strong>Nuvio megnyitása...</strong><br>📋 A manifest linket automatikusan a vágólapra is másoltuk!', 4200);
+
+      // Attempt deep link protocol
+      window.location.href = nuvioScheme;
     }
 
     function copyManifest() {
-      const url = document.getElementById('manifestUrl').textContent;
-      navigator.clipboard.writeText(url);
-      alert('Manifest URL kimásolva:\n' + url + '\n\nIlleszd be a Nuvio Addonok hozzáadása mezőbe!');
+      const input = document.getElementById('manifestUrl');
+      input.select();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(input.value);
+      }
+      showToast('✅ <strong>Manifest URL kimásolva!</strong><br>Illeszd be a Nuvio Beállítások ➔ Kiegészítők menüpontjába.');
     }
 
-    function getStreamBucket(s) {
-      const h = s.height || 0;
-      const q = String(s.quality || '').toLowerCase();
-      const name = String(s.name || '');
-      if (h >= 1080 || q === '1080p' || name.includes('1080')) return '1080p';
-      if (h >= 720 || q === '720p' || name.includes('720')) return '720p';
-      if (h >= 480 || q === '480p' || name.includes('480')) return '480p';
-      return '360p';
+    function setFilter(type) {
+      activeFilter = type;
+      currentCatalogPage = 1;
+      document.getElementById('tabAll').className = type === 'all' ? 'filter-btn active' : 'filter-btn';
+      document.getElementById('tabLive').className = type === 'tv' ? 'filter-btn active' : 'filter-btn';
+      document.getElementById('tabMovies').className = type === 'movie' ? 'filter-btn active' : 'filter-btn';
+      document.getElementById('tabClassics').className = type === 'classics' ? 'filter-btn active' : 'filter-btn';
+      document.getElementById('tabSeries').className = type === 'series' ? 'filter-btn active' : 'filter-btn';
+      
+      const rawInput = (document.getElementById('testId').value || '').trim();
+      if (rawInput) {
+        runSearch();
+      } else {
+        loadDefaultCatalog(type);
+      }
     }
 
-    function setActiveResTab(res) {
-      activeResTab = res;
-      document.querySelectorAll('#liveResTabs button.pill').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-res') === res);
-      });
-      renderStreams();
+    function quickSearch(title) {
+      document.getElementById('testId').value = title;
+      currentCatalogPage = 1;
+      runSearch();
     }
 
-    function updateTabCounts(streams) {
-      const counts = { all: streams.length, '1080p': 0, '720p': 0, '480p': 0, '360p': 0 };
-      streams.forEach(s => {
-        const b = getStreamBucket(s);
-        counts[b] = (counts[b] || 0) + 1;
-      });
-      const labels = {
-        all: `Összes (${counts.all})`,
-        '1080p': `1080p FHD (${counts['1080p']})`,
-        '720p': `720p HD (${counts['720p']})`,
-        '480p': `480p SD (${counts['480p']})`,
-        '360p': `360p (${counts['360p']})`
-      };
-      document.querySelectorAll('#liveResTabs button.pill').forEach(btn => {
-        const r = btn.getAttribute('data-res');
-        if (labels[r]) btn.textContent = labels[r];
-      });
+    // Catalog Pagination State
+    let currentCatalogResults = [];
+    let currentCatalogPage = 1;
+    const CATALOG_ITEMS_PER_PAGE = 6;
+
+    async function loadDefaultCatalog(filter = 'all') {
+      const catalogList = document.getElementById('catalogList');
+      const pagination = document.getElementById('catalogPagination');
+      const seriesView = document.getElementById('seriesView');
+      const streamsList = document.getElementById('streamsList');
+      const loader = document.getElementById('loadingIndicator');
+
+      if (seriesView) {
+        seriesView.innerHTML = '';
+        seriesView.style.display = 'none';
+      }
+      if (streamsList) {
+        streamsList.innerHTML = '';
+      }
+      if (loader) loader.style.display = 'block';
+
+      try {
+        const filterParam = filter !== 'all' ? `&type=${filter}` : '';
+        const res = await fetch(`/api/search?q=${filterParam}`);
+        const data = await res.json();
+        const results = data.results || [];
+
+        if (loader) loader.style.display = 'none';
+
+        currentCatalogResults = results;
+        renderCatalogPage(1, false);
+      } catch (err) {
+        if (loader) loader.style.display = 'none';
+      }
     }
 
-    function renderStreams() {
-      const out = document.getElementById('testOutput');
-      const selectedResSet = new Set(getSelectedResolutions());
+    function renderCatalogPage(page = 1, autoSelect = false) {
+      const catalogList = document.getElementById('catalogList');
+      const pagination = document.getElementById('catalogPagination');
+      if (!catalogList) return;
 
-      // Filter by checked resolution checkboxes first
-      const allowedByCheckbox = lastFetchedStreams.filter(s => selectedResSet.has(getStreamBucket(s)));
-      updateTabCounts(allowedByCheckbox);
-
-      // Filter by active resolution tab
-      const filtered = activeResTab === 'all'
-        ? allowedByCheckbox
-        : allowedByCheckbox.filter(s => getStreamBucket(s) === activeResTab);
-
-      if (filtered.length === 0) {
-        out.textContent = 'Nincs találat a kiválasztott felbontás-szűrővel. Kapcsold be a többi felbontást fent, vagy válts az "Összes" fülre!';
+      if (!currentCatalogResults || currentCatalogResults.length === 0) {
+        catalogList.style.display = 'none';
+        if (pagination) pagination.style.display = 'none';
         return;
       }
 
-      out.innerHTML = filtered.map((s, idx) => {
-        const bucket = getStreamBucket(s);
-        const badgeClass = bucket === '1080p' ? 'q1080' : bucket === '720p' ? 'q720' : '';
-        return `
-          <div class="stream-item">
-            <div>
-              <strong>#${idx + 1} ${(s.name || '').replace(/\n/g, ' — ')}</strong>
-              <span class="qual-badge ${badgeClass}">${s.quality || (s.height ? s.height + 'p' : bucket)}</span><br/>
-              <span style="color:#94a3b8">${(s.title || '').replace(/\n/g, ' | ')}</span>
-            </div>
-            <a class="btn btn-secondary" href="${s.url}" target="_blank" rel="noopener">▶ Megnyitás</a>
+      const totalItems = currentCatalogResults.length;
+      const totalPages = Math.ceil(totalItems / CATALOG_ITEMS_PER_PAGE);
+      currentCatalogPage = Math.max(1, Math.min(page, totalPages));
+
+      const startIndex = (currentCatalogPage - 1) * CATALOG_ITEMS_PER_PAGE;
+      const endIndex = Math.min(startIndex + CATALOG_ITEMS_PER_PAGE, totalItems);
+      const pageSlice = currentCatalogResults.slice(startIndex, endIndex);
+
+      catalogList.innerHTML = '';
+      catalogList.style.display = 'grid';
+
+      pageSlice.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'catalog-card' + (autoSelect && idx === 0 ? ' active' : '');
+        const isTv = item.type === 'tv';
+        const isSeries = item.type === 'series';
+        const badgeText = isTv ? '🔴 Élő TV' : isSeries ? '📺 Sorozat' : '🎬 Film';
+        const badgeClass = isTv ? 'catalog-badge badge-tv' : isSeries ? 'catalog-badge badge-sorozat' : 'catalog-badge badge-film';
+
+        const posterUrl = item.poster || (item.id ? `https://images.metahub.space/poster/medium/${item.id}/img` : NO_POSTER_SVG);
+
+        card.innerHTML = `
+          <span class="${badgeClass}">${badgeText}</span>
+          <div class="poster-container">
+            <img class="catalog-poster" 
+                 src="${posterUrl}" 
+                 alt="" 
+                 loading="lazy" 
+                 onerror="this.onerror=null; this.src='${NO_POSTER_SVG}';">
+          </div>
+          <div class="catalog-info">
+            <div class="catalog-title" title="${item.name}">${item.name}</div>
+            <div class="catalog-year">${item.year || badgeText}</div>
           </div>
         `;
-      }).join('');
-    }
+        card.onclick = () => {
+          document.querySelectorAll('.catalog-card').forEach(c => c.classList.remove('active'));
+          card.classList.add('active');
+          onCatalogItemClick(item);
+        };
+        catalogList.appendChild(card);
+      });
 
-    function runPreset(type, id) {
-      document.getElementById('mediaType').value = type;
-      document.getElementById('imdbInput').value = id;
-      testStreams();
-    }
+      // Render Pagination Bar with Page Numbers and Next/Prev
+      if (pagination) {
+        if (totalPages > 1) {
+          pagination.style.display = 'flex';
+          let pageBtnsHtml = '';
+          
+          for (let p = 1; p <= totalPages; p++) {
+            if (totalPages <= 7 || p === 1 || p === totalPages || (p >= currentCatalogPage - 1 && p <= currentCatalogPage + 1)) {
+              pageBtnsHtml += `<button type="button" class="page-number-btn ${p === currentCatalogPage ? 'active' : ''}" onclick="goToCatalogPage(${p})">${p}</button>`;
+            } else if (p === currentCatalogPage - 2 || p === currentCatalogPage + 2) {
+              pageBtnsHtml += `<span style="color: #64748b; padding: 0 0.2rem;">...</span>`;
+            }
+          }
 
-    async function testStreams() {
-      const type = document.getElementById('mediaType').value;
-      const id = document.getElementById('imdbInput').value.trim();
-      const out = document.getElementById('testOutput');
-      const sources = getSelectedSources().join(',');
-      out.textContent = '⏳ Magyar források lekérdezése folyamatban (MédiaKlikk, Videa, Indavideo, HDMozi, Filmvilág2, NetMozi, stb.)...';
-
-      try {
-        const res = await fetch(`${origin}/stream/${type}/${encodeURIComponent(id)}.json?sources=${encodeURIComponent(sources)}`);
-        const data = await res.json();
-        lastFetchedStreams = data.streams || [];
-        if (lastFetchedStreams.length === 0) {
-          updateTabCounts([]);
-          out.textContent = 'Nem található közvetlen magyar stream ehhez az azonosítóhoz.';
-          return;
+          pagination.innerHTML = `
+            <button type="button" class="page-btn" onclick="goToCatalogPage(${currentCatalogPage - 1})" ${currentCatalogPage === 1 ? 'disabled' : ''}>
+              ◀ Előző
+            </button>
+            <div class="page-numbers-group">
+              ${pageBtnsHtml}
+            </div>
+            <button type="button" class="page-btn" onclick="goToCatalogPage(${currentCatalogPage + 1})" ${currentCatalogPage === totalPages ? 'disabled' : ''}>
+              Következő ▶
+            </button>
+            <span class="page-info-badge">
+              ${currentCatalogPage}. / ${totalPages} oldal (${totalItems} db találat)
+            </span>
+          `;
+        } else {
+          pagination.style.display = 'none';
         }
-        renderStreams();
-      } catch (e) {
-        out.textContent = 'Hiba történt: ' + e.message;
+      }
+
+      // Automatically handle first result of page ONLY when autoSelect is true
+      if (autoSelect && pageSlice.length > 0) {
+        onCatalogItemClick(pageSlice[0]);
       }
     }
 
+    function goToCatalogPage(p) {
+      renderCatalogPage(p, false);
+      const catalogEl = document.getElementById('catalogList');
+      if (catalogEl) {
+        catalogEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    async function runSearch() {
+      let rawInput = (document.getElementById('testId').value || '').trim();
+      if (!rawInput) {
+        await loadDefaultCatalog(activeFilter);
+        return;
+      }
+
+      const catalogList = document.getElementById('catalogList');
+      const pagination = document.getElementById('catalogPagination');
+      const seriesView = document.getElementById('seriesView');
+      const streamsList = document.getElementById('streamsList');
+      const loader = document.getElementById('loadingIndicator');
+
+      catalogList.innerHTML = '';
+      catalogList.style.display = 'none';
+      if (pagination) pagination.style.display = 'none';
+      seriesView.innerHTML = '';
+      seriesView.style.display = 'none';
+      streamsList.innerHTML = '';
+      if (loader) loader.style.display = 'block';
+
+      if (rawInput.startsWith('tt') || rawInput.startsWith('mediaklikk-live-')) {
+        await loadStreamsForId(rawInput);
+        return;
+      }
+
+      try {
+        const filterParam = activeFilter !== 'all' ? `&type=${activeFilter}` : '';
+        const res = await fetch(`/api/search?q=${encodeURIComponent(rawInput)}${filterParam}`);
+        const data = await res.json();
+        const results = data.results || [];
+
+        if (loader) loader.style.display = 'none';
+
+        if (results.length > 0) {
+          currentCatalogResults = results;
+          renderCatalogPage(1, true);
+        } else {
+          currentCatalogResults = [];
+          if (pagination) pagination.style.display = 'none';
+          await loadStreamsForId(rawInput);
+        }
+      } catch (err) {
+        if (loader) loader.style.display = 'none';
+        await loadStreamsForId(rawInput);
+      }
+    }
+
+    // Handles user clicking a catalog card (Movie vs Series vs Live TV)
+    async function onCatalogItemClick(item) {
+      const seriesView = document.getElementById('seriesView');
+      const streamsList = document.getElementById('streamsList');
+
+      if (item.type === 'tv' || (item.id && item.id.startsWith('mediaklikk-live-'))) {
+        if (seriesView) {
+          seriesView.innerHTML = '';
+          seriesView.style.display = 'none';
+        }
+        await loadStreamsForId(item.id, item.name);
+        return;
+      }
+
+      if (item.type === 'series') {
+        // Load Series View with Seasons and Episodes
+        streamsList.innerHTML = '';
+        await loadSeriesEpisodes(item.id, item.name);
+      } else {
+        // Movie: immediately fetch and display streams
+        seriesView.innerHTML = '';
+        seriesView.style.display = 'none';
+        await loadStreamsForId(item.id, item.name);
+      }
+    }
+
+    // Nuvio-like Series View: fetches seasons and episodes list
+    async function loadSeriesEpisodes(seriesId, titleHint) {
+      const seriesView = document.getElementById('seriesView');
+      const loader = document.getElementById('loadingIndicator');
+      if (loader) loader.style.display = 'block';
+
+      try {
+        const res = await fetch(`/api/episodes?id=${encodeURIComponent(seriesId)}&_t=${Date.now()}`, { cache: 'no-store' });
+        const data = await res.json();
+        if (loader) loader.style.display = 'none';
+
+        if (!data || !data.seasons || Object.keys(data.seasons).length === 0) {
+          // Fallback if episodes not found
+          await loadStreamsForId(`${seriesId}:1:1`, titleHint);
+          return;
+        }
+
+        currentSeriesMeta = data;
+        seriesView.style.display = 'block';
+
+        const seasonNums = Object.keys(data.seasons).filter(s => s !== '0' || Object.keys(data.seasons).length === 1);
+        const initialSeason = seasonNums[0] || '1';
+        let targetSeason = initialSeason;
+        let targetEpisode = data.seasons[initialSeason]?.[0];
+
+        // If the user's search query mentions an episode title (e.g. "A só", "Kacor király"), auto-select it!
+        const rawInput = (document.getElementById('testId').value || '').trim().toLowerCase();
+        if (rawInput) {
+          for (const sNum of seasonNums) {
+            const match = (data.seasons[sNum] || []).find(e => {
+              const epClean = (e.name || '').toLowerCase();
+              return epClean.length > 2 && (rawInput.includes(epClean) || epClean.includes(rawInput));
+            });
+            if (match) {
+              targetSeason = sNum;
+              targetEpisode = match;
+              break;
+            }
+          }
+        }
+
+        currentActiveSeason = targetSeason;
+        currentActiveEpisodeId = targetEpisode ? targetEpisode.id : null;
+
+        renderSeriesHeaderAndSeasons(data, seasonNums, targetSeason);
+        renderEpisodes(targetSeason);
+
+        if (targetEpisode) {
+          highlightActiveEpisode(targetEpisode.id);
+          await loadStreamsForId(targetEpisode.id, `${data.name} - ${targetSeason}. Évad ${targetEpisode.episode}. Rész (${targetEpisode.name})`);
+        }
+      } catch (err) {
+        if (loader) loader.style.display = 'none';
+        await loadStreamsForId(`${seriesId}:1:1`, titleHint);
+      }
+    }
+
+    function renderSeriesHeaderAndSeasons(meta, seasonNums, activeSeason) {
+      const seriesView = document.getElementById('seriesView');
+      const totalSeasons = seasonNums.length;
+      const totalEpsInSeason = meta.seasons[activeSeason]?.length || 0;
+
+      seriesView.innerHTML = `
+        <div class="series-header">
+          <img class="series-header-poster" src="${meta.poster || NO_POSTER_SVG}" alt="" onerror="this.onerror=null; this.src='${NO_POSTER_SVG}';">
+          <div class="series-header-details">
+            <div class="series-header-title">${meta.name}</div>
+            <div class="series-header-meta">
+              ${meta.year ? `<span class="series-tag">${meta.year}</span>` : ''}
+              <span class="series-tag">${totalSeasons} Évad</span>
+              <span class="series-tag" id="pickerSummaryText">${activeSeason}. Évad (${totalEpsInSeason} rész)</span>
+              ${(meta.genres && meta.genres.length > 0) ? `<span style="font-size: 0.74rem; color: #94a3b8; margin-left: 0.2rem;">${meta.genres.slice(0, 3).join(' • ')}</span>` : ''}
+            </div>
+            <div class="series-header-desc">${meta.description || 'Válassz évadot és részt a listából!'}</div>
+          </div>
+        </div>
+
+        <div class="season-bar-container">
+          <div class="season-tabs" id="seasonTabsContainer">
+            ${seasonNums.map(s => `
+              <button type="button" class="season-tab-btn ${s === activeSeason ? 'active' : ''}" onclick="selectSeason('${s}')">
+                ${s === '0' ? 'Különkiadás' : s + '. Évad'}
+              </button>
+            `).join('')}
+          </div>
+          <div class="series-filter-wrap">
+            <input type="text" id="seriesEpisodeFilterInput" class="series-filter-input" placeholder="🔍 Rész keresése (pl. A só, 5)..." oninput="onEpisodeFilterInput(this.value)">
+          </div>
+        </div>
+
+        <div class="episodes-grid" id="episodesGrid"></div>
+      `;
+
+      renderEpisodes(activeSeason);
+    }
+
+    function onEpisodeFilterInput(text) {
+      renderEpisodes(currentActiveSeason, text);
+    }
+
+    function selectSeason(seasonNum) {
+      currentActiveSeason = seasonNum;
+
+      const summary = document.getElementById('pickerSummaryText');
+      if (summary && currentSeriesMeta) {
+        summary.textContent = `${seasonNum}. Évad (${currentSeriesMeta.seasons[seasonNum]?.length || 0} rész)`;
+      }
+
+      document.querySelectorAll('.season-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.trim().startsWith(seasonNum + '.') || (seasonNum === '0' && btn.textContent.includes('Különkiadás')));
+      });
+
+      const filterInput = document.getElementById('seriesEpisodeFilterInput');
+      const filterVal = filterInput ? filterInput.value : '';
+
+      renderEpisodes(seasonNum, filterVal);
+
+      // Automatically select first episode of selected season
+      const firstEp = currentSeriesMeta.seasons[seasonNum]?.[0];
+      if (firstEp) {
+        selectEpisode(firstEp.id, `${currentSeriesMeta.name} - ${seasonNum}. Évad ${firstEp.episode}. Rész (${firstEp.name || firstEp.episode + '. Rész'})`);
+      }
+    }
+
+    function renderEpisodes(seasonNum, filterText = '') {
+      const grid = document.getElementById('episodesGrid');
+      if (!grid || !currentSeriesMeta) return;
+      grid.innerHTML = '';
+
+      const eps = currentSeriesMeta.seasons[seasonNum] || [];
+      const cleanFilter = (filterText || '').toLowerCase().trim();
+
+      const filtered = cleanFilter
+        ? eps.filter(e => (e.name || '').toLowerCase().includes(cleanFilter) || String(e.episode).includes(cleanFilter))
+        : eps;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 1.5rem; color: #94a3b8; font-size: 0.85rem; text-align: center;">
+            Nem található "${filterText}" nevű epizód a(z) ${seasonNum}. évadban.
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(ep => {
+        const card = document.createElement('div');
+        const isActive = ep.id === currentActiveEpisodeId;
+        card.className = 'episode-card' + (isActive ? ' active' : '');
+        card.id = `ep_card_${ep.id.replace(/[^a-zA-Z0-9]/g, '_')}`;
+
+        const epPad = String(ep.episode).padStart(2, '0');
+        const badgeLabel = `E${epPad}`;
+        const epName = ep.name || `${ep.episode}. Rész`;
+
+        card.innerHTML = `
+          <div class="ep-left-content">
+            <span class="ep-badge">${badgeLabel}</span>
+            <div class="ep-info">
+              <div class="ep-title" title="${epName}">${epName}</div>
+              <div class="ep-sub">${seasonNum}. Évad • ${ep.episode}. Rész</div>
+            </div>
+          </div>
+          <div class="ep-play-btn" title="Lejátszás">▶</div>
+        `;
+        card.onclick = () => {
+          selectEpisode(ep.id, `${currentSeriesMeta.name} - ${seasonNum}. Évad ${ep.episode}. Rész (${epName})`);
+        };
+        grid.appendChild(card);
+      });
+    }
+
+    function highlightActiveEpisode(id) {
+      document.querySelectorAll('.episode-card').forEach(c => c.classList.remove('active'));
+      const activeCard = document.getElementById(`ep_card_${id.replace(/[^a-zA-Z0-9]/g, '_')}`);
+      if (activeCard) {
+        activeCard.classList.add('active');
+        activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function selectEpisode(episodeId, label) {
+      currentActiveEpisodeId = episodeId;
+      highlightActiveEpisode(episodeId);
+      loadStreamsForId(episodeId, label);
+    }
+
+    function setStreamQualityFilter(filterKey) {
+      currentStreamQualityFilter = filterKey;
+      if (typeof window.reRenderStreams === 'function') {
+        window.reRenderStreams();
+      }
+    }
+
+    let currentSearchToken = 0;
+    let activeProgressInterval = null;
+
+    // Fetches streams progressively: quick initial results (~1-3s) + configured deep search with live countdown
+    async function loadStreamsForId(id, titleLabel) {
+      const searchToken = ++currentSearchToken;
+      if (activeProgressInterval) {
+        clearInterval(activeProgressInterval);
+        activeProgressInterval = null;
+      }
+
+      currentStreamQualityFilter = 'all';
+
+      const streamsList = document.getElementById('streamsList');
+      const filterBar = document.getElementById('streamFilterBar');
+      const progressBox = document.getElementById('searchProgressBox');
+      const progressTitle = document.getElementById('progressTitle');
+      const progressBadge = document.getElementById('progressBadge');
+      const progressBarFill = document.getElementById('progressBarFill');
+      const progressTimerText = document.getElementById('progressTimerText');
+      const progressSourcesRow = document.getElementById('progressSourcesRow');
+
+      const sourcesQuery = selectedSources.join(',');
+      const resQuery = selectedResolutions.join(',');
+      const TOTAL_SEARCH_MS = selectedTimeoutSec * 1000;
+
+      // Reset & show Progress Box
+      streamsList.innerHTML = '';
+      if (filterBar) {
+        filterBar.innerHTML = '';
+        filterBar.style.display = 'none';
+      }
+      progressBox.style.display = 'block';
+      progressBox.className = 'progress-box active';
+      progressBarFill.style.width = '5%';
+      progressTitle.innerHTML = `
+        <span class="pulse-dot"></span>
+        <span style="color: #60a5fa;">Magyar források pásztázása (1080p vadászat: ${selectedTimeoutSec} mp)...</span>
+      `;
+      progressBadge.textContent = `${selectedTimeoutSec} mp hátralévő`;
+      progressBadge.style.background = 'rgba(59, 130, 246, 0.2)';
+      progressBadge.style.color = '#60a5fa';
+
+      // Render active source scanning pills
+      progressSourcesRow.innerHTML = selectedSources.map(sId => {
+        const srcObj = AVAILABLE_SOURCES.find(s => s.id === sId);
+        const name = srcObj ? srcObj.name : sId;
+        return `<span class="source-scanning-pill" id="scan_pill_${sId}">${name}</span>`;
+      }).join('');
+
+      // Start custom countdown interval
+      const startTime = Date.now();
+
+      activeProgressInterval = setInterval(() => {
+        if (searchToken !== currentSearchToken) {
+          clearInterval(activeProgressInterval);
+          return;
+        }
+        const elapsed = Date.now() - startTime;
+        const remainSec = Math.max(0, Math.ceil((TOTAL_SEARCH_MS - elapsed) / 1000));
+        const pct = Math.min(95, Math.max(5, (elapsed / TOTAL_SEARCH_MS) * 100));
+
+        progressBarFill.style.width = `${pct}%`;
+        progressBadge.textContent = `${remainSec} mp hátralévő`;
+        progressTimerText.textContent = `⏳ Még kb. ${remainSec} másodperc mélykeresés (${selectedTimeoutSec} mp limit)...`;
+      }, 250);
+
+      let allKnownStreams = [];
+      const seenUrls = new Set();
+
+      function updateStreamsUI(isFinal = false, newlyFound1080p = false) {
+        if (searchToken !== currentSearchToken) return;
+
+        // Sort: 1080p -> 720p -> 480p, direct MP4s first
+        allKnownStreams.sort((a, b) => {
+          const heightA = a.height || 0;
+          const heightB = b.height || 0;
+          if (heightB !== heightA) return heightB - heightA;
+          const isDirectA = a.source === 'videa' || a.source === 'indavideo' || a.source === 'jobbmintatv' || a.source === 'netmozi' || a.source === 'hdmozi';
+          const isDirectB = b.source === 'videa' || b.source === 'indavideo' || b.source === 'jobbmintatv' || b.source === 'netmozi' || b.source === 'hdmozi';
+          if (isDirectA && !isDirectB) return -1;
+          if (isDirectB && !isDirectA) return 1;
+          return 0;
+        });
+
+        // Filter based on selected resolutions
+        let filteredStreams = allKnownStreams.filter(s => {
+          const h = s.height || 0;
+          if (selectedResolutions.includes('1080p') && (h >= 1080 || (s.name && s.name.includes('1080')))) return true;
+          if (selectedResolutions.includes('720p') && ((h >= 720 && h < 1080) || (s.name && s.name.includes('720')))) return true;
+          if (selectedResolutions.includes('480p') && ((h >= 480 && h < 720) || (s.name && s.name.includes('480')))) return true;
+          if (selectedResolutions.includes('360p') && (h < 480 || (s.name && (s.name.includes('360') || s.name.includes('240'))))) return true;
+          return selectedResolutions.length === 0;
+        });
+
+        // Fallback: If filteredStreams is empty but streams exist (e.g. only 720p available on NetMozi/Videa), show them!
+        let resolutionFallbackActive = false;
+        if (filteredStreams.length === 0 && allKnownStreams.length > 0) {
+          filteredStreams = allKnownStreams;
+          resolutionFallbackActive = true;
+        }
+
+        const has1080p = filteredStreams.some(s => (s.height >= 1080) || (s.name && s.name.includes('1080')));
+
+        // Quality counts
+        const count1080 = filteredStreams.filter(s => (s.height >= 1080) || (s.name && s.name.includes('1080'))).length;
+        const count720 = filteredStreams.filter(s => (s.height >= 720 && s.height < 1080) || (s.name && s.name.includes('720'))).length;
+        const count480 = filteredStreams.filter(s => (s.height >= 480 && s.height < 720) || (s.name && s.name.includes('480'))).length;
+        const count360 = filteredStreams.filter(s => (s.height < 480) || (s.name && (s.name.includes('360') || s.name.includes('240')))).length;
+
+        // Render Stream Filter Bar
+        if (filterBar) {
+          if (filteredStreams.length > 0) {
+            filterBar.style.display = 'flex';
+            filterBar.innerHTML = `
+              <button class="stream-filter-btn ${currentStreamQualityFilter === 'all' ? 'active' : ''}" onclick="setStreamQualityFilter('all')">
+                Mind (${filteredStreams.length})
+              </button>
+              ${count1080 > 0 ? `<button class="stream-filter-btn ${currentStreamQualityFilter === '1080p' ? 'active' : ''}" onclick="setStreamQualityFilter('1080p')" style="color: #34d399;">💎 1080p FHD (${count1080})</button>` : ''}
+              ${count720 > 0 ? `<button class="stream-filter-btn ${currentStreamQualityFilter === '720p' ? 'active' : ''}" onclick="setStreamQualityFilter('720p')" style="color: #60a5fa;">📺 720p HD (${count720})</button>` : ''}
+              ${count480 > 0 ? `<button class="stream-filter-btn ${currentStreamQualityFilter === '480p' ? 'active' : ''}" onclick="setStreamQualityFilter('480p')">480p SD (${count480})</button>` : ''}
+              ${count360 > 0 ? `<button class="stream-filter-btn ${currentStreamQualityFilter === '360p' ? 'active' : ''}" onclick="setStreamQualityFilter('360p')">360p (${count360})</button>` : ''}
+            `;
+          } else {
+            filterBar.style.display = 'none';
+          }
+        }
+
+        if (isFinal) {
+          if (activeProgressInterval) {
+            clearInterval(activeProgressInterval);
+            activeProgressInterval = null;
+          }
+          progressBarFill.style.width = '100%';
+
+          if (filteredStreams.length > 0) {
+            progressBox.className = 'progress-box success';
+            progressBarFill.style.background = '#10b981';
+            progressBadge.textContent = 'Kész (100%)';
+            progressBadge.style.background = 'rgba(16, 185, 129, 0.25)';
+            progressBadge.style.color = '#34d399';
+
+            if (newlyFound1080p) {
+              progressTitle.innerHTML = `
+                <span>🎉</span>
+                <span style="color: #34d399;">Keresés befejezve! Új 1080p Full HD stream(ek) találva a lista elején!</span>
+              `;
+            } else {
+              progressTitle.innerHTML = `
+                <span>✅</span>
+                <span style="color: #34d399;">Keresés befejezve! Összesen ${filteredStreams.length} db lejátszható stream elérhető.</span>
+              `;
+            }
+            progressTimerText.textContent = `✅ Teljes ${selectedTimeoutSec} másodperces mélykeresés befejezve (${count1080} db 1080p FHD).`;
+          } else {
+            progressBox.className = 'progress-box empty';
+            progressBarFill.style.background = '#ef4444';
+            progressBadge.textContent = '0 találat';
+            progressBadge.style.background = 'rgba(239, 68, 68, 0.25)';
+            progressBadge.style.color = '#f87171';
+            progressTitle.innerHTML = `
+              <span>❌</span>
+              <span style="color: #f87171;">Keresés befejezve: Nem található közvetlen stream a kiválasztott felbontásokkal.</span>
+            `;
+            progressTimerText.textContent = `Tipp: Kapcsolj be további forrásokat vagy alacsonyabb felbontást a fenti beállításokban!`;
+            streamsList.innerHTML = `
+              <div style="color: #f87171; padding: 1.2rem; text-align: center; background: #0f172a; border-radius: 0.6rem; border: 1px solid #7f1d1d; margin-top: 1rem;">
+                Nem található közvetlen stream a kiválasztott szűrőkkel ehhez: <strong>${titleLabel || id}</strong>.<br>
+                <span style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.4rem; display: inline-block;">
+                  Tipp: Próbáld meg növelni a keresési másodpercet vagy engedélyezz további felbontásokat!
+                </span>
+              </div>
+            `;
+            return;
+          }
+        } else {
+          // Intermediate update (Stage 1 done)
+          if (filteredStreams.length > 0) {
+            progressTitle.innerHTML = `
+              <span class="pulse-dot"></span>
+              <span style="color: #38bdf8;">⚡ Első ${filteredStreams.length} db forrás beolvasva! Mélykeresés még folyamatban (1080p vadászat)...</span>
+            `;
+          }
+        }
+
+        // Apply Tab Filter (all, 1080p, 720p, etc.)
+        const displayedStreams = filteredStreams.filter(s => {
+          if (currentStreamQualityFilter === 'all') return true;
+          const h = s.height || 0;
+          if (currentStreamQualityFilter === '1080p') return (h >= 1080 || (s.name && s.name.includes('1080')));
+          if (currentStreamQualityFilter === '720p') return ((h >= 720 && h < 1080) || (s.name && s.name.includes('720')));
+          if (currentStreamQualityFilter === '480p') return ((h >= 480 && h < 720) || (s.name && s.name.includes('480')));
+          if (currentStreamQualityFilter === '360p') return (h < 480 || (s.name && (s.name.includes('360') || s.name.includes('240'))));
+          return true;
+        });
+
+        // Render Stream Cards
+        let streamsCardsHtml = '';
+        displayedStreams.forEach(s => {
+          const is1080 = (s.height >= 1080) || (s.name && s.name.includes('1080'));
+          const is720 = (s.height >= 720 && s.height < 1080) || (s.name && s.name.includes('720'));
+          const badgeClass = is1080 ? 'badge-quality badge-1080' : is720 ? 'badge-quality badge-720' : 'badge-quality badge-480';
+          const badgeText = is1080 ? '1080p FHD' : is720 ? '720p HD' : (s.height ? `${s.height}p` : 'SD');
+
+          // Highlight source pill
+          if (s.source) {
+            const pill = document.getElementById(`scan_pill_${s.source}`);
+            if (pill) pill.classList.add('highlight');
+          }
+
+          streamsCardsHtml += `
+            <div class="stream-card ${is1080 ? 'stream-card-fhd' : ''}">
+              <div style="flex: 1; min-width: 0;">
+                <div>
+                  <span class="${badgeClass}">${badgeText}</span>
+                  <strong style="color: #f1f5f9;">${s.name}</strong>
+                  ${is1080 ? '<span style="font-size: 0.72rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.15rem 0.4rem; border-radius: 0.25rem; margin-left: 0.4rem; font-weight: 700;">★ 1080p</span>' : ''}
+                </div>
+                <div style="color: #94a3b8; font-size: 0.82rem; margin-top: 0.3rem; white-space: pre-line; word-break: break-word;">${s.title}</div>
+              </div>
+              <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                <button type="button" onclick="playInModal('${encodeURIComponent(s.url)}', '${encodeURIComponent(s.name || titleLabel || 'Lejátszás')}', '${encodeURIComponent(s.playerUrl || '')}')" class="btn btn-primary" style="font-size: 0.85rem; padding: 0.5rem 0.95rem; white-space: nowrap;">
+                  ▶️ Lejátszás
+                </button>
+                ${s.playerUrl ? `
+                  <a href="${s.playerUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.5rem 0.85rem; white-space: nowrap;">
+                    🌐 Hivatalos Oldal
+                  </a>
+                ` : ''}
+                <button type="button" onclick="copyStreamDirect('${encodeURIComponent(s.url)}')" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.5rem 0.75rem; white-space: nowrap;">
+                  📋 Másolás
+                </button>
+              </div>
+            </div>
+          `;
+        });
+
+        streamsList.innerHTML = `
+          ${resolutionFallbackActive ? `
+            <div style="background: rgba(245, 158, 11, 0.15); border: 1px solid #d97706; color: #fde68a; padding: 0.6rem 0.9rem; border-radius: 0.5rem; margin-bottom: 0.8rem; font-size: 0.85rem;">
+              💡 <strong>Figyelem:</strong> Ebből a tartalomból nem létezik 1080p FHD forrás, ezért automatikusan betöltöttük a legjobb elérhető <strong>720p HD</strong> minőséget!
+            </div>
+          ` : ''}
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; margin-top: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="font-weight: 700; color: #38bdf8; font-size: 1.05rem;">
+              ✅ Elérhető források (${displayedStreams.length} db): ${titleLabel || id}
+            </div>
+            <div class="speed-badge" style="background: ${has1080p ? 'rgba(16, 185, 129, 0.2)' : 'rgba(59, 130, 246, 0.2)'}; color: ${has1080p ? '#34d399' : '#60a5fa'};">
+              ${has1080p ? '💎 1080p FHD' : '📺 720p HD'}
+            </div>
+          </div>
+          ${streamsCardsHtml}
+        `;
+      }
+
+      window.reRenderStreams = () => updateStreamsUI(true);
+
+      // SPECIAL HANDLING: If this is an MTVA Live TV Channel, fetch directly from user's browser
+      // so ConnectMedia CDN hashes the user's real client IP directly (preventing IP-mismatch 'err')
+      if (id.startsWith('mediaklikk-live-')) {
+        const streamIdMap = {
+          'mediaklikk-live-duna': 'dunalive',
+          'mediaklikk-live-m1': 'mtv1live',
+          'mediaklikk-live-m2': 'mtv2live',
+          'mediaklikk-live-m4': 'mtv4live',
+          'mediaklikk-live-m4plus': 'mtv4plus',
+          'mediaklikk-live-m5': 'mtv5live',
+          'mediaklikk-live-dunaworld': 'dunaworldlive'
+        };
+        const streamId = streamIdMap[id] || id.replace('mediaklikk-live-', '');
+        try {
+          const plRes = await fetch(`https://player.mediaklikk.hu/playernew/player.php?video=${streamId}`);
+          if (plRes.ok) {
+            const plHtml = await plRes.text();
+            const m3u8Match = plHtml.match(/"file":\s*"([^"]+\.m3u8[^"]*)"/i);
+            if (m3u8Match) {
+              const clientHls = m3u8Match[1].replace(/\\\//g, '/');
+              const channelTitle = titleLabel || 'Élő TV Csatorna';
+              allKnownStreams = [{
+                name: `🔴 ${channelTitle} [ÉLŐ FHD]`,
+                title: `🔴 ÉLŐ KÖZVETÍTÉS • MédiaKlikk HLS Stream (1080p)\nA token a saját IP-címedre generálva a közvetlen lejátszáshoz!`,
+                url: clientHls,
+                playerUrl: `https://player.mediaklikk.hu/playernew/player.php?video=${streamId}`,
+                quality: '1080p',
+                height: 1080,
+                source: 'mediaklikk'
+              }];
+              if (activeProgressInterval) {
+                clearInterval(activeProgressInterval);
+                activeProgressInterval = null;
+              }
+              updateStreamsUI(true);
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn('Client-side player.php fetch error, falling back to server test endpoint:', e);
+        }
+      }
+
+      // STEP 1: Fast Stage (~3s response)
+      try {
+        const fastRes = await fetch(`/api/test?id=${encodeURIComponent(id)}&sources=${encodeURIComponent(sourcesQuery)}&resolutions=${encodeURIComponent(resQuery)}&stage=fast&timeout=3500`);
+        const fastData = await fastRes.json();
+
+        if (searchToken === currentSearchToken) {
+          if (fastData.streams && Array.isArray(fastData.streams)) {
+            for (const s of fastData.streams) {
+              if (s.url && !seenUrls.has(s.url)) {
+                seenUrls.add(s.url);
+                allKnownStreams.push(s);
+              }
+            }
+          }
+          updateStreamsUI(false);
+        }
+      } catch (err) {
+        console.warn('Fast stage fetch error:', err);
+      }
+
+      // STEP 2: Deep Stage (full user-selected timeout deep search across all sources)
+      try {
+        const had1080pBefore = allKnownStreams.some(s => (s.height >= 1080) || (s.name && s.name.includes('1080')));
+
+        const deepRes = await fetch(`/api/test?id=${encodeURIComponent(id)}&sources=${encodeURIComponent(sourcesQuery)}&resolutions=${encodeURIComponent(resQuery)}&stage=deep&timeout=${TOTAL_SEARCH_MS}`);
+        const deepData = await deepRes.json();
+
+        if (searchToken === currentSearchToken) {
+          if (deepData.streams && Array.isArray(deepData.streams)) {
+            for (const s of deepData.streams) {
+              if (s.url && !seenUrls.has(s.url)) {
+                seenUrls.add(s.url);
+                allKnownStreams.push(s);
+              }
+            }
+          }
+
+          const has1080pNow = allKnownStreams.some(s => (s.height >= 1080) || (s.name && s.name.includes('1080')));
+          const newlyFound1080p = !had1080pBefore && has1080pNow;
+
+          updateStreamsUI(true, newlyFound1080p);
+        }
+      } catch (err) {
+        if (searchToken === currentSearchToken) {
+          updateStreamsUI(true);
+        }
+      }
+    }
+
+    // Provider Matrix Inspector Configuration
+    const INSPECTOR_PROVIDERS = [
+      { id: 'netmozi', name: 'NetMozi.com', icon: '🎬', desc: 'Filemoon, VOE, Vidmoly, StreamRuby, Vinovo stb.' },
+      { id: 'hdmozi', name: 'HDMozi.hu (RPM)', icon: '🍿', desc: 'AES-CBC közvetlen HLS 1080p FHD & 720p' },
+      { id: 'jobbmintatv', name: 'JobbMintATV', icon: '🎞️', desc: 'Videa & beágyazott magyar források' },
+      { id: 'videa', name: 'Videa.hu', icon: '📺', desc: 'Közvetlen 1080p FHD / 720p MP4 videók' },
+      { id: 'indavideo', name: 'Indavideo.hu', icon: '📽️', desc: 'Közvetlen 720p / 360p MP4 videók' },
+      { id: 'filmvilag2', name: 'Filmvilág2', icon: '🎥', desc: 'Videa 1080p & egyéb filmek' },
+      { id: 'dmdamedia', name: 'DMDAMedia', icon: '📀', desc: 'HD Filmek & Sorozatok' },
+      { id: 'mesefilm', name: 'MeseFilm / Kincstár', icon: '🏰', desc: 'Népmesék & Rajzfilmek' },
+      { id: 'filmezek', name: 'Filmezek.com', icon: '🎞️', desc: 'Videa, OK.ru & Beágyazott források' },
+      { id: 'onlinefilmek', name: 'OnlineFilmekIngyen1.com', icon: '🌐', desc: 'VOE, Videa, Filemoon & DooPlayer' }
+    ];
+
+    function renderProviderGrid() {
+      const grid = document.getElementById('providerGrid');
+      if (!grid) return;
+
+      grid.innerHTML = INSPECTOR_PROVIDERS.map(p => `
+        <div class="provider-card" id="provCard_${p.id}">
+          <div class="provider-card-header">
+            <div class="provider-info">
+              <div class="provider-icon">${p.icon}</div>
+              <div>
+                <div class="provider-name">${p.name}</div>
+                <div class="provider-desc">${p.desc}</div>
+              </div>
+            </div>
+            <div class="provider-badge badge-idle" id="provBadge_${p.id}">Készen áll</div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.06);">
+            <div style="font-size: 0.75rem; color: #64748b;" id="provTime_${p.id}">Nincs tesztelve</div>
+            <button type="button" class="provider-retry-btn" onclick="testSingleProvider('${p.id}')">Tesztelés</button>
+          </div>
+          <div class="provider-diagnostic-text" id="provDiag_${p.id}" style="display: none;"></div>
+          <div class="provider-streams-list" id="provStreams_${p.id}" style="display: none;"></div>
+        </div>
+      `).join('');
+    }
+
+    async function testSingleProvider(providerId) {
+      const titleInput = document.getElementById('inspectorTitleInput');
+      const typeSelect = document.getElementById('inspectorTypeSelect');
+      const title = titleInput ? titleInput.value.trim() : 'A vad robot';
+      const type = typeSelect ? typeSelect.value : 'movie';
+
+      const card = document.getElementById(`provCard_${providerId}`);
+      const badge = document.getElementById(`provBadge_${providerId}`);
+      const timeEl = document.getElementById(`provTime_${providerId}`);
+      const diagEl = document.getElementById(`provDiag_${providerId}`);
+      const streamsEl = document.getElementById(`provStreams_${providerId}`);
+
+      if (card) card.classList.add('card-loading');
+      if (badge) {
+        badge.className = 'provider-badge badge-loading';
+        badge.textContent = 'Keresés...';
+      }
+      if (timeEl) timeEl.textContent = 'Lekérdezés...';
+      if (diagEl) diagEl.style.display = 'none';
+      if (streamsEl) {
+        streamsEl.style.display = 'none';
+        streamsEl.innerHTML = '';
+      }
+
+      const t0 = Date.now();
+      try {
+        let epParams = '';
+        if (type === 'series') epParams = '&season=1&episode=1';
+        const res = await fetch(`/api/provider-test?provider=${providerId}&title=${encodeURIComponent(title)}&type=${type}${epParams}&cb=${Date.now()}`);
+        const data = await res.json();
+        const duration = data.durationMs || (Date.now() - t0);
+
+        if (card) card.classList.remove('card-loading');
+        if (timeEl) timeEl.textContent = `${duration} ms`;
+
+        if (data.ok && data.count > 0) {
+          if (badge) {
+            badge.className = 'provider-badge badge-success';
+            badge.textContent = `🟢 ${data.count} db stream`;
+          }
+          if (streamsEl) {
+            streamsEl.style.display = 'flex';
+            streamsEl.innerHTML = data.streams.map(s => {
+              const qBadge = s.quality || (s.height >= 1080 ? '1080p' : '720p');
+              const safeName = (s.name || '').replace(/'/g, "\\'");
+              const safeUrl = encodeURIComponent(s.url || '');
+              const safePlayerUrl = encodeURIComponent(s.playerUrl || s.url || '');
+              const safeTitle = encodeURIComponent(s.title || s.name || '');
+
+              return `
+                <div class="provider-stream-item">
+                  <div class="provider-stream-meta">
+                    <span class="provider-stream-title" title="${s.title || s.name}">${s.name || s.title}</span>
+                    <span style="font-size: 0.7rem; color: #34d399; font-weight: 600;">${qBadge}</span>
+                  </div>
+                  <div class="provider-stream-actions">
+                    <button type="button" class="provider-btn-action provider-btn-play" onclick="playInModal('${safeUrl}', '${safeTitle}', '${safePlayerUrl}')">▶️ Lejátszás</button>
+                    <button type="button" class="provider-btn-action provider-btn-copy" onclick="copyStreamDirect('${s.url}')">📋</button>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+        } else if (data.ok && data.count === 0) {
+          // Zero streams without error
+          if (badge) {
+            badge.className = 'provider-badge badge-empty';
+            badge.textContent = `🟡 0 találat`;
+          }
+          if (diagEl) {
+            diagEl.style.display = 'block';
+            diagEl.textContent = `Nem található stream erre a címre ezen a forráson.`;
+          }
+        } else {
+          // An actual error or Cloudflare block occurred
+          const isCf = data.error && (data.error.includes('403') || data.error.includes('Cloudflare') || data.error.includes('challenge'));
+          if (badge) {
+            badge.className = 'provider-badge badge-blocked';
+            badge.textContent = isCf ? `🔴 Felhő IP korlát` : `🔴 Hiba`;
+          }
+          if (diagEl) {
+            diagEl.style.display = 'block';
+            if (isCf) {
+              diagEl.innerHTML = `⚠️ A távoli oldal Cloudflare védelme blokkolta a felhőszervert. <strong>Helyi gépen (node server.js vagy Kodi) azonnal működik!</strong>`;
+            } else {
+              diagEl.textContent = data.error || 'Nem található stream erre a címre.';
+            }
+          }
+        }
+      } catch (err) {
+        if (card) card.classList.remove('card-loading');
+        if (timeEl) timeEl.textContent = `${Date.now() - t0} ms`;
+        const isCf = err.message && (err.message.includes('403') || err.message.includes('Cloudflare') || err.message.includes('challenge'));
+        if (badge) {
+          badge.className = 'provider-badge badge-blocked';
+          badge.textContent = isCf ? `🔴 Felhő IP korlát` : `🔴 Hiba`;
+        }
+        if (diagEl) {
+          diagEl.style.display = 'block';
+          if (isCf) {
+            diagEl.innerHTML = `⚠️ A távoli oldal Cloudflare védelme blokkolja ezt a kérést. <strong>Helyi gépen (node server.js) azonnal működik!</strong>`;
+          } else {
+            diagEl.textContent = `Hiba történt: ${err.message}`;
+          }
+        }
+      }
+    }
+
+    async function runAllProvidersTest() {
+      const btn = document.getElementById('runAllProvidersBtn');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span>⏳</span><span>Tesztelés folyamatban...</span>`;
+      }
+
+      const promises = INSPECTOR_PROVIDERS.map(p => testSingleProvider(p.id));
+      await Promise.allSettled(promises);
+
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `<span>🚀</span><span>Összes Forrás Tesztelése</span>`;
+      }
+      showToast('✅ Minden szolgáltató tesztelése befejeződött!');
+    }
+
+    function setInspectorQuery(title, type) {
+      const titleInput = document.getElementById('inspectorTitleInput');
+      const typeSelect = document.getElementById('inspectorTypeSelect');
+      if (titleInput) titleInput.value = title;
+      if (typeSelect) typeSelect.value = type;
+      runAllProvidersTest();
+    }
+
+    function copyStreamDirect(url) {
+      if (!url) return;
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('📋 Stream link másolva a vágólapra!');
+      }).catch(() => {
+        showToast('⚠️ Nem sikerült a másolás');
+      });
+    }
+
+    function parseInitialUrlConfig() {
+      const path = window.location.pathname;
+      let configStr = '';
+      const m = path.match(/^\/([^/]+)\/configure/);
+      if (m && m[1]) {
+        configStr = m[1];
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('sources')) {
+        selectedSources = params.get('sources').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+      }
+      if (params.get('cat') || params.get('catalogs')) {
+        const cats = (params.get('cat') || params.get('catalogs')).split(',').map(c => c.trim()).filter(Boolean);
+        if (cats.length > 0) selectedCatalogs = cats;
+      }
+      if (params.get('res')) {
+        selectedResolutions = params.get('res').split(',').map(r => r.trim().toLowerCase()).filter(Boolean);
+      }
+      if (params.get('timeout')) {
+        selectedTimeoutSec = parseInt(params.get('timeout'), 10) || 10;
+      }
+
+      if (configStr) {
+        const parts = decodeURIComponent(configStr).split(/[|&;]/);
+        for (const part of parts) {
+          const [k, v] = part.split(/[=:]/);
+          if (!k || !v) continue;
+          const key = k.trim().toLowerCase();
+          const val = v.trim();
+          if (key === 'sources') {
+            selectedSources = val.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+          } else if (key === 'cat' || key === 'catalogs') {
+            const cats = val.split(',').map(c => c.trim()).filter(Boolean);
+            if (cats.length > 0) selectedCatalogs = cats;
+          } else if (key === 'res') {
+            selectedResolutions = val.split(',').map(r => r.trim().toLowerCase()).filter(Boolean);
+          } else if (key === 'timeout') {
+            selectedTimeoutSec = parseInt(val, 10) || 20;
+          }
+        }
+      }
+    }
+
+    // Init on load
+    parseInitialUrlConfig();
+    renderSourcesGrid();
+    renderCatalogsGrid();
+    renderProviderGrid();
+    updateResolutionUI();
+    onTimeoutChange(selectedTimeoutSec);
+    highlightActivePreset();
+    highlightActiveCatalogPreset();
     updateManifestUrl();
+    loadDefaultCatalog('all');
+
+    // Built-in In-Page Cinema Video Player with Hls.js and Iframe Embed Support
+    let currentModalStreamUrl = '';
+
+    function resolveEmbedUrl(rawUrl) {
+      if (!rawUrl) return null;
+      const u = rawUrl.trim();
+
+      // Filemoon
+      const fMatch = u.match(/filemoon\.(?:to|sx|org|me)\/(?:d\/|e\/)?([a-zA-Z0-9]+)/i);
+      if (fMatch) return `https://filemoon.to/e/${fMatch[1]}`;
+
+      // Vidmoly
+      const vMatch = u.match(/vidmoly\.(?:me|to|net|biz|org)\/(?:embed-|w\/|v\/|dl\/)?([0-9a-zA-Z]+)/i);
+      if (vMatch) return `https://vidmoly.me/embed-${vMatch[1]}.html`;
+
+      // StreamRuby / RubyStream
+      const sMatch = u.match(/(?:streamruby|sruby|rubystream|rubyvidhub)\.(?:com|xyz|buzz)\/(?:embed-|e\/|d\/)?([a-zA-Z0-9]+)/i);
+      if (sMatch) return `https://streamruby.com/embed-${sMatch[1]}.html`;
+
+      // Upstream
+      const upMatch = u.match(/upstream\.(?:to)\/(?:embed-)?([a-zA-Z0-9]+)/i);
+      if (upMatch) return `https://upstream.to/embed-${upMatch[1]}.html`;
+
+      // Waaw / Netu
+      const wMatch = u.match(/(?:waaw|netu)\.(?:to|tv)\/(?:watch_video\.php\?v=|e\/|f\/)([a-zA-Z0-9]+)/i);
+      if (wMatch) return `https://waaw.to/e/${wMatch[1]}`;
+
+      // VOE
+      const voeMatch = u.match(/voe\.(?:sx|net|to|org)\/(?:e\/)?([a-zA-Z0-9]+)/i);
+      if (voeMatch) return `https://voe.sx/e/${voeMatch[1]}`;
+
+      // Vinovo
+      const vinMatch = u.match(/vinovo\.(?:to|com|net)\/(?:d\/|e\/)?([a-zA-Z0-9]+)/i);
+      if (vinMatch) return `https://vinovo.to/e/${vinMatch[1]}`;
+
+      // Vidara
+      const vidaraMatch = u.match(/vidara\.(?:to|com)\/(?:v\/|e\/)?([a-zA-Z0-9]+)/i);
+      if (vidaraMatch) return `https://vidara.to/e/${vidaraMatch[1]}`;
+
+      // Mixdrop
+      const mxMatch = u.match(/(?:mixdrop|mxdrop)\.(?:co|to|ch|bz|sx)\/(?:e\/|f\/)?([a-zA-Z0-9]+)/i);
+      if (mxMatch) return `https://mixdrop.co/e/${mxMatch[1]}`;
+
+      // DoodStream
+      const dMatch = u.match(/(?:doodstream|dood|ds2play)\.(?:com|to|so|cx|watch)\/(?:e\/|d\/)?([a-zA-Z0-9]+)/i);
+      if (dMatch) return `https://doodstream.com/e/${dMatch[1]}`;
+
+      // Videa
+      const vdMatch = u.match(/videa\.hu\/(?:videok|player)[^?#]*[?&]v=([a-zA-Z0-9]{16})/i) || u.match(/videa\.hu\/static\/.*?[?&]v=([a-zA-Z0-9]{16})/i);
+      if (vdMatch) return `https://videa.hu/player?v=${vdMatch[1]}`;
+
+      // Indavideo
+      const indaMatch = u.match(/indavideo\.hu\/(?:video|player)\/([a-zA-Z0-9]+)/i);
+      if (indaMatch) return `https://indavideo.hu/player/video/${indaMatch[1]}`;
+
+      // JobbMintATV embedded player page
+      if (u.includes('jobbmintatv.hu')) {
+        return u;
+      }
+
+      // If already an embed/e URL
+      if (u.includes('/embed') || u.includes('/e/')) {
+        return u;
+      }
+
+      return null;
+    }
+
+    function playInModal(encUrl, encTitle, encPlayerUrl) {
+      const url = decodeURIComponent(encUrl);
+      const title = decodeURIComponent(encTitle);
+      const playerUrl = encPlayerUrl ? decodeURIComponent(encPlayerUrl) : '';
+      currentModalStreamUrl = url;
+
+      const modal = document.getElementById('playerModal');
+      const video = document.getElementById('modalVideoPlayer');
+      const iframe = document.getElementById('modalIframePlayer');
+      const titleEl = document.getElementById('playerModalTitle');
+      const officialBtn = document.getElementById('playerOfficialBtn');
+      const metaEl = document.getElementById('playerModalMeta');
+
+      if (titleEl) titleEl.textContent = title;
+      if (officialBtn) {
+        officialBtn.href = playerUrl || url;
+        officialBtn.style.display = 'inline-flex';
+        officialBtn.textContent = 'Megnyitás Új Lapban';
+      }
+
+      modal.style.display = 'flex';
+
+      // Clean up previous playback instance
+      if (window._currentHls) {
+        window._currentHls.destroy();
+        window._currentHls = null;
+      }
+      video.pause();
+      video.removeAttribute('src');
+
+      const isHosterUrl = /filemoon|vidmoly|streamruby|rubystream|rubyvidhub|upstream|waaw|netu|voe\.(?:sx|net|to|org)|dood|byselapuix|vinovo|vidara|mixdrop|mxdrop/i.test(url);
+      const isDirectMedia = !isHosterUrl && (url.includes('.m3u8') || url.includes('.mp4') || url.includes('.webm') || url.includes('.mkv'));
+      const embedUrl = resolveEmbedUrl(playerUrl || url);
+
+      if (isDirectMedia) {
+        // Direct HTML5 / HLS Stream
+        if (iframe) {
+          iframe.style.display = 'none';
+          iframe.src = 'about:blank';
+        }
+        video.style.display = 'block';
+
+        if (url.includes('.m3u8')) {
+          if (metaEl) metaEl.textContent = '🔴 HLS Élő / VOD Közvetlen Stream (1080p FHD)';
+          if (window.Hls && Hls.isSupported()) {
+            const hls = new Hls({
+              enableWorker: true,
+              lowLatencyMode: true,
+              capLevelToPlayerSize: false
+            });
+            window._currentHls = hls;
+            hls.loadSource(url);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
+              if (data && data.levels && data.levels.length > 0) {
+                const maxIdx = data.levels.length - 1;
+                hls.currentLevel = maxIdx;
+                hls.startLevel = maxIdx;
+              }
+              video.play().catch(e => console.log('Autoplay deferred:', e));
+            });
+            hls.on(Hls.Events.ERROR, (event, data) => {
+              if (data.fatal) {
+                switch (data.type) {
+                  case Hls.ErrorTypes.NETWORK_ERROR:
+                    hls.startLoad();
+                    break;
+                  case Hls.ErrorTypes.MEDIA_ERROR:
+                    hls.recoverMediaError();
+                    break;
+                  default:
+                    hls.destroy();
+                    break;
+                }
+              }
+            });
+          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = url;
+            video.play().catch(() => {});
+          } else {
+            showToast('⚠️ A böngésződ nem támogatja a közvetlen HLS-t, használd a "Stream Link Másolása" gombot!');
+          }
+        } else {
+          // Direct MP4
+          if (metaEl) metaEl.textContent = '🎬 Közvetlen MP4 Lejátszás';
+          video.src = url;
+          video.play().catch(() => {});
+        }
+      } else if (embedUrl) {
+        // Direct In-Page Web Player (Filemoon, Vidmoly, StreamRuby, etc.)
+        video.style.display = 'none';
+        const extCard = document.getElementById('modalExternalCard');
+
+        if (embedUrl.includes('netmozi.com')) {
+          // NetMozi webpage blocks iframe embedding via CSP frame-ancestors 'self'
+          if (iframe) {
+            iframe.style.display = 'none';
+            iframe.src = 'about:blank';
+          }
+          if (extCard) extCard.style.display = 'block';
+          const extTitle = document.getElementById('modalExternalCardTitle');
+          const extBtn = document.getElementById('modalExternalCardBtn');
+          if (extTitle) extTitle.textContent = title;
+          if (extBtn) extBtn.href = embedUrl;
+          if (metaEl) metaEl.textContent = '🎬 Védett Mozi Lejátszó • NetMozi';
+        } else {
+          // Embeddable video hosters (Filemoon, Vidmoly, StreamRuby, Upstream, Waaw, VOE, Videa, Indavideo)
+          if (extCard) extCard.style.display = 'none';
+          if (iframe) {
+            iframe.style.display = 'block';
+            iframe.src = embedUrl;
+          }
+          if (metaEl) {
+            let hosterLabel = 'Mozi Stream Hoster';
+            if (embedUrl.includes('filemoon')) hosterLabel = 'Filemoon Hoster Player';
+            else if (embedUrl.includes('streamruby')) hosterLabel = 'StreamRuby Hoster Player';
+            else if (embedUrl.includes('vidmoly')) hosterLabel = 'Vidmoly Hoster Player';
+            else if (embedUrl.includes('videa')) hosterLabel = 'Videa Hoster Player';
+            else if (embedUrl.includes('indavideo')) hosterLabel = 'Indavideo Player';
+            metaEl.textContent = `🎬 Beépített Mozi Lejátszó • ${hosterLabel}`;
+          }
+        }
+      } else {
+        // Fallback: Open in new tab
+        window.open(playerUrl || url, '_blank', 'noopener,noreferrer');
+        showToast('🌐 <strong>Lejátszó megnyitva új lapon!</strong>');
+        closePlayerModal();
+      }
+    }
+
+    function closePlayerModal() {
+      const modal = document.getElementById('playerModal');
+      const video = document.getElementById('modalVideoPlayer');
+      const iframe = document.getElementById('modalIframePlayer');
+      const extCard = document.getElementById('modalExternalCard');
+      if (video) {
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+      }
+      if (iframe) {
+        iframe.src = 'about:blank';
+        iframe.style.display = 'none';
+      }
+      if (extCard) {
+        extCard.style.display = 'none';
+      }
+      if (window._currentHls) {
+        window._currentHls.destroy();
+        window._currentHls = null;
+      }
+      if (modal) modal.style.display = 'none';
+    }
+
+    function copyCurrentStreamUrl() {
+      if (currentModalStreamUrl) {
+        copyStreamDirect(encodeURIComponent(currentModalStreamUrl));
+      }
+    }
+
+    function copyStreamDirect(encUrl) {
+      const url = decodeURIComponent(encUrl);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).catch(() => {});
+      }
+      showToast('📋 <strong>Közvetlen stream link kimásolva!</strong><br>Beillesztheted VLC, PotPlayer vagy Nuvio lejátszóba.');
+    }
+
+    
+    // Keyboard shortcuts (Cmd+K / Ctrl+K or / to focus search)
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        const searchInput = document.getElementById('testId');
+        if (searchInput) {
+          searchInput.focus();
+          searchInput.select();
+        }
+      } else if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        const searchInput = document.getElementById('testId');
+        if (searchInput) {
+          searchInput.focus();
+        }
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closePlayerModal();
+      }
+    });
+  
   </script>
 </body>
 </html>
