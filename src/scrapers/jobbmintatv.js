@@ -3,7 +3,12 @@
  * Extracts direct Videa, Indavideo, and OK.ru streams from jobbmintatv.org / jobbmintatv.pro.
  */
 
-const { extractVideaStreams } = require('./videa');
+const {
+  extractVideaStreams,
+  isValidRuntime,
+  checkPageMetadata,
+  extractCandidateYears
+} = require('./videa');
 const { extractIndavideoStreams } = require('./indavideo');
 const { extractOkRuStreams } = require('./filmezek');
 
@@ -60,9 +65,18 @@ async function scrapeJobbMintATV(meta) {
         // Find top matching candidate releases
         const normTarget = normalize(hu);
         const targetSlug = normTarget.replace(/\s+/g, '_');
+        const targetYear = meta.year ? parseInt(meta.year, 10) : null;
+        const isSeries = Boolean(meta.season && meta.episode);
         const scoredItems = [];
 
         for (const item of links) {
+          if (!isSeries && targetYear) {
+            const candYears = extractCandidateYears(item.title, hu);
+            if (candYears.length > 0 && !candYears.some(cy => Math.abs(cy - targetYear) <= 1)) {
+              continue;
+            }
+          }
+
           const normTitle = normalize(item.title);
           let score = 0;
           if (normTitle === normTarget || item.url.toLowerCase().includes(targetSlug)) {
@@ -110,6 +124,11 @@ async function scrapeJobbMintATV(meta) {
             if (!pageRes.ok) return;
 
             const pageHtml = await pageRes.text();
+
+            // Verify IMDb ID and release year on candidate page so remakes (e.g. 1960 vs 2016) are never merged
+            const pageCheck = checkPageMetadata(pageHtml, meta);
+            if (!pageCheck.match) return;
+
             const iframes = [...pageHtml.matchAll(/<iframe[^>]+src=["']([^"']+)["']/gi)].map(m => m[1]);
 
             for (const ifr of iframes) {
@@ -121,6 +140,7 @@ async function scrapeJobbMintATV(meta) {
                 if (vcodeMatch) {
                   const vcode = vcodeMatch[1];
                   const vData = await extractVideaStreams(vcode);
+                  if (vData && !isValidRuntime(vData.duration, meta)) continue;
                   const vStreams = vData?.sources || [];
                   for (const vs of vStreams) {
                     const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
@@ -130,7 +150,8 @@ async function scrapeJobbMintATV(meta) {
                       url: vs.url,
                       quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
                       height: vs.height,
-                      source: 'jobbmintatv'
+                      source: 'jobbmintatv',
+                      yearVerified: true
                     });
                   }
                 }
@@ -142,6 +163,7 @@ async function scrapeJobbMintATV(meta) {
                 if (ihashMatch) {
                   const ihash = ihashMatch[1];
                   const iData = await extractIndavideoStreams(ihash);
+                  if (iData && !isValidRuntime(iData.duration, meta)) continue;
                   const iStreams = iData?.streams || [];
                   for (const is of iStreams) {
                     const qualLabel = is.height >= 1080 ? '1080p FHD' : is.height >= 720 ? '720p HD' : `${is.height}p`;
@@ -149,9 +171,10 @@ async function scrapeJobbMintATV(meta) {
                       name: `[HU] JobbMintATV (Inda) ${qualLabel}`,
                       title: `${candidate.title}\n🇭🇺 JobbMintATV (Indavideo) • ${qualLabel} • Szinkron`,
                       url: is.url,
-                      quality: is.height >= 1080 ? '1080p' : is.height >= 720 ? '720p' : '480p',
+                      quality: is.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
                       height: is.height,
-                      source: 'jobbmintatv'
+                      source: 'jobbmintatv',
+                      yearVerified: true
                     });
                   }
                 }

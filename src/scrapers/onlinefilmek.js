@@ -5,6 +5,7 @@
 
 const { extractOkRuStreams, resolveVideaEmbed } = require('./filmezek');
 const { extractIndavideoStreams } = require('./indavideo');
+const { isValidRuntime, checkPageMetadata } = require('./videa');
 
 function normalize(str) {
   return (str || '')
@@ -57,14 +58,16 @@ function findBestDooPlayItem(results, meta) {
       score += (overlap / Math.max(targetWords.size, 1)) * 40;
     }
 
-    // Check year match
+    // Check year match (strict ±1 year for movies)
     if (targetYear && itemYear) {
       if (itemYear === targetYear) {
         score += 50;
       } else if (Math.abs(itemYear - targetYear) <= 1) {
         score += 20;
+      } else if (!isSeries) {
+        continue; // Hard-reject wrong-year movie remakes
       } else {
-        score -= 70; // Penalty for wrong sequel or unrelated movie
+        score -= 70;
       }
     }
 
@@ -231,10 +234,21 @@ async function scrapeOnlineFilmek(meta) {
         });
         if (wpRes.ok) {
           const wpHtml = await wpRes.text();
-          const matches = [...wpHtml.matchAll(/<div class="title"><a href="([^"]+)">([^<]+)<\/a>/g)];
-          for (const m of matches) {
-            const mUrl = m[1];
-            const mTitle = m[2];
+          const resultBlocks = [...wpHtml.matchAll(/<div class="result-item">([\s\S]*?)<\/article>/gi)];
+          const targetYear = meta.year ? parseInt(meta.year, 10) : null;
+          for (const rb of resultBlocks) {
+            const blockHtml = rb[1];
+            const tMatch = blockHtml.match(/<div class="title">\s*<a href="([^"]+)">([^<]+)<\/a>/i);
+            if (!tMatch) continue;
+            const mUrl = tMatch[1];
+            const mTitle = tMatch[2];
+            const yMatch = blockHtml.match(/<span class="year">\s*(\d{4})\s*<\/span>/i);
+            const mYear = yMatch ? parseInt(yMatch[1], 10) : null;
+
+            if (!meta.season && targetYear && mYear && Math.abs(mYear - targetYear) > 1) {
+              continue;
+            }
+
             const normMTitle = normalize(mTitle);
             const normHu = normalize(hu);
             if (normMTitle.includes(normHu) || normHu.includes(normMTitle)) {
@@ -267,6 +281,10 @@ async function scrapeOnlineFilmek(meta) {
       if (!pageRes.ok) continue;
 
       const pageHtml = await pageRes.text();
+      if (!meta.season) {
+        const pageCheck = checkPageMetadata(pageHtml, meta);
+        if (!pageCheck.match) continue;
+      }
 
       // Find player options: data-type='...' data-post='...' data-nume='...'
       const optionMatches = [...pageHtml.matchAll(/data-type=['"]([^'"]+)['"]\s+data-post=['"]([^'"]+)['"]\s+data-nume=['"]([^'"]+)['"]/g)];

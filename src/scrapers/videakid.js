@@ -1,4 +1,9 @@
-const { extractVideaStreams, isTitleMatch } = require('./videa');
+const {
+  extractVideaStreams,
+  isTitleMatch,
+  isValidRuntime,
+  hasVerifiedYearInTitle
+} = require('./videa');
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
@@ -50,23 +55,29 @@ async function scrapeVideakid(meta) {
   );
 
   const streams = [];
+  const targetYear = year ? parseInt(year, 10) : null;
   await Promise.allSettled(
     candidates.slice(0, 4).map(async (c) => {
       const videoData = await extractVideaStreams(c.vcode);
       if (!videoData || !videoData.sources || videoData.sources.length === 0) return;
-      if (isMovie && videoData.duration < 2400) return;
-      if (!isMovie && videoData.duration < 300) return;
+      if (!isValidRuntime(videoData.duration, meta)) return;
+      if (isMovie && targetYear && videoData.uploadYear && videoData.uploadYear < targetYear) return;
+
+      const candTitle = videoData.videoTitle || c.title;
+      const yearVerified = !isMovie || !targetYear || titles.some(t => hasVerifiedYearInTitle(candTitle, targetYear, t));
+      const warnBadge = (!yearVerified && isMovie && targetYear) ? ' [⚠️ Év?]' : '';
 
       const durationMins = Math.round((videoData.duration || 0) / 60);
       for (const vs of videoData.sources) {
         const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
         streams.push({
-          name: `[HU] Videakid ${qualLabel}`,
-          title: `${videoData.videoTitle || c.title}\n🇭🇺 Videakid.hu • ${qualLabel}${durationMins ? ` • ${durationMins} perc` : ''}`,
+          name: `[HU] Videakid ${qualLabel}${warnBadge}`,
+          title: `${candTitle}\n🇭🇺 Videakid.hu • ${qualLabel}${durationMins ? ` • ${durationMins} perc` : ''}`,
           url: vs.url,
           quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
           height: vs.height,
           source: 'videakid',
+          yearVerified,
           behaviorHints: {
             bingeGroup: `hu-videakid-${qualLabel}`
           }

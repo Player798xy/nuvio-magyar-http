@@ -3,7 +3,7 @@
  * Extracts 1080p and 720p direct streams from Filmvilag2 articles (Videa, Indavideo, OK.ru).
  */
 
-const { extractVideaStreams, isTitleMatch } = require('./videa');
+const { extractVideaStreams, isTitleMatch, isValidRuntime, checkPageMetadata } = require('./videa');
 const { extractIndavideoStreams } = require('./indavideo');
 
 function normalize(str) {
@@ -69,6 +69,10 @@ async function scrapeFilmvilag(meta) {
           if (!artRes.ok) return;
 
           const artHtml = await artRes.text();
+          if (!isSeries) {
+            const pageCheck = checkPageMetadata(artHtml, meta);
+            if (!pageCheck.match) return;
+          }
           const iframes = [...artHtml.matchAll(/<iframe[^>]+src=["']([^"']+)["']/gi)].map(m => m[1]);
 
           for (const ifr of iframes) {
@@ -80,6 +84,7 @@ async function scrapeFilmvilag(meta) {
               if (vcodeMatch) {
                 const vcode = vcodeMatch[1];
                 const vData = await extractVideaStreams(vcode);
+                if (vData && !isValidRuntime(vData.duration, meta)) continue;
                 const vStreams = vData?.sources || [];
                 for (const vs of vStreams) {
                   const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
@@ -89,7 +94,8 @@ async function scrapeFilmvilag(meta) {
                     url: vs.url,
                     quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
                     height: vs.height,
-                    source: 'filmvilag2'
+                    source: 'filmvilag2',
+                    yearVerified: true
                   });
                 }
               }
@@ -101,6 +107,7 @@ async function scrapeFilmvilag(meta) {
               if (ihashMatch) {
                 const ihash = ihashMatch[1];
                 const iData = await extractIndavideoStreams(ihash);
+                if (iData && !isValidRuntime(iData.duration, meta)) continue;
                 const iStreams = iData?.streams || [];
                 for (const is of iStreams) {
                   const qualLabel = is.height >= 1080 ? '1080p FHD' : is.height >= 720 ? '720p HD' : `${is.height}p`;
@@ -110,7 +117,8 @@ async function scrapeFilmvilag(meta) {
                     url: is.url,
                     quality: is.height >= 1080 ? '1080p' : is.height >= 720 ? '720p' : '480p',
                     height: is.height,
-                    source: 'filmvilag2'
+                    source: 'filmvilag2',
+                    yearVerified: true
                   });
                 }
               }

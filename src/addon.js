@@ -253,7 +253,9 @@ async function getStreams(type, rawId, config = {}) {
     }
   });
 
-  const hasGoodStreams = allStreams.some(s => s.height >= 720) || allStreams.length >= 3;
+  const hasGoodStreams =
+    allStreams.some(s => s.height >= 720 && s.yearVerified !== false) ||
+    allStreams.filter(s => s.yearVerified !== false).length >= 3;
   if (!hasGoodStreams && otherScrapers.length > 0 && config.stage !== 'fast') {
     const otherResults = await Promise.allSettled(otherPromises);
     otherResults.forEach(res => {
@@ -303,8 +305,11 @@ async function getStreams(type, rawId, config = {}) {
     uniqueStreams.push(s);
   }
 
-  // Priority sorting: 1. Resolution height (1080p -> 720p -> 480p), 2. Direct MP4/MédiaKlikk
+  // Priority sorting: 1. Year-verified streams first, 2. Resolution height (1080p -> 720p -> 480p), 3. Direct MP4/MédiaKlikk
   uniqueStreams.sort((a, b) => {
+    const verA = a.yearVerified !== false ? 1 : 0;
+    const verB = b.yearVerified !== false ? 1 : 0;
+    if (verB !== verA) return verB - verA;
     const heightA = a.height || 0;
     const heightB = b.height || 0;
     if (heightB !== heightA) return heightB - heightA;

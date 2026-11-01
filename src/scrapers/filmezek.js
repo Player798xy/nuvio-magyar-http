@@ -3,7 +3,13 @@
  * Extracts direct Videa, OK.ru, and third-party hoster streams from filmezek.com movies & series.
  */
 
-const { extractVideaStreams, extractVideaFCodeStreams, isTitleMatch } = require('./videa');
+const {
+  extractVideaStreams,
+  extractVideaFCodeStreams,
+  isTitleMatch,
+  isValidRuntime,
+  checkPageMetadata
+} = require('./videa');
 
 async function extractOkRuStreams(embedUrl, srcName = 'Filmezek') {
   try {
@@ -161,72 +167,90 @@ async function scrapeFilmezek(meta) {
       const items = await res.json();
       if (!Array.isArray(items) || items.length === 0) continue;
 
-      // Filter matching item by IMDb ID or title similarity
+      // Filter matching item by IMDb ID or title + ±1 year similarity
       const isSeries = Boolean(meta.season);
-      let matchingItem = items.find(it => it.MovieCover && meta.imdbId && it.MovieCover.includes(meta.imdbId));
-      if (!matchingItem) {
-        matchingItem = items.find(it => {
+      const targetYear = meta.year ? parseInt(meta.year, 10) : null;
+      let matchingItems = items.filter(it => it.MovieCover && meta.imdbId && it.MovieCover.includes(meta.imdbId));
+      if (matchingItems.length === 0) {
+        matchingItems = items.filter(it => {
           const title = it.MovieTitle || it.value || it.label || '';
+          const itemYear = parseInt(it.MovieYear || it.year || '', 10);
+          if (!isSeries && targetYear && !isNaN(itemYear) && Math.abs(itemYear - targetYear) > 1) {
+            return false;
+          }
           if (isSeries && it.type === 'online-sorozatok') {
             return isTitleMatch(hu, title, meta.year, true) && (!meta.season || title.includes(`${meta.season}.`));
           }
           if (!isSeries && it.type === 'online-filmek') {
-            return isTitleMatch(hu, title, meta.year, false);
+            return isTitleMatch(hu, title, meta.year, false) || isTitleMatch(meta.englishTitle, title, meta.year, false);
           }
           return false;
         });
       }
 
-      if (!matchingItem) continue;
+      if (matchingItems.length === 0) continue;
 
-      const pageType = matchingItem.type || (meta.season ? 'online-sorozatok' : 'online-filmek');
-      const itemUrl = `https://filmezek.com/${pageType}/${matchingItem.MovieSlug}/`;
+      for (const matchingItem of matchingItems.slice(0, 3)) {
+        const pageType = matchingItem.type || (meta.season ? 'online-sorozatok' : 'online-filmek');
+        const itemUrl = `https://filmezek.com/${pageType}/${matchingItem.MovieSlug}/`;
 
-      const pageRes = await fetch(itemUrl, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-        signal: AbortSignal.timeout(6000)
-      });
-      if (!pageRes.ok) continue;
+        const pageRes = await fetch(itemUrl, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+          signal: AbortSignal.timeout(6000)
+        });
+        if (!pageRes.ok) continue;
 
-      const pageHtml = await pageRes.text();
+        const pageHtml = await pageRes.text();
 
-      // Extract embed urls from data-url attributes and iframes
-      const dataUrls = [...pageHtml.matchAll(/data-url=["']([^"']+)["']/g)].map(m => m[1]);
-      const iframes = [...pageHtml.matchAll(/<iframe[^>]+src=["']([^"']+)["']/g)].map(m => m[1]);
-      const allEmbeds = [...new Set([...dataUrls, ...iframes])];
-
-      for (const embed of allEmbeds) {
-        // A. Videa embed
-        if (embed.includes('videa.hu')) {
-          const vSources = await resolveVideaEmbed(embed);
-          for (const vs of vSources) {
-            if (seenUrls.has(vs.url)) continue;
-            seenUrls.add(vs.url);
-
-            const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
-            streams.push({
-              name: `[HU] Filmezek (Videa) ${qualLabel}`,
-              title: `${matchingItem.MovieTitle}\n🇭🇺 Filmezek.com (Videa) • ${qualLabel} • Szinkron`,
-              url: vs.url,
-              quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
-              height: vs.height,
-              source: 'filmezek',
-              behaviorHints: { bingeGroup: `hu-filmezek-videa-${qualLabel}` }
-            });
-          }
-          continue;
+        // Check IMDb ID and release year on detail page HTML
+        if (!isSeries) {
+          const pageCheck = checkPageMetadata(pageHtml, meta);
+          if (!pageCheck.match) continue;
         }
 
-        // B. OK.ru embed
-        if (embed.includes('ok.ru/videoembed/') || embed.includes('ok.ru/video/')) {
-          const okStreams = await extractOkRuStreams(embed, 'Filmezek');
-          for (const os of okStreams) {
-            if (seenUrls.has(os.url)) continue;
-            seenUrls.add(os.url);
-            streams.push(os);
+        // Extract embed urls from data-url attributes and iframes
+        const dataUrls = [...pageHtml.matchAll(/data-url=["']([^"']+)["']/g)].map(m => m[1]);
+        const iframes = [...pageHtml.matchAll(/<iframe[^>]+src=["']([^"']+)["']/g)].map(m => m[1]);
+        const allEmbeds = [...new Set([...dataUrls, ...iframes])];
+
+        for (const embed of allEmbeds) {
+          // A. Videa embed
+          if (embed.includes('videa.hu')) {
+            const vSources = await resolveVideaEmbed(embed);
+            for (const vs of vSources) {
+              if (!isValidRuntime(vs.duration, meta)) continue;
+              if (seenUrls.has(vs.url)) continue;
+              seenUrls.add(vs.url);
+
+              const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
+              streams.push({
+                name: `[HU] Filmezek (Videa) ${qualLabel}`,
+                title: `${matchingItem.MovieTitle}\n🇭🇺 Filmezek.com (Videa) • ${qualLabel} • Szinkron`,
+                url: vs.url,
+                quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
+                height: vs.height,
+                source: 'filmezek',
+                yearVerified: true,
+                behaviorHints: { bingeGroup: `hu-filmezek-videa-${qualLabel}` }
+              });
+            }
+            continue;
           }
-          continue;
+
+          // B. OK.ru embed
+          if (embed.includes('ok.ru/videoembed/') || embed.includes('ok.ru/video/')) {
+            const okStreams = await extractOkRuStreams(embed, 'Filmezek');
+            for (const os of okStreams) {
+              if (seenUrls.has(os.url)) continue;
+              seenUrls.add(os.url);
+              os.yearVerified = true;
+              streams.push(os);
+            }
+            continue;
+          }
         }
+
+        if (streams.length > 0) break;
       }
 
       if (streams.length > 0) break;

@@ -6,7 +6,7 @@
  */
 
 const { extractRpmStream } = require('../utils/rpm');
-const { extractVideaStreams } = require('./videa');
+const { extractVideaStreams, isValidRuntime, checkPageMetadata } = require('./videa');
 
 const HDMOZI_BASE = 'https://hdmozi.hu';
 const HDMOZI_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
@@ -99,7 +99,11 @@ async function resolveHdmoziUrl(mediaInfo, season = null, episode = null) {
       let score = 0;
       if (rt === targetTitle) score += 100;
       else if (rt.includes(targetTitle) || targetTitle.includes(rt)) score += 60;
-      if (mediaInfo.year && r.year) {
+      if (mediaInfo.type === 'movie' && mediaInfo.year && r.year) {
+        const diff = Math.abs(mediaInfo.year - r.year);
+        if (diff > 1) return { ...r, score: -1000 };
+        score += 50 - diff * 10;
+      } else if (mediaInfo.year && r.year) {
         const diff = Math.abs(mediaInfo.year - r.year);
         score += Math.max(0, 30 - diff * 10);
       }
@@ -110,6 +114,10 @@ async function resolveHdmoziUrl(mediaInfo, season = null, episode = null) {
 
     const best = scored[0];
     if (!best || best.score < 40) {
+      // Do not blindly fall back to an unverified slug if search returned wrong-year remakes
+      if (results.length > 0 && mediaInfo.type === 'movie' && mediaInfo.year) {
+        return null;
+      }
       return createHdmoziUrl(mediaInfo, season, episode);
     }
 
@@ -244,7 +252,7 @@ async function extractRpmIdFromDooPlayer(hdmoziUrl, html) {
   }
 }
 
-async function extractRpmIdFromHdmozi(hdmoziUrl) {
+async function extractRpmIdFromHdmozi(hdmoziUrl, meta = null) {
   try {
     const response = await fetch(hdmoziUrl, {
       headers: {
@@ -268,13 +276,19 @@ async function extractRpmIdFromHdmozi(hdmoziUrl) {
             headers: { 'User-Agent': HDMOZI_UA },
             signal: AbortSignal.timeout(3500)
           });
-          if (noYearResp.ok) return await extractRpmIdFromHdmozi(noYearUrl);
+          if (noYearResp.ok) return await extractRpmIdFromHdmozi(noYearUrl, meta);
         }
       }
       return null;
     }
 
     const html = await response.text();
+
+    // Verify IMDb ID and release year on the movie page so blind slug guesses never return a wrong-year remake
+    if (meta && !meta.season) {
+      const pageCheck = checkPageMetadata(html, meta);
+      if (!pageCheck.match) return null;
+    }
 
     // 1) Direct iframe src match
     const iframeMatch = html.match(/<iframe[^>]*src=["'](?:https?:)?\/\/rpmshare\.rpmstream\.live\/#([a-zA-Z0-9_-]+)["'][^>]*>/i);
@@ -333,13 +347,14 @@ async function scrapeHDMozi(meta) {
 
     if (!hdmoziUrl) return streams;
 
-    const rpmId = await extractRpmIdFromHdmozi(hdmoziUrl);
+    const rpmId = await extractRpmIdFromHdmozi(hdmoziUrl, meta);
     if (!rpmId) return streams;
 
     // Videa fallback
     if (typeof rpmId === 'string' && (rpmId.startsWith('videa:') || /^[a-zA-Z0-9]{16}$/.test(rpmId))) {
       const vId = rpmId.replace(/^videa:/, '');
       const vData = await extractVideaStreams(vId);
+      if (vData && !isValidRuntime(vData.duration, meta)) return streams;
       const vSources = vData?.sources || [];
       for (const vs of vSources) {
         const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
@@ -351,6 +366,7 @@ async function scrapeHDMozi(meta) {
           quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
           height: vs.height,
           source: 'hdmozi',
+          yearVerified: true,
           behaviorHints: { bingeGroup: `hu-hdmozi-${qualLabel}` }
         });
       }
@@ -386,6 +402,7 @@ async function scrapeHDMozi(meta) {
         quality: height >= 1080 ? '1080p' : '720p',
         height: height,
         source: 'hdmozi',
+        yearVerified: true,
         behaviorHints: { bingeGroup: `hu-hdmozi-${qualBadge}` }
       });
     }

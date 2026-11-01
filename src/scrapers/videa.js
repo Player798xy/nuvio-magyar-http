@@ -112,6 +112,7 @@ async function extractVideaFCodeStreams(fcode) {
     const durationMatch = xmlStr.match(/<duration>(\d+)<\/duration>/);
     const videoTitle = titleMatch ? titleMatch[1].trim() : 'Videa Stream';
     const duration = durationMatch ? parseInt(durationMatch[1], 10) : 0;
+    const uploadYear = extractUploadYearFromText(xmlStr) || extractUploadYearFromText(html);
 
     const sources = [];
     const sourceRegex = /<video_source\s+([^>]+)>([^<]+)<\/video_source>/g;
@@ -141,11 +142,12 @@ async function extractVideaFCodeStreams(fcode) {
         height: hNum,
         url,
         videoTitle,
-        duration
+        duration,
+        uploadYear
       });
     }
 
-    return { videoTitle, duration, sources };
+    return { videoTitle, duration, uploadYear, sources };
   } catch (e) {
     return null;
   }
@@ -253,6 +255,7 @@ async function extractVideaStreams(vcode) {
     const durationMatch = xmlStr.match(/<duration>(\d+)<\/duration>/);
     const videoTitle = titleMatch ? titleMatch[1].trim() : 'Videa Stream';
     const duration = durationMatch ? parseInt(durationMatch[1], 10) : 0;
+    const uploadYear = extractUploadYearFromText(xmlStr) || extractUploadYearFromText(html);
 
     const sources = [];
     const sourceRegex = /<video_source\s+([^>]+)>([^<]+)<\/video_source>/g;
@@ -285,14 +288,144 @@ async function extractVideaStreams(vcode) {
         height: hNum,
         url,
         videoTitle,
-        duration
+        duration,
+        uploadYear
       });
     }
 
-    return { videoTitle, duration, sources };
+    return { videoTitle, duration, uploadYear, sources };
   } catch (err) {
     return null;
   }
+}
+
+/**
+ * Extracts a 4-digit upload year from Videa/Indavideo XML, JSON, or HTML metadata.
+ */
+function extractUploadYearFromText(text) {
+  if (!text || typeof text !== 'string') return null;
+  const patterns = [
+    /<(?:upload_date|created_at|date|pubDate)>[^<]*?\b(20\d{2})\b/i,
+    /["'](?:uploadDate|datePublished|upload_date|created_at)["']\s*:\s*["'](20\d{2})/i,
+    /\b(20\d{2})[.\-/](?:0[1-9]|1[0-2])[.\-/](?:0[1-9]|[12]\d|3[01])\b/
+  ];
+  for (const re of patterns) {
+    const m = text.match(re);
+    if (m && m[1]) {
+      const y = parseInt(m[1], 10);
+      if (y >= 2005 && y <= 2030) return y;
+    }
+  }
+  return null;
+}
+
+/**
+ * Extracts 4-digit candidate release years from a title, ignoring any 4-digit number
+ * that is part of the movie's own title (e.g. "1917", "2012", "1984", "2001").
+ */
+function extractCandidateYears(candidateTitle, targetTitle = '') {
+  if (!candidateTitle) return [];
+  const titleYears = new Set(
+    [...String(targetTitle || '').matchAll(/\b(19\d\d|20\d\d)\b/g)].map(m => parseInt(m[1], 10))
+  );
+  const found = [];
+  for (const m of String(candidateTitle).matchAll(/\b(19\d\d|20\d\d)\b/g)) {
+    const y = parseInt(m[1], 10);
+    if (!titleYears.has(y)) {
+      found.push(y);
+    }
+  }
+  return found;
+}
+
+/**
+ * Returns true if candidateTitle explicitly contains a 4-digit year within ±1 of targetYear.
+ */
+function hasVerifiedYearInTitle(candidateTitle, targetYear, targetTitle = '') {
+  if (!targetYear || !candidateTitle) return false;
+  const tYear = parseInt(targetYear, 10);
+  if (isNaN(tYear)) return false;
+  const years = extractCandidateYears(candidateTitle, targetTitle);
+  return years.some(y => Math.abs(y - tYear) <= 1);
+}
+
+/**
+ * Validates stream duration against official IMDb/TMDB runtime.
+ * For movies with known runtime: ±10 minutes with a 4% PAL speedup allowance on the lower bound.
+ */
+function isValidRuntime(durationSeconds, meta) {
+  if (!durationSeconds || durationSeconds <= 0) return true;
+  const isMovie = !meta || meta.type === 'movie' || !meta.season;
+
+  if (meta && meta.runtimeMinutes && meta.runtimeMinutes > 0) {
+    const targetSec = meta.runtimeMinutes * 60;
+    if (isMovie) {
+      const palAdjustedSec = Math.round(targetSec * 0.96); // 4% PAL 25fps speedup
+      const minSec = Math.max(1800, palAdjustedSec - 600); // -10 min
+      const maxSec = targetSec + 600;                      // +10 min
+      return durationSeconds >= minSec && durationSeconds <= maxSec;
+    } else {
+      const minSec = Math.max(300, Math.round(targetSec * 0.60) - 300);
+      const maxSec = Math.round(targetSec * 1.45) + 600;
+      return durationSeconds >= minSec && durationSeconds <= maxSec;
+    }
+  }
+
+  return isMovie
+    ? (durationSeconds >= 2400 && durationSeconds <= 18000)
+    : (durationSeconds >= 300 && durationSeconds <= 7200);
+}
+
+/**
+ * Inspects a scraped movie/series detail page HTML for IMDb ID (tt...) and release year (±1 year).
+ * Returns { match: boolean, verified: boolean, reason?: string }.
+ */
+function checkPageMetadata(pageHtml, meta) {
+  if (!pageHtml || !meta) return { match: true, verified: false };
+  const isMovie = meta.type === 'movie' || !meta.season;
+
+  // 1. Check explicit IMDb ID on the page (100% authoritative like pengu.uk)
+  if (meta.imdbId && /^tt\d+$/.test(meta.imdbId)) {
+    const imdbMatches = [
+      ...pageHtml.matchAll(/imdb\.com\/title\/(tt\d+)/gi),
+      ...pageHtml.matchAll(/\[imdb:(tt\d+)\]/gi)
+    ].map(m => m[1].toLowerCase());
+
+    if (imdbMatches.length > 0) {
+      const targetImdb = meta.imdbId.toLowerCase();
+      if (imdbMatches.includes(targetImdb)) {
+        return { match: true, verified: true, reason: 'imdb' };
+      }
+      return { match: false, verified: true, reason: 'imdb_mismatch' };
+    }
+  }
+
+  // 2. Check explicit release year on the page for movies (±1 year tolerance)
+  if (isMovie && meta.year) {
+    const tYear = parseInt(meta.year, 10);
+    if (!isNaN(tYear)) {
+      const yearPatterns = [
+        /<span[^>]*class=["'][^"']*\byear\b[^"']*["'][^>]*>\s*(19\d\d|20\d\d)\s*<\/span>/i,
+        /<span[^>]*class=["'][^"']*\bdate\b[^"']*["'][^>]*>[^<]*?\b(19\d\d|20\d\d)\b\s*<\/span>/i,
+        /(?:Év|Évjárat|Megjelenés(?:\s+éve)?|Kiadás(?:\s+éve)?)\s*:\s*(?:<[^>]+>\s*)*(19\d\d|20\d\d)\b/i,
+        /<h1[^>]*>[^<]*?\((19\d\d|20\d\d)\)/i,
+        /<title>[^<]*?\((19\d\d|20\d\d)\)/i
+      ];
+
+      for (const re of yearPatterns) {
+        const m = pageHtml.match(re);
+        if (m && m[1]) {
+          const pYear = parseInt(m[1], 10);
+          if (Math.abs(pYear - tYear) <= 1) {
+            return { match: true, verified: true, reason: 'year' };
+          }
+          return { match: false, verified: true, reason: 'year_mismatch' };
+        }
+      }
+    }
+  }
+
+  return { match: true, verified: false };
 }
 
 // Terms indicating music, clips, trailers, or sports/motorsport race broadcasts that should not be treated as a movie/series
@@ -320,11 +453,12 @@ function isTitleMatch(targetTitle, candidateTitle, targetYear, isSeries = false)
     if (!targetHasNumber && candHasNumber) return false;
 
     if (targetYear) {
-      const candYearMatch = normCand.match(/\b(19\d\d|20\d\d)\b/);
-      if (candYearMatch) {
-        const candYear = parseInt(candYearMatch[1], 10);
-        const tYear = parseInt(targetYear, 10);
-        if (Math.abs(candYear - tYear) > 2) return false;
+      const tYear = parseInt(targetYear, 10);
+      if (!isNaN(tYear)) {
+        const candYears = extractCandidateYears(normCand, normTarget);
+        if (candYears.length > 0 && !candYears.some(cy => Math.abs(cy - tYear) <= 1)) {
+          return false;
+        }
       }
     }
 
@@ -408,23 +542,7 @@ async function scrapeVidea(meta) {
   if (!hu) return streams;
 
   const isMovie = meta.type === 'movie' || !meta.season;
-  
-  // Calculate acceptable runtime window based on official IMDb/TMDB runtime
-  let minDuration = isMovie ? 2400 : 600;
-  let maxDuration = isMovie ? 18000 : 7200;
-
-  if (meta.runtimeMinutes && meta.runtimeMinutes > 0) {
-    const targetSec = meta.runtimeMinutes * 60;
-    if (isMovie) {
-      // For movies: allow -30% to +35% (covers PAL 25fps speedup and extended/director cuts)
-      minDuration = Math.max(2100, Math.round(targetSec * 0.70));
-      maxDuration = Math.round(targetSec * 1.35);
-    } else {
-      // For series episodes: allow -40% to +50%
-      minDuration = Math.max(600, Math.round(targetSec * 0.60));
-      maxDuration = Math.round(targetSec * 1.50);
-    }
-  }
+  const targetYear = meta.year ? parseInt(meta.year, 10) : null;
 
   const searchTerms = [];
   if (meta.season && meta.episode) {
@@ -439,9 +557,9 @@ async function scrapeVidea(meta) {
     searchTerms.push(`${hu} ${e}. resz`);
     searchTerms.push(`${hu} ${s}x${ePad}`);
   } else {
-    // Movies: Prioritize full movie queries
-    searchTerms.push(`${hu} teljes film`);
+    // Movies: Prioritize year-specific query first so remakes (e.g. 2016 vs 1960) surface first
     if (meta.year) searchTerms.push(`${hu} ${meta.year}`);
+    searchTerms.push(`${hu} teljes film`);
     searchTerms.push(`${hu} teljes film magyarul`);
     searchTerms.push(hu);
   }
@@ -463,7 +581,7 @@ async function scrapeVidea(meta) {
       const linkRegex = /href=["'](https?:\/\/videa\.hu)?\/videok\/([^/"'\s]+)\/[^"'#\s]+-([A-Za-z0-9]{16})["']/g;
       const matches = [...html.matchAll(linkRegex)];
 
-      const candidateIds = [];
+      const candidateItems = [];
       for (const m of matches) {
         const category = m[2];
         const vid = m[3];
@@ -485,63 +603,82 @@ async function scrapeVidea(meta) {
 
         if (!seenVideoIds.has(vid)) {
           seenVideoIds.add(vid);
-          candidateIds.push(vid);
-          if (candidateIds.length >= 8) break;
+          const snippet = html.slice(Math.max(0, (m.index || 0) - 250), Math.min(html.length, (m.index || 0) + 500));
+          const cardUploadYear = extractUploadYearFromText(snippet);
+          candidateItems.push({ vid, cardUploadYear });
+          if (candidateItems.length >= 8) break;
         }
       }
 
       // Parallel stream extraction for candidates (cuts latency by 4x)
       const videoDataList = await Promise.all(
-        candidateIds.map(vid => extractVideaStreams(vid).catch(() => null))
+        candidateItems.map(async (item) => {
+          const data = await extractVideaStreams(item.vid).catch(() => null);
+          if (data && !data.uploadYear && item.cardUploadYear) {
+            data.uploadYear = item.cardUploadYear;
+          }
+          return data;
+        })
       );
 
       for (const videoData of videoDataList) {
         if (!videoData || !videoData.sources || videoData.sources.length === 0) continue;
 
-        // Strict Duration Filter against IMDb/TMDB official runtime:
-        if (videoData.duration < minDuration || videoData.duration > maxDuration) {
+        // 1. Strict Duration Filter (±10 min + 4% PAL speedup against official IMDb/TMDB runtime):
+        if (!isValidRuntime(videoData.duration, meta)) {
           continue;
         }
 
-        // Title filter: ignore music / parody / clips
+        // 2. Upload-year sanity check: a video uploaded before targetYear cannot be that movie
+        if (isMovie && targetYear && videoData.uploadYear && videoData.uploadYear < targetYear) {
+          continue;
+        }
+
+        // 3. Title filter: ignore music / parody / clips / F1 races
         if (JUNK_TITLE_REGEX.test(videoData.videoTitle)) {
           continue;
         }
 
-        // Title relevance match: must match searched title (and year/sequel rules for movies)
+        // 4. Title relevance match: must match searched title (and ±1 year / sequel rules for movies)
         if (!isTitleMatch(hu, videoData.videoTitle, meta.year, !isMovie) && !isTitleMatch(meta.englishTitle, videoData.videoTitle, meta.year, !isMovie)) {
           continue;
         }
 
-        // Strict episode filter for series:
+        // 5. Strict episode filter for series:
         if (!isMovie && !matchesEpisode(videoData.videoTitle, meta.season, meta.episode, meta.episodeTitle)) {
           continue;
         }
 
         const durationMins = Math.round(videoData.duration / 60);
+        const yearVerified = !isMovie || !targetYear ||
+          hasVerifiedYearInTitle(videoData.videoTitle, targetYear, hu) ||
+          hasVerifiedYearInTitle(videoData.videoTitle, targetYear, meta.englishTitle);
+        const warnBadge = (!yearVerified && isMovie && targetYear) ? ' [⚠️ Év?]' : '';
+        const warnNote = (!yearVerified && isMovie && targetYear) ? ' • ⚠️ Évszám nincs a címben' : '';
 
         for (const vs of videoData.sources) {
           const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
           streams.push({
-            name: `[HU] Videa ${qualLabel}`,
-            title: `${videoData.videoTitle}\n🇭🇺 Videa.hu • ${qualLabel} • ${durationMins} perc • Teljes film`,
+            name: `[HU] Videa ${qualLabel}${warnBadge}`,
+            title: `${videoData.videoTitle}\n🇭🇺 Videa.hu • ${qualLabel} • ${durationMins} perc • Teljes film${warnNote}`,
             url: vs.url,
             quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
             height: vs.height,
             source: 'videa',
+            yearVerified,
             behaviorHints: {
               bingeGroup: `hu-videa-${qualLabel}`
             }
           });
         }
 
-        // Keep collecting to maximize 1080p finds
-        const count1080 = streams.filter(s => s.height >= 1080).length;
-        if (count1080 >= 5 || streams.length >= 15) break;
+        // Keep collecting until we have enough year-verified 1080p streams
+        const verified1080 = streams.filter(s => s.height >= 1080 && s.yearVerified !== false).length;
+        if (verified1080 >= 4 || streams.length >= 16) break;
       }
 
-      const count1080 = streams.filter(s => s.height >= 1080).length;
-      if (count1080 >= 4 || streams.length >= 12) break;
+      const verified1080 = streams.filter(s => s.height >= 1080 && s.yearVerified !== false).length;
+      if (verified1080 >= 4 || streams.length >= 14) break;
     } catch (e) {
       // Continue to next search term
     }
@@ -554,5 +691,10 @@ module.exports = {
   scrapeVidea,
   extractVideaStreams,
   extractVideaFCodeStreams,
-  isTitleMatch
+  isTitleMatch,
+  isValidRuntime,
+  hasVerifiedYearInTitle,
+  extractCandidateYears,
+  extractUploadYearFromText,
+  checkPageMetadata
 };

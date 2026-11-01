@@ -4,7 +4,12 @@
  * Supports Videa, Indavideo, Filemoon / Byse, VOE, Vidmoly, StreamRuby, and other major video hosters.
  */
 
-const { extractVideaStreams } = require('./videa');
+const {
+  extractVideaStreams,
+  isValidRuntime,
+  checkPageMetadata,
+  extractCandidateYears
+} = require('./videa');
 const { extractIndavideoStreams } = require('./indavideo');
 const { netmoziTlsRequest } = require('./netmozi');
 
@@ -195,22 +200,43 @@ async function scrapeDMDAMedia(meta) {
 
       if (links.length === 0) continue;
 
-      // Prefer links containing _film or _sorozat, or matching target title
+      // Prefer links containing _film or _sorozat, or matching target title + ±1 year
       const normTarget = normalize(hu);
       const isSeries = Boolean(meta.season && meta.episode);
+      const targetYear = meta.year ? parseInt(meta.year, 10) : null;
 
-      const scored = links.map(item => {
+      const scored = [];
+      for (const item of links) {
+        if (!isSeries && targetYear) {
+          const candYears = extractCandidateYears(item.title, hu);
+          if (candYears.length > 0 && !candYears.some(cy => Math.abs(cy - targetYear) <= 1)) {
+            continue;
+          }
+        }
+
         let score = 0;
-        const normItem = normalize(item.title);
+        const cleanCand = item.title
+          .replace(/^(?:Film|Sorozat)\s+(?:[0-9.]+\s+)?/i, '')
+          .replace(/\s+\d{4}$/, '')
+          .trim();
+        const normItem = normalize(cleanCand || item.title);
         if (normItem === normTarget) score += 100;
         else if (normItem.includes(normTarget) || normTarget.includes(normItem)) score += 50;
+
+        if (!isSeries && targetYear) {
+          const candYears = extractCandidateYears(item.title, hu);
+          if (candYears.some(cy => Math.abs(cy - targetYear) <= 1)) score += 40;
+        }
 
         if (isSeries && item.url.includes('_sorozat')) score += 30;
         if (!isSeries && item.url.includes('_film')) score += 30;
 
-        return { ...item, score };
-      });
+        if (score >= 50) {
+          scored.push({ ...item, score });
+        }
+      }
 
+      if (scored.length === 0) continue;
       scored.sort((a, b) => b.score - a.score);
       const candidates = scored.slice(0, 3);
 
@@ -227,6 +253,11 @@ async function scrapeDMDAMedia(meta) {
         try {
           const pageHtml = await dmdaRequest(targetUrl, {}, clientIp);
           if (!pageHtml) return;
+
+          if (!isSeries) {
+            const pageCheck = checkPageMetadata(pageHtml, meta);
+            if (!pageCheck.match) return;
+          }
 
           const iframes = [...pageHtml.matchAll(/<iframe[^>]+src=["']([^"']+)["']/gi)].map(m => m[1]);
 
@@ -269,6 +300,7 @@ async function scrapeDMDAMedia(meta) {
               if (vcodeMatch) {
                 const vcode = vcodeMatch[1];
                 const vData = await extractVideaStreams(vcode);
+                if (vData && !isValidRuntime(vData.duration, meta)) continue;
                 const vStreams = vData?.sources || [];
                 for (const vs of vStreams) {
                   const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
@@ -278,7 +310,8 @@ async function scrapeDMDAMedia(meta) {
                     url: vs.url,
                     quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
                     height: vs.height,
-                    source: 'dmdamedia'
+                    source: 'dmdamedia',
+                    yearVerified: true
                   });
                 }
                 continue;
@@ -291,6 +324,7 @@ async function scrapeDMDAMedia(meta) {
               if (ihashMatch) {
                 const ihash = ihashMatch[1];
                 const iData = await extractIndavideoStreams(ihash);
+                if (iData && !isValidRuntime(iData.duration, meta)) continue;
                 const iStreams = iData?.streams || iData?.sources || [];
                 for (const is of iStreams) {
                   const qualLabel = is.height >= 1080 ? '1080p FHD' : is.height >= 720 ? '720p HD' : `${is.height}p`;
@@ -300,7 +334,8 @@ async function scrapeDMDAMedia(meta) {
                     url: is.url,
                     quality: is.height >= 1080 ? '1080p' : is.height >= 720 ? '720p' : '480p',
                     height: is.height,
-                    source: 'dmdamedia'
+                    source: 'dmdamedia',
+                    yearVerified: true
                   });
                 }
                 continue;

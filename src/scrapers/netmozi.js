@@ -254,7 +254,10 @@ function parseCandidatesFromHtml(html, isSeries, normTarget, targetYear) {
         ? new RegExp(`\\b${normTarget}\\b`, 'i').test(normItem) 
         : (normItem.includes(normTarget) || normTarget.includes(normItem));
       const matchScore = normItem === normTarget ? 100 : (isWordMatch ? 75 : 0);
-      const yearScore = (targetYear && itemYear && String(targetYear) === String(itemYear)) ? 20 : 0;
+      if (isSeries === false && targetYear && itemYear && Math.abs(parseInt(targetYear, 10) - parseInt(itemYear, 10)) > 1) {
+        continue;
+      }
+      const yearScore = (targetYear && itemYear && Math.abs(parseInt(targetYear, 10) - parseInt(itemYear, 10)) <= 1) ? 40 : 0;
       let typeScore = 0;
       if (isSeries === true) {
         typeScore = itemIsSeries ? 30 : -20;
@@ -308,7 +311,10 @@ function parseCandidatesFromHtml(html, isSeries, normTarget, targetYear) {
         ? new RegExp(`\\b${normTarget}\\b`, 'i').test(normItem) 
         : (normItem.includes(normTarget) || normTarget.includes(normItem));
       const matchScore = normItem === normTarget ? 100 : (isWordMatch ? 75 : 0);
-      const yearScore = (targetYear && itemYear && String(targetYear) === String(itemYear)) ? 20 : 0;
+      if (isSeries === false && targetYear && itemYear && Math.abs(parseInt(targetYear, 10) - parseInt(itemYear, 10)) > 1) {
+        continue;
+      }
+      const yearScore = (targetYear && itemYear && Math.abs(parseInt(targetYear, 10) - parseInt(itemYear, 10)) <= 1) ? 40 : 0;
       let typeScore = 0;
       if (isSeries === true) {
         typeScore = itemIsSeries ? 30 : -20;
