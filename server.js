@@ -135,8 +135,9 @@ app.get('/:config/catalog/:type/:id/:extra.json', handleCatalog);
 // 4. Meta Route (Provides episode lists and details for Hungarian series/movies)
 async function handleMeta(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  const { type } = req.params;
-  const rawId = decodeURIComponent(req.params.id || '').replace(/\.json$/, '');
+  const { type, prefix } = req.params;
+  const combinedId = prefix ? `${prefix}/${req.params.id || ''}` : (req.params.id || '');
+  const rawId = decodeURIComponent(combinedId).replace(/\.json$/, '');
 
   try {
     const metaObj = await getMeta(type, rawId);
@@ -151,13 +152,16 @@ async function handleMeta(req, res) {
 }
 
 app.get('/meta/:type/:id.json', handleMeta);
+app.get('/meta/:type/:prefix/:id.json', handleMeta);
 app.get('/:config/meta/:type/:id.json', handleMeta);
+app.get('/:config/meta/:type/:prefix/:id.json', handleMeta);
 
 // 5. Default Stream Route (/stream/:type/:id.json)
-app.get('/stream/:type/:id.json', async (req, res) => {
+app.get(['/stream/:type/:id.json', '/stream/:type/:prefix/:id.json'], async (req, res) => {
   try {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    const { type, id } = req.params;
+    const { type, prefix } = req.params;
+    const id = prefix ? `${prefix}/${req.params.id || ''}` : req.params.id;
     const config = parseConfig(null, req.query);
     config.hostUrl = getHostUrl(req);
     config.clientIp = getClientIp(req);
@@ -170,10 +174,11 @@ app.get('/stream/:type/:id.json', async (req, res) => {
 });
 
 // 6. Configured Stream Route (/:config/stream/:type/:id.json)
-app.get('/:config/stream/:type/:id.json', async (req, res) => {
+app.get(['/:config/stream/:type/:id.json', '/:config/stream/:type/:prefix/:id.json'], async (req, res) => {
   try {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    const { config: configParam, type, id } = req.params;
+    const { config: configParam, type, prefix } = req.params;
+    const id = prefix ? `${prefix}/${req.params.id || ''}` : req.params.id;
     const config = parseConfig(configParam, req.query);
     config.hostUrl = getHostUrl(req);
     config.clientIp = getClientIp(req);

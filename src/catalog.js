@@ -4,7 +4,13 @@
  */
 
 const { getMediaMeta } = require('./utils/meta');
-const { LIVE_CHANNELS, getMediaKlikkPrograms, getMediaKlikkSeriesEpisodes } = require('./scrapers/mediaklikk');
+const {
+  LIVE_CHANNELS,
+  VERIFIED_MEDIAKLIKK_CLASSICS,
+  sanitizeSlug,
+  getMediaKlikkPrograms,
+  getMediaKlikkSeriesEpisodes
+} = require('./scrapers/mediaklikk');
 const { searchNetMozi, getNetMoziSeriesEpisodes } = require('./scrapers/netmozi');
 const { fetchCatalogItems } = require('./catalogs');
 
@@ -219,40 +225,23 @@ async function searchCatalog(type, query, catalogId = null, extra = {}) {
 
   // If MédiaKlikk classics catalog requested
   if (catalogId === 'hu-mediaklikk-classics') {
-    const allPrograms = getMediaKlikkPrograms();
-    const classicPrograms = allPrograms.filter(p => {
-      const cats = p.categories || [];
-      return cats.some(c => ['Retró', 'Sorozat', 'Gyerekeknek', 'Film', 'Kultúra', 'Ismeretterjesztő'].includes(c));
-    });
-
-    // Ensure all items strictly have type: 'series' (Stremio TV requirement for series catalogs)
-    const featuredSeries = FEATURED_MEDIAKLIKK_CLASSICS
-      .filter(item => item.type === 'series')
-      .map(item => ({ ...item, type: 'series' }));
-
-    const mappedClassics = classicPrograms.map(p => ({
-      ...p,
-      type: 'series'
+    const verifiedList = VERIFIED_MEDIAKLIKK_CLASSICS.map(item => ({
+      id: item.id,
+      name: item.name,
+      type: 'series',
+      poster: item.poster,
+      background: item.poster,
+      description: item.description,
+      releaseInfo: item.year,
+      year: item.year,
+      genres: item.categories || ['MTVA Archívum'],
+      categories: item.categories || ['MTVA Archívum']
     }));
 
-    // Deduplicate by name/id with featured series placed first
-    const seenMap = new Set();
-    const combinedList = [];
-
-    for (const item of [...featuredSeries, ...mappedClassics]) {
-      const normKey = normalize(item.name);
-      if (!seenMap.has(normKey) && !seenMap.has(item.id)) {
-        seenMap.add(normKey);
-        seenMap.add(item.id);
-        combinedList.push(item);
-      }
-    }
-
-    const list = combinedList.length > 0 ? combinedList : featuredSeries;
-    if (!query) return list;
+    if (!query) return verifiedList;
     const qNorm = normalize(query);
-    return list.filter(item => 
-      normalize(item.name).includes(qNorm) || 
+    return verifiedList.filter(item =>
+      normalize(item.name).includes(qNorm) ||
       normalize(item.description || '').includes(qNorm) ||
       (item.categories && item.categories.some(c => normalize(c).includes(qNorm)))
     );
@@ -638,21 +627,30 @@ async function getMeta(type, id) {
 
   // Handle MédiaKlikk programs (Dynamic Series & Episodes)
   if (id.startsWith('mediaklikk:program:')) {
+    const cleanSlug = sanitizeSlug(id);
+    const cleanProgramId = `mediaklikk:program:${cleanSlug}`;
     let progData = null;
     try {
-      progData = await getMediaKlikkSeriesEpisodes(id);
+      progData = await getMediaKlikkSeriesEpisodes(cleanProgramId);
     } catch (e) {}
 
     if (progData && progData.seasons && Object.keys(progData.seasons).length > 0) {
-      const allVideos = Object.values(progData.seasons || {}).flat().map(e => ({
-        id: `${id}:${e.season}:${e.episode}`,
-        title: e.name,
-        name: e.name,
-        season: e.season,
-        episode: e.episode,
-        overview: e.overview,
-        thumbnail: e.thumbnail
-      }));
+      const allVideos = Object.values(progData.seasons || {}).flat().map(e => {
+        const sNum = Number(e.season) || 1;
+        const epNum = Number(e.episode) || 1;
+        const relDate = new Date(Date.UTC(2020, (sNum - 1) % 12, Math.min(28, epNum), 12, 0, 0)).toISOString();
+        return {
+          id: `${cleanProgramId}:${sNum}:${epNum}`,
+          title: e.name,
+          name: e.name,
+          season: sNum,
+          episode: epNum,
+          number: epNum,
+          released: relDate,
+          overview: e.overview || progData.description,
+          thumbnail: e.thumbnail || progData.poster
+        };
+      });
 
       if (allVideos.length > 0) {
         return {
@@ -661,7 +659,7 @@ async function getMeta(type, id) {
             type: 'series',
             name: progData.name,
             poster: progData.poster,
-            background: progData.background,
+            background: progData.background || progData.poster,
             description: progData.description,
             releaseInfo: progData.year,
             genres: progData.genres,
@@ -672,11 +670,9 @@ async function getMeta(type, id) {
     }
 
     // Robust Fallback: NEVER return null for mediaklikk:program:!
-    // Returning null causes "Series error" on Stremio Android TV / Smart TV.
     const allPrograms = getMediaKlikkPrograms();
-    const cleanKey = id.replace(/^mediaklikk:program:/, '').trim();
-    const prog = allPrograms.find(p => p.id === id || p.slug === cleanKey || normalize(p.name) === normalize(cleanKey));
-    const progName = prog ? prog.name : cleanKey.replace(/-/g, ' ');
+    const prog = allPrograms.find(p => p.id === cleanProgramId || p.slug === cleanSlug || normalize(p.name) === normalize(cleanSlug));
+    const progName = prog ? prog.name : cleanSlug.replace(/-/g, ' ');
     const poster = prog?.poster || '';
     const desc = prog?.description || `MédiaKlikk (MTVA) műsor: ${progName}.`;
     const genres = prog?.categories || ['MTVA Archívum'];
@@ -693,11 +689,13 @@ async function getMeta(type, id) {
         genres,
         videos: [
           {
-            id: `${id}:1:1`,
-            title: `${progName} (1. Adás)`,
-            name: `${progName} (1. Adás)`,
+            id: `${cleanProgramId}:1:1`,
+            title: `${progName} (1. Rész)`,
+            name: `${progName} (1. Rész)`,
             season: 1,
             episode: 1,
+            number: 1,
+            released: new Date(Date.UTC(2020, 0, 1, 12, 0, 0)).toISOString(),
             overview: desc,
             thumbnail: poster
           }

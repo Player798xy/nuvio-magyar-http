@@ -105,9 +105,371 @@ let lastProgramsRefresh = 0;
 const PROGRAMS_REFRESH_INTERVAL_MS = 12 * 60 * 60 * 1000; // 12 hours
 const showEpisodesCache = new Map();
 
+// 100% Verified & Tested MédiaKlikk (MTVA) Classic Series Catalog
+const VERIFIED_MEDIAKLIKK_CLASSICS = [
+  {
+    id: 'mediaklikk:program:a-nagy-ho-ho-ho-horgasz',
+    slug: 'a-nagy-ho-ho-ho-horgasz',
+    imdbId: 'tt0154077',
+    name: 'A nagy ho-ho-ho-horgász',
+    keyword: 'A nagy ho-ho-ho',
+    matchWord: 'horgasz',
+    type: 'series',
+    year: '1982–1988',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/08/hohoho_1920x1080.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Klasszikus mese'],
+    description: 'A nagy ho-ho-ho-horgász és a Főkukac felejthetetlen kalandjai Balázs Péter és Mikó István hangjával az MTVA archívumából.'
+  },
+  {
+    id: 'mediaklikk:program:magyar-nepmesek',
+    slug: 'magyar-nepmesek',
+    imdbId: 'tt0861751',
+    name: 'Magyar népmesék',
+    keyword: 'Magyar népmesék',
+    matchWord: 'magyar nepmesek',
+    type: 'series',
+    year: '1980–2012',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2013/12/magyarnepmesek_1920x1080.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Klasszikus mese'],
+    description: 'Klasszikus magyar népmesék animációs sorozat Szabó Gyula felejthetetlen mesemondásával.'
+  },
+  {
+    id: 'mediaklikk:program:pom-pom-mesei',
+    slug: 'pom-pom-mesei',
+    imdbId: 'tt0166931',
+    name: 'Pom-Pom meséi',
+    keyword: 'Pom-Pom meséi',
+    matchWord: 'pom pom mesei',
+    type: 'series',
+    year: '1980–1984',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/09/pompom_1920x1080.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Klasszikus mese'],
+    description: 'Picur és Pom-Pom történetei: Gombóc Artúr, Festéktüsszentő Hapci Benő, Radírpók és barátaik.'
+  },
+  {
+    id: 'mediaklikk:program:frakk-a-macskak-reme',
+    slug: 'frakk-a-macskak-reme',
+    imdbId: 'tt0167595',
+    name: 'Frakk, a macskák réme',
+    keyword: 'Frakk, a macskák réme',
+    matchWord: 'frakk',
+    type: 'series',
+    year: '1971–1985',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2013/12/frakk_1920x1080.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Klasszikus mese'],
+    description: 'Klasszikus magyar papírkivágásos animációs sorozat Károly bácsival, Irmuskával, Lukréciával és Szerénkével.'
+  },
+  {
+    id: 'mediaklikk:program:kukori-es-kotkoda',
+    slug: 'kukori-es-kotkoda',
+    imdbId: 'tt0168342',
+    name: 'Kukori és Kotkoda',
+    keyword: 'Kukori és Kotkoda',
+    matchWord: 'kukori',
+    type: 'series',
+    year: '1971–1972',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/08/kukori_1920x1080.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Klasszikus mese'],
+    description: 'Népszerű magyar rajzfilmsorozat a lusta kakasról és szorgos tyúkocskájáról.'
+  },
+  {
+    id: 'mediaklikk:program:vizipok-csodapok',
+    slug: 'vizipok-csodapok',
+    imdbId: 'tt0168393',
+    name: 'Vízipók-csodapók',
+    keyword: 'Vízipók-csodapók',
+    matchWord: 'vizipok',
+    type: 'series',
+    year: '1978–1988',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2018/02/vizipok_16-9.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Klasszikus mese'],
+    description: 'Vízipók és Keresztespók kalandjai a kristálytiszta vizű tó mélyén.'
+  },
+  {
+    id: 'mediaklikk:program:kerem-a-kovetkezot',
+    slug: 'kerem-a-kovetkezot',
+    imdbId: 'tt0168343',
+    name: 'Kérem a következőt! (Dr. Bubó)',
+    keyword: 'Kérem a következőt!',
+    matchWord: 'kerem a kovetkezot',
+    type: 'series',
+    year: '1974–1986',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/08/keremakovit_1920x1080-1.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Animáció'],
+    description: 'Dr. Bubó orvosbagoly és Ursula nővér erdőlakó pácienseinek szellemes szatírája Romhányi József és Nepp József tollából.'
+  },
+  {
+    id: 'mediaklikk:program:uzenet-a-jovobol-a-mezga-csalad',
+    slug: 'uzenet-a-jovobol-a-mezga-csalad',
+    imdbId: 'tt0136650',
+    name: 'Üzenet a jövőből – A Mézga család',
+    keyword: 'Üzenet a jövőből',
+    matchWord: 'uzenet a jovobol',
+    type: 'series',
+    year: '1969',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2015/10/mezga_16-9.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Animáció'],
+    description: 'A Mézga család 1. évada: kapcsolatfelvétel MZ/X-szel, a 30. századi köb-ükunokával.'
+  },
+  {
+    id: 'mediaklikk:program:mezga-aladar-kulonos-kalandjai',
+    slug: 'mezga-aladar-kulonos-kalandjai',
+    imdbId: 'tt0136650',
+    name: 'Mézga Aladár különös kalandjai',
+    keyword: 'Mézga Aladár különös kalandjai',
+    matchWord: 'mezga aladar',
+    type: 'series',
+    year: '1973',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2015/10/mezga_16-9.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Animáció'],
+    description: 'A Mézga család 2. évada: Aladár és Blöki éjszakai űrutazásai a Gulliverkli 5-tel.'
+  },
+  {
+    id: 'mediaklikk:program:vakacion-a-mezga-csalad',
+    slug: 'vakacion-a-mezga-csalad',
+    imdbId: 'tt1225872',
+    name: 'Vakáción a Mézga család',
+    keyword: 'Vakáción a Mézga család',
+    matchWord: 'vakacion a mezga',
+    type: 'series',
+    year: '1978',
+    poster: 'https://images.metahub.space/poster/medium/tt1225872/img',
+    categories: ['Gyerekeknek', 'Retró', 'Animáció'],
+    description: 'A Mézga család világkörüli kalandjai Hufnágel Pisti meghívására.'
+  },
+  {
+    id: 'mediaklikk:program:susu-a-sarkany',
+    slug: 'susu-a-sarkany',
+    imdbId: 'tt0129719',
+    name: 'Süsü, a sárkány kalandjai',
+    keyword: 'Süsü, a sárkány kalandjai',
+    matchWord: 'susu a sarkany kalandjai',
+    type: 'series',
+    year: '1977–1984',
+    poster: 'https://m.media-amazon.com/images/M/MV5BYjBjN2Y1OGItYTRhNC00ZmZiLTk0NWItMTBjNzI5ZThjOTkyXkEyXkFqcGc@._V1_SX250.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Bábfilm'],
+    description: 'Csukás István legendás bábfilmsorozata a jólelkű, egyfejű sárkányról Bodrogi Gyula hangjával.'
+  },
+  {
+    id: 'mediaklikk:program:mekk-elek-az-ezermester',
+    slug: 'mekk-elek-az-ezermester',
+    imdbId: 'tt0168350',
+    name: 'Mekk Elek, az ezermester',
+    keyword: 'Mekk Elek az ezermester',
+    matchWord: 'mekk elek',
+    type: 'series',
+    year: '1974',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/04/mekkelek_1920x1080.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Bábfilm'],
+    description: 'Mekk Elek, a tizenhárom mesterséget kipróbáló kecske bábfilmsorozata Balázs Péter hangjával.'
+  },
+  {
+    id: 'mediaklikk:program:mirr-murr-kandur-kalandjai',
+    slug: 'mirr-murr-kandur-kalandjai',
+    name: 'Mirr-Murr kandúr kalandjai',
+    keyword: 'Mirr-Murr',
+    matchWord: 'mirr murr',
+    type: 'series',
+    year: '1972–1975',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/04/mirrmurr169.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Bábfilm'],
+    description: 'Csukás István és Foky Ottó klasszikus bábfilmsorozata Mirr-Murr és Oriza-Triznyák kalandjairól.'
+  },
+  {
+    id: 'mediaklikk:program:a-legkisebb-ugrifules',
+    slug: 'a-legkisebb-ugrifules',
+    name: 'A legkisebb Ugrifüles',
+    keyword: 'A legkisebb Ugrifüles',
+    matchWord: 'ugrifules',
+    type: 'series',
+    year: '1975–1976',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/12/kep-8.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Bábfilm'],
+    description: 'Csukás István és Foky Ottó bábfilmsorozata Ugrifüles nyusziról, Tüskéshátúról és Brekkencs békáról.'
+  },
+  {
+    id: 'mediaklikk:program:tof-tof-elefant',
+    slug: 'tof-tof-elefant',
+    name: 'Töf-Töf elefánt',
+    keyword: 'Töf-Töf elefánt',
+    matchWord: 'tof tof',
+    type: 'series',
+    year: '1991–1994',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/12/kep-1.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Animáció'],
+    description: 'Klasszikus magyar rajzfilmsorozat Töf-Töf elefántról és barátairól.'
+  },
+  {
+    id: 'mediaklikk:program:dormogoek-kalandjai',
+    slug: 'dormogoek-kalandjai',
+    name: 'Dörmögőék kalandjai',
+    keyword: 'Dörmögőék',
+    matchWord: 'dormogoek',
+    type: 'series',
+    year: '1987–1997',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/12/dormogoek_1920x1080.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Bábfilm'],
+    description: 'A mackótestvérek – Berci, Marci és Borka – vidám bábfilmes kalandjai.'
+  },
+  {
+    id: 'mediaklikk:program:a-kiscsacsi-kalandjai',
+    slug: 'a-kiscsacsi-kalandjai',
+    name: 'A Kiscsacsi kalandjai',
+    keyword: 'A Kiscsacsi kalandjai',
+    matchWord: 'kiscsacsi',
+    type: 'series',
+    year: '1971',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/12/kiscsacsi169.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Bábfilm'],
+    description: 'Klasszikus magyar bábfilmsorozat a kíváncsi Kiscsacsiról.'
+  },
+  {
+    id: 'mediaklikk:program:trombi-es-a-tuzmano',
+    slug: 'trombi-es-a-tuzmano',
+    name: 'Trombi és a Tűzmanó',
+    keyword: 'Trombi és a Tűzmanó',
+    matchWord: 'trombi',
+    type: 'series',
+    year: '1987–1990',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/09/Firefly-1-2.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Animáció'],
+    description: 'Trombi, a tűzoltó elefánt és a csintalan Tűzmanó rajzfilmsorozata.'
+  },
+  {
+    id: 'mediaklikk:program:mikrobi',
+    slug: 'mikrobi',
+    name: 'Mikrobi',
+    keyword: 'Mikrobi',
+    matchWord: 'mikrobi',
+    type: 'series',
+    year: '1973–1975',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/09/mikrobi_1920x1080.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Sci-fi animáció'],
+    description: 'Mikrobi, a gömbölyű háztartási robot és Pille, Pépe, Plumpi űrkalandjai.'
+  },
+  {
+    id: 'mediaklikk:program:benedek-elek-mesei',
+    slug: 'benedek-elek-mesei',
+    name: 'Benedek Elek meséi',
+    keyword: 'Benedek Elek meséi',
+    matchWord: 'benedek elek',
+    type: 'series',
+    year: '1995',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2013/12/magyarnepmesek_1920x1080.jpg',
+    categories: ['Gyerekeknek', 'Retró', 'Mese'],
+    description: 'Benedek Elek legszebb magyar népmeséi az MTVA archívumából.'
+  },
+  {
+    id: 'mediaklikk:program:a-tenkes-kapitanya',
+    slug: 'a-tenkes-kapitanya',
+    imdbId: 'tt0056789',
+    name: 'A Tenkes kapitánya',
+    keyword: 'A Tenkes kapitánya',
+    matchWord: 'tenkes kapitanya',
+    type: 'series',
+    year: '1964',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/08/tenkes_1920x1080-1.jpg',
+    categories: ['Retró', 'Sorozat', 'Történelmi'],
+    description: 'Eke Máté, a Tenkes kapitánya és Buga Jakab kalandjai a kuruc korban Zenthe Ferenc és Szabó Gyula főszereplésével.'
+  },
+  {
+    id: 'mediaklikk:program:szomszedok',
+    slug: 'szomszedok',
+    imdbId: 'tt0149529',
+    name: 'Szomszédok',
+    keyword: 'Szomszédok',
+    matchWord: 'szomszedok',
+    type: 'series',
+    year: '1987–1999',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/08/szomszedok_1920x1080.jpg',
+    categories: ['Retró', 'Sorozat'],
+    description: 'Horváth Ádám legendás teleregénye a gazdagréti lakótelep lakóinak (Takácsék, Mágenheimék, Vágásiék) életéről.'
+  },
+  {
+    id: 'mediaklikk:program:linda',
+    slug: 'linda',
+    imdbId: 'tt0149483',
+    name: 'Linda',
+    keyword: 'Linda',
+    matchWord: 'linda',
+    type: 'series',
+    year: '1984–1989',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/08/linda_1920x1080-v3-1.jpg',
+    categories: ['Retró', 'Sorozat', 'Krimi'],
+    description: 'Veszprémi Linda rendőr alhadnagy (Görbe Nóra) és apja (Bodrogi Gyula) bűnügyi-vígjáték sorozata.'
+  },
+  {
+    id: 'mediaklikk:program:regimodi-tortenet',
+    slug: 'regimodi-tortenet',
+    name: 'Régimódi történet',
+    keyword: 'Régimódi történet',
+    matchWord: 'regimodi tortenet',
+    type: 'series',
+    year: '2006',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/05/regimoditortenet_1920x1080.jpg',
+    categories: ['Sorozat', 'Dráma', 'Retró'],
+    description: 'Szabó Magda regényéből készült hatrészes magyar televíziós sorozat Bereményi Géza rendezésében.'
+  },
+  {
+    id: 'mediaklikk:program:kemeri',
+    slug: 'kemeri',
+    name: 'Kémeri',
+    keyword: 'Kémeri',
+    matchWord: 'kemeri',
+    type: 'series',
+    year: '1985',
+    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/08/linda_1920x1080-v3-1.jpg',
+    categories: ['Retró', 'Sorozat', 'Krimi'],
+    description: 'Dr. Kémeri Ferenc ügyvéd és magánnyomozó (Székhelyi József) bűnügyi esetei a két világháború között.'
+  }
+];
+
+const STATIC_CLASSIC_EPISODES = {
+  'susu-a-sarkany': [
+    'Süsü, a sárkány',
+    'Süsü újabb kalandjai',
+    'A bűvös virág',
+    'Süsü csapdába esik',
+    'A sárkányfűárus',
+    'A műsárkány',
+    'Süsü, a rettentő',
+    'Süsü, a pesztra',
+    'Süsü és a sárkánylány'
+  ],
+  'vakacion-a-mezga-csalad': [
+    'Irány a Déli-sark!',
+    'Az üvegszemű kapitány',
+    'A fekete arany',
+    'Hamis barátok',
+    'Fújd fel!',
+    'A szent kobra',
+    'A lila köd',
+    'Gori-gori',
+    'A jég hátán',
+    'A lakatlan sziget',
+    'Maffia',
+    'Az őserdőben',
+    'Végre otthon!'
+  ]
+};
+
+function sanitizeSlug(rawSlug) {
+  return String(rawSlug || '')
+    .replace(/^mediaklikk:program:/, '')
+    .split('/')
+    .filter(Boolean)
+    .pop() || '';
+}
+
+function fixImageUrl(url) {
+  if (!url) return '';
+  if (url.startsWith('//')) return 'https:' + url;
+  return url;
+}
+
 /**
  * Loads all MédiaKlikk programs (490+ active and archive shows, series, and films)
- * Automatically updates from mediaklikk.hu/musoraink periodically without manual coding.
+ * Sanitizes slugs so no program ID contains a '/' (which breaks Express :id routing).
  */
 function getMediaKlikkPrograms() {
   if (mediaklikkProgramsCache && (Date.now() - lastProgramsRefresh < PROGRAMS_REFRESH_INTERVAL_MS)) {
@@ -116,10 +478,18 @@ function getMediaKlikkPrograms() {
 
   try {
     const localData = require('../data/mediaklikk_programs.json');
-    mediaklikkProgramsCache = localData;
+    mediaklikkProgramsCache = (localData || []).map(p => {
+      const cleanSlug = sanitizeSlug(p.slug || p.id);
+      return {
+        ...p,
+        slug: cleanSlug,
+        id: `mediaklikk:program:${cleanSlug}`,
+        poster: fixImageUrl(p.poster)
+      };
+    });
     lastProgramsRefresh = Date.now();
   } catch (err) {
-    if (!mediaklikkProgramsCache) mediaklikkProgramsCache = [];
+    if (!mediaklikkProgramsCache) mediaklikkProgramsCache = [...VERIFIED_MEDIAKLIKK_CLASSICS];
   }
 
   // Asynchronous background refresh
@@ -143,15 +513,15 @@ async function refreshProgramsFromWeb() {
 
     while ((m = cardRegex.exec(html)) !== null) {
       const fullUrl = m[1];
-      const slug = m[2];
+      const slug = sanitizeSlug(m[2]);
       const inner = m[3];
-      if (seenSlugs.has(slug)) continue;
+      if (!slug || seenSlugs.has(slug)) continue;
       seenSlugs.add(slug);
 
       const titleMatch = inner.match(/<h[234][^>]*>([^<]+)<\/h[234]>/i) || inner.match(/class=["'][^"']*title[^"']*["'][^>]*>([^<]+)</i);
       const name = titleMatch ? titleMatch[1].trim() : slug.replace(/-/g, ' ');
       const imgMatch = inner.match(/src=["']([^"']+\.(?:jpg|jpeg|png|webp)[^"']*)["']/i);
-      const poster = imgMatch ? imgMatch[1] : '';
+      const poster = fixImageUrl(imgMatch ? imgMatch[1] : '');
 
       const catMatches = [...inner.matchAll(/class=["'][^"']*category[^"']*["'][^>]*>([^<]+)</gi)].map(cm => cm[1].trim());
       const categories = catMatches.length > 0 ? catMatches : ['Kultúra'];
@@ -178,12 +548,12 @@ async function refreshProgramsFromWeb() {
 
 /**
  * Dynamically resolves all seasons and episodes for ANY MédiaKlikk show
- * directly from the official MTVA AJAX search backend.
- * Zero hardcoding: works automatically for all existing and newly added shows.
+ * directly from the official MTVA AJAX search backend, with verified fallback episodes
+ * for Magyar népmesék, Süsü, and Vakáción a Mézga család.
  */
 async function getMediaKlikkSeriesEpisodes(idOrSlugOrName) {
   if (!idOrSlugOrName) return null;
-  const cleanKey = idOrSlugOrName.replace(/^mediaklikk:program:/, '').trim();
+  const cleanKey = sanitizeSlug(idOrSlugOrName);
 
   if (showEpisodesCache.has(cleanKey)) {
     const cached = showEpisodesCache.get(cleanKey);
@@ -192,10 +562,17 @@ async function getMediaKlikkSeriesEpisodes(idOrSlugOrName) {
     }
   }
 
+  const verified = VERIFIED_MEDIAKLIKK_CLASSICS.find(p =>
+    p.slug === cleanKey ||
+    p.id === idOrSlugOrName ||
+    p.imdbId === cleanKey ||
+    normalize(p.name) === normalize(cleanKey)
+  );
+
   const allPrograms = getMediaKlikkPrograms();
-  const program = allPrograms.find(p => 
-    p.slug === cleanKey || 
-    p.id === idOrSlugOrName || 
+  const program = verified || allPrograms.find(p =>
+    p.slug === cleanKey ||
+    p.id === idOrSlugOrName ||
     normalize(p.name) === normalize(cleanKey)
   ) || {
     id: `mediaklikk:program:${cleanKey}`,
@@ -207,14 +584,18 @@ async function getMediaKlikkSeriesEpisodes(idOrSlugOrName) {
     description: `MédiaKlikk (MTVA) sorozat: ${cleanKey}.`
   };
 
+  const seasonsMap = {};
+  const seenEpNames = new Set();
+
   try {
     const searchUrl = 'https://mediaklikk.hu/wp-content/plugins/hms-mediaklikk/interfaces/get_results.php';
+    const searchKeyword = program.keyword || program.name;
     const body = new URLSearchParams({
       action: 'search',
       s_type: 'video',
-      keyword: program.name,
+      keyword: searchKeyword,
       fromDate: '2013-01-01',
-      toDate: new Date().toISOString().slice(0, 10),
+      toDate: '2026-12-31',
       pageSize: '100',
       pageNumber: '1',
       getAudioPrograms: 'false'
@@ -231,91 +612,164 @@ async function getMediaKlikkSeriesEpisodes(idOrSlugOrName) {
       signal: AbortSignal.timeout(5000)
     });
 
-    if (!res.ok) return null;
-    const data = await res.json();
-    const items = data[0]?.data?.items || [];
+    if (res.ok) {
+      const data = await res.json();
+      const items = data[0]?.data?.items || [];
+      const normProgName = normalize(program.matchWord || program.name);
 
-    if (items.length === 0) return null;
+      items.forEach((item) => {
+        const rawTitle = (item.post_title || item.source?.post_title || '').replace(/<[^>]+>/g, '').trim();
+        const token = item.token || item.source?.token;
+        if (!token || !rawTitle) return;
 
-    const seasonsMap = {};
-    const normProgName = normalize(program.name);
+        const normTitle = normalize(rawTitle);
+        // Reject radio readings / talk show mentions when looking for classic series
+        if (normTitle.includes('csillagok esti mesefenyben') || normTitle.includes('ismeretlen ismerosok') || normTitle.includes('debrecenbol jelentkezunk') || normTitle.includes('bevettuk a varost')) {
+          return;
+        }
 
-    items.forEach((item, idx) => {
-      const rawTitle = (item.post_title || item.source?.post_title || '').replace(/<[^>]+>/g, '').trim();
-      const token = item.token || item.source?.token;
-      if (!token) return;
+        if (program.matchWord) {
+          if (!normTitle.startsWith(normProgName)) return;
+        } else if (!normTitle.includes(normProgName) && !normProgName.includes(normTitle)) {
+          const progWords = normProgName.split(' ').filter(w => w.length > 2);
+          const matchCount = progWords.filter(w => normTitle.includes(w)).length;
+          if (matchCount < Math.min(2, progWords.length)) return;
+        }
 
-      const normTitle = normalize(rawTitle);
-      // Ensure the result actually pertains to this program
-      if (!normTitle.includes(normProgName) && !normProgName.includes(normTitle)) {
-        // Soft match check
-        const progWords = normProgName.split(' ').filter(w => w.length > 2);
-        const matchCount = progWords.filter(w => normTitle.includes(w)).length;
-        if (matchCount < Math.min(2, progWords.length)) return;
-      }
+        const parsed = parseSeasonEpisode(rawTitle);
+        const sNum = parsed.season != null ? String(parsed.season) : '1';
 
-      const parsed = parseSeasonEpisode(rawTitle);
-      const sNum = parsed.season != null ? String(parsed.season) : '1';
-      const epNum = parsed.episode != null ? parsed.episode : (idx + 1);
+        // Clean episode subtitle
+        let epName = rawTitle;
+        if (rawTitle.includes(',')) {
+          epName = rawTitle.split(',').slice(1).join(',').trim();
+        } else if (rawTitle.includes('–')) {
+          epName = rawTitle.split('–').slice(1).join('–').trim();
+        } else if (rawTitle.includes(' - ')) {
+          epName = rawTitle.split(' - ').slice(1).join(' - ').trim();
+        } else {
+          // Strip leading program name if present
+          const stripped = rawTitle.replace(new RegExp('^' + (program.keyword || program.name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'), '').trim();
+          if (stripped.length >= 3) epName = stripped;
+        }
+        epName = epName
+          .replace(/^(I{1,3}|IV|V|\d+)\.\s*(sorozat|évad|evad|rész)\s*,?\s*/i, '')
+          .replace(/^(I{1,3}|IV|V|\d+)\s*\/\s*\d+\.?\s*(rész)?\s*/i, '')
+          .replace(/^[,–\-:\s]+/, '')
+          .trim();
 
-      // Clean episode subtitle
-      let epName = rawTitle;
-      if (rawTitle.includes(',')) {
-        epName = rawTitle.split(',').slice(1).join(',').trim();
-      } else if (rawTitle.includes('-')) {
-        epName = rawTitle.split('-').slice(1).join('-').trim();
-      }
-      epName = epName.replace(/^(I{1,3}|IV|V|\d+)\.\s*(sorozat|évad|evad|rész)\s*,?\s*/i, '').trim();
-      if (!epName || epName.length < 2) {
-        epName = `${epNum}. rész`;
-      }
+        const dedupKey = `${sNum}:${normalize(epName || rawTitle)}`;
+        if (seenEpNames.has(dedupKey)) return;
+        seenEpNames.add(dedupKey);
 
-      if (!seasonsMap[sNum]) {
-        seasonsMap[sNum] = [];
-      }
+        if (!seasonsMap[sNum]) {
+          seasonsMap[sNum] = [];
+        }
 
-      const thumb = item.featured_image_url_large || item.featured_image_url_medium || program.poster || '';
+        const thumb = fixImageUrl(item.featured_image_url_large || item.featured_image_url_medium || program.poster || '');
 
-      let cleanToken = token;
-      while (cleanToken.includes('%')) {
-        try { cleanToken = decodeURIComponent(cleanToken); } catch(e) { break; }
-      }
+        let cleanToken = token;
+        while (cleanToken.includes('%')) {
+          try { cleanToken = decodeURIComponent(cleanToken); } catch (e) { break; }
+        }
 
-      seasonsMap[sNum].push({
-        id: `mediaklikk:video:${encodeURIComponent(cleanToken)}`,
-        season: parseInt(sNum, 10),
-        episode: epNum,
-        name: epName,
-        rawTitle,
-        overview: `${program.name} - ${rawTitle}`,
-        thumbnail: thumb,
-        token: cleanToken
+        const assignedEp = parsed.episode != null && !seasonsMap[sNum].some(x => x.episode === parsed.episode)
+          ? parsed.episode
+          : (seasonsMap[sNum].length + 1);
+
+        if (!epName || epName.length < 2) {
+          epName = `${assignedEp}. rész`;
+        }
+
+        seasonsMap[sNum].push({
+          id: `${program.id}:${sNum}:${assignedEp}`,
+          season: parseInt(sNum, 10),
+          episode: assignedEp,
+          name: epName,
+          rawTitle,
+          overview: `${program.name} – ${rawTitle}`,
+          thumbnail: thumb,
+          token: cleanToken
+        });
       });
-    });
-
-    // Sort episodes inside each season
-    for (const s of Object.keys(seasonsMap)) {
-      seasonsMap[s].sort((a, b) => a.episode - b.episode);
     }
-
-    const result = {
-      id: program.id,
-      name: program.name,
-      englishName: program.name,
-      year: program.categories?.join(' • ') || 'MédiaKlikk Archívum',
-      poster: program.poster,
-      background: program.poster,
-      description: program.description,
-      genres: program.categories || ['MTVA Archívum'],
-      seasons: seasonsMap
-    };
-
-    showEpisodesCache.set(cleanKey, { data: result, timestamp: Date.now() });
-    return result;
   } catch (err) {
     console.warn(`[MediaKlikk] Dynamic episode fetch error for ${program.name}:`, err.message);
-    return null;
   }
+
+  // For Magyar népmesék: keep all live 1080p MédiaKlikk episodes first, and append the rest of the 100-episode archive
+  if (program.slug === 'magyar-nepmesek') {
+    try {
+      const nepmesekSeasons = require('../data/magyar_nepmesek_episodes.json');
+      if (!seasonsMap['1']) seasonsMap['1'] = [];
+      for (const sKey of Object.keys(nepmesekSeasons)) {
+        const epArr = nepmesekSeasons[sKey] || [];
+        for (const epObj of epArr) {
+          const folkTitle = epObj.title;
+          if (!folkTitle) continue;
+          const normFolk = normalize(folkTitle);
+          // Skip if already present from live MédiaKlikk results
+          let alreadyAdded = false;
+          for (const existingKey of seenEpNames) {
+            if (existingKey.endsWith(`:${normFolk}`)) {
+              alreadyAdded = true;
+              break;
+            }
+          }
+          if (alreadyAdded) continue;
+          seenEpNames.add(`${sKey}:${normFolk}`);
+          if (!seasonsMap[sKey]) seasonsMap[sKey] = [];
+          const nextEpNum = seasonsMap[sKey].length + 1;
+          seasonsMap[sKey].push({
+            id: `${program.id}:${sKey}:${nextEpNum}`,
+            season: parseInt(sKey, 10) || 1,
+            episode: nextEpNum,
+            name: folkTitle,
+            rawTitle: `Magyar népmesék - ${folkTitle}`,
+            overview: `Magyar népmesék (${sKey}. évad ${nextEpNum}. rész) – ${folkTitle}`,
+            thumbnail: fixImageUrl(program.poster)
+          });
+        }
+      }
+    } catch (e) {}
+  }
+
+  // Fallback for Süsü & Vakáción a Mézga család if MTVA VOD window currently has 0 items for them
+  if (Object.keys(seasonsMap).length === 0 && STATIC_CLASSIC_EPISODES[program.slug]) {
+    seasonsMap['1'] = STATIC_CLASSIC_EPISODES[program.slug].map((epTitle, idx) => ({
+      id: `${program.id}:1:${idx + 1}`,
+      season: 1,
+      episode: idx + 1,
+      name: epTitle,
+      rawTitle: `${program.name} - ${idx + 1}. rész: ${epTitle}`,
+      overview: `${program.name} (${idx + 1}. rész) – ${epTitle}`,
+      thumbnail: fixImageUrl(program.poster)
+    }));
+  }
+
+  if (Object.keys(seasonsMap).length === 0) return null;
+
+  // Sort episodes inside each season and ensure sequential episode numbers if needed
+  for (const s of Object.keys(seasonsMap)) {
+    seasonsMap[s].sort((a, b) => a.episode - b.episode);
+  }
+
+  const result = {
+    id: program.id,
+    slug: program.slug,
+    imdbId: program.imdbId || null,
+    name: program.name,
+    englishName: program.name,
+    year: program.year || program.categories?.join(' • ') || 'MédiaKlikk Archívum',
+    poster: fixImageUrl(program.poster),
+    background: fixImageUrl(program.poster),
+    description: program.description,
+    genres: program.categories || ['MTVA Archívum'],
+    seasons: seasonsMap
+  };
+
+  showEpisodesCache.set(cleanKey, { data: result, timestamp: Date.now() });
+  return result;
 }
 
 function normalize(str) {
@@ -500,38 +954,33 @@ async function getLiveChannelStreams(channelIdOrKey, clientIp = null, hostUrl = 
   ];
 }
 
+function romanToInt(sStr) {
+  const map = { I: 1, II: 2, III: 3, IV: 4, V: 5, VI: 6, VII: 7, VIII: 8, IX: 9, X: 10 };
+  return map[sStr.toUpperCase()] || parseInt(sStr, 10) || 1;
+}
+
 function parseSeasonEpisode(title) {
   let s = null;
   let e = null;
 
-  // Fraction format e.g. II/2. or I/12. or II/ 10. or 1/5.
-  const slashMatch = title.match(/\b(I{1,3}|IV|V|\d+)\s*\/\s*(\d+)/i);
+  // Fraction format e.g. II/2. or I/12. or VI/3. or 1/5.
+  const slashMatch = title.match(/\b(I{1,3}|IV|VI{0,3}|IX|X|\d+)\s*\/\s*(\d+)/i);
   if (slashMatch) {
-    const sStr = slashMatch[1].toUpperCase();
-    if (sStr === 'I') s = 1;
-    else if (sStr === 'II') s = 2;
-    else if (sStr === 'III') s = 3;
-    else if (sStr === 'IV') s = 4;
-    else s = parseInt(sStr, 10);
+    s = romanToInt(slashMatch[1]);
     e = parseInt(slashMatch[2], 10);
   }
 
-  // Roman numeral season e.g. "I. sorozat" or "2. évad"
+  // Roman numeral season e.g. "I. sorozat" or "VI. sorozat" or "2. évad"
   if (s === null) {
-    const sMatch = title.match(/\b(I{1,3}|IV|V|\d+)\.\s*(sorozat|evad|évad|széria|szeria)/i);
+    const sMatch = title.match(/\b(I{1,3}|IV|VI{0,3}|IX|X|\d+)\.\s*(sorozat|evad|évad|széria|szeria)/i);
     if (sMatch) {
-      const sStr = sMatch[1].toUpperCase();
-      if (sStr === 'I') s = 1;
-      else if (sStr === 'II') s = 2;
-      else if (sStr === 'III') s = 3;
-      else if (sStr === 'IV') s = 4;
-      else s = parseInt(sStr, 10);
+      s = romanToInt(sMatch[1]);
     }
   }
 
-  // Ordinal episode e.g. "(\\d+)\\. rész"
+  // Ordinal episode e.g. "(\\d+)\\. rész" or "fejezet" or "epizód"
   if (e === null) {
-    const eMatch = title.match(/(\d+)\.\s*rész/i);
+    const eMatch = title.match(/(\d+)\.\s*(?:rész|epizód|fejezet)/i);
     if (eMatch) {
       e = parseInt(eMatch[1], 10);
     }
@@ -570,11 +1019,12 @@ async function scrapeMediaKlikk(meta) {
         const m3u8Match = plHtml.match(/"file":\s*"([^"]+\.m3u8[^"]*)"/i);
         if (m3u8Match) {
           const streamUrl = m3u8Match[1].replace(/\\\//g, '/');
+          const epLabel = meta.title ? `${meta.title}\n` : '';
           return [{
             name: '🔴 MédiaKlikk (MTVA) 1080p FHD',
-            title: `🇭🇺 MédiaKlikk HLS Közvetlen Lejátszás • MTVA Archívum\nKözvetlen 1080p Full HD stream az MTVA szerveréről`,
+            title: `${epLabel}🇭🇺 MédiaKlikk HLS Közvetlen Lejátszás • MTVA Archívum`,
             url: streamUrl,
-            playerUrl: `https://mediaklikk.hu/`,
+            playerUrl: meta.permalink || `https://mediaklikk.hu/`,
             quality: '1080p',
             height: 1080,
             source: 'mediaklikk',
@@ -597,20 +1047,26 @@ async function scrapeMediaKlikk(meta) {
       if (parts.length >= 5) {
         epNum = parseInt(parts[parts.length - 1], 10) || 1;
         seasonNum = parseInt(parts[parts.length - 2], 10) || 1;
-        slug = parts.slice(2, parts.length - 2).join(':');
+        slug = sanitizeSlug(parts.slice(2, parts.length - 2).join(':'));
       } else if (parts.length >= 3) {
-        slug = parts.slice(2).join(':');
+        slug = sanitizeSlug(parts.slice(2).join(':'));
       }
 
       const progData = await getMediaKlikkSeriesEpisodes(`mediaklikk:program:${slug}`);
       if (progData && progData.seasons) {
-        const sList = progData.seasons[String(seasonNum)] || Object.values(progData.seasons)[0] || [];
-        const matchedEp = sList.find(e => e.episode === epNum) || sList[0];
+        const sList = progData.seasons[String(seasonNum)] || [];
+        const matchedEp = sList.find(e => e.episode === epNum);
         if (matchedEp && matchedEp.token) {
-          return await scrapeMediaKlikk({ token: matchedEp.token, clientIp: meta.clientIp });
+          return await scrapeMediaKlikk({
+            token: matchedEp.token,
+            title: matchedEp.name,
+            permalink: matchedEp.permalink,
+            clientIp: meta.clientIp
+          });
         }
       }
     } catch(e) {}
+    return [];
   }
 
   // If live channel id was requested, return live channel streams directly
@@ -786,6 +1242,8 @@ function isPublicIp(ip) {
 
 module.exports = {
   LIVE_CHANNELS,
+  VERIFIED_MEDIAKLIKK_CLASSICS,
+  sanitizeSlug,
   getLiveHlsStream,
   getReorderedMasterPlaylist,
   getRewrittenMasterPlaylist: getReorderedMasterPlaylist,

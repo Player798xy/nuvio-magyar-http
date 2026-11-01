@@ -412,29 +412,78 @@ async function getMediaMeta(type, rawId) {
   // Handle MédiaKlikk program episode IDs: mediaklikk:program:slug:season:episode
   if (id.startsWith('mediaklikk:program:')) {
     const parts = id.split(':');
-    const slug = parts[2] || '';
-    season = parts[3] && /^\d+$/.test(parts[3]) ? parseInt(parts[3], 10) : 1;
-    episode = parts[4] && /^\d+$/.test(parts[4]) ? parseInt(parts[4], 10) : 1;
-    
-    let progName = slug.replace(/-/g, ' ');
+    let rawSlug = parts[2] || '';
+    if (parts.length >= 5) {
+      season = parseInt(parts[parts.length - 2], 10) || 1;
+      episode = parseInt(parts[parts.length - 1], 10) || 1;
+      rawSlug = parts.slice(2, parts.length - 2).join(':');
+    } else {
+      season = parts[3] && /^\d+$/.test(parts[3]) ? parseInt(parts[3], 10) : 1;
+      episode = parts[4] && /^\d+$/.test(parts[4]) ? parseInt(parts[4], 10) : 1;
+    }
+
+    let slug = rawSlug;
+    let progName = rawSlug.replace(/-/g, ' ');
+    let imdbId = id;
+    let yearStr = '';
+    let epTitle = `${episode}. Rész`;
+    const searchTitles = [];
+
     try {
-      const { getMediaKlikkPrograms } = require('../scrapers/mediaklikk');
-      const allP = getMediaKlikkPrograms();
-      const p = allP.find(item => item.slug === slug || item.id === `mediaklikk:program:${slug}`);
-      if (p) progName = p.name;
-    } catch(e) {}
+      const {
+        sanitizeSlug,
+        VERIFIED_MEDIAKLIKK_CLASSICS,
+        getMediaKlikkPrograms,
+        getMediaKlikkSeriesEpisodes
+      } = require('../scrapers/mediaklikk');
+
+      slug = sanitizeSlug(rawSlug);
+      const verified = VERIFIED_MEDIAKLIKK_CLASSICS.find(
+        item => item.slug === slug || item.id === `mediaklikk:program:${slug}`
+      );
+      if (verified) {
+        progName = verified.name;
+        if (verified.imdbId) imdbId = verified.imdbId;
+        if (verified.year) {
+          const ym = String(verified.year).match(/\b(19\d\d|20\d\d)\b/);
+          if (ym) yearStr = ym[1];
+        }
+        if (verified.keyword) searchTitles.push(verified.keyword);
+      } else {
+        const allP = getMediaKlikkPrograms();
+        const p = allP.find(item => item.slug === slug || item.id === `mediaklikk:program:${slug}`);
+        if (p) progName = p.name;
+      }
+
+      const progData = await getMediaKlikkSeriesEpisodes(`mediaklikk:program:${slug}`);
+      if (progData && progData.seasons) {
+        const sList = progData.seasons[String(season)] || [];
+        const matchedEp = sList.find(e => e.episode === episode);
+        if (matchedEp && matchedEp.name) {
+          const cleanEp = matchedEp.name
+            .replace(/^\d+\.\s*(?:rész|epizód|fejezet)\s*[:\-–]\s*/i, '')
+            .trim();
+          if (cleanEp) epTitle = cleanEp;
+        }
+      }
+    } catch (e) {}
+
+    const baseName = progName.replace(/\s*\([^)]*\)\s*/g, '').trim();
+    const titlesList = [...new Set([baseName, progName, ...searchTitles].filter(Boolean))];
 
     const result = {
       id,
-      imdbId: id,
+      imdbId,
       slug,
       type: 'series',
-      englishTitle: progName,
-      hungarianTitle: progName,
-      year: '',
+      englishTitle: baseName,
+      hungarianTitle: baseName,
+      searchTitles: titlesList,
+      titles: titlesList,
+      year: yearStr,
       season,
       episode,
-      episodeTitle: `${episode}. Rész`
+      episodeTitle: epTitle
     };
     metaCache.set(cacheKey, result);
     return result;
