@@ -49,7 +49,7 @@ const ALL_SCRAPERS = [
 const DEFAULT_CONFIG = {
   sources: ALL_SCRAPERS.map(s => s.id),
   catalogs: CATALOG_DEFINITIONS.filter(c => c.defaultEnabled).map(c => c.id),
-  qualities: ['1080p', '720p', '480p'],
+  qualities: ['1080p', '720p', '480p', '360p'],
   maxResults: 25
 };
 
@@ -58,10 +58,11 @@ function parseConfig(configStr) {
   try {
     const decoded = Buffer.from(configStr, 'base64url').toString('utf-8');
     const parsed = JSON.parse(decoded);
+    const qualities = parsed.qualities || parsed.resolutions;
     return {
       sources: Array.isArray(parsed.sources) && parsed.sources.length ? parsed.sources : DEFAULT_CONFIG.sources,
       catalogs: Array.isArray(parsed.catalogs) && parsed.catalogs.length ? parsed.catalogs : DEFAULT_CONFIG.catalogs,
-      qualities: Array.isArray(parsed.qualities) && parsed.qualities.length ? parsed.qualities : DEFAULT_CONFIG.qualities,
+      qualities: Array.isArray(qualities) && qualities.length ? qualities : DEFAULT_CONFIG.qualities,
       maxResults: Number(parsed.maxResults) || DEFAULT_CONFIG.maxResults
     };
   } catch (e) {
@@ -73,8 +74,15 @@ function getManifest(config = {}) {
   let name = 'Magyar Streaming Pro (HU)';
   let desc = 'Magyar szinkronos filmek, sorozatok, mesék és élő TV csatornák 1080p & 720p minőségben (MédiaKlikk 490+ műsor + Élő TV, Videa, Indavideo, HDMozi, Filmvilág2, JobbMintATV, NetMozi, Filmezek, OnlineFilmek, DMDAMedia, MeseFilm, Videakid, Sorozatok.net).';
 
+  const badges = [];
   if (config.sources && Array.isArray(config.sources) && config.sources.length > 0 && config.sources.length < ALL_SCRAPERS.length) {
-    name = `Magyar Streaming Pro [${config.sources.length} forrás]`;
+    badges.push(`${config.sources.length} forrás`);
+  }
+  if (config.qualities && Array.isArray(config.qualities) && config.qualities.length > 0 && config.qualities.length < 4) {
+    badges.push(config.qualities.join('/'));
+  }
+  if (badges.length > 0) {
+    name = `Magyar Streaming Pro [${badges.join(' • ')}]`;
   }
 
   const hostUrl = config.hostUrl || process.env.HOST_URL || 'https://nuvio-magyar-http.vercel.app';
@@ -205,12 +213,29 @@ async function getStreams(type, rawId, config = {}) {
     });
   }
 
-  // Deduplicate by stream URL
+  // Deduplicate by stream URL and apply resolution filter
   const seenUrls = new Set();
   const uniqueStreams = [];
+  const activeQualities = config.qualities || config.resolutions;
+  const hasQualityFilter = Array.isArray(activeQualities) && activeQualities.length > 0 && activeQualities.length < 4;
+  const qualSet = hasQualityFilter ? new Set(activeQualities.map(q => String(q).toLowerCase())) : null;
+
   for (const s of allStreams) {
     if (!s || !s.url || seenUrls.has(s.url)) continue;
     seenUrls.add(s.url);
+
+    if (qualSet) {
+      const h = s.height || 0;
+      const qStr = String(s.quality || '').toLowerCase();
+      const nameStr = String(s.name || '');
+      let matches = false;
+      if (qualSet.has('1080p') && (h >= 1080 || qStr === '1080p' || nameStr.includes('1080'))) matches = true;
+      if (qualSet.has('720p') && ((h >= 720 && h < 1080) || qStr === '720p' || nameStr.includes('720'))) matches = true;
+      if (qualSet.has('480p') && ((h >= 480 && h < 720) || qStr === '480p' || nameStr.includes('480'))) matches = true;
+      if (qualSet.has('360p') && ((h > 0 && h < 480) || qStr === '360p' || nameStr.includes('360') || nameStr.includes('240'))) matches = true;
+      if (!matches) continue;
+    }
+
     uniqueStreams.push(s);
   }
 
