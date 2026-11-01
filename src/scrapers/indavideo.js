@@ -38,6 +38,7 @@ async function extractIndavideoStreams(embHash) {
     if (!data) return null;
 
     const title = data.title || '';
+    const duration = parseInt(data.length || '0', 10) || 0;
     const filesh = data.filesh || {};
     const videoFiles = [];
 
@@ -79,7 +80,7 @@ async function extractIndavideoStreams(embHash) {
     }
 
     streams.sort((a, b) => b.height - a.height);
-    return { title, streams };
+    return { title, duration, streams };
   } catch (err) {
     return null;
   }
@@ -148,8 +149,14 @@ async function scrapeIndavideo(meta) {
           const vData = await extractIndavideoStreams(embHash);
           if (!vData || !vData.streams || vData.streams.length === 0) return;
 
-          // Check title match
+          // Check duration (movies must be >= 40 mins, series episodes >= 8 mins)
           const isSeries = Boolean(meta.season);
+          if (vData.duration > 0) {
+            if (!isSeries && vData.duration < 2400) return;
+            if (isSeries && vData.duration < 480) return;
+          }
+
+          // Check title match
           if (!isTitleMatch(hu, vData.title, meta.year, isSeries)) {
             return;
           }

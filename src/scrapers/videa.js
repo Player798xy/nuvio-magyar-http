@@ -295,11 +295,13 @@ async function extractVideaStreams(vcode) {
   }
 }
 
-// Terms indicating music, clips, or trailers that should not be treated as a full feature
-const JUNK_TITLE_REGEX = /\b(filmzene|zene|soundtrack|ost|paródia|parodia|főcímdal|focimdal|trailer|előzetes|elozetes|párbaj|parbaj|interjú|interju|dán állami)\b/i;
+// Terms indicating music, clips, trailers, or sports/motorsport race broadcasts that should not be treated as a movie/series
+const JUNK_TITLE_REGEX = /\b(filmzene|zene|soundtrack|ost|paródia|parodia|főcímdal|focimdal|trailer|előzetes|elozetes|párbaj|parbaj|interjú|interju|dán állami|nagydíj|nagydij|időmérő|idomero|szabadedzés|szabadedzes|futam|sprintkvalifikáció|boxutca|forma-?1|formula-?1|gameplay|végigjátszás|vegigjatszas|összefoglaló|osszefoglalo)\b/i;
 
 function isTitleMatch(targetTitle, candidateTitle, targetYear, isSeries = false) {
   if (!targetTitle || !candidateTitle) return false;
+  if (JUNK_TITLE_REGEX.test(candidateTitle)) return false;
+
   const norm = (s) => s.toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9\s]/g, " ")
@@ -324,6 +326,15 @@ function isTitleMatch(targetTitle, candidateTitle, targetYear, isSeries = false)
         const tYear = parseInt(targetYear, 10);
         if (Math.abs(candYear - tYear) > 2) return false;
       }
+    }
+
+    // For ultra-short titles (e.g. "F1", "Up", "It"), require movie context or exact year so random F1 races/clips are rejected
+    if (normTarget.length <= 3) {
+      const hasWord = new RegExp("\\b" + normTarget + "\\b", "i").test(normCand);
+      if (!hasWord) return false;
+      const hasMovieCue = /\b(film|teljes|mozi|szinkron|szinkronos|magyarul|felirat|feliratos|hd|1080p|720p|brad pitt)\b/i.test(normCand);
+      const hasExactYear = targetYear && normCand.includes(String(targetYear));
+      return Boolean(hasMovieCue || hasExactYear || normCand === normTarget);
     }
   }
 
@@ -457,8 +468,18 @@ async function scrapeVidea(meta) {
         const category = m[2];
         const vid = m[3];
 
-        // Skip non-movie categories (e.g. zene, hirek, emberek-vlogok)
-        if (category === 'zene' || category === 'emberek-vlogok' || category === 'hirek-politika' || category === 'vicces') {
+        // Skip non-movie categories (e.g. sport, jarmuvek, jatek, zene, hirek, emberek-vlogok)
+        if (
+          category === 'zene' ||
+          category === 'emberek-vlogok' ||
+          category === 'hirek-politika' ||
+          category === 'vicces' ||
+          category === 'sport' ||
+          category === 'jarmuvek' ||
+          category === 'jatek' ||
+          category === 'allatok' ||
+          category === 'tudomany-technika'
+        ) {
           continue;
         }
 
