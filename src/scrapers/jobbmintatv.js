@@ -4,13 +4,12 @@
  */
 
 const {
-  extractVideaStreams,
-  isValidRuntime,
+  isTitleMatch,
   checkPageMetadata,
   extractCandidateYears
 } = require('./videa');
 const { extractIndavideoStreams } = require('./indavideo');
-const { extractOkRuStreams } = require('./filmezek');
+const { extractOkRuStreams, resolveVideaEmbed } = require('./filmezek');
 
 function normalize(str) {
   return (str || '')
@@ -27,12 +26,23 @@ async function scrapeJobbMintATV(meta) {
   const hu = meta.hungarianTitle || meta.englishTitle;
   if (!hu) return streams;
 
-  const searchTerms = [normalize(hu)];
+  const searchTerms = [];
+  const addTerm = (t) => {
+    const n = normalize(t);
+    if (n && n.length >= 2 && !searchTerms.includes(n)) searchTerms.push(n);
+  };
+  addTerm(hu);
+  const baseHu = hu.split(/[:\-–&]/)[0].trim();
+  if (baseHu && baseHu.length >= 3) addTerm(baseHu);
+
   if (meta.englishTitle && normalize(meta.englishTitle) !== normalize(hu)) {
-    searchTerms.push(normalize(meta.englishTitle));
+    addTerm(meta.englishTitle);
+    const baseEn = meta.englishTitle.split(/[:\-–&]/)[0].trim();
+    if (baseEn && baseEn.length >= 3) addTerm(baseEn);
   }
 
   const baseDomains = ['https://jobbmintatv.org', 'https://jobbmintatv.pro'];
+  const seenUrls = new Set();
 
   for (const term of searchTerms) {
     for (const baseDom of baseDomains) {
@@ -62,7 +72,6 @@ async function scrapeJobbMintATV(meta) {
 
         if (links.length === 0) continue;
 
-        // Find top matching candidate releases
         const normTarget = normalize(hu);
         const targetSlug = normTarget.replace(/\s+/g, '_');
         const targetYear = meta.year ? parseInt(meta.year, 10) : null;
@@ -75,6 +84,10 @@ async function scrapeJobbMintATV(meta) {
             if (candYears.length > 0 && !candYears.some(cy => Math.abs(cy - targetYear) <= 1)) {
               continue;
             }
+          }
+
+          if (!isTitleMatch(hu, item.title, meta.year, isSeries) && (!meta.englishTitle || !isTitleMatch(meta.englishTitle, item.title, meta.year, isSeries))) {
+            continue;
           }
 
           const normTitle = normalize(item.title);
@@ -106,7 +119,6 @@ async function scrapeJobbMintATV(meta) {
         await Promise.all(candidates.map(async (candidate) => {
           let targetUrl = candidate.url;
 
-          // If series, construct episode URL
           if (meta.season && meta.episode) {
             const s = meta.season;
             const e = meta.episode;
@@ -126,52 +138,55 @@ async function scrapeJobbMintATV(meta) {
             const pageHtml = await pageRes.text();
 
             // Verify IMDb ID and release year on candidate page so remakes (e.g. 1960 vs 2016) are never merged
-            const pageCheck = checkPageMetadata(pageHtml, meta);
-            if (!pageCheck.match) return;
+            if (!isSeries) {
+              const pageCheck = checkPageMetadata(pageHtml, meta);
+              if (!pageCheck.match) return;
+            }
 
             const iframes = [...pageHtml.matchAll(/<iframe[^>]+src=["']([^"']+)["']/gi)].map(m => m[1]);
+            const dataUrls = [...pageHtml.matchAll(/data-url=["']([^"']+)["']/gi)].map(m => m[1]);
+            const allEmbeds = [...new Set([...iframes, ...dataUrls])];
 
-            for (const ifr of iframes) {
+            for (const ifr of allEmbeds) {
               let iframeSrc = ifr.startsWith('//') ? 'https:' + ifr : ifr;
 
-              // 1. Videa embed -> decode direct MP4s
-              if (iframeSrc.includes('videa.hu/player?v=')) {
-                const vcodeMatch = iframeSrc.match(/v=([a-zA-Z0-9]{16})/);
-                if (vcodeMatch) {
-                  const vcode = vcodeMatch[1];
-                  const vData = await extractVideaStreams(vcode);
-                  if (vData && !isValidRuntime(vData.duration, meta)) continue;
-                  const vStreams = vData?.sources || [];
-                  for (const vs of vStreams) {
-                    const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
-                    streams.push({
-                      name: `[HU] JobbMintATV ${qualLabel}`,
-                      title: `${candidate.title}\n🇭🇺 JobbMintATV (Videa) • ${qualLabel} • Szinkron`,
-                      url: vs.url,
-                      quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
-                      height: vs.height,
-                      source: 'jobbmintatv',
-                      yearVerified: true
-                    });
-                  }
+              // 1. Videa embed (both v= and f=) -> decode direct MP4s
+              if (iframeSrc.includes('videa.hu')) {
+                const vStreams = await resolveVideaEmbed(iframeSrc);
+                for (const vs of vStreams) {
+                  if (vs.duration && vs.duration > 0 && vs.duration < (isSeries ? 480 : 2400)) continue;
+                  if (seenUrls.has(vs.url)) continue;
+                  seenUrls.add(vs.url);
+                  const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
+                  streams.push({
+                    name: `[HU] JobbMintATV (Videa) ${qualLabel}`,
+                    title: `${candidate.title}\n🇭🇺 JobbMintATV (Videa) • ${qualLabel} • Szinkron`,
+                    url: vs.url,
+                    quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
+                    height: vs.height,
+                    source: 'jobbmintatv',
+                    yearVerified: true
+                  });
                 }
               }
 
               // 2. Indavideo embed -> decode direct MP4s
-              if (iframeSrc.includes('embed.indavideo.hu/player/video/')) {
-                const ihashMatch = iframeSrc.match(/video\/([a-zA-Z0-9]+)/);
+              if (iframeSrc.includes('embed.indavideo.hu/player/video/') || iframeSrc.includes('indavideo.hu/video/')) {
+                const ihashMatch = iframeSrc.match(/video\/([a-zA-Z0-9_-]+)/);
                 if (ihashMatch) {
                   const ihash = ihashMatch[1];
                   const iData = await extractIndavideoStreams(ihash);
-                  if (iData && !isValidRuntime(iData.duration, meta)) continue;
+                  if (iData && iData.duration > 0 && iData.duration < (isSeries ? 480 : 2400)) continue;
                   const iStreams = iData?.streams || [];
                   for (const is of iStreams) {
+                    if (seenUrls.has(is.url)) continue;
+                    seenUrls.add(is.url);
                     const qualLabel = is.height >= 1080 ? '1080p FHD' : is.height >= 720 ? '720p HD' : `${is.height}p`;
                     streams.push({
                       name: `[HU] JobbMintATV (Inda) ${qualLabel}`,
                       title: `${candidate.title}\n🇭🇺 JobbMintATV (Indavideo) • ${qualLabel} • Szinkron`,
                       url: is.url,
-                      quality: is.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
+                      quality: is.height >= 1080 ? '1080p' : is.height >= 720 ? '720p' : '480p',
                       height: is.height,
                       source: 'jobbmintatv',
                       yearVerified: true
@@ -180,10 +195,15 @@ async function scrapeJobbMintATV(meta) {
                 }
               }
 
-              // 3. OK.ru embed -> decode direct MP4s / HLS
-              if (iframeSrc.includes('ok.ru/videoembed/')) {
+              // 3. OK.ru embed -> decode locked single-resolution HLS tracks & MP4 fallback
+              if (iframeSrc.includes('ok.ru/videoembed/') || iframeSrc.includes('ok.ru/video/')) {
                 const okStreams = await extractOkRuStreams(iframeSrc, 'JobbMintATV', meta);
-                streams.push(...okStreams);
+                for (const os of okStreams) {
+                  if (seenUrls.has(os.url)) continue;
+                  seenUrls.add(os.url);
+                  os.yearVerified = true;
+                  streams.push(os);
+                }
               }
             }
           } catch (e) {}

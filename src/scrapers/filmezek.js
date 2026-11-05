@@ -58,8 +58,9 @@ async function extractOkRuStreams(embedUrl, providerName = 'Filmezek', mediaMeta
     const meta = typeof rawMeta === 'string' ? JSON.parse(rawMeta) : rawMeta;
     const durationSec = parseInt(meta?.movie?.duration || '0', 10);
 
-    // Reject trailers, short clips, or wrong-runtime documentaries when mediaMeta has runtime
-    if (mediaMeta && durationSec > 0 && !isValidRuntime(durationSec, mediaMeta)) {
+    // Reject short trailers/clips (< 40 min for movies, < 8 min for series)
+    const isSeries = Boolean(mediaMeta?.season);
+    if (durationSec > 0 && durationSec < (isSeries ? 480 : 2400)) {
       return streams;
     }
 
@@ -78,6 +79,25 @@ async function extractOkRuStreams(embedUrl, providerName = 'Filmezek', mediaMeta
       sd: { label: '480p SD', height: 480 },
       low: { label: '360p', height: 360 },
       lowest: { label: '240p', height: 240 }
+    };
+
+    // Helper to resolve canonical 1080/720/480/360 height even for 2.39:1 widescreen (e.g. 1920x800, 1280x536)
+    const resolveTrackHeight = (line) => {
+      const qualMatch = line.match(/QUALITY=([a-z]+)/i);
+      const qKey = (qualMatch?.[1] || '').toLowerCase();
+      if (qualityMap[qKey]) return qualityMap[qKey].height;
+
+      const resMatch = line.match(/RESOLUTION=(\d+)x(\d+)/i);
+      if (resMatch) {
+        const w = parseInt(resMatch[1], 10);
+        const h = parseInt(resMatch[2], 10);
+        if (w >= 1900 || h >= 1000) return 1080;
+        if (w >= 1200 || h >= 700) return 720;
+        if (w >= 800 || h >= 450) return 480;
+        if (w >= 600 || h >= 340) return 360;
+        return h;
+      }
+      return 720;
     };
 
     const proxyHints = {
@@ -103,13 +123,9 @@ async function extractOkRuStreams(embedUrl, providerName = 'Filmezek', mediaMeta
           const tracks = [];
           for (let i = 0; i < lines.length; i++) {
             if (lines[i].startsWith('#EXT-X-STREAM-INF')) {
-              const resMatch = lines[i].match(/RESOLUTION=\d+x(\d+)/i);
-              const qualMatch = lines[i].match(/QUALITY=([a-z]+)/i);
               const nextLine = lines[i + 1];
               if (nextLine && !nextLine.startsWith('#')) {
-                const qKey = (qualMatch?.[1] || '').toLowerCase();
-                const qInfo = qualityMap[qKey];
-                const height = parseInt(resMatch?.[1] || '0', 10) || qInfo?.height || 720;
+                const height = resolveTrackHeight(lines[i]);
                 if (height < 360) continue;
                 const label = height >= 1080 ? '1080p FHD' : height >= 720 ? '720p HD' : height >= 480 ? '480p SD' : '360p';
                 const trackUrl = new URL(nextLine, meta.ondemandHls).toString();
@@ -139,7 +155,7 @@ async function extractOkRuStreams(embedUrl, providerName = 'Filmezek', mediaMeta
     }
 
     // 2. Secondary: Extract locked single-resolution HLS tracks from hlsManifestUrl (ct=8, `/video/index.m3u8`)
-    if (streams.length === 0 && meta.hlsManifestUrl) {
+    if (meta.hlsManifestUrl) {
       try {
         const hlsRes = await fetch(meta.hlsManifestUrl, {
           headers: reqHeaders,
@@ -151,13 +167,9 @@ async function extractOkRuStreams(embedUrl, providerName = 'Filmezek', mediaMeta
           const tracks = [];
           for (let i = 0; i < lines.length; i++) {
             if (lines[i].startsWith('#EXT-X-STREAM-INF')) {
-              const resMatch = lines[i].match(/RESOLUTION=\d+x(\d+)/i);
-              const qualMatch = lines[i].match(/QUALITY=([a-z]+)/i);
               const nextLine = lines[i + 1];
               if (nextLine && !nextLine.startsWith('#')) {
-                const qKey = (qualMatch?.[1] || '').toLowerCase();
-                const qInfo = qualityMap[qKey];
-                const height = parseInt(resMatch?.[1] || '0', 10) || qInfo?.height || 720;
+                const height = resolveTrackHeight(lines[i]);
                 if (height < 360) continue;
                 const label = height >= 1080 ? '1080p FHD' : height >= 720 ? '720p HD' : height >= 480 ? '480p SD' : '360p';
                 const baseTrackUrl = new URL(nextLine, meta.hlsManifestUrl).toString();
@@ -189,12 +201,13 @@ async function extractOkRuStreams(embedUrl, providerName = 'Filmezek', mediaMeta
       } catch (e) {}
     }
 
-    // 3. Fallback: Direct MP4 links (only if HLS tracks were unavailable, or for 720p/480p compatibility)
-    if (streams.length === 0 && Array.isArray(meta.videos)) {
+    // 3. Fallback: Direct MP4 links for any resolution height not already covered by HLS tracks
+    if (Array.isArray(meta.videos)) {
       for (const v of meta.videos) {
         if (!v.url || v.disallowed) continue;
         const q = qualityMap[v.name] || { label: v.name, height: 480 };
-        if (q.height < 360) continue;
+        if (q.height < 360 || seenTrackHeights.has(q.height)) continue;
+        seenTrackHeights.add(q.height);
         streams.push({
           name: `[HU] ${providerName} (OK.ru MP4) ${q.label}`,
           title: `${meta.movie?.title || 'Magyar Stream'}\n🇭🇺 ${providerName} • OK.ru ${q.label} MP4${durTag} • Szinkron`,
@@ -340,14 +353,18 @@ async function scrapeFilmezek(meta) {
         const iframes = [...pageHtml.matchAll(/<iframe[^>]+src=["']([^"']+)["']/g)].map(m => m[1]);
         const allEmbeds = [...new Set([...dataUrls, ...iframes])];
 
-        // Resolve Videa embeds first (direct MP4, fastest), then OK.ru HLS tracks
-        const videaEmbeds = allEmbeds.filter(e => e.includes('videa.hu'));
-        const okEmbeds = allEmbeds.filter(e => e.includes('ok.ru/videoembed/') || e.includes('ok.ru/video/'));
+        // Resolve Videa embeds and OK.ru HLS tracks in parallel for speed
+        const videaEmbeds = allEmbeds.filter(e => e.includes('videa.hu')).slice(0, 4);
+        const okEmbeds = allEmbeds.filter(e => e.includes('ok.ru/videoembed/') || e.includes('ok.ru/video/')).slice(0, 5);
 
-        for (const embed of videaEmbeds) {
-          const vSources = await resolveVideaEmbed(embed);
+        const [videaResults, okResults] = await Promise.all([
+          Promise.all(videaEmbeds.map(embed => resolveVideaEmbed(embed).catch(() => []))),
+          Promise.all(okEmbeds.map(embed => extractOkRuStreams(embed, 'Filmezek', meta).catch(() => [])))
+        ]);
+
+        for (const vSources of videaResults) {
           for (const vs of vSources) {
-            if (!isValidRuntime(vs.duration, meta)) continue;
+            if (vs.duration && vs.duration > 0 && vs.duration < (isSeries ? 480 : 2400)) continue;
             if (seenUrls.has(vs.url)) continue;
             seenUrls.add(vs.url);
 
@@ -365,8 +382,7 @@ async function scrapeFilmezek(meta) {
           }
         }
 
-        for (const embed of okEmbeds.slice(0, 3)) {
-          const okStreams = await extractOkRuStreams(embed, 'Filmezek', meta);
+        for (const okStreams of okResults) {
           for (const os of okStreams) {
             if (seenUrls.has(os.url)) continue;
             seenUrls.add(os.url);
