@@ -168,6 +168,8 @@ A publikus Vercel szerveren 8 forrás (Videa, JobbMintATV, Filmezek, Filmvilág2
 - **GitHub Repo & Dokumentáció:** https://github.com/Player798xy/nuvio-magyar-http
 
 Visszajelzéseket, ötleteket és hibajelentéseket szívesen fogadok! Jó filmezést! 🍿
+
+*(Jogi nyilatkozat: Ez a kiegészítő nem tárol, nem tölt fel és nem hosztol semmilyen médiafájlt; kizárólag nyilvánosan elérhető külső weboldalak hivatkozásait indexeli keresőmotorként, oktatási és kutatási célból. A fejlesztő semmilyen felelősséget nem vállal a külső tartalmakért vagy esetleges hibákért.)*
 ```
 </details>
 
@@ -180,3 +182,22 @@ Visszajelzéseket, ötleteket és hibajelentéseket szívesen fogadok! Jó filme
 - [`src/utils/crypto_decoders.js`](src/utils/crypto_decoders.js) — RC4, AES-128-CBC (`rpmshare`), FNV-1a (`NetMozi`), `hunter` (`Sorozatok.net`) és `VOE` (`extractVoeDirectStreams`) dekóderek.
 - [`src/scrapers/`](src/scrapers/) — A 13 önálló magyar forrás-modul (`videa.js`, `jobbmintatv.js`, `filmezek.js`, `filmvilag.js`, `mesefilm.js`, `videakid.js`, `indavideo.js`, `mediaklikk.js`, `netmozi.js`, `onlinefilmek.js`, `sorozatok_net.js`, `hdmozi.js`, `dmdamedia.js`).
 - [`vercel.json`](vercel.json) — Európai (`fra1` Frankfurt) Serverless konfiguráció és gyorsítótár-szabályok.
+
+---
+
+## ⚖️ 9. Jogi Nyilatkozat és Felelősségkizárás (Legal Disclaimer)
+
+> **⚠️ FONTOS FIGYELMEZTETÉS – KÉRJÜK, OLVASD EL HASZNÁLAT ELŐTT!**
+
+1. **Nem hosztolunk semmilyen tartalmat (No Hosting of Media):**
+   Ez a projekt és a hozzá tartozó szerver **nem tárol, nem hosztol, nem tölt fel, nem streamel és nem terjeszt** semmilyen videófájlt, médiaállományt vagy szerzőiek által védett tartalmat. A kiegészítő kizárólag egy automatizált technikai keresőmotor (indexelő eszköz), amely az interneten már nyilvánosan elérhető, harmadik fél által üzemeltetett weboldalakon (*Videa, Indavideo, OK.ru, MédiaKlikk stb.*) található hivatkozásokat gyűjti össze.
+2. **Külső szolgáltatókért való felelősség kizárása:**
+   A fejlesztőnek nincs semmilyen ráhatása vagy ellenőrzése a külső weboldalakon elérhető tartalmakra, azok minőségére, pontosságára, elérhetőségére vagy jogszerűségére. Minden megtalált videóért és adatért kizárólag az adott külső tárhelyszolgáltató és a tartalom feltöltője felelős.
+3. **Garancia és felelősség teljes kizárása („AS IS”):**
+   A szoftver kizárólag **oktatási, tanulmányi és hobbi-fejlesztési célból** készült, és **„AHOGY VAN” (`AS IS`)** állapotban kerül közreadásra, bármiféle kifejezett vagy hallgatólagos garancia nélkül. **A fejlesztő semmilyen felelősséget nem vállal** a szoftver működési hibáiért, pontatlan találatokért, leállásokért, adatvesztésért, illetve semmilyen közvetlen vagy közvetett kárért vagy jogi következményért, amely a kiegészítő használatából ered.
+4. **Felhasználói felelősség:**
+   A kiegészítőt mindenki **kizárólag saját felelősségére** használja. A felhasználó köteles betartani a saját országában érvényes jogszabályokat, valamint az érintett harmadik fél weboldalak felhasználási feltételeit.
+
+### 🌐 English Summary (Disclaimer)
+- **No Content Hosted:** This repository and addon **do not host, store, upload, or distribute** any video files or copyrighted media. It functions strictly as a client/server-side metadata and link scraper (similar to a search engine) that indexes publicly accessible URLs on third-party websites.
+- **No Liability ("AS IS"):** This project is provided strictly for **educational and personal research purposes** on an **"AS IS"** basis without warranties of any kind. The author/developer assumes **zero responsibility or liability** for any bugs, errors, broken streams, inaccurate matches, third-party content, misuse, or any damages arising from the use of this software. Use entirely at your own risk.
