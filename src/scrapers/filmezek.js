@@ -1,6 +1,6 @@
 /**
  * Filmezek.com Scraper
- * Extracts direct Videa, OK.ru, and third-party hoster streams from filmezek.com movies & series.
+ * Uses Filmezek's fast JSON autocomplete API (searchinput.php) and extracts Videa/OK.ru direct streams.
  */
 
 const {
@@ -11,126 +11,253 @@ const {
   checkPageMetadata
 } = require('./videa');
 
-async function extractOkRuStreams(embedUrl, srcName = 'Filmezek') {
+const OKRU_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)';
+
+/**
+ * Extracts smooth, non-buffering HLS track playlists & direct MP4 streams from OK.ru embed URLs.
+ *
+ * Why OK.ru previously buffered every 5 seconds:
+ * 1. OK.ru's progressive MP4 URLs (ct=0, meta.videos) include `&pr=10` in the HMAC signature, which
+ *    throttles a single long-lived TCP connection after the initial 10-second burst (~0.5-1.1 MB/s).
+ * 2. OK.ru's master HLS playlist (`video.m3u8` / `ondemandHls`) puts 144p/480p first, causing ExoPlayer/Nuvio
+ *    to switch resolution and flush the decoder every 5 seconds.
+ * 3. Solution: Extract the locked single-resolution HLS sub-playlists (`.../fn/track.m3u8` and
+ *    `.../type/5/.../video/index.m3u8`). Each 3-9s `.ts` segment is fetched as a separate HTTP request
+ *    that receives the full unthrottled burst speed (5-9 MB/s) while locking resolution from second 0.
+ */
+async function extractOkRuStreams(embedUrl, providerName = 'Filmezek', mediaMeta = null) {
+  const streams = [];
   try {
-    const res = await fetch(embedUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-      signal: AbortSignal.timeout(5000)
+    let url = embedUrl;
+    if (url.startsWith('//')) url = 'https:' + url;
+
+    const reqHeaders = {
+      'User-Agent': OKRU_UA,
+      'Referer': 'https://ok.ru/'
+    };
+    if (mediaMeta?.clientIp) {
+      reqHeaders['X-Forwarded-For'] = mediaMeta.clientIp;
+      reqHeaders['X-Real-IP'] = mediaMeta.clientIp;
+    }
+
+    const res = await fetch(url, {
+      headers: reqHeaders,
+      signal: AbortSignal.timeout(6000)
     });
-    if (!res.ok) return [];
+    if (!res.ok) return streams;
 
     const html = await res.text();
-    const match = html.match(/data-options=["']([^"']+)["']/);
-    if (!match) return [];
+    const match = html.match(/data-options="([^"]+)"/);
+    if (!match) return streams;
 
-    const rawJson = match[1].replace(/&quot;/g, '"');
-    const data = JSON.parse(rawJson);
-    const meta = typeof data.flashvars?.metadata === 'string'
-      ? JSON.parse(data.flashvars.metadata)
-      : data.flashvars?.metadata;
+    const decoded = match[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+    const opts = JSON.parse(decoded);
+    const rawMeta = opts?.flashvars?.metadata;
+    if (!rawMeta) return streams;
 
-    if (!meta) return [];
+    const meta = typeof rawMeta === 'string' ? JSON.parse(rawMeta) : rawMeta;
+    const durationSec = parseInt(meta?.movie?.duration || '0', 10);
 
-    const streams = [];
-    if (Array.isArray(meta.videos)) {
-      for (const v of meta.videos) {
-        let height = 480;
-        let qLabel = '480p';
-        const vName = (v.name || '').toLowerCase();
-        if (vName === 'ultra' || vName === 'quad' || vName === 'full' || vName === 'fhd' || vName.includes('1080')) {
-          height = 1080;
-          qLabel = '1080p FHD';
-        } else if (vName === 'hd' || vName.includes('720')) {
-          height = 720;
-          qLabel = '720p HD';
-        } else if (vName === 'sd' || vName.includes('480')) {
-          height = 480;
-          qLabel = '480p SD';
-        } else {
-          height = 360;
-          qLabel = '360p';
+    // Reject trailers, short clips, or wrong-runtime documentaries when mediaMeta has runtime
+    if (mediaMeta && durationSec > 0 && !isValidRuntime(durationSec, mediaMeta)) {
+      return streams;
+    }
+
+    const durationMins = durationSec > 0 ? Math.round(durationSec / 60) : 0;
+    const durTag = durationMins > 0 ? ` • ${durationMins} perc` : '';
+    const seenTrackHeights = new Set();
+
+    const qualityMap = {
+      ultra: { label: '4K UHD', height: 2160 },
+      quad: { label: '1440p QHD', height: 1440 },
+      fullhd: { label: '1080p FHD', height: 1080 },
+      full: { label: '1080p FHD', height: 1080 },
+      high: { label: '720p HD', height: 720 },
+      hd: { label: '720p HD', height: 720 },
+      medium: { label: '480p SD', height: 480 },
+      sd: { label: '480p SD', height: 480 },
+      low: { label: '360p', height: 360 },
+      lowest: { label: '240p', height: 240 }
+    };
+
+    const proxyHints = {
+      notWebReady: false,
+      proxyHeaders: {
+        request: {
+          'User-Agent': OKRU_UA,
+          'Referer': 'https://ok.ru/'
         }
+      }
+    };
 
+    // 1. Primary: Extract locked single-resolution HLS tracks from ondemandHls (ct=28, 3s segments, zero throttling)
+    if (meta.ondemandHls) {
+      try {
+        const hlsRes = await fetch(meta.ondemandHls, {
+          headers: reqHeaders,
+          signal: AbortSignal.timeout(4500)
+        });
+        if (hlsRes.ok) {
+          const masterTxt = await hlsRes.text();
+          const lines = masterTxt.split('\n').map(l => l.trim()).filter(Boolean);
+          const tracks = [];
+          for (let i = 0; i < lines.length; i++) {
+            if (lines[i].startsWith('#EXT-X-STREAM-INF')) {
+              const resMatch = lines[i].match(/RESOLUTION=\d+x(\d+)/i);
+              const qualMatch = lines[i].match(/QUALITY=([a-z]+)/i);
+              const nextLine = lines[i + 1];
+              if (nextLine && !nextLine.startsWith('#')) {
+                const qKey = (qualMatch?.[1] || '').toLowerCase();
+                const qInfo = qualityMap[qKey];
+                const height = parseInt(resMatch?.[1] || '0', 10) || qInfo?.height || 720;
+                if (height < 360) continue;
+                const label = height >= 1080 ? '1080p FHD' : height >= 720 ? '720p HD' : height >= 480 ? '480p SD' : '360p';
+                const trackUrl = new URL(nextLine, meta.ondemandHls).toString();
+                tracks.push({ height, label, trackUrl });
+              }
+            }
+          }
+          tracks.sort((a, b) => b.height - a.height);
+          for (const tr of tracks) {
+            if (seenTrackHeights.has(tr.height)) continue;
+            seenTrackHeights.add(tr.height);
+            streams.push({
+              name: `[HU] ${providerName} (OK.ru) ${tr.label}`,
+              title: `${meta.movie?.title || 'Magyar Stream'}\n🇭🇺 ${providerName} • OK.ru Fix ${tr.label} HLS${durTag} • Szinkron`,
+              url: tr.trackUrl,
+              quality: tr.height >= 1080 ? '1080p' : tr.height >= 720 ? '720p' : '480p',
+              height: tr.height,
+              source: providerName.toLowerCase(),
+              behaviorHints: {
+                ...proxyHints,
+                bingeGroup: `hu-${providerName.toLowerCase()}-okru-hls-${tr.height}`
+              }
+            });
+          }
+        }
+      } catch (e) {}
+    }
+
+    // 2. Secondary: Extract locked single-resolution HLS tracks from hlsManifestUrl (ct=8, `/video/index.m3u8`)
+    if (streams.length === 0 && meta.hlsManifestUrl) {
+      try {
+        const hlsRes = await fetch(meta.hlsManifestUrl, {
+          headers: reqHeaders,
+          signal: AbortSignal.timeout(4500)
+        });
+        if (hlsRes.ok) {
+          const masterTxt = await hlsRes.text();
+          const lines = masterTxt.split('\n').map(l => l.trim()).filter(Boolean);
+          const tracks = [];
+          for (let i = 0; i < lines.length; i++) {
+            if (lines[i].startsWith('#EXT-X-STREAM-INF')) {
+              const resMatch = lines[i].match(/RESOLUTION=\d+x(\d+)/i);
+              const qualMatch = lines[i].match(/QUALITY=([a-z]+)/i);
+              const nextLine = lines[i + 1];
+              if (nextLine && !nextLine.startsWith('#')) {
+                const qKey = (qualMatch?.[1] || '').toLowerCase();
+                const qInfo = qualityMap[qKey];
+                const height = parseInt(resMatch?.[1] || '0', 10) || qInfo?.height || 720;
+                if (height < 360) continue;
+                const label = height >= 1080 ? '1080p FHD' : height >= 720 ? '720p HD' : height >= 480 ? '480p SD' : '360p';
+                const baseTrackUrl = new URL(nextLine, meta.hlsManifestUrl).toString();
+                const trackUrl = baseTrackUrl.endsWith('.m3u8')
+                  ? baseTrackUrl
+                  : `${baseTrackUrl.replace(/\/?$/, '/')}index.m3u8`;
+                tracks.push({ height, label, trackUrl });
+              }
+            }
+          }
+          tracks.sort((a, b) => b.height - a.height);
+          for (const tr of tracks) {
+            if (seenTrackHeights.has(tr.height)) continue;
+            seenTrackHeights.add(tr.height);
+            streams.push({
+              name: `[HU] ${providerName} (OK.ru) ${tr.label}`,
+              title: `${meta.movie?.title || 'Magyar Stream'}\n🇭🇺 ${providerName} • OK.ru Fix ${tr.label} HLS${durTag} • Szinkron`,
+              url: tr.trackUrl,
+              quality: tr.height >= 1080 ? '1080p' : tr.height >= 720 ? '720p' : '480p',
+              height: tr.height,
+              source: providerName.toLowerCase(),
+              behaviorHints: {
+                ...proxyHints,
+                bingeGroup: `hu-${providerName.toLowerCase()}-okru-hls-${tr.height}`
+              }
+            });
+          }
+        }
+      } catch (e) {}
+    }
+
+    // 3. Fallback: Direct MP4 links (only if HLS tracks were unavailable, or for 720p/480p compatibility)
+    if (streams.length === 0 && Array.isArray(meta.videos)) {
+      for (const v of meta.videos) {
+        if (!v.url || v.disallowed) continue;
+        const q = qualityMap[v.name] || { label: v.name, height: 480 };
+        if (q.height < 360) continue;
         streams.push({
-          name: `[HU] ${srcName} (OK.ru) ${qLabel}`,
-          title: `${srcName} • OK.ru ${qLabel} • Magyar Szinkron`,
+          name: `[HU] ${providerName} (OK.ru MP4) ${q.label}`,
+          title: `${meta.movie?.title || 'Magyar Stream'}\n🇭🇺 ${providerName} • OK.ru ${q.label} MP4${durTag} • Szinkron`,
           url: v.url,
-          quality: height >= 1080 ? '1080p' : height >= 720 ? '720p' : '480p',
-          height,
-          source: srcName.toLowerCase()
+          quality: q.height >= 1080 ? '1080p' : q.height >= 720 ? '720p' : '480p',
+          height: q.height,
+          source: providerName.toLowerCase(),
+          behaviorHints: {
+            ...proxyHints,
+            bingeGroup: `hu-${providerName.toLowerCase()}-okru-mp4-${q.height}`
+          }
         });
       }
     }
-
-    if (meta.hlsManifestUrl) {
-      streams.push({
-        name: `[HU] ${srcName} (OK.ru) Auto HLS`,
-        title: `${srcName} • OK.ru Multi-Quality HLS • Magyar Szinkron`,
-        url: meta.hlsManifestUrl,
-        quality: '720p',
-        height: 720,
-        source: srcName.toLowerCase()
-      });
-    }
-
-    return streams;
-  } catch (err) {
-    return [];
+  } catch (e) {
+    // Ignore error
   }
+  return streams;
 }
 
 /**
- * Resolves a Videa embed URL to direct stream sources.
- * Handles ?v=16char, /videok/.*-16char, ?f=fcode, and iframe players.
+ * Extracts Videa streams from any Videa embed URL (supports both v= and f= formats)
  */
 async function resolveVideaEmbed(embedUrl) {
-  const cleanUrl = embedUrl.replace(/&amp;/g, '&');
+  let clean = embedUrl.replace(/&amp;/g, '&');
+  if (clean.startsWith('//')) clean = 'https:' + clean;
 
-  // 1. Check direct 16-character vcode in query parameter (?v=... or &v=...)
-  const vParam = cleanUrl.match(/[?&]v=([A-Za-z0-9]{16})/);
-  if (vParam) {
-    try {
-      const vData = await extractVideaStreams(vParam[1]);
-      if (vData?.sources?.length) return vData.sources;
-    } catch (e) {}
+  // 1. Check standard v=<16-char-vcode> or /videok/...-<16-char-vcode>
+  const vMatch = clean.match(/(?:[?&]v=|[-/])([a-zA-Z0-9]{16})(?:[?&#]|$)/);
+  if (vMatch) {
+    const data = await extractVideaStreams(vMatch[1]);
+    if (data && data.sources && data.sources.length > 0) {
+      return data.sources;
+    }
   }
 
-  // 2. Check /videok/.*-16char
-  const pathMatch = cleanUrl.match(/\/videok\/.*-([A-Za-z0-9]{16})/);
-  if (pathMatch) {
-    try {
-      const vData = await extractVideaStreams(pathMatch[1]);
-      if (vData?.sources?.length) return vData.sources;
-    } catch (e) {}
+  // 2. Check f=<fcode> format (e.g. f=8.2720056.2191928.0)
+  const fMatch = clean.match(/[?&]f=([0-9.]+)/);
+  if (fMatch) {
+    const fData = await extractVideaFCodeStreams(fMatch[1]);
+    if (fData && fData.sources && fData.sources.length > 0) {
+      return fData.sources;
+    }
   }
 
-  // 3. Check ?f=fcode (e.g. ?f=8.3068504.1958019.0)
-  const fParam = cleanUrl.match(/[?&]f=([^&"'\s>]+)/);
-  if (fParam) {
-    const fcode = decodeURIComponent(fParam[1]);
-    try {
-      const fData = await extractVideaFCodeStreams(fcode);
-      if (fData?.sources?.length) return fData.sources;
-    } catch (e) {}
-  }
-
-  // 4. Fetch player HTML to extract internal vcode or fallback sources
-  if (cleanUrl.includes('videa.hu/player')) {
-    try {
-      const resp = await fetch(cleanUrl, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-        signal: AbortSignal.timeout(4000)
-      });
-      if (resp.ok) {
-        const html = await resp.text();
-        const vcodeMatch = html.match(/vcode\s*=\s*["']([A-Za-z0-9]{16})["']/);
-        if (vcodeMatch) {
-          const vData = await extractVideaStreams(vcodeMatch[1]);
-          if (vData?.sources?.length) return vData.sources;
-        }
+  // 3. Fallback: fetch the player HTML and look for canonical vcode inside
+  try {
+    const res = await fetch(clean, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        'Referer': 'https://filmezek.com/'
+      },
+      signal: AbortSignal.timeout(5000)
+    });
+    if (res.ok) {
+      const html = await res.text();
+      const canonicalMatch = html.match(/[-/]([a-zA-Z0-9]{16})(?:["'?&#]|$)/);
+      if (canonicalMatch) {
+        const data = await extractVideaStreams(canonicalMatch[1]);
+        if (data && data.sources) return data.sources;
       }
-    } catch (e) {}
-  }
+    }
+  } catch (e) {}
 
   return [];
 }
@@ -213,40 +340,38 @@ async function scrapeFilmezek(meta) {
         const iframes = [...pageHtml.matchAll(/<iframe[^>]+src=["']([^"']+)["']/g)].map(m => m[1]);
         const allEmbeds = [...new Set([...dataUrls, ...iframes])];
 
-        for (const embed of allEmbeds) {
-          // A. Videa embed
-          if (embed.includes('videa.hu')) {
-            const vSources = await resolveVideaEmbed(embed);
-            for (const vs of vSources) {
-              if (!isValidRuntime(vs.duration, meta)) continue;
-              if (seenUrls.has(vs.url)) continue;
-              seenUrls.add(vs.url);
+        // Resolve Videa embeds first (direct MP4, fastest), then OK.ru HLS tracks
+        const videaEmbeds = allEmbeds.filter(e => e.includes('videa.hu'));
+        const okEmbeds = allEmbeds.filter(e => e.includes('ok.ru/videoembed/') || e.includes('ok.ru/video/'));
 
-              const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
-              streams.push({
-                name: `[HU] Filmezek (Videa) ${qualLabel}`,
-                title: `${matchingItem.MovieTitle}\n🇭🇺 Filmezek.com (Videa) • ${qualLabel} • Szinkron`,
-                url: vs.url,
-                quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
-                height: vs.height,
-                source: 'filmezek',
-                yearVerified: true,
-                behaviorHints: { bingeGroup: `hu-filmezek-videa-${qualLabel}` }
-              });
-            }
-            continue;
+        for (const embed of videaEmbeds) {
+          const vSources = await resolveVideaEmbed(embed);
+          for (const vs of vSources) {
+            if (!isValidRuntime(vs.duration, meta)) continue;
+            if (seenUrls.has(vs.url)) continue;
+            seenUrls.add(vs.url);
+
+            const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
+            streams.push({
+              name: `[HU] Filmezek (Videa) ${qualLabel}`,
+              title: `${matchingItem.MovieTitle}\n🇭🇺 Filmezek.com (Videa) • ${qualLabel} • Szinkron`,
+              url: vs.url,
+              quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
+              height: vs.height,
+              source: 'filmezek',
+              yearVerified: true,
+              behaviorHints: { bingeGroup: `hu-filmezek-videa-${qualLabel}` }
+            });
           }
+        }
 
-          // B. OK.ru embed
-          if (embed.includes('ok.ru/videoembed/') || embed.includes('ok.ru/video/')) {
-            const okStreams = await extractOkRuStreams(embed, 'Filmezek');
-            for (const os of okStreams) {
-              if (seenUrls.has(os.url)) continue;
-              seenUrls.add(os.url);
-              os.yearVerified = true;
-              streams.push(os);
-            }
-            continue;
+        for (const embed of okEmbeds.slice(0, 3)) {
+          const okStreams = await extractOkRuStreams(embed, 'Filmezek', meta);
+          for (const os of okStreams) {
+            if (seenUrls.has(os.url)) continue;
+            seenUrls.add(os.url);
+            os.yearVerified = true;
+            streams.push(os);
           }
         }
 

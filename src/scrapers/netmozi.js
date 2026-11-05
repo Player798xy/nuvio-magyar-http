@@ -1,3 +1,4 @@
+const { extractVoeDirectStreams } = require('../utils/crypto_decoders');
 /**
  * NetMozi Scraper (Kodi NetMozi Addon Port for Nuvio & Stremio)
  * Scrapes netmozi.com with full Cloudflare TLS bypass (OP_NO_TICKET) and linkpayload unpacking.
@@ -654,6 +655,13 @@ async function searchAndScrapeNetMozi(cleanTitle, targetYear, isSeries, season, 
             return;
           }
         }
+        if (locLower.includes('voe.sx') || locLower.includes('voe.')) {
+          const voeStreams = await extractVoeDirectStreams(loc, 'NetMozi', cleanTitle, 'netmozi');
+          if (voeStreams.length > 0) {
+            streams.push(...voeStreams);
+            return;
+          }
+        }
       } catch (err) {
         // Individual route failed
       }
@@ -912,6 +920,13 @@ async function scrapeNetMoziDetailPage(targetPageUrl, cleanTitle, clientIp = nul
           const okStreams = await extractOkRuStreams(loc, 'NetMozi');
           if (okStreams.length > 0) {
             streams.push(...okStreams);
+            return;
+          }
+        }
+        if (locLower.includes('voe.sx') || locLower.includes('voe.')) {
+          const voeStreams = await extractVoeDirectStreams(loc, 'NetMozi', cleanTitle, 'netmozi');
+          if (voeStreams.length > 0) {
+            streams.push(...voeStreams);
             return;
           }
         }

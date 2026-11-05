@@ -1,3 +1,4 @@
+const { extractVoeDirectStreams } = require('../utils/crypto_decoders');
 /**
  * OnlineFilmekIngyen1.com Scraper
  * Uses DooPlay search, REST API (dooplayer/v2) and AJAX player options to resolve video sources (Videa, VOE, Filemoon, etc.).
@@ -234,7 +235,7 @@ async function scrapeOnlineFilmek(meta) {
         });
         if (wpRes.ok) {
           const wpHtml = await wpRes.text();
-          const resultBlocks = [...wpHtml.matchAll(/<div class="result-item">([\s\S]*?)<\/article>/gi)];
+          const resultBlocks = [...wpHtml.matchAll(/<article[^>]*>([\s\S]*?)<\/article>/gi)];
           const targetYear = meta.year ? parseInt(meta.year, 10) : null;
           for (const rb of resultBlocks) {
             const blockHtml = rb[1];
@@ -340,8 +341,15 @@ async function scrapeOnlineFilmek(meta) {
 
         // 3. Check if OK.ru embed -> decode to direct MP4/HLS
         if (embedUrl.includes('ok.ru/videoembed/') || embedUrl.includes('ok.ru/video/')) {
-          const okStreams = await extractOkRuStreams(embedUrl, 'OnlineFilmek');
+          const okStreams = await extractOkRuStreams(embedUrl, 'OnlineFilmek', meta);
           streams.push(...okStreams);
+          continue;
+        }
+
+        // 3b. Check if VOE embed -> decode direct HLS/MP4 on Self-Host
+        if (embedUrl.includes('voe.sx') || embedUrl.includes('voe.')) {
+          const voeStreams = await extractVoeDirectStreams(embedUrl, 'OnlineFilmek', postTitle || hu, 'onlinefilmek');
+          streams.push(...voeStreams);
           continue;
         }
 

@@ -7,7 +7,8 @@ const {
   isTitleMatch,
   isValidRuntime,
   hasVerifiedYearInTitle,
-  extractUploadYearFromText
+  extractUploadYearFromText,
+  matchesEpisode
 } = require('./videa');
 
 function normalize(str) {
@@ -86,7 +87,7 @@ async function extractIndavideoStreams(embHash) {
     }
 
     streams.sort((a, b) => b.height - a.height);
-    return { title, duration, uploadYear, streams };
+    return { title, videoTitle: title, duration, uploadYear, streams };
   } catch (err) {
     return null;
   }
@@ -105,18 +106,20 @@ async function scrapeIndavideo(meta) {
     const s = meta.season;
     const e = meta.episode;
     const ePad = e.toString().padStart(2, '0');
-    searchTerms.push(`${hu} S${s}E${ePad}`);
-    searchTerms.push(`${hu} ${s}x${e}`);
+    if (meta.episodeTitle) searchTerms.push(`${hu} ${meta.episodeTitle}`);
     searchTerms.push(`${hu} ${s} evad ${e} resz`);
-  } else {
-    if (meta.year) searchTerms.push(`${hu} ${meta.year}`);
-    searchTerms.push(`${hu} teljes film`);
+    searchTerms.push(`${hu} ${e}. resz`);
+    searchTerms.push(`${hu} S${s}E${ePad}`);
     searchTerms.push(hu);
+  } else {
+    searchTerms.push(hu);
+    searchTerms.push(`${hu} teljes film`);
+    if (meta.year) searchTerms.push(`${hu} ${meta.year}`);
   }
 
-  const seenVideoSlugs = new Set();
+  const seenVideoUrls = new Set();
 
-  for (const term of searchTerms.slice(0, 2)) {
+  for (const term of searchTerms.slice(0, 3)) {
     try {
       const searchUrl = `https://indavideo.hu/search?search=${encodeURIComponent(term)}&view=detailed&sort_mode=magic`;
       const res = await fetch(searchUrl, {
@@ -128,22 +131,23 @@ async function scrapeIndavideo(meta) {
       if (!res.ok) continue;
 
       const html = await res.text();
-      const videoLinks = [...html.matchAll(/href="https?:\/\/indavideo\.hu\/video\/([^"#\s]+)"/g)].map(m => m[1]);
+      // Match any subdomain of indavideo.hu (e.g. index.indavideo.hu, auto.indavideo.hu, indavideo.hu)
+      const videoLinks = [...html.matchAll(/href=["'](https?:\/\/(?:[a-z0-9-]+\.)?indavideo\.hu\/video\/[^"'#\s]+)["']/gi)].map(m => m[1]);
 
-      const slugsToProcess = [];
-      for (const slug of videoLinks) {
-        if (!seenVideoSlugs.has(slug)) {
-          seenVideoSlugs.add(slug);
-          slugsToProcess.push(slug);
-          if (slugsToProcess.length >= 3) break;
+      const urlsToProcess = [];
+      for (const vUrl of videoLinks) {
+        if (!seenVideoUrls.has(vUrl)) {
+          seenVideoUrls.add(vUrl);
+          urlsToProcess.push(vUrl);
+          if (urlsToProcess.length >= 4) break;
         }
       }
 
-      await Promise.all(slugsToProcess.map(async (slug) => {
+      await Promise.all(urlsToProcess.map(async (videoPageUrl) => {
         try {
-          const pageRes = await fetch(`https://indavideo.hu/video/${slug}`, {
+          const pageRes = await fetch(videoPageUrl, {
             headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-            signal: AbortSignal.timeout(3500)
+            signal: AbortSignal.timeout(4000)
           });
           if (!pageRes.ok) return;
 
@@ -167,13 +171,17 @@ async function scrapeIndavideo(meta) {
           if (!isSeries && targetYear && uploadYear && uploadYear < targetYear) return;
 
           // 3. Check title match (±1 year)
-          if (!isTitleMatch(hu, vData.title, meta.year, isSeries) && !isTitleMatch(meta.englishTitle, vData.title, meta.year, isSeries)) {
+          if (!isTitleMatch(hu, vData.title, meta.year, isSeries) && (!meta.englishTitle || !isTitleMatch(meta.englishTitle, vData.title, meta.year, isSeries))) {
+            return;
+          }
+
+          if (isSeries && !matchesEpisode(vData.title, meta.season, meta.episode, meta.episodeTitle)) {
             return;
           }
 
           const yearVerified = isSeries || !targetYear ||
             hasVerifiedYearInTitle(vData.title, targetYear, hu) ||
-            hasVerifiedYearInTitle(vData.title, targetYear, meta.englishTitle);
+            (meta.englishTitle && hasVerifiedYearInTitle(vData.title, targetYear, meta.englishTitle));
           const warnBadge = (!yearVerified && !isSeries && targetYear) ? ' [⚠️ Év?]' : '';
           const warnNote = (!yearVerified && !isSeries && targetYear) ? ' • ⚠️ Évszám nincs a címben' : '';
 

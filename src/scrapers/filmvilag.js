@@ -5,6 +5,7 @@
 
 const { extractVideaStreams, isTitleMatch, isValidRuntime, checkPageMetadata } = require('./videa');
 const { extractIndavideoStreams } = require('./indavideo');
+const { resolveVideaEmbed, extractOkRuStreams } = require('./filmezek');
 
 function normalize(str) {
   return (str || '')
@@ -22,9 +23,13 @@ async function scrapeFilmvilag(meta) {
   if (!hu) return streams;
 
   const searchQueries = [hu];
+  const strippedHu = hu.replace(/^(?:A|Az)\s+/i, '');
+  if (strippedHu !== hu) searchQueries.push(strippedHu);
   if (meta.englishTitle && normalize(meta.englishTitle) !== normalize(hu)) {
     searchQueries.push(meta.englishTitle);
   }
+
+  const seenUrls = new Set();
 
   for (const q of searchQueries) {
     try {
@@ -46,19 +51,33 @@ async function scrapeFilmvilag(meta) {
       if (!searchRes.ok) continue;
 
       const searchHtml = await searchRes.text();
-      const links = [...searchHtml.matchAll(/<a[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi)]
+      const rawLinks = [...searchHtml.matchAll(/<a[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi)]
         .map(m => ({
           url: m[1].replace('http://', 'https://'),
           title: m[2].replace(/<[^>]+>/g, '').trim()
         }))
-        .filter(l => l.url.includes('.html') && !l.url.includes('filmkeres-es-hibas-link'));
+        .filter(l => l.url.includes('.html') && !l.url.includes('filmkeres-es-hibas-link') && !l.title.startsWith('http'));
+
+      // Deduplicate by article URL
+      const seenArticleUrls = new Set();
+      const links = [];
+      for (const l of rawLinks) {
+        if (!seenArticleUrls.has(l.url)) {
+          seenArticleUrls.add(l.url);
+          links.push(l);
+        }
+      }
 
       if (links.length === 0) continue;
 
       const isSeries = Boolean(meta.season);
-      const candidates = links.slice(0, 3).filter(item => {
-        return isTitleMatch(hu, item.title, meta.year, isSeries);
-      });
+      const candidates = links
+        .filter(item => {
+          const cleanT = item.title.replace(/\(\s*(?:FHD|HD|SD|CAM|HUN|Sub)\s*\)/gi, '').trim();
+          return isTitleMatch(hu, cleanT, meta.year, isSeries) ||
+                 (meta.englishTitle && isTitleMatch(meta.englishTitle, cleanT, meta.year, isSeries));
+        })
+        .slice(0, 4);
 
       await Promise.all(candidates.map(async (item) => {
         try {
@@ -78,27 +97,25 @@ async function scrapeFilmvilag(meta) {
           for (const ifr of iframes) {
             let iframeSrc = ifr.startsWith('//') ? 'https:' + ifr : ifr;
 
-            // 1. Videa embed
-            if (iframeSrc.includes('videa.hu/player?v=')) {
-              const vcodeMatch = iframeSrc.match(/v=([a-zA-Z0-9]{16})/);
-              if (vcodeMatch) {
-                const vcode = vcodeMatch[1];
-                const vData = await extractVideaStreams(vcode);
-                if (vData && !isValidRuntime(vData.duration, meta)) continue;
-                const vStreams = vData?.sources || [];
-                for (const vs of vStreams) {
-                  const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
-                  streams.push({
-                    name: `[HU] Filmvilag2 ${qualLabel}`,
-                    title: `${item.title}\n🇭🇺 Filmvilág2 (Videa) • ${qualLabel} • Szinkron`,
-                    url: vs.url,
-                    quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
-                    height: vs.height,
-                    source: 'filmvilag2',
-                    yearVerified: true
-                  });
-                }
+            // 1. Videa embed (supports both v= and f=)
+            if (iframeSrc.includes('videa.hu')) {
+              const vSources = await resolveVideaEmbed(iframeSrc);
+              for (const vs of vSources) {
+                if (!isValidRuntime(vs.duration, meta)) continue;
+                if (seenUrls.has(vs.url)) continue;
+                seenUrls.add(vs.url);
+                const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
+                streams.push({
+                  name: `[HU] Filmvilág2 ${qualLabel}`,
+                  title: `${item.title}\n🇭🇺 Filmvilág2 (Videa) • ${qualLabel} • Szinkron`,
+                  url: vs.url,
+                  quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
+                  height: vs.height,
+                  source: 'filmvilag2',
+                  yearVerified: true
+                });
               }
+              continue;
             }
 
             // 2. Indavideo embed
@@ -110,9 +127,11 @@ async function scrapeFilmvilag(meta) {
                 if (iData && !isValidRuntime(iData.duration, meta)) continue;
                 const iStreams = iData?.streams || [];
                 for (const is of iStreams) {
+                  if (seenUrls.has(is.url)) continue;
+                  seenUrls.add(is.url);
                   const qualLabel = is.height >= 1080 ? '1080p FHD' : is.height >= 720 ? '720p HD' : `${is.height}p`;
                   streams.push({
-                    name: `[HU] Filmvilag2 ${qualLabel}`,
+                    name: `[HU] Filmvilág2 ${qualLabel}`,
                     title: `${item.title}\n🇭🇺 Filmvilág2 (Indavideo) • ${qualLabel} • Szinkron`,
                     url: is.url,
                     quality: is.height >= 1080 ? '1080p' : is.height >= 720 ? '720p' : '480p',
@@ -121,6 +140,19 @@ async function scrapeFilmvilag(meta) {
                     yearVerified: true
                   });
                 }
+              }
+              continue;
+            }
+
+            // 3. OK.ru embed
+            if (iframeSrc.includes('ok.ru')) {
+              const okStreams = await extractOkRuStreams(iframeSrc, 'Filmvilág2', meta);
+              for (const os of okStreams) {
+                if (seenUrls.has(os.url)) continue;
+                seenUrls.add(os.url);
+                os.source = 'filmvilag2';
+                os.yearVerified = true;
+                streams.push(os);
               }
             }
           }

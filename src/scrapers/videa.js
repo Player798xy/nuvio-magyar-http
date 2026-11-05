@@ -696,5 +696,6 @@ module.exports = {
   hasVerifiedYearInTitle,
   extractCandidateYears,
   extractUploadYearFromText,
-  checkPageMetadata
+  checkPageMetadata,
+  matchesEpisode
 };

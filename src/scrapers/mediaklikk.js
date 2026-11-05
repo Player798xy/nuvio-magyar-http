@@ -1300,6 +1300,32 @@ async function scrapeMediaKlikk(meta) {
   const epTitle = meta.episodeTitle ? normalize(meta.episodeTitle) : null;
   const clientIp = meta.clientIp || null;
 
+  // Fast-path: If series matches one of our 43 VERIFIED_MEDIAKLIKK_CLASSICS (excluding Magyar népmesék which is on Videa/Videakid), resolve episode token directly
+  if (isSeries) {
+    const matchedClassic = VERIFIED_MEDIAKLIKK_CLASSICS.find(c =>
+      c.slug !== 'magyar-nepmesek' &&
+      (normalize(c.name) === normTarget || normTarget.includes(c.matchWord) || c.matchWord.includes(normTarget))
+    );
+    if (matchedClassic) {
+      try {
+        const progData = await getMediaKlikkSeriesEpisodes(matchedClassic.id);
+        if (progData && progData.seasons) {
+          const sList = progData.seasons[String(season || 1)] || progData.seasons['1'] || [];
+          const matchedEp = sList.find(e => e.episode === (episode || 1)) || sList[0];
+          if (matchedEp && matchedEp.token) {
+            const epStreams = await scrapeMediaKlikk({
+              token: matchedEp.token,
+              title: matchedEp.name,
+              permalink: matchedEp.permalink,
+              clientIp
+            });
+            if (epStreams.length > 0) return epStreams;
+          }
+        }
+      } catch (e) {}
+    }
+  }
+
   // Curate targeted query keywords for MédiaKlikk's backend
   const queries = new Set();
   if (normTarget.includes('ho ho') || normTarget.includes('hoho') || normTarget.includes('horgasz')) {

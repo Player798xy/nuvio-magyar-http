@@ -242,7 +242,78 @@ function decodeVoePayload(encoded) {
   }
 }
 
+
+/**
+ * 6. Self-Host VOE Direct HLS (.m3u8) & MP4 Extractor
+ * Note: VOE signs its CDN URLs with the requester's IP & ASN (&i=...&asn=...).
+ * On Self-Host (!process.env.VERCEL), the server shares the user's home IP so VOE streams play natively at full speed.
+ * On Vercel, VOE URLs are skipped because Vercel's datacenter IP differs from the viewer's home IP.
+ */
+async function extractVoeDirectStreams(voeUrl, providerName, title, sourceId) {
+  if (process.env.VERCEL) return [];
+  const streams = [];
+  try {
+    let currentUrl = String(voeUrl || '').replace(/&amp;/g, '&');
+    if (currentUrl.startsWith('//')) currentUrl = 'https:' + currentUrl;
+    if (!currentUrl.includes('/e/')) {
+      const m = currentUrl.match(/voe\.[a-z]+\/(?:e\/)?([a-zA-Z0-9]+)/i);
+      if (m) currentUrl = `https://voe.sx/e/${m[1]}`;
+    }
+
+    for (let hop = 0; hop < 3; hop++) {
+      const res = await fetch(currentUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+          'Referer': 'https://voe.sx/'
+        },
+        signal: AbortSignal.timeout(4500)
+      });
+      if (!res.ok) break;
+      const html = await res.text();
+      const redirectMatch = html.match(/window\.location\.href\s*=\s*['"](https?:\/\/[^'"]+)['"]/i);
+      if (redirectMatch) {
+        currentUrl = redirectMatch[1];
+        continue;
+      }
+      const scriptMatch = html.match(/<script[^>]*type=["']application\/json["'][^>]*>\s*\["([^"]+)"\]\s*<\/script>/i);
+      if (scriptMatch) {
+        const decoded = decodeVoePayload(scriptMatch[1]);
+        if (decoded) {
+          const hlsUrl = decoded.source || decoded.file;
+          if (hlsUrl && hlsUrl.startsWith('http')) {
+            streams.push({
+              name: `[HU] ${providerName} (VOE) 1080p FHD`,
+              title: `${title}\n🇭🇺 ${providerName} • VOE HLS • 1080p • Self-Host Közvetlen Stream`,
+              url: hlsUrl,
+              quality: '1080p',
+              height: 1080,
+              source: sourceId || providerName.toLowerCase(),
+              yearVerified: true,
+              behaviorHints: { bingeGroup: `hu-${sourceId || providerName.toLowerCase()}-voe-hls` }
+            });
+          }
+          if (decoded.direct_access_url && decoded.direct_access_url.startsWith('http')) {
+            streams.push({
+              name: `[HU] ${providerName} (VOE MP4) 720p HD`,
+              title: `${title}\n🇭🇺 ${providerName} • VOE MP4 • 720p • Self-Host Közvetlen Stream`,
+              url: decoded.direct_access_url,
+              quality: '720p',
+              height: 720,
+              source: sourceId || providerName.toLowerCase(),
+              yearVerified: true,
+              behaviorHints: { bingeGroup: `hu-${sourceId || providerName.toLowerCase()}-voe-mp4` }
+            });
+          }
+        }
+      }
+      break;
+    }
+  } catch {}
+  return streams;
+}
+
 module.exports = {
+  extractVoeDirectStreams,
   unpackNetMoziPayload,
   resolveNetMoziContent,
   resolveRpmStream,

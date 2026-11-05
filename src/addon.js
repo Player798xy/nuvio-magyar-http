@@ -329,8 +329,8 @@ async function getStreams(type, rawId, config = {}) {
     const heightA = a.height || 0;
     const heightB = b.height || 0;
     if (heightB !== heightA) return heightB - heightA;
-    const isDirectA = a.source === 'mediaklikk' || a.source === 'videa' || a.source === 'indavideo' || (a.url && a.url.includes('.mp4'));
-    const isDirectB = b.source === 'mediaklikk' || b.source === 'videa' || b.source === 'indavideo' || (b.url && b.url.includes('.mp4'));
+    const isDirectA = a.source === 'mediaklikk' || (a.url && (a.url.includes('videa.hu/static/') || a.url.includes('videakid.hu/static/') || a.url.includes('indavideo.hu/') || (a.url.includes('.mp4') && !a.url.includes('okcdn.ru'))));
+    const isDirectB = b.source === 'mediaklikk' || (b.url && (b.url.includes('videa.hu/static/') || b.url.includes('videakid.hu/static/') || b.url.includes('indavideo.hu/') || (b.url.includes('.mp4') && !b.url.includes('okcdn.ru'))));
     if (isDirectA && !isDirectB) return -1;
     if (isDirectB && !isDirectA) return 1;
     return 0;

@@ -1,10 +1,8 @@
 const { cfRequest } = require('../utils/http');
-const { decodeHunter } = require('../utils/crypto_decoders');
+const { decodeHunter, extractVoeDirectStreams } = require('../utils/crypto_decoders');
 const { extractVideaStreams } = require('./videa');
 const { extractIndavideoStreams } = require('./indavideo');
 const { extractOkRuStreams } = require('./filmezek');
-
-const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
 function normalizeTitle(str) {
   if (!str) return '';
@@ -39,8 +37,9 @@ async function getSorozatokIndex() {
 }
 
 /**
- * Only extracts non-IP-locked direct streams (Videa, Videakid, Indavideo, OK.ru)
- * Avoids VOE/Filemoon/Streamwish/Vidmoly server-IP-bound tokens that cause infinite buffering on client devices.
+ * Resolves hoster stream from Sorozatok.net redirect URL.
+ * Supports Videa, Videakid, Indavideo, OK.ru (both Vercel & Self-Host)
+ * and VOE direct HLS/MP4 (Self-Host only, since VOE tokens are IP-bound).
  */
 async function resolveHosterStream(rawUrl, epLabel) {
   const streams = [];
@@ -93,13 +92,20 @@ async function resolveHosterStream(rawUrl, epLabel) {
       return streams;
     }
 
-    // 3. OK.ru (Direct MP4/HLS)
+    // 3. OK.ru (Direct HLS/MP4)
     if (lower.includes('ok.ru')) {
       const okStreams = await extractOkRuStreams(url, 'Sorozatok.net');
       for (const os of okStreams) {
         os.source = 'sorozatoknet';
         streams.push(os);
       }
+      return streams;
+    }
+
+    // 4. VOE (Self-Host Direct HLS/MP4 extraction)
+    if (lower.includes('voe.sx') || lower.includes('voe.')) {
+      const voeStreams = await extractVoeDirectStreams(url, 'Sorozatok.net', epLabel, 'sorozatoknet');
+      streams.push(...voeStreams);
       return streams;
     }
   } catch {}
@@ -113,8 +119,6 @@ async function scrapeSorozatokNet(meta) {
   if (type !== 'series' || !season || !episode) return [];
 
   const index = await getSorozatokIndex();
-  if (!index.length) return [];
-
   const normTargets = titles.map(normalizeTitle).filter(Boolean);
   let matchedSeries = null;
 
@@ -127,8 +131,11 @@ async function scrapeSorozatokNet(meta) {
     }
   }
 
+  const targetYear = meta.year ? parseInt(meta.year, 10) : null;
   if (!matchedSeries) {
     for (const item of index) {
+      const itemYear = item.year ? parseInt(item.year, 10) : null;
+      if (targetYear && itemYear && Math.abs(targetYear - itemYear) > 2) continue;
       const huNorm = normalizeTitle(item.cat_name);
       const enNorm = normalizeTitle(item.cat_eng);
       if (normTargets.some((t) => t.length > 3 && (huNorm.includes(t) || enNorm.includes(t)))) {
@@ -138,25 +145,32 @@ async function scrapeSorozatokNet(meta) {
     }
   }
 
-  if (!matchedSeries || !matchedSeries.url) return [];
+  const slug = matchedSeries?.url || normalizeTitle(meta.hungarianTitle || meta.englishTitle).replace(/\s+/g, '-');
+  if (!slug) return [];
 
-  const seriesUrl = `https://sorozatok.net/${matchedSeries.url}-online`;
+  const seriesUrl = `https://sorozatok.net/${slug}-online`;
   const seriesRes = await cfRequest(seriesUrl, { timeoutMs: 6500 });
   if (!seriesRes?.text) return [];
 
-  const epBlocks = [...seriesRes.text.matchAll(/<a[^>]+class="clip-link"[^>]+href="([^"]+)"[\s\S]*?<h4[^>]+class="video-title"[^>]*>\s*<a[^>]*>([^<]+)<\/a>/gi)];
+  const epBlocks = [...seriesRes.text.matchAll(/<a[^>]+class="clip-link"[^>]*>[\s\S]*?<h4[^>]+class="video-title"[^>]*>\s*<a[^>]*>([^<]+)<\/a>/gi)];
   let targetEpHref = null;
+  let targetEmbedId = null;
   let targetEpTitle = '';
 
   for (const m of epBlocks) {
-    const href = m[1];
-    const epTitle = m[2].trim();
+    const fullTag = m[0];
+    const hrefMatch = fullTag.match(/href="([^"]+)"/i);
+    const idMatch = fullTag.match(/data-id="(\d+)"/i);
+    if (!hrefMatch) continue;
+    const href = hrefMatch[1];
+    const epTitle = m[1].trim();
     const nums = [...epTitle.matchAll(/\d+/g)].map((n) => parseInt(n[0], 10));
     if (nums.length >= 2) {
       const sNum = nums[nums.length - 2];
       const eNum = nums[nums.length - 1];
       if (sNum === Number(season) && eNum === Number(episode)) {
         targetEpHref = href;
+        targetEmbedId = idMatch ? idMatch[1] : null;
         targetEpTitle = epTitle;
         break;
       }
@@ -169,15 +183,17 @@ async function scrapeSorozatokNet(meta) {
   const urlId = (epUrl.match(/watch.*v=([a-zA-Z0-9_-]+)/) || [])[1];
   if (!urlId) return [];
 
-  const epPage = await cfRequest(epUrl, { timeoutMs: 6000 });
-  if (!epPage?.text) return [];
+  if (!targetEmbedId) {
+    const epPage = await cfRequest(epUrl, { timeoutMs: 6000 });
+    if (!epPage?.text) return [];
+    const embedIdMatch =
+      epPage.text.match(new RegExp(`data-id="([^"]+)"[^>]*${urlId}`)) ||
+      epPage.text.match(/data-id="(\d+)"/);
+    if (!embedIdMatch) return [];
+    targetEmbedId = embedIdMatch[1];
+  }
 
-  const embedIdMatch =
-    epPage.text.match(new RegExp(`data-id="([^"]+)"[^>]*${urlId}`)) ||
-    epPage.text.match(/data-id="(\d+)"/);
-  if (!embedIdMatch) return [];
-
-  const goUrl = `https://sorozatok.net/go.php?id=${embedIdMatch[1]}&key=${urlId}`;
+  const goUrl = `https://sorozatok.net/go.php?id=${targetEmbedId}&key=${urlId}`;
   const sbPage = await cfRequest(goUrl, { timeoutMs: 6500 }, 4);
   if (!sbPage?.text) return [];
 
@@ -200,7 +216,7 @@ async function scrapeSorozatokNet(meta) {
       if (!loc || seen.has(loc)) return;
       seen.add(loc);
 
-      const resolved = await resolveHosterStream(loc, targetEpTitle || `${matchedSeries.cat_name} S${season}E${episode}`);
+      const resolved = await resolveHosterStream(loc, targetEpTitle || `${(matchedSeries?.cat_name || meta.hungarianTitle || meta.englishTitle)} S${season}E${episode}`);
       streams.push(...resolved);
     })
   );

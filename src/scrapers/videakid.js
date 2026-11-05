@@ -2,7 +2,8 @@ const {
   extractVideaStreams,
   isTitleMatch,
   isValidRuntime,
-  hasVerifiedYearInTitle
+  hasVerifiedYearInTitle,
+  matchesEpisode
 } = require('./videa');
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
@@ -14,14 +15,16 @@ const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 async function scrapeVideakid(meta) {
   const rawTitles = meta.searchTitles || meta.titles || [meta.hungarianTitle, meta.englishTitle];
   const titles = [...new Set(rawTitles.filter(Boolean))];
-  const { year, type, season, episode } = meta;
-  const isMovie = type === 'movie';
+  const { year, type, season, episode, episodeTitle } = meta;
+  const isMovie = type === 'movie' || !season;
   const queries = [];
 
   for (const t of titles.slice(0, 2)) {
     if (!isMovie && season && episode) {
+      if (episodeTitle) queries.push(`${t} ${episodeTitle}`);
       queries.push(`${t} ${season}. évad ${episode}. rész`);
       queries.push(`${t} ${episode}. rész`);
+      queries.push(t);
     } else {
       queries.push(t);
     }
@@ -31,7 +34,7 @@ async function scrapeVideakid(meta) {
   const seen = new Set();
 
   await Promise.allSettled(
-    queries.slice(0, 2).map(async (q) => {
+    queries.slice(0, 3).map(async (q) => {
       const searchUrl = `https://videakid.hu/kereses/${encodeURIComponent(q)}`;
       const r = await fetch(searchUrl, {
         headers: { 'User-Agent': UA, Referer: 'https://videakid.hu/' },
@@ -40,7 +43,7 @@ async function scrapeVideakid(meta) {
       if (!r.ok) return;
       const html = await r.text();
 
-      const linkRegex = /<a[^>]+href="(https?:\/\/videakid\.hu\/videok\/[^"]+-([a-zA-Z0-9]{16}))"[^>]*title="([^"]+)"/gi;
+      const linkRegex = /<a[^>]+href=["'](https?:\/\/videakid\.hu\/videok\/[^"']+-([a-zA-Z0-9]{16}))["'][^>]+(?:title|aria-label)=["']([^"']+)["']/gi;
       let m;
       while ((m = linkRegex.exec(html)) !== null) {
         const href = m[1];
@@ -48,6 +51,7 @@ async function scrapeVideakid(meta) {
         const title = m[3].trim();
         if (seen.has(vcode)) continue;
         if (!titles.some(t => isTitleMatch(t, title, year, !isMovie))) continue;
+        if (!isMovie && !matchesEpisode(title, season, episode, episodeTitle)) continue;
         seen.add(vcode);
         candidates.push({ url: href, vcode, title });
       }
@@ -57,10 +61,15 @@ async function scrapeVideakid(meta) {
   const streams = [];
   const targetYear = year ? parseInt(year, 10) : null;
   await Promise.allSettled(
-    candidates.slice(0, 4).map(async (c) => {
+    candidates.slice(0, 5).map(async (c) => {
       const videoData = await extractVideaStreams(c.vcode);
       if (!videoData || !videoData.sources || videoData.sources.length === 0) return;
-      if (!isValidRuntime(videoData.duration, meta)) return;
+      if (isMovie) {
+        if (!isValidRuntime(videoData.duration, meta)) return;
+      } else {
+        // Cartoon episodes on Videakid (e.g. Magyar népmesék, Pom-Pom, Bogyó és Babóca) are 4–30 minutes long
+        if (videoData.duration > 0 && videoData.duration < 180) return;
+      }
       if (isMovie && targetYear && videoData.uploadYear && videoData.uploadYear < targetYear) return;
 
       const candTitle = videoData.videoTitle || c.title;

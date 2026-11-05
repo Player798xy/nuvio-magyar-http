@@ -182,7 +182,7 @@ async function scrapeJobbMintATV(meta) {
 
               // 3. OK.ru embed -> decode direct MP4s / HLS
               if (iframeSrc.includes('ok.ru/videoembed/')) {
-                const okStreams = await extractOkRuStreams(iframeSrc, 'JobbMintATV');
+                const okStreams = await extractOkRuStreams(iframeSrc, 'JobbMintATV', meta);
                 streams.push(...okStreams);
               }
             }

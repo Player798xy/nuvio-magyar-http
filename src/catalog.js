@@ -12,7 +12,7 @@ const {
   getMediaKlikkSeriesEpisodes
 } = require('./scrapers/mediaklikk');
 const { searchNetMozi, getNetMoziSeriesEpisodes } = require('./scrapers/netmozi');
-const { fetchCatalogItems } = require('./catalogs');
+const { fetchCatalogItems, rotateWeekly } = require('./catalogs');
 
 function normalize(str) {
   return (str || '')
@@ -238,7 +238,7 @@ async function searchCatalog(type, query, catalogId = null, extra = {}) {
       categories: item.categories || ['MTVA Archívum']
     }));
 
-    if (!query) return verifiedList;
+    if (!query) return rotateWeekly(verifiedList, 'hu-mediaklikk-classics', 4);
     const qNorm = normalize(query);
     return verifiedList.filter(item =>
       normalize(item.name).includes(qNorm) ||

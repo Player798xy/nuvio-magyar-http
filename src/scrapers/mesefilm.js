@@ -1,19 +1,45 @@
 /**
- * MeseFilm Scraper (Mesekincstar.tv & Retromesek.hu)
- * Dedicated scraper for Hungarian animations, cartoons, and fairy tales.
+ * MeseKincstár.tv & MeseFilmek.hu Scraper
+ * Searches Hungarian cartoon/animation portals and extracts Videa/Indavideo direct MP4 streams
+ * with strict title, release year (±1 year), sequel/numbered entry, and runtime (±10 min) verification.
  */
 
-const { extractVideaStreams } = require('./videa');
+const {
+  extractVideaStreams,
+  isTitleMatch,
+  isValidRuntime,
+  hasVerifiedYearInTitle,
+  checkPageMetadata,
+  matchesEpisode
+} = require('./videa');
 const { extractIndavideoStreams } = require('./indavideo');
 
-function normalize(str) {
-  return (str || '')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+async function searchMeseKincstar(query) {
+  const results = [];
+  try {
+    const searchUrl = `https://mesekincstar.tv/mesekereso/${encodeURIComponent(query)}`;
+    const res = await fetch(searchUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      },
+      signal: AbortSignal.timeout(6000)
+    });
+    if (!res.ok) return results;
+
+    const html = await res.text();
+    const linkMatches = [...html.matchAll(/<a[^>]+href=["'](https?:\/\/mesekincstar\.tv\/mesek\/[^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)];
+    const seen = new Set();
+
+    for (const m of linkMatches) {
+      const url = m[1];
+      const title = m[2].replace(/<[^>]+>/g, '').trim();
+      if (!seen.has(url) && title.length > 2 && !title.toLowerCase().includes('tovább')) {
+        seen.add(url);
+        results.push({ url, title });
+      }
+    }
+  } catch (e) {}
+  return results;
 }
 
 async function scrapeMeseFilm(meta) {
@@ -21,88 +47,135 @@ async function scrapeMeseFilm(meta) {
   const hu = meta.hungarianTitle || meta.englishTitle;
   if (!hu) return streams;
 
-  const normTarget = normalize(hu);
+  const isMovie = meta.type === 'movie' || !meta.season;
+  const isSeries = !isMovie;
+  const targetYear = meta.year ? parseInt(meta.year, 10) : null;
 
-  const searchQueries = [];
-  if (meta.episodeTitle) {
-    searchQueries.push(meta.episodeTitle);
-    searchQueries.push(`${hu} ${meta.episodeTitle}`);
+  const queries = [hu];
+  const stripped = hu.replace(/^(?:A|Az)\s+/i, '');
+  if (stripped !== hu) queries.push(stripped);
+  if (meta.englishTitle && meta.englishTitle !== hu) {
+    queries.push(meta.englishTitle);
   }
-  searchQueries.push(hu);
 
-  // 1. Search Mesekincstar.tv
-  for (const q of searchQueries) {
+  const seenUrls = new Set();
+
+  for (const q of queries) {
     try {
-      const sUrl = `https://mesekincstar.tv/mesekereso/${encodeURIComponent(q)}`;
-      const sRes = await fetch(sUrl, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
-        signal: AbortSignal.timeout(4000)
-      });
-      if (sRes.ok) {
-        const html = await sRes.text();
-        const links = [...html.matchAll(/<a[^>]+href="([^"]+)"[^>]*title="([^"]+)"/gi)]
-          .map(m => ({ url: m[1], title: m[2] }))
-          .filter(l => !l.url.includes('/tag/') && !l.url.includes('/mesekereso/'));
+      const links = await searchMeseKincstar(q);
+      // Filter search results strictly by title and year before fetching detail pages
+      const matchingLinks = links.filter(item =>
+        isTitleMatch(hu, item.title, meta.year, isSeries) ||
+        (meta.englishTitle && isTitleMatch(meta.englishTitle, item.title, meta.year, isSeries))
+      );
 
-        for (const item of links.slice(0, 3)) {
-          try {
-            const pageRes = await fetch(item.url, {
-              headers: { 'User-Agent': 'Mozilla/5.0' },
-              signal: AbortSignal.timeout(3500)
+      for (const item of matchingLinks.slice(0, 4)) {
+        if (isSeries && !matchesEpisode(item.title, meta.season, meta.episode, meta.episodeTitle)) {
+          continue;
+        }
+
+        const pageRes = await fetch(item.url, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+          signal: AbortSignal.timeout(5000)
+        });
+        if (!pageRes.ok) continue;
+
+        const pageHtml = await pageRes.text();
+
+        // Check detail page metadata (rejects wrong IMDb ID or wrong release year)
+        if (isMovie) {
+          const pageCheck = checkPageMetadata(pageHtml, meta);
+          if (!pageCheck.match) continue;
+        }
+
+        // 1. Check Videa embeds
+        const videaMatches = [
+          ...pageHtml.matchAll(/videa\.hu\/player\?v=([a-zA-Z0-9]{16})/g),
+          ...pageHtml.matchAll(/videa\.hu\/videok\/[^"'\s]+-([a-zA-Z0-9]{16})/g)
+        ];
+
+        for (const vm of videaMatches) {
+          const vData = await extractVideaStreams(vm[1]);
+          if (!vData || !vData.sources || vData.sources.length === 0) continue;
+
+          // Strict duration validation (±10 min + PAL speedup tolerance)
+          if (!isValidRuntime(vData.duration, meta)) continue;
+
+          // Upload year sanity check: cannot be uploaded before movie release year
+          if (isMovie && targetYear && vData.uploadYear && vData.uploadYear < targetYear) {
+            continue;
+          }
+
+          // Video title must also match either the Hungarian or English title (unless generic episode title)
+          const vTitleMatches =
+            isTitleMatch(hu, vData.videoTitle, meta.year, isSeries) ||
+            (meta.englishTitle && isTitleMatch(meta.englishTitle, vData.videoTitle, meta.year, isSeries)) ||
+            isTitleMatch(item.title, vData.videoTitle, meta.year, isSeries);
+          if (!vTitleMatches) continue;
+
+          if (isSeries && !matchesEpisode(vData.videoTitle, meta.season, meta.episode, meta.episodeTitle) && !matchesEpisode(item.title, meta.season, meta.episode, meta.episodeTitle)) {
+            continue;
+          }
+
+          const durationMins = Math.round((vData.duration || 0) / 60);
+          const yearVerified = !isMovie || !targetYear ||
+            hasVerifiedYearInTitle(item.title, targetYear, hu) ||
+            hasVerifiedYearInTitle(vData.videoTitle, targetYear, hu) ||
+            (meta.englishTitle && hasVerifiedYearInTitle(vData.videoTitle, targetYear, meta.englishTitle));
+
+          for (const vs of vData.sources) {
+            if (seenUrls.has(vs.url)) continue;
+            seenUrls.add(vs.url);
+            const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
+            streams.push({
+              name: `[HU] MeseKincstár ${qualLabel}`,
+              title: `${item.title} (${vData.videoTitle})\n🇭🇺 MeseKincstár (Videa) • ${qualLabel}${durationMins ? ` • ${durationMins} perc` : ''} • Magyar mese`,
+              url: vs.url,
+              quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
+              height: vs.height,
+              source: 'mesefilm',
+              yearVerified,
+              behaviorHints: { bingeGroup: `hu-mesefilm-${qualLabel}` }
             });
-            if (pageRes.ok) {
-              const pHtml = await pageRes.text();
-              const iframes = [...pHtml.matchAll(/<iframe[^>]+src=["']([^"']+)["']/gi)].map(m => m[1]);
-              for (const ifr of iframes) {
-                let iframeSrc = ifr.startsWith('//') ? 'https:' + ifr : ifr;
+          }
+        }
 
-                // Videa embed
-                if (iframeSrc.includes('videa.hu/player?v=')) {
-                  const vcodeMatch = iframeSrc.match(/v=([a-zA-Z0-9]{16})/);
-                  if (vcodeMatch) {
-                    const vData = await extractVideaStreams(vcodeMatch[1]);
-                    const vStreams = vData?.sources || [];
-                    for (const vs of vStreams) {
-                      const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
-                      streams.push({
-                        name: `[HU] MeseFilm ${qualLabel}`,
-                        title: `${item.title}\n🇭🇺 MeseKincstár (Videa) • ${qualLabel} • Magyar Rajzfilm`,
-                        url: vs.url,
-                        quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
-                        height: vs.height,
-                        source: 'mesefilm'
-                      });
-                    }
-                  }
-                }
+        // 2. Check Indavideo embeds
+        const indaMatches = [...pageHtml.matchAll(/embed\.indavideo\.hu\/player\/video\/([a-zA-Z0-9]+)/g)];
+        for (const im of indaMatches) {
+          const iData = await extractIndavideoStreams(im[1]);
+          if (!iData || !iData.streams || iData.streams.length === 0) continue;
 
-                // Indavideo embed
-                if (iframeSrc.includes('embed.indavideo.hu/player/video/')) {
-                  const ihashMatch = iframeSrc.match(/video\/([a-zA-Z0-9]+)/);
-                  if (ihashMatch) {
-                    const iData = await extractIndavideoStreams(ihashMatch[1]);
-                    const iStreams = iData?.streams || [];
-                    for (const is of iStreams) {
-                      const qualLabel = is.height >= 1080 ? '1080p FHD' : is.height >= 720 ? '720p HD' : `${is.height}p`;
-                      streams.push({
-                        name: `[HU] MeseFilm ${qualLabel}`,
-                        title: `${item.title}\n🇭🇺 MeseKincstár (Indavideo) • ${qualLabel} • Magyar Rajzfilm`,
-                        url: is.url,
-                        quality: is.height >= 1080 ? '1080p' : is.height >= 720 ? '720p' : '480p',
-                        height: is.height,
-                        source: 'mesefilm'
-                      });
-                    }
-                  }
-                }
-              }
-            }
-          } catch (e) {}
-          if (streams.length >= 3) break;
+          if (!isValidRuntime(iData.duration, meta)) continue;
+
+          const iTitle = iData.videoTitle || item.title;
+          const iTitleMatches =
+            isTitleMatch(hu, iTitle, meta.year, isSeries) ||
+            (meta.englishTitle && isTitleMatch(meta.englishTitle, iTitle, meta.year, isSeries));
+          if (!iTitleMatches) continue;
+
+          const yearVerified = !isMovie || !targetYear ||
+            hasVerifiedYearInTitle(item.title, targetYear, hu) ||
+            hasVerifiedYearInTitle(iTitle, targetYear, hu);
+
+          for (const is of iData.streams) {
+            if (seenUrls.has(is.url)) continue;
+            seenUrls.add(is.url);
+            const qualLabel = is.height >= 1080 ? '1080p FHD' : is.height >= 720 ? '720p HD' : `${is.height}p`;
+            streams.push({
+              name: `[HU] MeseKincstár (Inda) ${qualLabel}`,
+              title: `${item.title}\n🇭🇺 MeseKincstár (Indavideo) • ${qualLabel} • Magyar mese`,
+              url: is.url,
+              quality: is.height >= 1080 ? '1080p' : is.height >= 720 ? '720p' : '480p',
+              height: is.height,
+              source: 'mesefilm',
+              yearVerified
+            });
+          }
         }
       }
+      if (streams.length > 0) break;
     } catch (e) {}
-    if (streams.length >= 3) break;
   }
 
   return streams;
