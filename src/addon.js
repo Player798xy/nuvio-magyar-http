@@ -302,6 +302,22 @@ async function getStreams(type, rawId, config = {}) {
       if (!matches) continue;
     }
 
+    // Add clear Nuvio stream warning when a video is unverified or from a community upload source
+    const USER_UPLOAD_SOURCES = new Set(['videa', 'indavideo', 'videakid', 'onlinefilmek', 'filmvilag2', 'dmdamedia']);
+    const cleanName = String(s.name || '').replace(/\s*\[⚠️\s*Év\?\]/g, '').trim();
+    const cleanTitle = String(s.title || '').replace(/\s*•\s*⚠️\s*Évszám nincs a címben/g, '').trim();
+
+    if (s.yearVerified === false) {
+      s.name = `${cleanName} ⚠️ [Lehet nem jó a videó!]`;
+      s.title = `${cleanTitle}\n⚠️ FIGYELEM: Lehet, hogy nem a jó videó (nem ellenőrzött évszám/feltöltés)!`;
+    } else if (USER_UPLOAD_SOURCES.has(s.source)) {
+      s.name = cleanName;
+      if (!cleanTitle.includes('FIGYELEM') && !cleanTitle.includes('lehet, hogy nem a jó videó')) {
+        s.title = `${cleanTitle}\n⚠️ Közösségi feltöltés – lehet, hogy nem a jó videó`;
+      }
+    }
+    s.description = s.title;
+
     uniqueStreams.push(s);
   }
 
