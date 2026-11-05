@@ -160,6 +160,7 @@ app.get('/:config/meta/:type/:prefix/:id.json', handleMeta);
 app.get(['/stream/:type/:id.json', '/stream/:type/:prefix/:id.json'], async (req, res) => {
   try {
     res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     const { type, prefix } = req.params;
     const id = prefix ? `${prefix}/${req.params.id || ''}` : req.params.id;
     const config = parseConfig(null, req.query);
@@ -177,6 +178,7 @@ app.get(['/stream/:type/:id.json', '/stream/:type/:prefix/:id.json'], async (req
 app.get(['/:config/stream/:type/:id.json', '/:config/stream/:type/:prefix/:id.json'], async (req, res) => {
   try {
     res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     const { config: configParam, type, prefix } = req.params;
     const id = prefix ? `${prefix}/${req.params.id || ''}` : req.params.id;
     const config = parseConfig(configParam, req.query);

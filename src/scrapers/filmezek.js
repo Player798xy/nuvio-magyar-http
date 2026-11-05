@@ -78,23 +78,31 @@ async function extractOkRuStreams(embedUrl, providerName = 'Filmezek', mediaMeta
       medium: { label: '480p SD', height: 480 },
       sd: { label: '480p SD', height: 480 },
       low: { label: '360p', height: 360 },
-      lowest: { label: '240p', height: 240 }
+      lowest: { label: '240p', height: 240 },
+      mobile: { label: '144p', height: 144 }
     };
 
-    // Helper to resolve canonical 1080/720/480/360 height even for 2.39:1 widescreen (e.g. 1920x800, 1280x536)
-    const resolveTrackHeight = (line) => {
-      const qualMatch = line.match(/QUALITY=([a-z]+)/i);
+    // Helper to resolve canonical 1080/720/480/360 height even for 2.39:1 widescreen (e.g. 1920x800, 1280x536) or vkuser /type/N/ paths
+    const resolveTrackHeight = (line, trackPath = '') => {
+      const qualMatch = line.match(/QUALITY=["']?([a-z0-9]+)["']?/i);
       const qKey = (qualMatch?.[1] || '').toLowerCase();
       if (qualityMap[qKey]) return qualityMap[qKey].height;
+
+      if (/\/type\/5\//.test(trackPath)) return 1080;
+      if (/\/type\/3\//.test(trackPath)) return 720;
+      if (/\/type\/2\//.test(trackPath)) return 480;
+      if (/\/type\/1\//.test(trackPath)) return 360;
+      if (/\/type\/0\//.test(trackPath)) return 240;
+      if (/\/type\/4\//.test(trackPath)) return 144;
 
       const resMatch = line.match(/RESOLUTION=(\d+)x(\d+)/i);
       if (resMatch) {
         const w = parseInt(resMatch[1], 10);
         const h = parseInt(resMatch[2], 10);
-        if (w >= 1900 || h >= 1000) return 1080;
-        if (w >= 1200 || h >= 700) return 720;
-        if (w >= 800 || h >= 450) return 480;
-        if (w >= 600 || h >= 340) return 360;
+        if (w >= 1800 || h >= 800) return 1080;
+        if (w >= 1200 || h >= 500) return 720;
+        if (w >= 800 || h >= 350) return 480;
+        if (w >= 600 || h >= 240) return 360;
         return h;
       }
       return 720;
@@ -125,7 +133,7 @@ async function extractOkRuStreams(embedUrl, providerName = 'Filmezek', mediaMeta
             if (lines[i].startsWith('#EXT-X-STREAM-INF')) {
               const nextLine = lines[i + 1];
               if (nextLine && !nextLine.startsWith('#')) {
-                const height = resolveTrackHeight(lines[i]);
+                const height = resolveTrackHeight(lines[i], nextLine);
                 if (height < 360) continue;
                 const label = height >= 1080 ? '1080p FHD' : height >= 720 ? '720p HD' : height >= 480 ? '480p SD' : '360p';
                 const trackUrl = new URL(nextLine, meta.ondemandHls).toString();
@@ -169,7 +177,7 @@ async function extractOkRuStreams(embedUrl, providerName = 'Filmezek', mediaMeta
             if (lines[i].startsWith('#EXT-X-STREAM-INF')) {
               const nextLine = lines[i + 1];
               if (nextLine && !nextLine.startsWith('#')) {
-                const height = resolveTrackHeight(lines[i]);
+                const height = resolveTrackHeight(lines[i], nextLine);
                 if (height < 360) continue;
                 const label = height >= 1080 ? '1080p FHD' : height >= 720 ? '720p HD' : height >= 480 ? '480p SD' : '360p';
                 const baseTrackUrl = new URL(nextLine, meta.hlsManifestUrl).toString();
