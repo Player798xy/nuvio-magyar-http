@@ -950,8 +950,8 @@
           <h2>Katalógus Polcok (Heti Rotáció)</h2>
         </div>
         <div class="sec-actions">
-          <button class="btn-chip" onclick="setCatalogPreset('default')">Alapértelmezett (7)</button>
-          <button class="btn-chip" onclick="setCatalogPreset('all')">Összes (12)</button>
+          <button class="btn-chip" onclick="setCatalogPreset('all')">Összes bekapcsolása (12)</button>
+          <button class="btn-chip" onclick="setCatalogPreset('core')">Csak Magyar &amp; Toplista (7)</button>
         </div>
       </div>
 
@@ -967,7 +967,7 @@
           <input type="checkbox" class="clean-cb" value="hu-mediaklikk-classics" checked onchange="onConfigChange()" />
           <span class="row-idx">02</span>
           <span class="row-name">MédiaKlikk Klasszikusok</span>
-          <span class="row-desc">43 MTVA archív mese és sorozat (Magyar népmesék, Süsü, Ho-ho-horgász)</span>
+          <span class="row-desc">30 MTVA archív mese és sorozat (Magyar népmesék, Süsü, Ho-ho-horgász)</span>
           <span class="row-meta"><span class="tag tag-ok">Heti rotáció</span></span>
         </label>
         <label class="list-row">
@@ -1006,35 +1006,35 @@
           <span class="row-meta"><span class="tag tag-ok">Heti rotáció</span></span>
         </label>
         <label class="list-row">
-          <input type="checkbox" class="clean-cb" value="hu-stream-netflix" onchange="onConfigChange()" />
+          <input type="checkbox" class="clean-cb" value="hu-stream-netflix" checked onchange="onConfigChange()" />
           <span class="row-idx">08</span>
           <span class="row-name">Netflix HU</span>
           <span class="row-desc">Netflix magyarországi szinkronos kínálat</span>
           <span class="row-meta"><span class="tag">Streaming</span></span>
         </label>
         <label class="list-row">
-          <input type="checkbox" class="clean-cb" value="hu-stream-max" onchange="onConfigChange()" />
+          <input type="checkbox" class="clean-cb" value="hu-stream-max" checked onchange="onConfigChange()" />
           <span class="row-idx">09</span>
           <span class="row-name">Max / HBO</span>
           <span class="row-desc">Max Magyarország toplista</span>
           <span class="row-meta"><span class="tag">Streaming</span></span>
         </label>
         <label class="list-row">
-          <input type="checkbox" class="clean-cb" value="hu-stream-disney" onchange="onConfigChange()" />
+          <input type="checkbox" class="clean-cb" value="hu-stream-disney" checked onchange="onConfigChange()" />
           <span class="row-idx">10</span>
           <span class="row-name">Disney+ HU</span>
           <span class="row-desc">Disney, Marvel, Star Wars magyar szinkronnal</span>
           <span class="row-meta"><span class="tag">Streaming</span></span>
         </label>
         <label class="list-row">
-          <input type="checkbox" class="clean-cb" value="hu-stream-skyshowtime" onchange="onConfigChange()" />
+          <input type="checkbox" class="clean-cb" value="hu-stream-skyshowtime" checked onchange="onConfigChange()" />
           <span class="row-idx">11</span>
           <span class="row-name">SkyShowtime</span>
           <span class="row-desc">Universal &amp; Paramount sikerfilmek magyarul</span>
           <span class="row-meta"><span class="tag">Streaming</span></span>
         </label>
         <label class="list-row">
-          <input type="checkbox" class="clean-cb" value="hu-stream-prime" onchange="onConfigChange()" />
+          <input type="checkbox" class="clean-cb" value="hu-stream-prime" checked onchange="onConfigChange()" />
           <span class="row-idx">12</span>
           <span class="row-name">Prime Video</span>
           <span class="row-desc">Amazon Prime Video magyarországi kínálat</span>
@@ -1104,6 +1104,11 @@
     ];
     const ALL_RES_IDS = ['1080p', '720p', '480p', '360p'];
     const DEFAULT_CATALOG_IDS = [
+      'hu-live-tv','hu-mediaklikk-classics','hu-trending-movies',
+      'hu-trending-series','hu-cinema-movies','hu-hungarian-movies','hu-hungarian-series',
+      'hu-stream-netflix','hu-stream-max','hu-stream-disney','hu-stream-skyshowtime','hu-stream-prime'
+    ];
+    const CORE_CATALOG_IDS = [
       'hu-live-tv','hu-mediaklikk-classics','hu-trending-movies',
       'hu-trending-series','hu-cinema-movies','hu-hungarian-movies','hu-hungarian-series'
     ];
@@ -1178,7 +1183,7 @@
     }
 
     function setCatalogPreset(mode) {
-      const set = new Set(DEFAULT_CATALOG_IDS);
+      const set = new Set(mode === 'core' ? CORE_CATALOG_IDS : DEFAULT_CATALOG_IDS);
       document.querySelectorAll('#catalogsGrid input[type="checkbox"]').forEach(cb => {
         cb.checked = mode === 'all' ? true : set.has(cb.value);
       });

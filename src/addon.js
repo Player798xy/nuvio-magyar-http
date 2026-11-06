@@ -58,7 +58,7 @@ function parseConfig(configStr, query = {}) {
     sources: [...DEFAULT_CONFIG.sources],
     catalogs: [...DEFAULT_CONFIG.catalogs],
     qualities: [...DEFAULT_CONFIG.qualities],
-    timeoutMs: 20000,
+    timeoutMs: 6500,
     maxResults: 25
   };
 
@@ -154,14 +154,13 @@ function getManifest(config = {}) {
 
   return {
     id: 'org.nuvio.magyar.http',
-    version: '2.5.0',
+    version: '2.5.2',
     name,
     description: desc,
     logo: `${hostUrl}/logo.png`,
     icon: `${hostUrl}/logo.png`,
     background: `${hostUrl}/logo.png`,
     resources: [
-      'catalog',
       {
         name: 'stream',
         types: ['movie', 'series', 'tv', 'channel'],
@@ -170,7 +169,11 @@ function getManifest(config = {}) {
       {
         name: 'meta',
         types: ['movie', 'series', 'tv', 'channel'],
-        idPrefixes: ['tt', 'tmdb:', 'mediaklikk-live-', 'mediaklikk:', 'netmozi:']
+        idPrefixes: ['mediaklikk-live-', 'mediaklikk:', 'netmozi:', 'tmdb:']
+      },
+      {
+        name: 'catalog',
+        types: ['movie', 'series', 'tv']
       }
     ],
     types: ['movie', 'series', 'tv', 'channel'],
@@ -213,10 +216,16 @@ async function getStreams(type, rawId, config = {}) {
   meta.hostUrl = config.hostUrl || null;
 
   let candidateScrapers = ALL_SCRAPERS;
-  let timeoutMs = config.timeoutMs || 15000;
+  let timeoutMs = config.timeoutMs || 6500;
+
+  // On Vercel Serverless, skip strictly IP-bound Self-Host-only scrapers so stream requests never time out
+  if (process.env.VERCEL) {
+    candidateScrapers = candidateScrapers.filter(s => s.id !== 'hdmozi' && s.id !== 'dmdamedia');
+    timeoutMs = Math.min(timeoutMs, 6500);
+  }
 
   if (config.stage === 'fast') {
-    candidateScrapers = ALL_SCRAPERS.filter(s => FAST_SCRAPER_IDS.has(s.id));
+    candidateScrapers = candidateScrapers.filter(s => FAST_SCRAPER_IDS.has(s.id));
     timeoutMs = Math.min(timeoutMs, 4500);
   }
 
@@ -232,7 +241,7 @@ async function getStreams(type, rawId, config = {}) {
   const fastPromises = fastScrapers.map(scraper =>
     Promise.race([
       scraper.fn(meta),
-      new Promise(resolve => setTimeout(() => resolve([]), Math.max(9500, timeoutMs)))
+      new Promise(resolve => setTimeout(() => resolve([]), Math.min(timeoutMs, 6000)))
     ]).catch(() => [])
   );
 

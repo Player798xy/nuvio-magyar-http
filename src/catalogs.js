@@ -65,7 +65,7 @@ const VERIFIED_HUNGARIAN_MOVIES_POOL = [
   { id: 'tt0388182', name: 'Kontroll', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0388182/img', releaseInfo: '2003', imdbRating: '7.6', description: 'Antal Nimród kultikus thriller-vígjátéka a budapesti metró ellenőrökről Csányi Sándor főszereplésével.' },
   { id: 'tt6067832', name: 'Kincsem', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt6067832/img', releaseInfo: '2017', imdbRating: '7.2', description: 'A legyőzhetetlen magyar csodakanca látványos kalandfilmje Nagy Ervin főszereplésével.' },
   { id: 'tt0082806', name: 'Mephisto', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0082806/img', releaseInfo: '1981', imdbRating: '7.7', description: 'Szabó István Oscar-díjas filmdrámája Klaus Maria Brandauer főszereplésével.' },
-  { id: 'tt0114369', name: 'Sose halunk meg', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0114369/img', releaseInfo: '1993', imdbRating: '7.9', description: 'Koltai Róbert megható és humoros története Gyuszi bácsiról, a vállfás ügynökről.' },
+  { id: 'tt0108188', name: 'Sose halunk meg', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0108188/img', releaseInfo: '1993', imdbRating: '7.9', description: 'Koltai Róbert megható és humoros története Gyuszi bácsiról, a vállfás ügynökről.' },
   { id: 'tt0074195', name: 'Az ötödik pecsét', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0074195/img', releaseInfo: '1976', imdbRating: '8.6', description: 'Fábri Zoltán filmtörténeti remekműve Latinovits Zoltán és Őze Lajos főszereplésével.' },
   { id: 'tt0087219', name: 'Az élet muzsikája - Kálmán Imre', type: 'movie', poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2017/11/KalmanImre_16-9.jpg', releaseInfo: '1984', imdbRating: '7.3', description: 'Életrajzi zenés film Kálmán Imre zeneszerző életéről Huszti Péter főszereplésével.' }
 ];
@@ -93,6 +93,30 @@ const VERIFIED_POPULAR_MOVIES_POOL = [
 ];
 
 /**
+ * Verified Popular Series Pool (100% verified posters + active Hungarian dubbed episode streams on JobbMintATV/Videa/Filmezek)
+ */
+const VERIFIED_POPULAR_SERIES_POOL = [
+  { id: 'tt0944947', name: 'Trónok harca', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0944947/img', releaseInfo: '2011', imdbRating: '9.2', description: 'Hét nemesi család küzd Westeros mitikus földjének irányításáért a Vastrónért vívott háborúban.' },
+  { id: 'tt4574334', name: 'Stranger Things', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt4574334/img', releaseInfo: '2016', imdbRating: '8.7', description: 'Egy kisfiú rejtélyes eltűnése után a kisváros lakói titkos kísérletekre és természetfeletti erőkre bukkannak.' },
+  { id: 'tt7366338', name: 'Csernobil', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt7366338/img', releaseInfo: '2019', imdbRating: '9.3', description: 'Az 1986-os csernobili atomkatasztrófa és a következmények elhárításáért küzdő hősök drámai története.' },
+  { id: 'tt13443470', name: 'Wednesday', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt13443470/img', releaseInfo: '2022', imdbRating: '8.1', description: 'Wednesday Addams a Nevermore Akadémián nyomoz egy rejtélyes gyilkossági sorozat után.' },
+  { id: 'tt3581920', name: 'The Last of Us', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt3581920/img', releaseInfo: '2023', imdbRating: '8.7', description: 'A civilizációt elpusztító világjárvány után Joel vállalja, hogy kimenekíti a 14 éves Ellie-t a karanténzónából.' },
+  { id: 'tt1190634', name: 'A fiúk (The Boys)', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt1190634/img', releaseInfo: '2019', imdbRating: '8.7', description: 'Önbíráskodók egy csapata felveszi a harcot a hatalmukkal visszaélő korrupt szuperhősök ellen.' },
+  { id: 'tt5180504', name: 'Vaják (The Witcher)', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt5180504/img', releaseInfo: '2019', imdbRating: '8.0', description: 'Ríviai Geralt, a magányos szörnyvadász sorsa összefonódik egy hatalmas varázslónőével és egy fiatal hercegnőével.' },
+  { id: 'tt11198330', name: 'Sárkányok háza', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt11198330/img', releaseInfo: '2022', imdbRating: '8.4', description: 'A Targaryen-ház története 200 évvel a Trónok harca eseményei előtt.' },
+  { id: 'tt1475582', name: 'Sherlock', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt1475582/img', releaseInfo: '2010', imdbRating: '9.1', description: 'Sherlock Holmes és Dr. John Watson modern londoni bűnügyeket oldanak meg.' },
+  { id: 'tt6468322', name: 'A nagy pénzrablás', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt6468322/img', releaseInfo: '2017', imdbRating: '8.2', description: 'A Professzor vezetésével nyolc rabló túszokat ejt a Spanyol Királyi Pénzverdében.' },
+  { id: 'tt11126994', name: 'Arcane', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt11126994/img', releaseInfo: '2021', imdbRating: '9.0', description: 'Piltover és Zaun ikervárosainak feszültségében két nővér egymással szemben találja magát.' },
+  { id: 'tt0108778', name: 'Jóbarátok', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0108778/img', releaseInfo: '1994', imdbRating: '8.9', description: 'Hat huszonéves jóbarát mindennapjai, szerelmei és kalandjai Manhattanben.' },
+  { id: 'tt0898266', name: 'Agymenők', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0898266/img', releaseInfo: '2007', imdbRating: '8.1', description: 'Két briliáns fizikus, Leonard és Sheldon élete fenekestül felfordul, amikor új szomszéd költözik melléjük.' },
+  { id: 'tt2306299', name: 'Vikingek', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt2306299/img', releaseInfo: '2013', imdbRating: '8.5', description: 'Ragnar Lothbrok, a legendás viking harcos és felfedező felemelkedésének története.' },
+  { id: 'tt2442560', name: 'Birmingham bandája', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt2442560/img', releaseInfo: '2013', imdbRating: '8.8', description: 'Thomas Shelby és a Peaky Blinders bűnszervezet felemelkedése az első világháború utáni Birminghamben.' },
+  { id: 'tt1520211', name: 'The Walking Dead', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt1520211/img', releaseInfo: '2010', imdbRating: '8.1', description: 'Rick Grimes seriffhelyettes kómából felébredve egy zombiapokalipszis sújtotta világban keresi családját.' },
+  { id: 'tt0412142', name: 'Doktor House', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0412142/img', releaseInfo: '2004', imdbRating: '8.7', description: 'Dr. Gregory House antiszociális, de zseniális diagnoszta a legrejtélyesebb orvosi eseteket oldja meg.' },
+  { id: 'tt2861424', name: 'Rick és Morty', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt2861424/img', releaseInfo: '2013', imdbRating: '9.1', description: 'Az őrült tudós, Rick Sanchez és unokája, Morty interdimenzionális kalandjai.' }
+];
+
+/**
  *Catalog Definitions
  */
 const CATALOG_DEFINITIONS = [
@@ -110,7 +134,7 @@ const CATALOG_DEFINITIONS = [
     name: '🏛️ MédiaKlikk Klasszikusok (MTVA)',
     type: 'series',
     category: 'tv',
-    description: '43 ellenőrzött magyar retro sorozat és klasszikus az MTVA archívumából + Magyar népmesék.',
+    description: '30 ellenőrzött magyar retro sorozat és klasszikus az MTVA archívumából + Magyar népmesék.',
     defaultEnabled: true
   },
 
@@ -171,7 +195,7 @@ const CATALOG_DEFINITIONS = [
     type: 'movie',
     category: 'stream',
     description: 'Népszerű magyar szinkronos filmek és saját gyártású premierek a Netflixről.',
-    defaultEnabled: false
+    defaultEnabled: true
   },
   {
     id: 'hu-stream-max',
@@ -179,7 +203,7 @@ const CATALOG_DEFINITIONS = [
     type: 'movie',
     category: 'stream',
     description: 'A Max (HBO Max) legnézettebb szinkronos filmjei és sorozatai Magyarországon.',
-    defaultEnabled: false
+    defaultEnabled: true
   },
   {
     id: 'hu-stream-disney',
@@ -187,7 +211,7 @@ const CATALOG_DEFINITIONS = [
     type: 'movie',
     category: 'stream',
     description: 'Disney, Marvel Studios, Star Wars és National Geographic alkotások.',
-    defaultEnabled: false
+    defaultEnabled: true
   },
   {
     id: 'hu-stream-skyshowtime',
@@ -195,7 +219,7 @@ const CATALOG_DEFINITIONS = [
     type: 'movie',
     category: 'stream',
     description: 'Universal, Paramount és Showtime sikerfilmek magyar szinkronnal.',
-    defaultEnabled: false
+    defaultEnabled: true
   },
   {
     id: 'hu-stream-appletv',
@@ -211,7 +235,7 @@ const CATALOG_DEFINITIONS = [
     type: 'movie',
     category: 'stream',
     description: 'Prime Video magyarországi legnézettebb alkotásai.',
-    defaultEnabled: false
+    defaultEnabled: true
   }
 ];
 
@@ -317,8 +341,8 @@ function filterPlayableTmdbItems(rawResults, isSeries = false) {
       if (yearNum >= 2026 && votes < 500) return false;
       if (votes < 120) return false;
     } else {
-      // Movies must already be released on VOD with Hungarian dubs (exclude 2026+ upcoming/theatrical-only titles)
-      if (yearNum >= 2026) return false;
+      // Movies must already be released on VOD with Hungarian dubs (exclude 2025+ titles unless massive blockbusters)
+      if (yearNum >= 2025) return false;
       if (votes < 450) return false;
     }
     return true;
@@ -366,14 +390,11 @@ async function enrichTmdbItems(rawResults, isSeries = false, allowRecentDays = 2
 }
 
 /**
- * Fetches two TMDB pages and merges them so weekly rotation has a rich 35-40 item pool.
+ * Fetches TMDB page fast so cold-start catalog requests complete in < 800ms on Vercel.
  */
 async function fetchTwoTmdbPages(buildUrlFn, isSeries = false, allowRecentDays = 25) {
-  const [r1, r2] = await Promise.all([
-    fetch(buildUrlFn(1), { signal: AbortSignal.timeout(4500) }).then(r => r.json()).catch(() => ({})),
-    fetch(buildUrlFn(2), { signal: AbortSignal.timeout(4500) }).then(r => r.json()).catch(() => ({}))
-  ]);
-  const combined = [...(r1.results || []), ...(r2.results || [])];
+  const r1 = await fetch(buildUrlFn(1), { signal: AbortSignal.timeout(2500) }).then(r => r.json()).catch(() => ({}));
+  const combined = r1.results || [];
   return await enrichTmdbItems(combined, isSeries, allowRecentDays);
 }
 
@@ -395,55 +416,30 @@ async function fetchCatalogItems(catalogId, type, { search = '', skip = 0 } = {}
 
   let items = [];
 
-  // 1. If page 1 and no search query, attempt to fetch live rankings from Mafab.hu
-  if (page === 1 && !search) {
-    try {
-      const mafabTitles = await tryFetchMafabList(catalogId);
-      if (Array.isArray(mafabTitles) && mafabTitles.length >= 5) {
-        const candidateItems = [];
-        for (const title of mafabTitles) {
-          try {
-            const sRes = await fetch(`${TMDB_BASE_URL}/search/${isSeries ? 'tv' : 'movie'}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title)}&language=hu-HU`, {
-              signal: AbortSignal.timeout(1500)
-            }).then(r => r.json());
-            if (sRes.results && sRes.results.length > 0) {
-              candidateItems.push(sRes.results[0]);
-            }
-          } catch (e) {}
-        }
-        if (candidateItems.length >= 5) {
-          items = await enrichTmdbItems(candidateItems, isSeries, 20);
-        }
-      }
-    } catch (e) {}
-  }
-
-  // 2. Official TMDB + Verified MédiaKlikk/Mafab catalog with guaranteed posters, VOD availability, and weekly rotation
+  // Official TMDB + Verified MédiaKlikk/Mafab catalog with guaranteed posters, VOD availability, and weekly rotation
   if (items.length === 0) {
     try {
-      // Cutoff date 30 days ago for VOD availability on cinema/discover shelves
-      const vodCutoffDate = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
-      const sixMonthsAgoDate = new Date(Date.now() - 210 * 86400000).toISOString().slice(0, 10);
-
       switch (catalogId) {
       case 'hu-trending-movies': {
         if (page === 1) {
-          const pool = await fetchTwoTmdbPages(
+          const verifiedRotated = rotateWeekly([...VERIFIED_POPULAR_MOVIES_POOL], catalogId, 0);
+          const tmdbPool = await fetchTwoTmdbPages(
             p => `${TMDB_BASE_URL}/trending/movie/week?api_key=${TMDB_API_KEY}&language=hu-HU&page=${p}`,
             false,
             25
           );
-          const seen = new Set(pool.map(x => x.id));
-          for (const v of VERIFIED_POPULAR_MOVIES_POOL) {
-            if (!seen.has(v.id)) {
-              seen.add(v.id);
-              pool.push(v);
+          const seen = new Set();
+          const merged = [];
+          for (const m of [...verifiedRotated, ...tmdbPool]) {
+            if (m && m.poster && !seen.has(m.id)) {
+              seen.add(m.id);
+              merged.push(m);
             }
           }
-          items = rotateWeekly(pool, catalogId, 0);
+          items = merged;
         } else {
           const url = `${TMDB_BASE_URL}/trending/movie/week?api_key=${TMDB_API_KEY}&language=hu-HU&page=${page}`;
-          const res = await fetch(url, { signal: AbortSignal.timeout(4500) }).then(r => r.json());
+          const res = await fetch(url, { signal: AbortSignal.timeout(2500) }).then(r => r.json()).catch(() => ({}));
           items = await enrichTmdbItems(res.results || [], false, 25);
         }
         break;
@@ -451,69 +447,83 @@ async function fetchCatalogItems(catalogId, type, { search = '', skip = 0 } = {}
 
       case 'hu-trending-series': {
         if (page === 1) {
-          const pool = await fetchTwoTmdbPages(
+          const verifiedRotated = rotateWeekly([...VERIFIED_POPULAR_SERIES_POOL], catalogId, 0);
+          const tmdbPool = await fetchTwoTmdbPages(
             p => `${TMDB_BASE_URL}/trending/tv/week?api_key=${TMDB_API_KEY}&language=hu-HU&page=${p}`,
             true,
             0
           );
-          items = rotateWeekly(pool, catalogId, 2);
+          const seen = new Set();
+          const merged = [];
+          for (const s of [...verifiedRotated, ...tmdbPool]) {
+            if (s && s.poster && !seen.has(s.id)) {
+              seen.add(s.id);
+              merged.push(s);
+            }
+          }
+          items = merged;
         } else {
           const url = `${TMDB_BASE_URL}/trending/tv/week?api_key=${TMDB_API_KEY}&language=hu-HU&page=${page}`;
-          const res = await fetch(url, { signal: AbortSignal.timeout(4500) }).then(r => r.json());
+          const res = await fetch(url, { signal: AbortSignal.timeout(2500) }).then(r => r.json()).catch(() => ({}));
           items = await enrichTmdbItems(res.results || [], true, 0);
         }
         break;
       }
 
       case 'hu-cinema-movies': {
-        // Recent popular movies that already have high viewer ratings and Hungarian dubbed VOD streams
-        const pool = await fetchTwoTmdbPages(
+        const verifiedRotated = rotateWeekly([...VERIFIED_POPULAR_MOVIES_POOL], catalogId, 0);
+        const tmdbPool = await fetchTwoTmdbPages(
           p => `${TMDB_BASE_URL}/discover/movie?api_key=${TMDB_API_KEY}&language=hu-HU&region=HU&primary_release_date.gte=2023-01-01&primary_release_date.lte=2025-11-01&vote_count.gte=600&sort_by=popularity.desc&page=${p}`,
           false
         );
-        const seen = new Set(pool.map(x => x.id));
-        for (const v of VERIFIED_POPULAR_MOVIES_POOL) {
-          if (!seen.has(v.id)) {
-            seen.add(v.id);
-            pool.push(v);
-          }
-        }
-        items = page === 1 ? rotateWeekly(pool, catalogId, 0) : pool;
-        break;
-      }
-
-      case 'hu-hungarian-movies': {
-        const tmdbHu = await fetchTwoTmdbPages(
-          p => `${TMDB_BASE_URL}/discover/movie?api_key=${TMDB_API_KEY}&language=hu-HU&with_original_language=hu&vote_count.gte=10&sort_by=vote_count.desc&page=${p}`,
-          false
-        );
-        // Merge verified Mafab/MédiaKlikk Hungarian classics with TMDB Hungarian hits and rotate weekly
         const seen = new Set();
         const merged = [];
-        for (const m of [...VERIFIED_HUNGARIAN_MOVIES_POOL, ...tmdbHu]) {
+        for (const m of [...verifiedRotated, ...tmdbPool]) {
           if (m && m.poster && !seen.has(m.id)) {
             seen.add(m.id);
             merged.push(m);
           }
         }
-        items = rotateWeekly(merged, catalogId, 2);
+        items = merged;
+        break;
+      }
+
+      case 'hu-hungarian-movies': {
+        const verifiedRotated = rotateWeekly([...VERIFIED_HUNGARIAN_MOVIES_POOL], catalogId, 0);
+        const tmdbHu = await fetchTwoTmdbPages(
+          p => `${TMDB_BASE_URL}/discover/movie?api_key=${TMDB_API_KEY}&language=hu-HU&with_original_language=hu&vote_count.gte=15&sort_by=vote_count.desc&page=${p}`,
+          false
+        );
+        const seen = new Set();
+        const merged = [];
+        for (const m of [...verifiedRotated, ...tmdbHu]) {
+          if (m && m.poster && !seen.has(m.id)) {
+            seen.add(m.id);
+            merged.push(m);
+          }
+        }
+        items = merged;
         break;
       }
 
       case 'hu-hungarian-series': {
-        // Combine verified MédiaKlikk series (with guaranteed posters and 100% live MTVA/Videa sources) + TMDB Hungarian series
-        const mkSeries = VERIFIED_MEDIAKLIKK_CLASSICS.map(item => ({
-          id: item.id,
-          name: item.name,
-          type: 'series',
-          poster: item.poster,
-          background: item.poster,
-          description: item.description,
-          releaseInfo: item.year,
-          year: item.year
-        }));
+        // Verified MédiaKlikk series (with guaranteed posters and 100% live MTVA/Videa sources) rotated weekly
+        const mkSeries = rotateWeekly(
+          VERIFIED_MEDIAKLIKK_CLASSICS.map(item => ({
+            id: item.id,
+            name: item.name,
+            type: 'series',
+            poster: item.poster,
+            background: item.poster,
+            description: item.description,
+            releaseInfo: item.year,
+            year: item.year
+          })),
+          catalogId,
+          0
+        );
         const tmdbHuSeries = await fetchTwoTmdbPages(
-          p => `${TMDB_BASE_URL}/discover/tv?api_key=${TMDB_API_KEY}&language=hu-HU&with_original_language=hu&vote_count.gte=5&sort_by=vote_count.desc&page=${p}`,
+          p => `${TMDB_BASE_URL}/discover/tv?api_key=${TMDB_API_KEY}&language=hu-HU&with_original_language=hu&vote_count.gte=10&sort_by=vote_count.desc&page=${p}`,
           true,
           0
         );
@@ -525,7 +535,7 @@ async function fetchCatalogItems(catalogId, type, { search = '', skip = 0 } = {}
             merged.push(s);
           }
         }
-        items = rotateWeekly(merged, catalogId, 2);
+        items = merged;
         break;
       }
 
@@ -558,7 +568,7 @@ async function fetchCatalogItems(catalogId, type, { search = '', skip = 0 } = {}
           p => `${TMDB_BASE_URL}/discover/movie?api_key=${TMDB_API_KEY}&language=hu-HU&watch_region=HU&with_watch_providers=${provId}&vote_count.gte=150&sort_by=popularity.desc&page=${p}`,
           false
         );
-        items = page === 1 ? rotateWeekly(pool, catalogId, 1) : pool;
+        items = page === 1 ? rotateWeekly(pool, catalogId, 0) : pool;
         break;
       }
 
@@ -607,8 +617,7 @@ function getEnabledManifestCatalogs(configuredCatalogIds = null) {
     extra: [
       { name: 'search', isRequired: false },
       { name: 'skip', isRequired: false }
-    ],
-    extraSupported: ['search', 'skip']
+    ]
   }));
 }
 

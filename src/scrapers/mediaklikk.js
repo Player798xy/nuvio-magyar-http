@@ -457,18 +457,6 @@ const VERIFIED_MEDIAKLIKK_CLASSICS = [
     description: 'A Szép család és Kövér Lajos mindennapjai a 90-es évek legnépszerűbb magyar szituációs komédiájában.'
   },
   {
-    id: 'mediaklikk:program:kisvaros',
-    slug: 'kisvaros',
-    name: 'Kisváros',
-    keyword: 'Kisváros',
-    matchWord: 'kisvaros',
-    type: 'series',
-    year: '1993–2001',
-    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/06/kisvaros_1920x1080-1.jpg',
-    categories: ['Retró', 'Sorozat', 'Akció'],
-    description: 'Hunyadi főhadnagy (Usztics Mátyás) és a határőrség izgalmas bűnügyi esetei.'
-  },
-  {
     id: 'mediaklikk:program:linda',
     slug: 'linda',
     imdbId: 'tt0149483',
@@ -482,90 +470,6 @@ const VERIFIED_MEDIAKLIKK_CLASSICS = [
     description: 'Veszprémi Linda rendőr alhadnagy (Görbe Nóra) és apja (Bodrogi Gyula) bűnügyi-vígjáték sorozata.'
   },
   {
-    id: 'mediaklikk:program:angyalborben',
-    slug: 'angyalborben',
-    name: 'Angyalbőrben',
-    keyword: 'Angyalbőrben',
-    matchWord: 'angyalborben',
-    type: 'series',
-    year: '1990–1991',
-    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/10/angyalborben_1920x1080.jpg',
-    categories: ['Retró', 'Sorozat', 'Vígjáték'],
-    description: 'Urbán ezredes (Usztics Mátyás) és az újonc katonák (Szerednyey Béla, Mészáros Zoltán) laktanyai kalandjai.'
-  },
-  {
-    id: 'mediaklikk:program:abigel',
-    slug: 'abigel',
-    name: 'Abigél',
-    keyword: 'Abigél',
-    matchWord: 'abigel',
-    type: 'series',
-    year: '1978',
-    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/11/abigel_1920x1080.jpg',
-    categories: ['Retró', 'Sorozat', 'Dráma'],
-    description: 'Szabó Magda regényéből készült négyrészes televíziós sorozat Zsurzs Éva rendezésében.'
-  },
-  {
-    id: 'mediaklikk:program:a-fekete-varos',
-    slug: 'a-fekete-varos',
-    name: 'A fekete város',
-    keyword: 'A fekete város',
-    matchWord: 'a fekete varos',
-    type: 'series',
-    year: '1971',
-    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/08/A-fekete-varos-Roza-1.jpg',
-    categories: ['Retró', 'Sorozat', 'Történelmi'],
-    description: 'Mikszáth Kálmán regényéből készült hétrészes történelmi tévésorozat Bessenyei Ferenc főszereplésével.'
-  },
-  {
-    id: 'mediaklikk:program:rozsa-sandor',
-    slug: 'rozsa-sandor',
-    name: 'Rózsa Sándor',
-    keyword: 'Rózsa Sándor',
-    matchWord: 'rozsa sandor',
-    type: 'series',
-    year: '1971',
-    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/07/rozsasandor_1920x1080.jpg',
-    categories: ['Retró', 'Sorozat', 'Történelmi'],
-    description: 'Móricz Zsigmond regényéből készült történelmi sorozat Oszter Sándor főszereplésével.'
-  },
-  {
-    id: 'mediaklikk:program:robog-az-uthenger',
-    slug: 'robog-az-uthenger',
-    name: 'Robog az úthenger',
-    keyword: 'Robog az úthenger',
-    matchWord: 'robog az uthenger',
-    type: 'series',
-    year: '1976',
-    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/07/robogazuthenger_1920x1080.jpg',
-    categories: ['Retró', 'Sorozat', 'Vígjáték'],
-    description: 'Józsi (Sztankay István) és úthengere hatrészes országjáró vígjátéksorozata Bednai Nándor rendezésében.'
-  },
-  {
-    id: 'mediaklikk:program:princ-a-katona',
-    slug: 'princ-a-katona',
-    name: 'Princ a katona',
-    keyword: 'Princ a katona',
-    matchWord: 'princ a katona',
-    type: 'series',
-    year: '1966–1967',
-    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/06/princakatona_1920x1080.jpg',
-    categories: ['Retró', 'Sorozat'],
-    description: 'Rémy László (Erdélyi Tibor) sorkatona tizenhárom részes kalandjai Fejér Tamás rendezésében.'
-  },
-  {
-    id: 'mediaklikk:program:oregbereny',
-    slug: 'oregbereny',
-    name: 'Öregberény',
-    keyword: 'Öregberény',
-    matchWord: 'oregbereny',
-    type: 'series',
-    year: '1993–1995',
-    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/06/oregbereny_1920x1080.jpg',
-    categories: ['Retró', 'Sorozat'],
-    description: 'Klasszikus magyar családregény-sorozat egy bortermelő falu életéről.'
-  },
-  {
     id: 'mediaklikk:program:eletkepek',
     slug: 'eletkepek',
     name: 'Életképek',
@@ -576,66 +480,6 @@ const VERIFIED_MEDIAKLIKK_CLASSICS = [
     poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/04/eletkepek_1920x1080.jpg',
     categories: ['Retró', 'Sorozat'],
     description: 'Horváth Ádám teleregénye magyar családok mindennapjairól kiváló színészgárdával.'
-  },
-  {
-    id: 'mediaklikk:program:szeszelyes-evszakok',
-    slug: 'szeszelyes-evszakok',
-    name: 'Szeszélyes évszakok',
-    keyword: 'Szeszélyes évszakok',
-    matchWord: 'szeszelyes evszakok',
-    type: 'series',
-    year: '1981–2004',
-    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/09/Firefly-1-1.jpg',
-    categories: ['Retró', 'Szórakozás', 'Kabaré'],
-    description: 'Antal Imre legendás szórakoztató és kabaréműsora az MTVA archívumából.'
-  },
-  {
-    id: 'mediaklikk:program:masfelmillio-lepes-magyarorszagon',
-    slug: 'masfelmillio-lepes-magyarorszagon',
-    name: 'Másfélmillió lépés Magyarországon',
-    keyword: 'Másfélmillió lépés Magyarországon',
-    matchWord: 'masfelmillio lepes',
-    type: 'series',
-    year: '1979',
-    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/08/masfelmillio_1920x1080-v2.jpg',
-    categories: ['Retró', 'Ismeretterjesztő', 'Természet'],
-    description: 'Rockenbauer Pál és csapatának kultikus kéktúra-filmsorozata Sinkovits Imre narrációjával.'
-  },
-  {
-    id: 'mediaklikk:program:es-meg-egymillio-lepes',
-    slug: 'es-meg-egymillio-lepes',
-    name: '...és még egymillió lépés',
-    keyword: 'egymillió lépés',
-    matchWord: 'es meg egymillio lepes',
-    type: 'series',
-    year: '1986',
-    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/08/esmegegymillio_1920x1080.jpg',
-    categories: ['Retró', 'Ismeretterjesztő', 'Természet'],
-    description: 'Rockenbauer Pál dél-dunántúli gyalogtúra-sorozata Sinkovits Imre narrációjával.'
-  },
-  {
-    id: 'mediaklikk:program:regimodi-tortenet',
-    slug: 'regimodi-tortenet',
-    name: 'Régimódi történet',
-    keyword: 'Régimódi történet',
-    matchWord: 'regimodi tortenet',
-    type: 'series',
-    year: '2006',
-    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2026/05/regimoditortenet_1920x1080.jpg',
-    categories: ['Sorozat', 'Dráma', 'Retró'],
-    description: 'Szabó Magda regényéből készült hatrészes magyar televíziós sorozat Bereményi Géza rendezésében.'
-  },
-  {
-    id: 'mediaklikk:program:kemeri',
-    slug: 'kemeri',
-    name: 'Kémeri',
-    keyword: 'Kémeri',
-    matchWord: 'kemeri',
-    type: 'series',
-    year: '1985',
-    poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2025/08/linda_1920x1080-v3-1.jpg',
-    categories: ['Retró', 'Sorozat', 'Krimi'],
-    description: 'Dr. Kémeri Ferenc ügyvéd és magánnyomozó (Székhelyi József) bűnügyi esetei a két világháború között.'
   }
 ];
 
@@ -1269,8 +1113,8 @@ async function scrapeMediaKlikk(meta) {
 
       const progData = await getMediaKlikkSeriesEpisodes(`mediaklikk:program:${slug}`);
       if (progData && progData.seasons) {
-        const sList = progData.seasons[String(seasonNum)] || [];
-        const matchedEp = sList.find(e => e.episode === epNum);
+        const sList = progData.seasons[String(seasonNum)] || progData.seasons['1'] || [];
+        const matchedEp = sList.find(e => e.episode === epNum) || sList[epNum - 1] || sList[0];
         if (matchedEp && matchedEp.token) {
           return await scrapeMediaKlikk({
             token: matchedEp.token,
