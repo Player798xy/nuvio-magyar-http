@@ -161,6 +161,7 @@ function getManifest(config = {}) {
     icon: `${hostUrl}/logo.png`,
     background: `${hostUrl}/logo.png`,
     resources: [
+      'catalog',
       {
         name: 'stream',
         types: ['movie', 'series', 'tv', 'channel'],
@@ -170,10 +171,6 @@ function getManifest(config = {}) {
         name: 'meta',
         types: ['movie', 'series', 'tv', 'channel'],
         idPrefixes: ['tt', 'tmdb:', 'mediaklikk-live-', 'mediaklikk:', 'netmozi:']
-      },
-      {
-        name: 'catalog',
-        types: ['movie', 'series', 'tv']
       }
     ],
     types: ['movie', 'series', 'tv', 'channel'],

@@ -607,7 +607,8 @@ function getEnabledManifestCatalogs(configuredCatalogIds = null) {
     extra: [
       { name: 'search', isRequired: false },
       { name: 'skip', isRequired: false }
-    ]
+    ],
+    extraSupported: ['search', 'skip']
   }));
 }
 
