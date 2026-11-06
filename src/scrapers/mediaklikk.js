@@ -655,7 +655,7 @@ async function getMediaKlikkSeriesEpisodes(idOrSlugOrName) {
       keyword: searchKeyword,
       fromDate: '2013-01-01',
       toDate: '2026-12-31',
-      pageSize: '100',
+      pageSize: '50',
       pageNumber: '1',
       getAudioPrograms: 'false'
     });
@@ -668,7 +668,7 @@ async function getMediaKlikkSeriesEpisodes(idOrSlugOrName) {
         'Referer': 'https://mediaklikk.hu/'
       },
       body: body.toString(),
-      signal: AbortSignal.timeout(5000)
+      signal: AbortSignal.timeout(2500)
     });
 
     if (res.ok) {
@@ -806,7 +806,10 @@ async function getMediaKlikkSeriesEpisodes(idOrSlugOrName) {
     }));
   }
 
-  if (Object.keys(seasonsMap).length === 0) return null;
+  if (Object.keys(seasonsMap).length === 0) {
+    showEpisodesCache.set(cleanKey, { data: null, timestamp: Date.now() - (2 * 60 * 60 * 1000 - 60000) });
+    return null;
+  }
 
   // Sort episodes inside each season and ensure sequential episode numbers if needed
   for (const s of Object.keys(seasonsMap)) {
