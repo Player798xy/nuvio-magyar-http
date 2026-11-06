@@ -3,600 +3,818 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Magyar Streaming Pro (HU) — Nuvio & Stremio HTTP Addon</title>
+  <meta name="theme-color" content="#000000" />
+  <title>Magyar Streaming Pro — Nuvio & Stremio HTTP Addon</title>
   <link rel="icon" type="image/png" href="/logo.png" />
   <style>
     :root {
-      --bg: #0b0f17;
-      --card: #131b27;
-      --card-hover: #192334;
-      --border: #243247;
+      --bg: #000000;
+      --fg: #e8e8e8;
+      --dim: #8a8a8a;
+      --mute: #555555;
+      --line: #222222;
+      --line-strong: #3a3a3a;
       --hu-red: #ce2939;
-      --hu-white: #ffffff;
       --hu-green: #477050;
-      --text: #f1f5f9;
-      --muted: #94a3b8;
-      --green: #10b981;
+      --amber: #e0a82e;
+      --green: #38b26f;
+      --mono: 'Consolas', 'SFMono-Regular', 'Menlo', 'Monaco', monospace;
+      --sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at top, #172238 0%, var(--bg) 70%);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 0 16px 56px;
+
+    html, body {
+      background: #000000;
+      color: var(--fg);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Vízszintes magyar trikolór sáv (Piros - Fehér - Zöld felülről lefelé) */
-    .hu-top-stripe {
-      display: flex;
-      flex-direction: column;
+    a { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
+    a:hover { color: #ffffff; }
+
+    /* Top thin Hungarian tricolor rule */
+    .mast-stripe {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      height: 3px;
       width: 100%;
-      max-width: 980px;
-      height: 12px;
-      margin: 0 auto 28px;
-      border-radius: 0 0 8px 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.45);
     }
-    .hu-top-stripe .stripe-red { flex: 1; background: #ce2939; }
-    .hu-top-stripe .stripe-white { flex: 1; background: #ffffff; }
-    .hu-top-stripe .stripe-green { flex: 1; background: #477050; }
+    .mast-stripe .s-r { background: #ce2939; }
+    .mast-stripe .s-w { background: #e8e8e8; }
+    .mast-stripe .s-g { background: #477050; }
 
-    .container {
-      max-width: 980px;
+    /* Top utility bar (cleanyour.tv style) */
+    .topbar {
+      border-bottom: 1px solid var(--line);
+      padding: 8px 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      max-width: 860px;
       margin: 0 auto;
     }
-
-    .hero {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 28px;
-      margin-bottom: 24px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    .topbar-brand {
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      color: #ffffff;
     }
-    .hero-header {
+    .topbar-nav {
       display: flex;
-      align-items: center;
-      gap: 18px;
-      margin-bottom: 14px;
+      gap: 14px;
       flex-wrap: wrap;
+      color: var(--dim);
     }
-    .addon-logo {
-      width: 68px;
-      height: 68px;
-      border-radius: 16px;
-      object-fit: cover;
-      border: 2px solid var(--border);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-      flex-shrink: 0;
+    .topbar-nav a {
+      color: var(--dim);
+      text-decoration: none;
     }
-    .hu-flag-svg {
-      width: 42px;
-      height: 28px;
-      border-radius: 4px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.45);
-      border: 1px solid rgba(255,255,255,0.2);
-      flex-shrink: 0;
+    .topbar-nav a:hover {
+      color: #ffffff;
+      text-decoration: underline;
     }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      padding: 5px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      border: 1px solid rgba(16, 185, 129, 0.3);
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 20px 16px 64px;
+    }
+
+    /* Header block */
+    .intro {
+      border-bottom: 1px solid var(--line-strong);
+      padding-bottom: 18px;
+      margin-bottom: 22px;
+    }
+    .kicker {
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--dim);
+      margin-bottom: 6px;
     }
     h1 {
-      font-size: 26px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-bottom: 6px;
     }
-    p.subtitle {
-      color: var(--muted);
-      line-height: 1.6;
-      margin-bottom: 22px;
-      font-size: 15px;
+    .lede {
+      color: var(--dim);
+      font-size: 13.5px;
+      max-width: 72ch;
+      margin-bottom: 14px;
     }
-    .manifest-box {
-      background: #090d14;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
+
+    /* Manifest URL bar */
+    .manifest-bar {
+      border: 1px solid var(--line-strong);
+      background: #000000;
+      padding: 8px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
+      gap: 10px;
       flex-wrap: wrap;
     }
     .manifest-url {
-      font-family: 'Consolas', monospace;
-      font-size: 13.5px;
-      color: #38bdf8;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: #ffffff;
       word-break: break-all;
       flex: 1;
-      min-width: 220px;
+      min-width: 200px;
+      padding: 2px 4px;
     }
-    .btn-row {
+    .btn-group {
       display: flex;
-      gap: 10px;
+      gap: 6px;
       flex-wrap: wrap;
     }
     button, .btn {
-      cursor: pointer;
-      border: none;
-      border-radius: 10px;
-      padding: 11px 18px;
+      font-family: var(--mono);
+      font-size: 12px;
       font-weight: 600;
-      font-size: 14px;
-      transition: all 0.15s ease;
+      background: #000000;
+      color: var(--fg);
+      border: 1px solid var(--line-strong);
+      padding: 6px 11px;
+      cursor: pointer;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      color: var(--text);
+      gap: 6px;
+      border-radius: 0;
+    }
+    button:hover, .btn:hover {
+      border-color: #ffffff;
+      color: #ffffff;
+      background: #111111;
     }
     .btn-primary {
-      background: var(--hu-red);
-      color: #fff;
+      background: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
     }
-    .btn-primary:hover { background: #b01e2d; }
-    .btn-secondary {
-      background: #1e293b;
-      color: var(--text);
-      border: 1px solid var(--border);
+    .btn-primary:hover {
+      background: #d8d8d8;
+      color: #000000;
+      border-color: #d8d8d8;
     }
-    .btn-secondary:hover { background: #283548; }
-
-    /* Section Headers */
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-      gap: 10px;
+    .btn-small {
+      padding: 3px 8px;
+      font-size: 11px;
+      color: var(--dim);
+      border-color: var(--line);
     }
-    .section-header h2 {
-      font-size: 17px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .section-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+    .btn-small.active {
+      background: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
     }
 
-    /* Resolution Selector Grid */
-    .res-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 12px;
-      margin-bottom: 26px;
-    }
-    .res-card {
-      background: var(--card);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.15s ease;
-    }
-    .res-card:hover {
-      background: var(--card-hover);
-      border-color: #3b4f6e;
-    }
-    .res-card:has(input:checked) {
-      border-color: var(--hu-red);
-      background: rgba(206, 41, 57, 0.08);
-    }
-    .res-card input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      min-width: 18px;
-      flex: 0 0 18px;
-      accent-color: var(--hu-red);
-      cursor: pointer;
-    }
-    .res-info {
-      flex: 1;
-      min-width: 0;
-    }
-    .res-info h3 {
-      font-size: 14.5px;
-      font-weight: 700;
-      margin-bottom: 2px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .res-info p {
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .res-tag {
-      font-size: 10.5px;
-      font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 5px;
-      background: rgba(206, 41, 57, 0.22);
-      color: #fda4af;
-      border: 1px solid rgba(206, 41, 57, 0.45);
-    }
-
-    /* Sources & Catalogs Grid */
-    .sources-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
-      gap: 12px;
-      margin-bottom: 26px;
-    }
-    .source-card {
-      background: var(--card);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 15px;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.15s ease;
-    }
-    .source-card:hover {
-      background: var(--card-hover);
-      border-color: #3b4f6e;
-    }
-    .source-card:has(input:checked) {
-      border-color: rgba(16, 185, 129, 0.45);
-    }
-    .source-card input[type="checkbox"] {
-      margin-top: 2px;
-      width: 18px;
-      height: 18px;
-      min-width: 18px;
-      flex: 0 0 18px;
-      accent-color: var(--hu-red);
-      cursor: pointer;
-    }
-    .source-info {
-      flex: 1;
-      min-width: 0;
-    }
-    .source-info h3 {
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--text);
-    }
-    .source-info p {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.4;
-    }
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--green);
-      display: inline-block;
-      flex-shrink: 0;
-    }
-
-    /* Stream Tester */
-    .tester {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
+    /* Section blocks */
+    .sec {
       margin-bottom: 24px;
     }
-    .tester h2 {
-      font-size: 18px;
-      margin-bottom: 6px;
-    }
-    .tester p.hint {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 14px;
-    }
-    .preset-pills {
+    .sec-head {
       display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
       gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--line-strong);
     }
-    .pill {
-      background: #1e293b;
-      border: 1px solid var(--border);
-      color: #cbd5e1;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .pill:hover {
-      background: #334155;
-      color: #fff;
-    }
-    .pill.active {
-      background: var(--hu-red);
-      border-color: var(--hu-red);
-      color: #fff;
-    }
-    .test-controls {
+    .sec-title {
       display: flex;
-      gap: 10px;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .ch-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .sec-head h2 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #ffffff;
+    }
+    .sec-actions {
+      display: flex;
+      gap: 4px;
       flex-wrap: wrap;
-      margin-bottom: 14px;
+    }
+
+    /* Compact inline row for resolutions */
+    .res-bar {
+      display: flex;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--line);
+    }
+    .res-item {
+      flex: 1 1 180px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-right: 1px solid var(--line);
+      cursor: pointer;
+      user-select: none;
+      font-family: var(--mono);
+      font-size: 12.5px;
+    }
+    .res-item:last-child { border-right: none; }
+    .res-item:hover { background: #0c0c0c; }
+    .res-item input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      accent-color: #ffffff;
+      cursor: pointer;
+    }
+    .res-item .res-sub {
+      color: var(--dim);
+      font-family: var(--sans);
+      font-size: 11.5px;
+      margin-left: auto;
+    }
+
+    /* Compact vertical list (table-like rows, zero grid cards) */
+    .clean-list {
+      border-bottom: 1px solid var(--line-strong);
+    }
+    .list-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 8px;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      user-select: none;
+      font-size: 13px;
+    }
+    .list-row:last-child {
+      border-bottom: none;
+    }
+    .list-row:hover {
+      background: #0d0d0d;
+    }
+    .list-row input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      flex: 0 0 14px;
+      accent-color: #ffffff;
+      cursor: pointer;
+    }
+    .row-idx {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--mute);
+      width: 20px;
+      flex: 0 0 20px;
+    }
+    .row-name {
+      font-weight: 600;
+      color: #ffffff;
+      min-width: 155px;
+      flex: 0 0 165px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .row-desc {
+      color: var(--dim);
+      font-size: 12.5px;
+      flex: 1;
+      min-width: 160px;
+    }
+    .row-meta {
+      font-family: var(--mono);
+      font-size: 11px;
+      white-space: nowrap;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .tag {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      padding: 1px 5px;
+      border: 1px solid var(--line-strong);
+      color: var(--dim);
+    }
+    .tag-ok {
+      color: var(--green);
+      border-color: #1f5c3a;
+    }
+    .tag-warn {
+      color: var(--amber);
+      border-color: #664d14;
+    }
+    .tag-sh {
+      color: #aaaaaa;
+      border-color: #333333;
+    }
+
+    @media (max-width: 640px) {
+      .list-row {
+        flex-wrap: wrap;
+        padding: 7px 6px;
+      }
+      .row-name {
+        flex: 1;
+        min-width: 120px;
+      }
+      .row-desc {
+        width: 100%;
+        flex: 0 0 100%;
+        padding-left: 44px;
+        font-size: 12px;
+      }
+      .row-meta {
+        padding-left: 44px;
+      }
+      .res-item {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+    }
+
+    /* Stream Search / Tester section */
+    .search-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin: 10px 0 8px;
     }
     .select-input, .text-input {
-      background: #090d14;
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 11px 14px;
-      border-radius: 10px;
-      font-size: 14px;
+      background: #000000;
+      border: 1px solid var(--line-strong);
+      color: #ffffff;
+      padding: 6px 10px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      border-radius: 0;
+    }
+    .select-input:focus, .text-input:focus {
+      outline: 1px solid #ffffff;
+      border-color: #ffffff;
     }
     .text-input {
       flex: 1;
-      min-width: 220px;
+      min-width: 200px;
     }
-    .filter-tabs {
+    .preset-line {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--dim);
+      margin-bottom: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .preset-link {
+      color: var(--fg);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      background: none;
+      border: none;
+      padding: 0 2px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+    }
+    .preset-link:hover {
+      color: #ffffff;
+      background: #1a1a1a;
+    }
+    .filter-bar {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
-      margin-bottom: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-    }
-    .filter-tabs span.label {
-      font-size: 12.5px;
-      color: var(--muted);
-      margin-right: 4px;
+      padding: 6px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 8px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--dim);
     }
     .matched-banner {
       display: none;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      color: #6ee7b7;
-      padding: 9px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      margin-bottom: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--green);
+      padding: 6px 8px;
+      border: 1px solid #1f5c3a;
+      margin-bottom: 8px;
     }
-    .results {
-      background: #090d14;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-family: 'Consolas', monospace;
-      font-size: 13px;
-      max-height: 460px;
+    .results-list {
+      border: 1px solid var(--line-strong);
+      font-family: var(--mono);
+      font-size: 12px;
+      max-height: 420px;
       overflow-y: auto;
     }
-    .stream-item {
-      padding: 12px 4px;
-      border-bottom: 1px solid #1e293b;
+    .results-empty {
+      padding: 10px;
+      color: var(--dim);
+    }
+    .stream-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+      gap: 10px;
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--line);
     }
-    .stream-item:last-child { border-bottom: none; }
-    .qual-badge {
-      display: inline-block;
-      background: rgba(206, 41, 57, 0.22);
-      border: 1px solid #ce2939;
-      color: #fda4af;
+    .stream-row:last-child { border-bottom: none; }
+    .stream-row:hover { background: #0d0d0d; }
+    .stream-main {
+      flex: 1;
+      min-width: 0;
+    }
+    .stream-title-line {
+      color: #ffffff;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .stream-sub-line {
+      color: var(--dim);
       font-size: 11px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 6px;
-      margin-left: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .qual-badge.q1080 {
-      background: rgba(16, 185, 129, 0.2);
-      border-color: #10b981;
-      color: #6ee7b7;
+    .q-tag {
+      display: inline-block;
+      font-size: 10.5px;
+      padding: 0 5px;
+      border: 1px solid var(--line-strong);
+      margin-left: 6px;
+      color: var(--fg);
     }
-    .qual-badge.q720 {
-      background: rgba(56, 189, 248, 0.2);
-      border-color: #38bdf8;
-      color: #7dd3fc;
+    .q-tag.q1080 { color: var(--green); border-color: #1f5c3a; }
+    .q-tag.q720 { color: #7dd3fc; border-color: #1e4e68; }
+
+    /* Footer */
+    .footer {
+      margin-top: 32px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--mute);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
     }
+    .footer a { color: var(--dim); }
   </style>
 </head>
 <body>
-  <!-- Vízszintes magyar zászló csík: Piros felül, Fehér középen, Zöld alul -->
-  <div class="hu-top-stripe" title="Magyarország zászlaja (Piros-Fehér-Zöld)">
-    <div class="stripe-red"></div>
-    <div class="stripe-white"></div>
-    <div class="stripe-green"></div>
+  <div class="mast-stripe">
+    <div class="s-r"></div>
+    <div class="s-w"></div>
+    <div class="s-g"></div>
   </div>
 
-  <div class="container">
-    <div class="hero">
-      <div class="hero-header">
-        <img src="/logo.png" alt="Magyar Streaming Pro Ikon" class="addon-logo" />
-        <div>
-          <div class="badge">● NUVIO & STREMIO DIRECT HTTP ADDON • v2.5.0 • MAFAB.HU & TMDB</div>
-          <h1>
-            <svg class="hu-flag-svg" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-label="Magyar zászló">
-              <rect width="60" height="13.34" y="0" fill="#CE2939"/>
-              <rect width="60" height="13.34" y="13.33" fill="#FFFFFF"/>
-              <rect width="60" height="13.34" y="26.66" fill="#477050"/>
-            </svg>
-            Magyar Streaming Pro (HU)
-          </h1>
-        </div>
-      </div>
+  <nav class="topbar">
+    <a href="/configure" class="topbar-brand">MAGYAR STREAMING PRO // v2.5.1</a>
+    <div class="topbar-nav">
+      <a href="#ch01">01 Felbontás</a>
+      <a href="#ch02">02 Források (13)</a>
+      <a href="#ch03">03 Katalógusok (12)</a>
+      <a href="#ch04">04 Kereső</a>
+      <a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener">GitHub</a>
+      <a href="/configure?old=1" title="Vissza a régi kártyás nézethez">Régi UI</a>
+    </div>
+  </nav>
 
-      <p class="subtitle">
-        Közvetlen <strong>Direct MP4 és HLS (.m3u8)</strong> magyar szinkronos és feliratos streamek felbontás-szűréssel (<code>1080p FHD</code> / <code>720p HD</code> / <code>480p SD</code>),
-        <strong>Mafab.hu és TMDB</strong> magyar katalógusokkal, 490+ <strong>MédiaKlikk (MTVA)</strong> archív műsorral és 7 élő TV csatornával.
+  <main class="wrap">
+    <!-- CH 00: MANIFEST & INSTALL -->
+    <header class="intro">
+      <div class="kicker">CH 00 · NUVIO &amp; STREMIO DIRECT HTTP ADDON</div>
+      <h1>Magyar Streaming Pro (HU)</h1>
+      <p class="lede">
+        Közvetlen MP4 és HLS (.m3u8) magyar szinkronos streamek torrent és Debrid nélkül.
+        Válaszd ki alul a felbontást, a forrásokat és a katalógusokat — a Manifest URL automatikusan frissül.
       </p>
 
-      <div class="manifest-box">
+      <div class="manifest-bar">
         <span class="manifest-url" id="manifestUrl">Betöltés...</span>
-        <div class="btn-row">
-          <button class="btn-primary" onclick="copyManifest()">📋 Manifest URL másolása (Nuvio)</button>
-          <a class="btn btn-secondary" id="stremioInstallBtn" href="#">🚀 Megnyitás Stremio-ban</a>
+        <div class="btn-group">
+          <button class="btn-primary" onclick="copyManifest()">Manifest URL másolása</button>
+          <a class="btn" id="stremioInstallBtn" href="#">Megnyitás Stremio-ban →</a>
         </div>
       </div>
-    </div>
+    </header>
 
-    <!-- 1. FELBONTÁS SZŰRŐ (RESOLUTION FILTER) -->
-    <div class="section-header">
-      <h2>🎞️ Felbontás Szűrő (Nuvio Manifest & Kereső)</h2>
-      <div class="section-actions">
-        <button class="pill" onclick="setResolutions(['1080p','720p','480p','360p'])">Összes felbontás</button>
-        <button class="pill" onclick="setResolutions(['1080p','720p'])">Csak HD (1080p + 720p)</button>
-        <button class="pill" onclick="setResolutions(['1080p'])">Csak 1080p FHD</button>
-      </div>
-    </div>
-
-    <div class="res-grid" id="resolutionsGrid">
-      <label class="res-card">
-        <input type="checkbox" value="1080p" checked onchange="onConfigChange()" />
-        <div class="res-info">
-          <h3>1080p Full HD <span class="res-tag">FHD</span></h3>
-          <p>Legjobb képminőség (MédiaKlikk, Videa, HDMozi)</p>
+    <!-- CH 01: RESOLUTIONS -->
+    <section class="sec" id="ch01">
+      <div class="sec-head">
+        <div class="sec-title">
+          <span class="ch-num">CH 01</span>
+          <h2>Felbontás Szűrő</h2>
         </div>
-      </label>
-      <label class="res-card">
-        <input type="checkbox" value="720p" checked onchange="onConfigChange()" />
-        <div class="res-info">
-          <h3>720p HD <span class="res-tag">HD</span></h3>
-          <p>Gyors betöltés, HD minőség</p>
+        <div class="sec-actions">
+          <button class="btn-small" onclick="setResolutions(['1080p','720p','480p','360p'])">Összes</button>
+          <button class="btn-small" onclick="setResolutions(['1080p','720p'])">Csak HD (1080p+720p)</button>
+          <button class="btn-small" onclick="setResolutions(['1080p'])">Csak 1080p</button>
         </div>
-      </label>
-      <label class="res-card">
-        <input type="checkbox" value="480p" checked onchange="onConfigChange()" />
-        <div class="res-info">
-          <h3>480p SD <span class="res-tag">SD</span></h3>
-          <p>Normál felbontás, retro filmekhez</p>
-        </div>
-      </label>
-      <label class="res-card">
-        <input type="checkbox" value="360p" checked onchange="onConfigChange()" />
-        <div class="res-info">
-          <h3>360p / Alacsony <span class="res-tag">LQ</span></h3>
-          <p>Mobilnet-takarékos és archív felvételek</p>
-        </div>
-      </label>
-    </div>
-
-    <!-- 2. FORRÁSOK SZŰRŐJE (13 MAGYAR FORRÁS) -->
-    <div class="section-header">
-      <h2>📡 13 Aktív Magyar Forrás (Kattints a szűréshez)</h2>
-      <div class="section-actions">
-        <button class="pill" onclick="toggleAllSources(true)">Összes bekapcsolása</button>
-        <button class="pill" onclick="toggleAllSources(false)">Összes kikapcsolása</button>
-      </div>
-    </div>
-
-    <div class="sources-grid" id="sourcesGrid">
-      <label class="source-card"><input type="checkbox" value="mediaklikk" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> MédiaKlikk (MTVA)</h3><p>43+ klasszikus sorozat, retro mesék + 7 Élő TV (M4 Sport, M1, Duna 1080p) • <span style="color:#34d399;font-weight:600;">✅ Hivatalos forrás</span></p></div></label>
-      <label class="source-card"><input type="checkbox" value="videa" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Videa.hu</h3><p>RC4 XML dekódoló — 1080p FHD & 720p HD MP4 streamek • <span style="color:#fbbf24;font-weight:600;">⚠️ Közösségi feltöltés: lehet, hogy nem jó a videó</span></p></div></label>
-      <label class="source-card"><input type="checkbox" value="indavideo" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Indavideo.hu</h3><p>Dinamikus amfphp token feloldó — 720p/360p MP4 • <span style="color:#fbbf24;font-weight:600;">⚠️ Közösségi feltöltés: lehet, hogy nem jó a videó</span></p></div></label>
-      <label class="source-card"><input type="checkbox" value="hdmozi" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> HDMozi</h3><p>1080p FHD magyar szinkronos mozifilmek és sorozatok • <span style="color:#34d399;font-weight:600;">✅ IMDb / Évszám ellenőrzött</span></p></div></label>
-      <label class="source-card"><input type="checkbox" value="filmvilag2" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Filmvilág2</h3><p>Magyar szinkronos teljes filmek és klasszikusok • <span style="color:#fbbf24;font-weight:600;">⚠️ Cím alapú: lehet, hogy nem jó a videó</span></p></div></label>
-      <label class="source-card"><input type="checkbox" value="jobbmintatv" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> JobbMintATv</h3><p>Sorozat epizódok és mozifilmek közvetlen lejátszással • <span style="color:#34d399;font-weight:600;">✅ IMDb / Évszám ellenőrzött</span></p></div></label>
-      <label class="source-card"><input type="checkbox" value="netmozi" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> NetMozi</h3><p>Szinkronos és feliratos filmek és sorozatok • <span style="color:#34d399;font-weight:600;">✅ Évszám ellenőrzött</span></p></div></label>
-      <label class="source-card"><input type="checkbox" value="filmezek" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Filmezek.com</h3><p>Több tárhelyes magyar film- és sorozatgyűjtemény • <span style="color:#34d399;font-weight:600;">✅ IMDb / Évszám ellenőrzött</span></p></div></label>
-      <label class="source-card"><input type="checkbox" value="onlinefilmek" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Online-Filmek.me</h3><p>Közvetlen Videa, OK.ru és HLS folyamok • <span style="color:#fbbf24;font-weight:600;">⚠️ Közösségi feltöltés: lehet, hogy nem jó a videó</span></p></div></label>
-      <label class="source-card"><input type="checkbox" value="dmdamedia" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> DMDamedia</h3><p>Magyar szinkronos sorozatok és filmek • <span style="color:#fbbf24;font-weight:600;">⚠️ Cím alapú: lehet, hogy nem jó a videó</span></p></div></label>
-      <label class="source-card"><input type="checkbox" value="mesefilm" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> MeseFilm.hu</h3><p>Családi animációk, bábfilmek és mesék</p></div></label>
-      <label class="source-card"><input type="checkbox" value="videakid" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Videakid.hu</h3><p>Gyerekfilmek, rajzfilmek és mesék közvetlen MP4-ben • <span style="color:#fbbf24;font-weight:600;">⚠️ Közösségi feltöltés: lehet, hogy nem jó a videó</span></p></div></label>
-      <label class="source-card"><input type="checkbox" value="sorozatoknet" checked onchange="onConfigChange()"><div class="source-info"><h3><span class="dot"></span> Sorozatok.net</h3><p>Streambot dekódoló sorozat epizódokhoz</p></div></label>
-    </div>
-
-    <!-- 3. MAFAB.HU & TMDB KATALÓGUS POLCOK -->
-    <div class="section-header">
-      <h2>📚 Mafab.hu & TMDB Katalógus Polcok (Nuvio Kezdőlap)</h2>
-      <div class="section-actions">
-        <button class="pill" onclick="setCatalogPreset('default')">Alapértelmezett (7 polc)</button>
-        <button class="pill" onclick="setCatalogPreset('all')">Összes polc (+Streaming)</button>
-      </div>
-    </div>
-
-    <div class="sources-grid" id="catalogsGrid">
-      <label class="source-card"><input type="checkbox" value="hu-live-tv" checked onchange="onConfigChange()"><div class="source-info"><h3>🔴 Magyar Élő TV</h3><p>M4 Sport, M1, M2, Duna, M5 élő 1080p adások</p></div></label>
-      <label class="source-card"><input type="checkbox" value="hu-mediaklikk-classics" checked onchange="onConfigChange()"><div class="source-info"><h3>🏛️ MédiaKlikk Klasszikusok</h3><p>490+ MTVA archív műsor, retro sorozatok és mesék</p></div></label>
-      <label class="source-card"><input type="checkbox" value="hu-trending-movies" checked onchange="onConfigChange()"><div class="source-info"><h3>🔥 Heti legnézettebb filmek</h3><p>Mafab.hu & TMDB magyar heti filmes toplista</p></div></label>
-      <label class="source-card"><input type="checkbox" value="hu-trending-series" checked onchange="onConfigChange()"><div class="source-info"><h3>🔥 Heti legnézettebb sorozatok</h3><p>Mafab.hu & TMDB magyar heti sorozat toplista</p></div></label>
-      <label class="source-card"><input type="checkbox" value="hu-cinema-movies" checked onchange="onConfigChange()"><div class="source-info"><h3>🍿 Jelenleg a mozikban</h3><p>Mafab.hu mozibemutatók és friss premierek</p></div></label>
-      <label class="source-card"><input type="checkbox" value="hu-hungarian-movies" checked onchange="onConfigChange()"><div class="source-info"><h3>🇭🇺 Magyar Filmek Toplistája</h3><p>Mafab.hu legjobb hazai gyártású magyar filmek</p></div></label>
-      <label class="source-card"><input type="checkbox" value="hu-hungarian-series" checked onchange="onConfigChange()"><div class="source-info"><h3>🇭🇺 Magyar Sorozatok Toplistája</h3><p>Hazai sorozatok (A mi kis falunk, Aranyélet, stb.)</p></div></label>
-      <label class="source-card"><input type="checkbox" value="hu-stream-netflix" onchange="onConfigChange()"><div class="source-info"><h3>🔴 Netflix (Magyar kínálat)</h3><p>Mafab.hu & TMDB Netflix szinkronos sikerfilmek</p></div></label>
-      <label class="source-card"><input type="checkbox" value="hu-stream-max" onchange="onConfigChange()"><div class="source-info"><h3>🟣 Max / HBO Max</h3><p>Mafab.hu & TMDB Max Magyarország toplista</p></div></label>
-      <label class="source-card"><input type="checkbox" value="hu-stream-disney" onchange="onConfigChange()"><div class="source-info"><h3>🔵 Disney+ Magyarország</h3><p>Disney, Marvel, Star Wars magyar szinkronnal</p></div></label>
-      <label class="source-card"><input type="checkbox" value="hu-stream-skyshowtime" onchange="onConfigChange()"><div class="source-info"><h3>🟡 SkyShowtime</h3><p>Universal & Paramount sikerfilmek magyarul</p></div></label>
-      <label class="source-card"><input type="checkbox" value="hu-stream-prime" onchange="onConfigChange()"><div class="source-info"><h3>🔷 Amazon Prime Video</h3><p>Prime Video magyarországi kínálat</p></div></label>
-    </div>
-
-    <!-- 4. ÉLŐ STREAM & FELBONTÁS TESZTELŐ (CÍM SZERINTI KERESÉSSEL) -->
-    <div class="tester">
-      <h2>🔍 Élő Stream & Felbontás Kereső (Mafab.hu & TMDB)</h2>
-      <p class="hint">Írj be bármilyen magyar vagy angol film-/sorozatcímet (nem kell IMDb kódot írnod, a rendszer automatikusan feloldja TMDB & Mafab alapján)!</p>
-
-      <div class="preset-pills">
-        <span class="pill" onclick="runPreset('movie', 'mediaklikk-live-m4')">⚽ M4 Sport Élő (1080p)</span>
-        <span class="pill" onclick="runPreset('series', 'A nagy ho-ho-horgász')">🎣 A nagy ho-ho-horgász (MédiaKlikk)</span>
-        <span class="pill" onclick="runPreset('series', 'Magyar népmesék')">📖 Magyar népmesék</span>
-        <span class="pill" onclick="runPreset('movie', 'Macskafogó')">🐭 Macskafogó (1986)</span>
-        <span class="pill" onclick="runPreset('movie', 'Vuk')">🦊 Vuk (1981)</span>
-        <span class="pill" onclick="runPreset('movie', 'A vad robot')">🤖 A vad robot (2024)</span>
-        <span class="pill" onclick="runPreset('movie', 'Avatar')">🎬 Avatar (2009)</span>
       </div>
 
-      <div class="test-controls">
+      <div class="res-bar" id="resolutionsGrid">
+        <label class="res-item">
+          <input type="checkbox" value="1080p" checked onchange="onConfigChange()" />
+          <span>1080p FHD</span>
+          <span class="res-sub">Full HD</span>
+        </label>
+        <label class="res-item">
+          <input type="checkbox" value="720p" checked onchange="onConfigChange()" />
+          <span>720p HD</span>
+          <span class="res-sub">HD</span>
+        </label>
+        <label class="res-item">
+          <input type="checkbox" value="480p" checked onchange="onConfigChange()" />
+          <span>480p SD</span>
+          <span class="res-sub">Normál</span>
+        </label>
+        <label class="res-item">
+          <input type="checkbox" value="360p" checked onchange="onConfigChange()" />
+          <span>360p LQ</span>
+          <span class="res-sub">Takarékos</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- CH 02: 13 SOURCES (COMPACT LIST) -->
+    <section class="sec" id="ch02">
+      <div class="sec-head">
+        <div class="sec-title">
+          <span class="ch-num">CH 02</span>
+          <h2>13 Magyar Forrás</h2>
+        </div>
+        <div class="sec-actions">
+          <button class="btn-small" onclick="toggleAllSources(true)">Mind be</button>
+          <button class="btn-small" onclick="toggleAllSources(false)">Mind ki</button>
+        </div>
+      </div>
+
+      <div class="clean-list" id="sourcesGrid">
+        <label class="list-row">
+          <input type="checkbox" value="mediaklikk" checked onchange="onConfigChange()" />
+          <span class="row-idx">01</span>
+          <span class="row-name">MédiaKlikk (MTVA)</span>
+          <span class="row-desc">43 klasszikus mese/sorozat + 7 élő TV (1080p HLS)</span>
+          <span class="row-meta"><span class="tag tag-ok">Hivatalos</span></span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="jobbmintatv" checked onchange="onConfigChange()" />
+          <span class="row-idx">02</span>
+          <span class="row-name">JobbMintATv</span>
+          <span class="row-desc">Mozifilmek és sorozat epizódok (Videa MP4 &amp; OK.ru 1080p HLS)</span>
+          <span class="row-meta"><span class="tag tag-ok">IMDb ellenőrzött</span></span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="filmezek" checked onchange="onConfigChange()" />
+          <span class="row-idx">03</span>
+          <span class="row-name">Filmezek.com</span>
+          <span class="row-desc">Több tárhelyes magyar film- és sorozatgyűjtemény (Videa &amp; OK.ru 1080p)</span>
+          <span class="row-meta"><span class="tag tag-ok">IMDb ellenőrzött</span></span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="videa" checked onchange="onConfigChange()" />
+          <span class="row-idx">04</span>
+          <span class="row-name">Videa.hu</span>
+          <span class="row-desc">RC4 XML dekódoló — közvetlen 1080p/720p MP4 streamek</span>
+          <span class="row-meta"><span class="tag tag-warn">Közösségi: lehet nem jó</span></span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="indavideo" checked onchange="onConfigChange()" />
+          <span class="row-idx">05</span>
+          <span class="row-name">Indavideo.hu</span>
+          <span class="row-desc">Dinamikus amfphp token feloldó — 720p/360p MP4</span>
+          <span class="row-meta"><span class="tag tag-warn">Közösségi: lehet nem jó</span></span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="filmvilag2" checked onchange="onConfigChange()" />
+          <span class="row-idx">06</span>
+          <span class="row-name">Filmvilág2</span>
+          <span class="row-desc">Magyar szinkronos teljes filmek (Videa, Indavideo, OK.ru)</span>
+          <span class="row-meta"><span class="tag tag-warn">Cím alapú</span></span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="mesefilm" checked onchange="onConfigChange()" />
+          <span class="row-idx">07</span>
+          <span class="row-name">MeseKincstár</span>
+          <span class="row-desc">Családi animációk, bábfilmek és mesék (évszám/hossz szűrővel)</span>
+          <span class="row-meta"><span class="tag tag-ok">Ellenőrzött</span></span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="videakid" checked onchange="onConfigChange()" />
+          <span class="row-idx">08</span>
+          <span class="row-name">Videakid.hu</span>
+          <span class="row-desc">Gyerekfilmek, rajzfilmek és mesék közvetlen MP4-ben</span>
+          <span class="row-meta"><span class="tag tag-warn">Közösségi: lehet nem jó</span></span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="netmozi" checked onchange="onConfigChange()" />
+          <span class="row-idx">09</span>
+          <span class="row-name">NetMozi</span>
+          <span class="row-desc">Szinkronos filmek és sorozatok (VOE 1080p Self-Hoston)</span>
+          <span class="row-meta"><span class="tag tag-ok">Évszám ellenőrzött</span><span class="tag tag-sh">VOE: Self-Host</span></span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="onlinefilmek" checked onchange="onConfigChange()" />
+          <span class="row-idx">10</span>
+          <span class="row-name">Online-Filmek.me</span>
+          <span class="row-desc">Közvetlen Videa, OK.ru és Self-Host VOE 1080p folyamok</span>
+          <span class="row-meta"><span class="tag tag-warn">Közösségi</span><span class="tag tag-sh">VOE: Self-Host</span></span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="sorozatoknet" checked onchange="onConfigChange()" />
+          <span class="row-idx">11</span>
+          <span class="row-name">Sorozatok.net</span>
+          <span class="row-desc">Hunter JS dekódoló sorozat epizódokhoz</span>
+          <span class="row-meta"><span class="tag tag-sh">VOE: Self-Host</span></span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="hdmozi" checked onchange="onConfigChange()" />
+          <span class="row-idx">12</span>
+          <span class="row-name">HDMozi</span>
+          <span class="row-desc">1080p FHD AES-128 HLS mozifilmek és sorozatok</span>
+          <span class="row-meta"><span class="tag tag-ok">IMDb ellenőrzött</span><span class="tag tag-sh">Csak Self-Host</span></span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="dmdamedia" checked onchange="onConfigChange()" />
+          <span class="row-idx">13</span>
+          <span class="row-name">DMDamedia</span>
+          <span class="row-desc">Magyar szinkronos sorozatok és filmek</span>
+          <span class="row-meta"><span class="tag tag-warn">Cím alapú</span><span class="tag tag-sh">Csak Self-Host</span></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- CH 03: CATALOGS (COMPACT LIST) -->
+    <section class="sec" id="ch03">
+      <div class="sec-head">
+        <div class="sec-title">
+          <span class="ch-num">CH 03</span>
+          <h2>Katalógus Polcok (Heti Rotáció)</h2>
+        </div>
+        <div class="sec-actions">
+          <button class="btn-small" onclick="setCatalogPreset('default')">Alapértelmezett (7)</button>
+          <button class="btn-small" onclick="setCatalogPreset('all')">Összes (12)</button>
+        </div>
+      </div>
+
+      <div class="clean-list" id="catalogsGrid">
+        <label class="list-row">
+          <input type="checkbox" value="hu-live-tv" checked onchange="onConfigChange()" />
+          <span class="row-idx">01</span>
+          <span class="row-name">Magyar Élő TV</span>
+          <span class="row-desc">M4 Sport, M1, M2, Duna, M5, Duna World élő 1080p adások</span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="hu-mediaklikk-classics" checked onchange="onConfigChange()" />
+          <span class="row-idx">02</span>
+          <span class="row-name">MédiaKlikk Klasszikusok</span>
+          <span class="row-desc">43 MTVA archív mese és sorozat (Magyar népmesék, Süsü, Ho-ho-horgász)</span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="hu-trending-movies" checked onchange="onConfigChange()" />
+          <span class="row-idx">03</span>
+          <span class="row-name">Heti Trendi Filmek</span>
+          <span class="row-desc">Mafab.hu &amp; TMDB magyar heti filmes toplista (heti rotációval)</span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="hu-trending-series" checked onchange="onConfigChange()" />
+          <span class="row-idx">04</span>
+          <span class="row-name">Heti Trendi Sorozatok</span>
+          <span class="row-desc">Mafab.hu &amp; TMDB magyar heti sorozat toplista</span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="hu-cinema-movies" checked onchange="onConfigChange()" />
+          <span class="row-idx">05</span>
+          <span class="row-name">Friss Mozifilmek</span>
+          <span class="row-desc">Már elérhető szinkronos mozis sikerfilmek</span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="hu-hungarian-movies" checked onchange="onConfigChange()" />
+          <span class="row-idx">06</span>
+          <span class="row-name">Magyar Filmek</span>
+          <span class="row-desc">Legjobb hazai gyártású magyar filmek és klasszikusok</span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="hu-hungarian-series" checked onchange="onConfigChange()" />
+          <span class="row-idx">07</span>
+          <span class="row-name">Magyar Sorozatok</span>
+          <span class="row-desc">Hazai sorozatok és MTVA klasszikusok</span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="hu-stream-netflix" onchange="onConfigChange()" />
+          <span class="row-idx">08</span>
+          <span class="row-name">Netflix HU</span>
+          <span class="row-desc">Netflix magyarországi szinkronos kínálat</span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="hu-stream-max" onchange="onConfigChange()" />
+          <span class="row-idx">09</span>
+          <span class="row-name">Max / HBO</span>
+          <span class="row-desc">Max Magyarország toplista</span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="hu-stream-disney" onchange="onConfigChange()" />
+          <span class="row-idx">10</span>
+          <span class="row-name">Disney+ HU</span>
+          <span class="row-desc">Disney, Marvel, Star Wars magyar szinkronnal</span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="hu-stream-skyshowtime" onchange="onConfigChange()" />
+          <span class="row-idx">11</span>
+          <span class="row-name">SkyShowtime</span>
+          <span class="row-desc">Universal &amp; Paramount sikerfilmek magyarul</span>
+        </label>
+        <label class="list-row">
+          <input type="checkbox" value="hu-stream-prime" onchange="onConfigChange()" />
+          <span class="row-idx">12</span>
+          <span class="row-name">Prime Video</span>
+          <span class="row-desc">Amazon Prime Video magyarországi kínálat</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- CH 04: STREAM TESTER -->
+    <section class="sec" id="ch04">
+      <div class="sec-head">
+        <div class="sec-title">
+          <span class="ch-num">CH 04</span>
+          <h2>Élő Stream &amp; Felbontás Kereső</h2>
+        </div>
+      </div>
+
+      <div class="search-bar">
         <select id="mediaType" class="select-input">
           <option value="movie">Film / Élő TV</option>
           <option value="series">Sorozat (S1E1)</option>
         </select>
-        <input type="text" id="searchInput" class="text-input" value="Macskafogó" placeholder="Írj be egy címet, pl. Macskafogó, A vad robot, Dűne, M4 Sport..." onkeydown="if(event.key==='Enter') testStreams()" />
-        <button class="btn-primary" onclick="testStreams()">Streamek keresése</button>
+        <input type="text" id="searchInput" class="text-input" value="Macskafogó" placeholder="Cím (pl. Egri csillagok, Macskafogó, Dűne, M4 Sport)..." onkeydown="if(event.key==='Enter') testStreams()" />
+        <button class="btn-primary" onclick="testStreams()">Keresés →</button>
+      </div>
+
+      <div class="preset-line">
+        <span>Gyors teszt:</span>
+        <button class="preset-link" onclick="runPreset('movie', 'mediaklikk-live-m4')">M4 Sport</button> ·
+        <button class="preset-link" onclick="runPreset('series', 'A nagy ho-ho-horgász')">A nagy ho-ho-horgász</button> ·
+        <button class="preset-link" onclick="runPreset('series', 'Magyar népmesék')">Magyar népmesék</button> ·
+        <button class="preset-link" onclick="runPreset('movie', 'Egri csillagok')">Egri csillagok</button> ·
+        <button class="preset-link" onclick="runPreset('movie', 'Macskafogó')">Macskafogó</button> ·
+        <button class="preset-link" onclick="runPreset('movie', 'Vuk')">Vuk</button> ·
+        <button class="preset-link" onclick="runPreset('movie', 'Oppenheimer')">Oppenheimer</button>
       </div>
 
       <div id="matchedBanner" class="matched-banner"></div>
 
-      <div class="filter-tabs" id="liveResTabs">
-        <span class="label">Találatok szűrése felbontás szerint:</span>
-        <button class="pill active" data-res="all" onclick="setActiveResTab('all')">Összes</button>
-        <button class="pill" data-res="1080p" onclick="setActiveResTab('1080p')">1080p FHD</button>
-        <button class="pill" data-res="720p" onclick="setActiveResTab('720p')">720p HD</button>
-        <button class="pill" data-res="480p" onclick="setActiveResTab('480p')">480p SD</button>
-        <button class="pill" data-res="360p" onclick="setActiveResTab('360p')">360p</button>
+      <div class="filter-bar" id="liveResTabs">
+        <span>Szűrés:</span>
+        <button class="btn-small active" data-res="all" onclick="setActiveResTab('all')">Összes</button>
+        <button class="btn-small" data-res="1080p" onclick="setActiveResTab('1080p')">1080p FHD</button>
+        <button class="btn-small" data-res="720p" onclick="setActiveResTab('720p')">720p HD</button>
+        <button class="btn-small" data-res="480p" onclick="setActiveResTab('480p')">480p SD</button>
+        <button class="btn-small" data-res="360p" onclick="setActiveResTab('360p')">360p</button>
       </div>
 
-      <div class="results" id="testOutput">Kattints a "Streamek keresése" gombra vagy válassz a fenti gyorsgombok közül!</div>
-    </div>
-  </div>
+      <div class="results-list" id="testOutput">
+        <div class="results-empty">Kattints a "Keresés →" gombra vagy válassz a gyors tesztek közül.</div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>Magyar Streaming Pro · Nem tárol és nem hosztol médiafájlokat (kizárólag nyilvános linkeket indexel).</span>
+      <span><a href="/configure?old=1">Régi kártyás felület megnyitása</a> · <a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener">GitHub</a></span>
+    </footer>
+  </main>
 
   <script>
     const origin = window.location.origin;
@@ -685,7 +903,7 @@
     function copyManifest() {
       const url = document.getElementById('manifestUrl').textContent;
       navigator.clipboard.writeText(url);
-      alert('Manifest URL kimásolva:\n' + url + '\n\nIlleszd be a Nuvio Addonok hozzáadása mezőbe!');
+      alert('Manifest URL kimásolva:\n' + url);
     }
 
     function getStreamBucket(s) {
@@ -700,7 +918,7 @@
 
     function setActiveResTab(res) {
       activeResTab = res;
-      document.querySelectorAll('#liveResTabs button.pill').forEach(btn => {
+      document.querySelectorAll('#liveResTabs button').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-res') === res);
       });
       renderStreams();
@@ -719,7 +937,7 @@
         '480p': `480p SD (${counts['480p']})`,
         '360p': `360p (${counts['360p']})`
       };
-      document.querySelectorAll('#liveResTabs button.pill').forEach(btn => {
+      document.querySelectorAll('#liveResTabs button').forEach(btn => {
         const r = btn.getAttribute('data-res');
         if (labels[r]) btn.textContent = labels[r];
       });
@@ -737,21 +955,24 @@
         : allowedByCheckbox.filter(s => getStreamBucket(s) === activeResTab);
 
       if (filtered.length === 0) {
-        out.textContent = 'Nincs találat a kiválasztott felbontás-szűrővel. Kapcsold be a többi felbontást fent, vagy válts az "Összes" fülre!';
+        out.innerHTML = '<div class="results-empty">Nincs találat a kiválasztott felbontás-szűrővel.</div>';
         return;
       }
 
       out.innerHTML = filtered.map((s, idx) => {
         const bucket = getStreamBucket(s);
         const badgeClass = bucket === '1080p' ? 'q1080' : bucket === '720p' ? 'q720' : '';
+        const num = String(idx + 1).padStart(2, '0');
         return `
-          <div class="stream-item">
-            <div>
-              <strong>#${idx + 1} ${(s.name || '').replace(/\n/g, ' — ')}</strong>
-              <span class="qual-badge ${badgeClass}">${s.quality || (s.height ? s.height + 'p' : bucket)}</span><br/>
-              <span style="color:#94a3b8">${(s.title || '').replace(/\n/g, ' | ')}</span>
+          <div class="stream-row">
+            <div class="stream-main">
+              <div class="stream-title-line">
+                <span style="color:#666">${num}</span> ${(s.name || '').replace(/\n/g, ' — ')}
+                <span class="q-tag ${badgeClass}">${s.quality || (s.height ? s.height + 'p' : bucket)}</span>
+              </div>
+              <div class="stream-sub-line">${(s.title || '').replace(/\n/g, ' · ')}</div>
             </div>
-            <a class="btn btn-secondary" href="${s.url}" target="_blank" rel="noopener">▶ Megnyitás</a>
+            <a class="btn btn-small" href="${s.url}" target="_blank" rel="noopener">Megnyitás →</a>
           </div>
         `;
       }).join('');
@@ -771,7 +992,7 @@
       const sources = getSelectedSources().join(',');
 
       banner.style.display = 'none';
-      out.textContent = '⏳ Cím feloldása (TMDB & Mafab) és magyar források lekérdezése folyamatban...';
+      out.innerHTML = '<div class="results-empty">Keresés folyamatban...</div>';
 
       try {
         const res = await fetch(`${origin}/api/test?type=${encodeURIComponent(type)}&id=${encodeURIComponent(query)}&sources=${encodeURIComponent(sources)}`);
@@ -780,20 +1001,20 @@
 
         if (data.metaInfo && (data.metaInfo.hungarianTitle || data.metaInfo.englishTitle)) {
           banner.style.display = 'block';
-          banner.innerHTML = `✅ Feloldott cím (TMDB / Mafab): <strong>${data.metaInfo.hungarianTitle || data.metaInfo.englishTitle}</strong> ${data.metaInfo.englishTitle && data.metaInfo.englishTitle !== data.metaInfo.hungarianTitle ? `(${data.metaInfo.englishTitle})` : ''} ${data.metaInfo.year ? `[${data.metaInfo.year}]` : ''} • ${lastFetchedStreams.length} stream találat`;
+          banner.innerHTML = `[OK] Feloldott cím: <strong>${data.metaInfo.hungarianTitle || data.metaInfo.englishTitle}</strong> ${data.metaInfo.englishTitle && data.metaInfo.englishTitle !== data.metaInfo.hungarianTitle ? `(${data.metaInfo.englishTitle})` : ''} ${data.metaInfo.year ? `[${data.metaInfo.year}]` : ''} · ${lastFetchedStreams.length} találat`;
         } else if (data.matchedItem) {
           banner.style.display = 'block';
-          banner.innerHTML = `✅ Katalógus találat: <strong>${data.matchedItem.name}</strong> ${data.matchedItem.year ? `[${data.matchedItem.year}]` : ''} • ${lastFetchedStreams.length} stream találat`;
+          banner.innerHTML = `[OK] Katalógus találat: <strong>${data.matchedItem.name}</strong> ${data.matchedItem.year ? `[${data.matchedItem.year}]` : ''} · ${lastFetchedStreams.length} találat`;
         }
 
         if (lastFetchedStreams.length === 0) {
           updateTabCounts([]);
-          out.textContent = 'Nem található közvetlen magyar stream ehhez a címhez.';
+          out.innerHTML = '<div class="results-empty">Nem található közvetlen magyar stream ehhez a címhez.</div>';
           return;
         }
         renderStreams();
       } catch (e) {
-        out.textContent = 'Hiba történt: ' + e.message;
+        out.innerHTML = '<div class="results-empty">Hiba: ' + e.message + '</div>';
       }
     }
 

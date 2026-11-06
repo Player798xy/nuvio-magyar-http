@@ -482,14 +482,20 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Configure Route & Index Page
+// Configure Route & Index Page (supports ?old=1 or /old for legacy UI)
+app.get('/old', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.old.html'));
+});
+
 app.get(['/configure', '/:config/configure'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  const file = req.query.old === '1' ? 'index.old.html' : 'index.html';
+  res.sendFile(path.join(__dirname, 'public', file));
 });
 
 // Catch-all route to serve index.html for root
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  const file = req.query.old === '1' ? 'index.old.html' : 'index.html';
+  res.sendFile(path.join(__dirname, 'public', file));
 });
 
 if (require.main === module) {
