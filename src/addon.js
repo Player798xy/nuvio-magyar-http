@@ -154,7 +154,7 @@ function getManifest(config = {}) {
 
   return {
     id: 'org.nuvio.magyar.http',
-    version: '2.5.2',
+    version: '2.5.3',
     name,
     description: desc,
     logo: `${hostUrl}/logo.png`,
@@ -187,7 +187,11 @@ function getManifest(config = {}) {
 }
 
 async function getStreams(type, rawId, config = {}) {
-  const id = decodeURIComponent(rawId || '').replace(/\.json$/, '');
+  let id = rawId || '';
+  try {
+    id = decodeURIComponent(id);
+  } catch (e) {}
+  id = id.replace(/\.json$/, '');
 
   // 1. Handle Live TV channels (M4 Sport, M1, M2, Duna, M5, etc.)
   if (type === 'tv' || type === 'channel' || (id && id.startsWith('mediaklikk-live-'))) {
@@ -323,6 +327,8 @@ async function getStreams(type, rawId, config = {}) {
       }
     }
     s.description = s.title;
+    s.url = String(s.url).trim().replace(/\s+/g, '%20');
+    s.behaviorHints = { notWebReady: false, ...(s.behaviorHints || {}) };
 
     uniqueStreams.push(s);
   }

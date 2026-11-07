@@ -26,51 +26,50 @@ function normalize(str) {
 
 // Flagship MédiaKlikk (MTVA) Classics Archive Catalog
 const FEATURED_MEDIAKLIKK_CLASSICS = [
-  { id: 'tt0154077', name: 'A nagy ho-ho-horgász', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0154077/img', year: '1982–1984', description: 'A nagy ho-ho-horgász és a Főkukac felejthetetlen kalandjai Balázs Péter és Mikó István hangjával az MTVA archívumából.' },
-  { id: 'tt0861751', name: 'Magyar népmesék', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0861751/img', year: '1980–2012', description: 'Klasszikus magyar népmesék animációs sorozat Szabó Gyula felejthetetlen mesemondásával.' },
-  { id: 'tt0129719', name: 'Süsü, a sárkány kalandjai', type: 'series', poster: 'https://m.media-amazon.com/images/M/MV5BYjBjN2Y1OGItYTRhNC00ZmZiLTk0NWItMTBjNzI5ZThjOTkyXkEyXkFqcGc@._V1_SX250.jpg', year: '1977–1984', description: 'Csukás István legendás bábfilmsorozata a jólelkű, egyfejű sárkányról Bodrogi Gyula hangjával.' },
-  { id: 'tt0131636', name: 'Vuk', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0131636/img', year: '1981', description: 'Fekete István regényéből készült rajzfilmklasszikus Dargay Attila rendezésében.' },
-  { id: 'tt0121403', name: 'Indul a bakterház', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0121403/img', year: '1980', description: 'Regős Bendegúz, a bakter és a banya felejthetetlen története Koltai Róbert főszereplésével.' },
-  { id: 'tt0056789', name: 'A Tenkes kapitánya', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0056789/img', year: '1964', description: 'Történelmi kalandfilmsorozat a kuruc korból Zenthe Ferenc főszereplésével.' },
-  { id: 'tt0136650', name: 'Üzenet a jövőből - A Mézga család', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0136650/img', year: '1969', description: 'Klasszikus magyar rajzfilmsorozat Nepp Zoltán és Romhányi József tollából.' },
-  { id: 'tt1225872', name: 'Vakáción a Mézga család', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt1225872/img', year: '1978', description: 'A Mézga család világkörüli kalandjai Hufnágel Pisti nyomában.' },
-  { id: 'tt0167595', name: 'Frakk, a macskák réme', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0167595/img', year: '1971–1985', description: 'Klasszikus magyar papírkivágásos animációs sorozat Károly bácsival és Irmuskával.' },
-  { id: 'tt0168342', name: 'Kukori és Kotkoda', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0168342/img', year: '1971–1972', description: 'Népszerű magyar rajzfilmsorozat a lusta kakasról és szorgos tyúkocskájáról.' },
-  { id: 'tt0166931', name: 'Pom-Pom meséi', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0166931/img', year: '1980–1984', description: 'Picur és Pom Pom történetei: Gombóc Artúr, Festéktüsszentő Hapci Benő és barátai.' },
-  { id: 'tt0168343', name: 'Kérem a következőt! (Dr. Bubó)', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0168343/img', year: '1974–1979', description: 'Dr. Bubó orvosbagoly és Ursula nővér erdőlakó pácienseinek szatírája.' },
-  { id: 'tt0179955', name: 'Macskafogó (Cat City)', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0179955/img', year: '1986', description: 'Grabowski a szuperegér titkos küldetése a macskaszindikátus ellen.' },
-  { id: 'tt0065067', name: 'A tanú', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0065067/img', year: '1969', description: 'Pelikán József gátőr legendás szatírája Bacsó Péter filmjében.' },
-  { id: 'tt0257290', name: 'Üvegtigris', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0257290/img', year: '2001', description: 'Kultikus magyar vígjáték Rudolf Péter rendezésében.' }
+  { id: 'tt0154077', name: 'A nagy ho-ho-horgász', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0154077/img', background: 'https://images.metahub.space/poster/medium/tt0154077/img', releaseInfo: '1982–1984', year: '1982–1984', description: 'A nagy ho-ho-horgász és a Főkukac felejthetetlen kalandjai Balázs Péter és Mikó István hangjával az MTVA archívumából.' },
+  { id: 'tt0861751', name: 'Magyar népmesék', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0861751/img', background: 'https://images.metahub.space/poster/medium/tt0861751/img', releaseInfo: '1980–2012', year: '1980–2012', description: 'Klasszikus magyar népmesék animációs sorozat Szabó Gyula felejthetetlen mesemondásával.' },
+  { id: 'tt0129719', name: 'Süsü, a sárkány kalandjai', type: 'series', poster: 'https://m.media-amazon.com/images/M/MV5BYjBjN2Y1OGItYTRhNC00ZmZiLTk0NWItMTBjNzI5ZThjOTkyXkEyXkFqcGc@._V1_SX250.jpg', background: 'https://m.media-amazon.com/images/M/MV5BYjBjN2Y1OGItYTRhNC00ZmZiLTk0NWItMTBjNzI5ZThjOTkyXkEyXkFqcGc@._V1_SX250.jpg', releaseInfo: '1977–1984', year: '1977–1984', description: 'Csukás István legendás bábfilmsorozata a jólelkű, egyfejű sárkányról Bodrogi Gyula hangjával.' },
+  { id: 'tt0131636', name: 'Vuk', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0131636/img', background: 'https://images.metahub.space/poster/medium/tt0131636/img', releaseInfo: '1981', year: '1981', description: 'Fekete István regényéből készült rajzfilmklasszikus Dargay Attila rendezésében.' },
+  { id: 'tt0121403', name: 'Indul a bakterház', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0121403/img', background: 'https://images.metahub.space/poster/medium/tt0121403/img', releaseInfo: '1980', year: '1980', description: 'Regős Bendegúz, a bakter és a banya felejthetetlen története Koltai Róbert főszereplésével.' },
+  { id: 'tt0056789', name: 'A Tenkes kapitánya', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0056789/img', background: 'https://images.metahub.space/poster/medium/tt0056789/img', releaseInfo: '1964', year: '1964', description: 'Történelmi kalandfilmsorozat a kuruc korból Zenthe Ferenc főszereplésével.' },
+  { id: 'tt0136650', name: 'Üzenet a jövőből - A Mézga család', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0136650/img', background: 'https://images.metahub.space/poster/medium/tt0136650/img', releaseInfo: '1969', year: '1969', description: 'Klasszikus magyar rajzfilmsorozat Nepp Zoltán és Romhányi József tollából.' },
+  { id: 'tt1225872', name: 'Vakáción a Mézga család', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt1225872/img', background: 'https://images.metahub.space/poster/medium/tt1225872/img', releaseInfo: '1978', year: '1978', description: 'A Mézga család világkörüli kalandjai Hufnágel Pisti nyomában.' },
+  { id: 'tt0167595', name: 'Frakk, a macskák réme', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0167595/img', background: 'https://images.metahub.space/poster/medium/tt0167595/img', releaseInfo: '1971–1985', year: '1971–1985', description: 'Klasszikus magyar papírkivágásos animációs sorozat Károly bácsival és Irmuskával.' },
+  { id: 'tt0168342', name: 'Kukori és Kotkoda', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0168342/img', background: 'https://images.metahub.space/poster/medium/tt0168342/img', releaseInfo: '1971–1972', year: '1971–1972', description: 'Népszerű magyar rajzfilmsorozat a lusta kakasról és szorgos tyúkocskájáról.' },
+  { id: 'tt0166931', name: 'Pom-Pom meséi', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0166931/img', background: 'https://images.metahub.space/poster/medium/tt0166931/img', releaseInfo: '1980–1984', year: '1980–1984', description: 'Picur és Pom Pom történetei: Gombóc Artúr, Festéktüsszentő Hapci Benő és barátai.' },
+  { id: 'tt0168343', name: 'Kérem a következőt! (Dr. Bubó)', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0168343/img', background: 'https://images.metahub.space/poster/medium/tt0168343/img', releaseInfo: '1974–1979', year: '1974–1979', description: 'Dr. Bubó orvosbagoly és Ursula nővér erdőlakó pácienseinek szatírája.' },
+  { id: 'tt0179955', name: 'Macskafogó (Cat City)', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0179955/img', background: 'https://images.metahub.space/poster/medium/tt0179955/img', releaseInfo: '1986', year: '1986', description: 'Grabowski a szuperegér titkos küldetése a macskaszindikátus ellen.' },
+  { id: 'tt0065067', name: 'A tanú', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0065067/img', background: 'https://images.metahub.space/poster/medium/tt0065067/img', releaseInfo: '1969', year: '1969', description: 'Pelikán József gátőr legendás szatírája Bacsó Péter filmjében.' },
+  { id: 'tt0257290', name: 'Üvegtigris', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0257290/img', background: 'https://images.metahub.space/poster/medium/tt0257290/img', releaseInfo: '2001', year: '2001', description: 'Kultikus magyar vígjáték Rudolf Péter rendezésében.' }
 ];
 
 // Popular curated Hungarian catalog items for browsing (100% verified IMDb IDs & posters)
 const FEATURED_HUNGARIAN_SERIES = [
-  { id: 'tt0861751', name: 'Magyar népmesék', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0861751/img', year: '1980–2012', description: 'Klasszikus magyar népmesék animációs sorozat.' },
-  { id: 'tt0154077', name: 'A nagy ho-ho-horgász', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0154077/img', year: '1982–1984', description: 'A nagy ho-ho-horgász és a Főkukac felejthetetlen kalandjai Balázs Péter hangjával.' },
-  { id: 'tt0129719', name: 'Süsü, a sárkány kalandjai', type: 'series', poster: 'https://m.media-amazon.com/images/M/MV5BYjBjN2Y1OGItYTRhNC00ZmZiLTk0NWItMTBjNzI5ZThjOTkyXkEyXkFqcGc@._V1_SX250.jpg', year: '1977–1984', description: 'Csukás István legendás bábfilmsorozata a jólelkű, egyfejű sárkányról Bodrogi Gyula hangjával.' },
-  { id: 'tt8111088', name: 'A Mandalóri (The Mandalorian)', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt8111088/img', year: '2019–2023', description: 'Star Wars élőszereplős sorozat magyar szinkronnal.' },
-  { id: 'tt0056789', name: 'A Tenkes kapitánya', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0056789/img', year: '1964', description: 'Történelmi kalandfilmsorozat a kuruc korból Zenthe Ferenc főszereplésével.' },
-  { id: 'tt0136650', name: 'Üzenet a jövőből - A Mézga család', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0136650/img', year: '1969', description: 'Klasszikus magyar rajzfilmsorozat Nepp Zoltán és Romhányi József tollából.' },
-  { id: 'tt1225872', name: 'Vakáción a Mézga család', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt1225872/img', year: '1978', description: 'A Mézga család világkörüli kalandjai Hufnágel Pisti nyomában.' },
-  { id: 'tt0167595', name: 'Frakk, a macskák réme', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0167595/img', year: '1971–1985', description: 'Klasszikus magyar papírkivágásos animációs sorozat Károly bácsival és Irmuskával.' },
-  { id: 'tt0168342', name: 'Kukori és Kotkoda', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0168342/img', year: '1971–1972', description: 'Népszerű magyar rajzfilmsorozat a lusta kakasról és szorgos tyúkocskájáról.' },
-  { id: 'tt0154077', name: 'A nagy ho-ho-horgász', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0154077/img', year: '1982–1984', description: 'A nagy ho-ho-horgász és a Főkukac felejthetetlen kalandjai Balázs Péter hangjával.' },
-  { id: 'tt0166931', name: 'Pom-Pom meséi', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0166931/img', year: '1980–1984', description: 'Picur és Pom Pom történetei: Gombóc Artúr, Festéktüsszentő Hapci Benő és barátai.' },
-  { id: 'tt0168343', name: 'Kérem a következőt! (Dr. Bubó)', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0168343/img', year: '1974–1979', description: 'Dr. Bubó orvosbagoly és Ursula nővér erdőlakó pácienseinek szatírája.' }
+  { id: 'tt0861751', name: 'Magyar népmesék', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0861751/img', background: 'https://images.metahub.space/poster/medium/tt0861751/img', releaseInfo: '1980–2012', year: '1980–2012', description: 'Klasszikus magyar népmesék animációs sorozat.' },
+  { id: 'tt0154077', name: 'A nagy ho-ho-horgász', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0154077/img', background: 'https://images.metahub.space/poster/medium/tt0154077/img', releaseInfo: '1982–1984', year: '1982–1984', description: 'A nagy ho-ho-horgász és a Főkukac felejthetetlen kalandjai Balázs Péter hangjával.' },
+  { id: 'tt0129719', name: 'Süsü, a sárkány kalandjai', type: 'series', poster: 'https://m.media-amazon.com/images/M/MV5BYjBjN2Y1OGItYTRhNC00ZmZiLTk0NWItMTBjNzI5ZThjOTkyXkEyXkFqcGc@._V1_SX250.jpg', background: 'https://m.media-amazon.com/images/M/MV5BYjBjN2Y1OGItYTRhNC00ZmZiLTk0NWItMTBjNzI5ZThjOTkyXkEyXkFqcGc@._V1_SX250.jpg', releaseInfo: '1977–1984', year: '1977–1984', description: 'Csukás István legendás bábfilmsorozata a jólelkű, egyfejű sárkányról Bodrogi Gyula hangjával.' },
+  { id: 'tt8111088', name: 'A Mandalóri (The Mandalorian)', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt8111088/img', background: 'https://images.metahub.space/poster/medium/tt8111088/img', releaseInfo: '2019–2023', year: '2019–2023', description: 'Star Wars élőszereplős sorozat magyar szinkronnal.' },
+  { id: 'tt0056789', name: 'A Tenkes kapitánya', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0056789/img', background: 'https://images.metahub.space/poster/medium/tt0056789/img', releaseInfo: '1964', year: '1964', description: 'Történelmi kalandfilmsorozat a kuruc korból Zenthe Ferenc főszereplésével.' },
+  { id: 'tt0136650', name: 'Üzenet a jövőből - A Mézga család', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0136650/img', background: 'https://images.metahub.space/poster/medium/tt0136650/img', releaseInfo: '1969', year: '1969', description: 'Klasszikus magyar rajzfilmsorozat Nepp Zoltán és Romhányi József tollából.' },
+  { id: 'tt1225872', name: 'Vakáción a Mézga család', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt1225872/img', background: 'https://images.metahub.space/poster/medium/tt1225872/img', releaseInfo: '1978', year: '1978', description: 'A Mézga család világkörüli kalandjai Hufnágel Pisti nyomában.' },
+  { id: 'tt0167595', name: 'Frakk, a macskák réme', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0167595/img', background: 'https://images.metahub.space/poster/medium/tt0167595/img', releaseInfo: '1971–1985', year: '1971–1985', description: 'Klasszikus magyar papírkivágásos animációs sorozat Károly bácsival és Irmuskával.' },
+  { id: 'tt0168342', name: 'Kukori és Kotkoda', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0168342/img', background: 'https://images.metahub.space/poster/medium/tt0168342/img', releaseInfo: '1971–1972', year: '1971–1972', description: 'Népszerű magyar rajzfilmsorozat a lusta kakasról és szorgos tyúkocskájáról.' },
+  { id: 'tt0166931', name: 'Pom-Pom meséi', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0166931/img', background: 'https://images.metahub.space/poster/medium/tt0166931/img', releaseInfo: '1980–1984', year: '1980–1984', description: 'Picur és Pom Pom történetei: Gombóc Artúr, Festéktüsszentő Hapci Benő és barátai.' },
+  { id: 'tt0168343', name: 'Kérem a következőt! (Dr. Bubó)', type: 'series', poster: 'https://images.metahub.space/poster/medium/tt0168343/img', background: 'https://images.metahub.space/poster/medium/tt0168343/img', releaseInfo: '1974–1979', year: '1974–1979', description: 'Dr. Bubó orvosbagoly és Ursula nővér erdőlakó pácienseinek szatírája.' }
 ];
 
 const FEATURED_HUNGARIAN_MOVIES = [
-  { id: 'tt0179955', name: 'Macskafogó (Cat City)', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0179955/img', year: '1986', description: 'Grabowski a szuperegér titkos küldetése a macskaszindikátus ellen Ternovszky Béla kultikus rajzfilmjében.' },
-  { id: 'tt0257290', name: 'Üvegtigris', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0257290/img', year: '2001', description: 'Kultikus magyar vígjáték Rudolf Péter rendezésében Csoki, Lali és a büfékocsi történetével.' },
-  { id: 'tt0065067', name: 'A tanú', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0065067/img', year: '1969', description: 'Pelikan József gátőr legendás szatírája: A nemzetközi helyzet egyre fokozódik Bacsó Péter filmjében.' },
-  { id: 'tt0121403', name: 'Indul a bakterház', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0121403/img', year: '1980', description: 'Regős Bendegúz, a bakter és a banya felejthetetlen története Koltai Róbert főszereplésével.' },
-  { id: 'tt0303184', name: 'Valami Amerika', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0303184/img', year: '2002', description: 'Sikeres magyar közönségfilm a három testvérről és a titokzatos amerikai producerről.' },
-  { id: 'tt0069697', name: 'Különben dühbe jövünk', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0069697/img', year: '1974', description: 'Bud Spencer és Terence Hill kultikus akció-vígjátéka a piros puma dune buggyért.' },
-  { id: 'tt0085327', name: 'Kincs, ami nincs', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0085327/img', year: '1981', description: 'Alan és Charlie kalandjai Puffin lekvárral a lakatlan szigeten.' },
-  { id: 'tt0131636', name: 'Vuk', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0131636/img', year: '1981', description: 'Fekete István regényéből készült rajzfilmklasszikus Dargay Attila rendezésében.' },
-  { id: 'tt0268380', name: 'Jégkorszak (Ice Age)', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0268380/img', year: '2002', description: 'Jégkorszak animációs film felejthetetlen magyar szinkronnal (Geszti Péter mint Sid).' },
-  { id: 'tt0060196', name: 'A Jó, a Rossz és a Csúf', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0060196/img', year: '1966', description: 'Klasszikus spagettiwestern Clint Eastwooddal magyar szinkronnal.' },
-  { id: 'tt0848228', name: 'Bosszúállók (The Avengers)', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0848228/img', year: '2012', description: 'Marvel Bosszúállók magyar szinkronnal.' }
+  { id: 'tt0179955', name: 'Macskafogó (Cat City)', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0179955/img', background: 'https://images.metahub.space/poster/medium/tt0179955/img', releaseInfo: '1986', year: '1986', description: 'Grabowski a szuperegér titkos küldetése a macskaszindikátus ellen Ternovszky Béla kultikus rajzfilmjében.' },
+  { id: 'tt0257290', name: 'Üvegtigris', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0257290/img', background: 'https://images.metahub.space/poster/medium/tt0257290/img', releaseInfo: '2001', year: '2001', description: 'Kultikus magyar vígjáték Rudolf Péter rendezésében Csoki, Lali és a büfékocsi történetével.' },
+  { id: 'tt0065067', name: 'A tanú', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0065067/img', background: 'https://images.metahub.space/poster/medium/tt0065067/img', releaseInfo: '1969', year: '1969', description: 'Pelikan József gátőr legendás szatírája: A nemzetközi helyzet egyre fokozódik Bacsó Péter filmjében.' },
+  { id: 'tt0121403', name: 'Indul a bakterház', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0121403/img', background: 'https://images.metahub.space/poster/medium/tt0121403/img', releaseInfo: '1980', year: '1980', description: 'Regős Bendegúz, a bakter és a banya felejthetetlen története Koltai Róbert főszereplésével.' },
+  { id: 'tt0303184', name: 'Valami Amerika', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0303184/img', background: 'https://images.metahub.space/poster/medium/tt0303184/img', releaseInfo: '2002', year: '2002', description: 'Sikeres magyar közönségfilm a három testvérről és a titokzatos amerikai producerről.' },
+  { id: 'tt0069697', name: 'Különben dühbe jövünk', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0069697/img', background: 'https://images.metahub.space/poster/medium/tt0069697/img', releaseInfo: '1974', year: '1974', description: 'Bud Spencer és Terence Hill kultikus akció-vígjátéka a piros puma dune buggyért.' },
+  { id: 'tt0085327', name: 'Kincs, ami nincs', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0085327/img', background: 'https://images.metahub.space/poster/medium/tt0085327/img', releaseInfo: '1981', year: '1981', description: 'Alan és Charlie kalandjai Puffin lekvárral a lakatlan szigeten.' },
+  { id: 'tt0131636', name: 'Vuk', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0131636/img', background: 'https://images.metahub.space/poster/medium/tt0131636/img', releaseInfo: '1981', year: '1981', description: 'Fekete István regényéből készült rajzfilmklasszikus Dargay Attila rendezésében.' },
+  { id: 'tt0268380', name: 'Jégkorszak (Ice Age)', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0268380/img', background: 'https://images.metahub.space/poster/medium/tt0268380/img', releaseInfo: '2002', year: '2002', description: 'Jégkorszak animációs film felejthetetlen magyar szinkronnal (Geszti Péter mint Sid).' },
+  { id: 'tt0060196', name: 'A Jó, a Rossz és a Csúf', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0060196/img', background: 'https://images.metahub.space/poster/medium/tt0060196/img', releaseInfo: '1966', year: '1966', description: 'Klasszikus spagettiwestern Clint Eastwooddal magyar szinkronnal.' },
+  { id: 'tt0848228', name: 'Bosszúállók (The Avengers)', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0848228/img', background: 'https://images.metahub.space/poster/medium/tt0848228/img', releaseInfo: '2012', year: '2012', description: 'Marvel Bosszúállók magyar szinkronnal.' }
 ];
 
 const actorFilmographyCache = new Map();
@@ -211,7 +210,151 @@ async function resolveHungarianQueryToEnglish(query) {
   }
 }
 
+async function executeMultiSourceSearch(type, query) {
+  const results = [];
+  const seenIds = new Set();
+  const cleanQuery = (query || '').trim();
+  if (!cleanQuery) return results;
+  const qNorm = normalize(cleanQuery);
+
+  // Match curated Hungarian Classics & Flagship Catalog
+  const allCurated = [...FEATURED_MEDIAKLIKK_CLASSICS, ...FEATURED_HUNGARIAN_SERIES, ...FEATURED_HUNGARIAN_MOVIES];
+  for (const item of allCurated) {
+    if (type && item.type && item.type !== type && type !== 'all') continue;
+    const normItem = normalize(item.name).replace(/\s+/g, '');
+    const normQ = qNorm.replace(/\s+/g, '');
+    const isHoHoMatch = normQ.includes('hoho') && normItem.includes('hoho');
+    if (normItem.includes(normQ) || normQ.includes(normItem) || isHoHoMatch || scoreItemRelevance(item.name, cleanQuery) >= 150) {
+      if (!seenIds.has(item.id)) {
+        seenIds.add(item.id);
+        results.push({
+          ...item,
+          background: item.background || item.poster,
+          releaseInfo: item.releaseInfo || item.year
+        });
+      }
+    }
+  }
+
+  // If query matches any Live TV channel or mentions "elo", "live", "sport", "tv", "mediaklikk"
+  const matchedChannels = LIVE_CHANNELS.filter(ch => 
+    normalize(ch.name).includes(qNorm) ||
+    ch.channelKey.includes(qNorm) ||
+    (qNorm.length >= 2 && ('elo'.includes(qNorm) || 'live'.includes(qNorm) || 'tv'.includes(qNorm) || 'mediaklikk'.includes(qNorm)))
+  );
+  if (type !== 'movie' && type !== 'series' || qNorm.includes('m1') || qNorm.includes('m2') || qNorm.includes('m4') || qNorm.includes('duna') || qNorm.includes('sport')) {
+    for (const ch of matchedChannels) {
+      if (!seenIds.has(ch.id)) {
+        seenIds.add(ch.id);
+        results.push({
+          id: ch.id,
+          name: ch.name,
+          type: type || 'movie',
+          poster: ch.poster,
+          background: ch.poster,
+          logo: ch.logo,
+          description: ch.description,
+          releaseInfo: ch.year || 'ÉLŐ • 1080p FHD',
+          year: ch.year || 'ÉLŐ • 1080p FHD',
+          posterShape: 'poster',
+          behaviorHints: {
+            defaultVideoId: ch.id,
+            isLive: true
+          }
+        });
+      }
+    }
+  }
+
+  // Match across all 490+ MédiaKlikk shows, series, and archive programs
+  try {
+    const allPrograms = getMediaKlikkPrograms();
+    for (const prog of allPrograms) {
+      if (type && prog.type && prog.type !== type && type !== 'all') continue;
+      const normProg = normalize(prog.name);
+      if (normProg.includes(qNorm) || qNorm.includes(normProg) || scoreItemRelevance(prog.name, cleanQuery) >= 150) {
+        if (!seenIds.has(prog.id)) {
+          seenIds.add(prog.id);
+          results.push({
+            ...prog,
+            background: prog.poster,
+            releaseInfo: prog.year
+          });
+        }
+      }
+    }
+  } catch (e) {}
+
+  // Check if query is an actor name (e.g. Bud Spencer, Terence Hill)
+  if (!type || type === 'movie') {
+    try {
+      const actorMovies = await searchActorFilmography(cleanQuery);
+      for (const m of actorMovies) {
+        if (!seenIds.has(m.id)) {
+          seenIds.add(m.id);
+          results.push({
+            ...m,
+            background: m.poster,
+            releaseInfo: m.year
+          });
+        }
+      }
+    } catch (e) {}
+  }
+
+  // Parallel multi-source search: TMDB (HU metadata), Cinemeta (IMDb catalog), JobbMintATV, NetMozi
+  try {
+    const [tmdbList, cinemetaList, jobbList, netmoziList] = await Promise.all([
+      searchTmdb(cleanQuery, type).catch(() => []),
+      searchCinemeta(cleanQuery, type).catch(() => []),
+      searchJobbMintAtv(cleanQuery, type).catch(() => []),
+      searchNetMozi(cleanQuery, type).catch(() => [])
+    ]);
+
+    for (const item of [...tmdbList, ...cinemetaList, ...jobbList]) {
+      if (!seenIds.has(item.id)) {
+        seenIds.add(item.id);
+        results.push({
+          ...item,
+          background: item.background || item.poster,
+          releaseInfo: item.releaseInfo || item.year
+        });
+      }
+    }
+
+    for (const item of netmoziList) {
+      if (!seenIds.has(item.id)) {
+        const normItemName = normalize(item.name);
+        const alreadyExists = results.some(r => {
+          const normR = normalize(r.name);
+          return normR === normItemName || normR.startsWith(normItemName + ' ') || normItemName.startsWith(normR + ' ');
+        });
+        if (!alreadyExists) {
+          seenIds.add(item.id);
+          results.push({
+            ...item,
+            background: item.poster,
+            releaseInfo: item.year
+          });
+        }
+      }
+    }
+  } catch (err) {}
+
+  if (cleanQuery) {
+    results.sort((a, b) => {
+      const scoreB = scoreItemRelevance(b.name, cleanQuery, b.id);
+      const scoreA = scoreItemRelevance(a.name, cleanQuery, a.id);
+      return scoreB - scoreA;
+    });
+  }
+
+  return results;
+}
+
 async function searchCatalog(type, query, catalogId = null, extra = {}) {
+  const skipNum = typeof extra === 'number' ? extra : (extra?.skip || 0);
+
   // If dynamic toplist or streaming catalog requested (TMDB / Mafab)
   if (catalogId && (
     catalogId.startsWith('hu-trending-') ||
@@ -220,7 +363,20 @@ async function searchCatalog(type, query, catalogId = null, extra = {}) {
     catalogId.startsWith('hu-top-rated-') ||
     catalogId.startsWith('hu-stream-')
   )) {
-    return await fetchCatalogItems(catalogId, type, { search: query, skip: extra.skip || 0 });
+    if (!query) {
+      return await fetchCatalogItems(catalogId, type, { search: '', skip: skipNum });
+    }
+    const shelfResults = await fetchCatalogItems(catalogId, type, { search: query, skip: skipNum });
+    const searchResults = await executeMultiSourceSearch(type, query);
+    const seen = new Set();
+    const merged = [];
+    for (const item of [...shelfResults, ...searchResults]) {
+      if (item && item.id && !seen.has(item.id)) {
+        seen.add(item.id);
+        merged.push(item);
+      }
+    }
+    return merged;
   }
 
   // If MédiaKlikk classics catalog requested
@@ -240,18 +396,32 @@ async function searchCatalog(type, query, catalogId = null, extra = {}) {
 
     if (!query) return rotateWeekly(verifiedList, 'hu-mediaklikk-classics', 4);
     const qNorm = normalize(query);
-    return verifiedList.filter(item =>
+    const matched = verifiedList.filter(item =>
       normalize(item.name).includes(qNorm) ||
       normalize(item.description || '').includes(qNorm) ||
       (item.categories && item.categories.some(c => normalize(c).includes(qNorm)))
     );
+    if (matched.length > 0) return matched;
+    return await executeMultiSourceSearch(type || 'series', query);
   }
 
   // If Live TV catalog requested (either by catalog id or by type)
   if (catalogId === 'hu-live-tv' || catalogId === 'hu-live-tv-channel' || type === 'tv' || type === 'channel') {
     const list = LIVE_CHANNELS.map(ch => ({
-      ...ch,
-      type: type || 'movie'
+      id: ch.id,
+      name: ch.name,
+      type: type || 'movie',
+      poster: ch.poster,
+      background: ch.poster,
+      logo: ch.logo,
+      description: ch.description,
+      releaseInfo: ch.year || 'ÉLŐ • 1080p FHD',
+      year: ch.year || 'ÉLŐ • 1080p FHD',
+      posterShape: 'poster',
+      behaviorHints: {
+        defaultVideoId: ch.id,
+        isLive: true
+      }
     }));
     if (!query) return list;
     const qNorm = normalize(query);
@@ -265,71 +435,23 @@ async function searchCatalog(type, query, catalogId = null, extra = {}) {
   if (!query) {
     if (catalogId === 'hu-series' || type === 'series') return FEATURED_HUNGARIAN_SERIES;
     if (catalogId === 'hu-movies' || type === 'movie') return FEATURED_HUNGARIAN_MOVIES;
-    return [...LIVE_CHANNELS, ...FEATURED_HUNGARIAN_MOVIES, ...FEATURED_HUNGARIAN_SERIES];
+    const liveItems = LIVE_CHANNELS.map(ch => ({
+      id: ch.id,
+      name: ch.name,
+      type: 'movie',
+      poster: ch.poster,
+      background: ch.poster,
+      logo: ch.logo,
+      description: ch.description,
+      releaseInfo: ch.year || 'ÉLŐ • 1080p FHD',
+      year: ch.year || 'ÉLŐ • 1080p FHD',
+      posterShape: 'poster'
+    }));
+    return [...liveItems, ...FEATURED_HUNGARIAN_MOVIES, ...FEATURED_HUNGARIAN_SERIES];
   }
 
-  const results = [];
-  const seenIds = new Set();
-  const cleanQuery = query.trim();
-  const qNorm = normalize(cleanQuery);
-
-  // Match curated Hungarian Classics & Flagship Catalog
-  const allCurated = [...FEATURED_MEDIAKLIKK_CLASSICS, ...FEATURED_HUNGARIAN_SERIES, ...FEATURED_HUNGARIAN_MOVIES];
-  for (const item of allCurated) {
-    if (type && item.type && item.type !== type && type !== 'all') continue;
-    const normItem = normalize(item.name).replace(/\s+/g, '');
-    const normQ = qNorm.replace(/\s+/g, '');
-    const isHoHoMatch = normQ.includes('hoho') && normItem.includes('hoho');
-    if (normItem.includes(normQ) || normQ.includes(normItem) || isHoHoMatch || scoreItemRelevance(item.name, cleanQuery) >= 150) {
-      if (!seenIds.has(item.id)) {
-        seenIds.add(item.id);
-        results.push(item);
-      }
-    }
-  }
-
-  // If query matches any Live TV channel or mentions "elo", "live", "sport", "tv", "mediaklikk"
-  const matchedChannels = LIVE_CHANNELS.filter(ch => 
-    normalize(ch.name).includes(qNorm) ||
-    ch.channelKey.includes(qNorm) ||
-    (qNorm.length >= 2 && ('elo'.includes(qNorm) || 'live'.includes(qNorm) || 'tv'.includes(qNorm) || 'mediaklikk'.includes(qNorm)))
-  );
-  if (type !== 'movie' && type !== 'series' || qNorm.includes('m1') || qNorm.includes('m2') || qNorm.includes('m4') || qNorm.includes('duna') || qNorm.includes('sport')) {
-    for (const ch of matchedChannels) {
-      if (!seenIds.has(ch.id)) {
-        seenIds.add(ch.id);
-        results.push(ch);
-      }
-    }
-  }
-
-  // Match across all 490+ MédiaKlikk shows, series, and archive programs
-  try {
-    const allPrograms = getMediaKlikkPrograms();
-    for (const prog of allPrograms) {
-      if (type && prog.type && prog.type !== type && type !== 'all') continue;
-      const normProg = normalize(prog.name);
-      if (normProg.includes(qNorm) || qNorm.includes(normProg) || scoreItemRelevance(prog.name, cleanQuery) >= 150) {
-        if (!seenIds.has(prog.id)) {
-          seenIds.add(prog.id);
-          results.push(prog);
-        }
-      }
-    }
-  } catch (e) {}
-
-  // Check if query is an actor name (e.g. Bud Spencer, Terence Hill)
-  if (!type || type === 'movie') {
-    try {
-      const actorMovies = await searchActorFilmography(cleanQuery);
-      for (const m of actorMovies) {
-        if (!seenIds.has(m.id)) {
-          seenIds.add(m.id);
-          results.push(m);
-        }
-      }
-    } catch (e) {}
-  }
+  return await executeMultiSourceSearch(type, query);
+}
 
 const TMDB_API_KEY = 'ffe7ef8916c61835264d2df68276ddc2';
 
@@ -368,6 +490,8 @@ async function searchTmdb(query, type) {
         type: itemType,
         name: title !== origTitle && origTitle ? `${title} (${origTitle})` : title,
         poster: poster || (imdbId ? `https://images.metahub.space/poster/medium/${imdbId}/img` : null),
+        background: item.backdrop_path ? `https://image.tmdb.org/t/p/original${item.backdrop_path}` : (poster || null),
+        releaseInfo: year ? String(year) : undefined,
         year,
         description: item.overview || ''
       };
@@ -425,7 +549,9 @@ async function searchCinemeta(cleanQuery, type) {
               type: itemType,
               name: item.name,
               poster: item.poster,
-              year: item.year,
+              background: item.poster,
+              releaseInfo: item.year ? String(item.year) : undefined,
+              year: item.year ? String(item.year) : undefined,
               description: item.description
             });
           }
@@ -503,6 +629,8 @@ async function searchJobbMintAtv(cleanQuery, type) {
           type: realType,
           name: displayName,
           poster,
+          background: poster,
+          releaseInfo: year ? String(year) : undefined,
           year,
           description: desc
         };
@@ -515,48 +643,6 @@ async function searchJobbMintAtv(cleanQuery, type) {
   } catch (e) {
     return [];
   }
-}
-
-  // Parallel multi-source search: TMDB (HU metadata), Cinemeta (IMDb catalog), JobbMintATV, NetMozi
-  try {
-    const [tmdbList, cinemetaList, jobbList, netmoziList] = await Promise.all([
-      searchTmdb(cleanQuery, type).catch(() => []),
-      searchCinemeta(cleanQuery, type).catch(() => []),
-      searchJobbMintAtv(cleanQuery, type).catch(() => []),
-      searchNetMozi(cleanQuery, type).catch(() => [])
-    ]);
-
-    for (const item of [...tmdbList, ...cinemetaList, ...jobbList]) {
-      if (!seenIds.has(item.id)) {
-        seenIds.add(item.id);
-        results.push(item);
-      }
-    }
-
-    for (const item of netmoziList) {
-      if (!seenIds.has(item.id)) {
-        const normItemName = normalize(item.name);
-        const alreadyExists = results.some(r => {
-          const normR = normalize(r.name);
-          return normR === normItemName || normR.startsWith(normItemName + ' ') || normItemName.startsWith(normR + ' ');
-        });
-        if (!alreadyExists) {
-          seenIds.add(item.id);
-          results.push(item);
-        }
-      }
-    }
-  } catch (err) {}
-
-  if (cleanQuery) {
-    results.sort((a, b) => {
-      const scoreB = scoreItemRelevance(b.name, cleanQuery, b.id);
-      const scoreA = scoreItemRelevance(a.name, cleanQuery, a.id);
-      return scoreB - scoreA;
-    });
-  }
-
-  return results;
 }
 
 function scoreItemRelevance(itemTitle, query, itemId = '') {

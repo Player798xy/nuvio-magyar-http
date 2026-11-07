@@ -10,12 +10,13 @@ const { getLiveHlsStream, getRewrittenMasterPlaylist } = require('./src/scrapers
 const app = express();
 const PORT = process.env.PORT || 7000;
 
-// Enable CORS for Stremio & Nuvio Web/Mobile clients
+// Enable CORS for Stremio & Nuvio Web/Mobile clients (full wildcard header support)
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Range']
+  allowedHeaders: '*'
 }));
+app.options('*', cors());
 
 // Serve static landing & configuration page + logos + channel icons
 app.use(express.static(path.join(__dirname, 'public')));
@@ -78,6 +79,9 @@ function getClientIp(req) {
 
 // 1. Default Manifest Route
 app.get('/manifest.json', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Cache-Control', 'public, max-age=3600');
   const config = parseConfig(null, req.query);
   config.hostUrl = getHostUrl(req);
@@ -86,15 +90,72 @@ app.get('/manifest.json', (req, res) => {
 
 // 2. Configured Manifest Route (/:config/manifest.json)
 app.get('/:config/manifest.json', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Cache-Control', 'public, max-age=3600');
   const config = parseConfig(req.params.config, req.query);
   config.hostUrl = getHostUrl(req);
   res.json(getManifest(config));
 });
 
+/**
+ * Ensures strict Stremio stremio-core MetaPreview schema compliance
+ * Never allows null posters, numeric releaseInfo, or missing id/type/name
+ */
+function sanitizeMetaPreview(item, defaultType = 'movie') {
+  if (!item || !item.id || !item.name) return null;
+  const id = String(item.id).trim();
+  const name = String(item.name).trim();
+  const type = String(item.type || defaultType).trim();
+  if (!id || !name || !type) return null;
+
+  const yearVal = item.releaseInfo || item.year;
+  const releaseInfo = yearVal ? String(yearVal).trim() : undefined;
+
+  let poster = item.poster ? String(item.poster).trim() : null;
+  if (poster && (!poster.startsWith('http://') && !poster.startsWith('https://'))) {
+    poster = null;
+  }
+  if (!poster && id.startsWith('tt')) {
+    poster = `https://images.metahub.space/poster/medium/${id}/img`;
+  }
+
+  let background = item.background ? String(item.background).trim() : null;
+  if (background && (!background.startsWith('http://') && !background.startsWith('https://'))) {
+    background = null;
+  }
+  if (!background && poster) {
+    background = poster;
+  }
+
+  const meta = {
+    id,
+    type,
+    name
+  };
+
+  if (poster) meta.poster = poster;
+  if (background) meta.background = background;
+  if (item.logo) meta.logo = String(item.logo);
+  if (item.description) meta.description = String(item.description);
+  if (releaseInfo) {
+    meta.releaseInfo = releaseInfo;
+    meta.year = releaseInfo;
+  }
+  if (item.imdbRating) meta.imdbRating = String(item.imdbRating);
+  if (item.posterShape) meta.posterShape = item.posterShape;
+  if (item.genres && Array.isArray(item.genres)) meta.genres = item.genres.map(String);
+  if (item.behaviorHints && typeof item.behaviorHints === 'object') meta.behaviorHints = item.behaviorHints;
+
+  return meta;
+}
+
 // 3. Catalog Routes (Enables searching and browsing Hungarian movies/series in Nuvio & Stremio)
 async function handleCatalog(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   const { type, id } = req.params;
   const cleanId = (id || '').replace(/\.json$/, '');
   const extraStr = (req.params.extra || '').replace(/\.json$/, '');
@@ -118,7 +179,8 @@ async function handleCatalog(req, res) {
   }
 
   try {
-    const metas = await searchCatalog(type, searchQuery, cleanId, skip);
+    const rawMetas = await searchCatalog(type, searchQuery, cleanId, { skip, search: searchQuery });
+    const metas = (rawMetas || []).map(m => sanitizeMetaPreview(m, type)).filter(Boolean);
     res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=1200');
     res.json({ metas });
   } catch (err) {
@@ -127,17 +189,22 @@ async function handleCatalog(req, res) {
   }
 }
 
-app.get('/catalog/:type/:id.json', handleCatalog);
-app.get('/catalog/:type/:id/:extra.json', handleCatalog);
-app.get('/:config/catalog/:type/:id.json', handleCatalog);
-app.get('/:config/catalog/:type/:id/:extra.json', handleCatalog);
+app.get(['/catalog/:type/:id.json', '/catalog/:type/:id'], handleCatalog);
+app.get(['/catalog/:type/:id/:extra.json', '/catalog/:type/:id/:extra'], handleCatalog);
+app.get(['/:config/catalog/:type/:id.json', '/:config/catalog/:type/:id'], handleCatalog);
+app.get(['/:config/catalog/:type/:id/:extra.json', '/:config/catalog/:type/:id/:extra'], handleCatalog);
 
 // 4. Meta Route (Provides episode lists and details for Hungarian series/movies)
 async function handleMeta(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   const { type, prefix } = req.params;
   const combinedId = prefix ? `${prefix}/${req.params.id || ''}` : (req.params.id || '');
-  const rawId = decodeURIComponent(combinedId).replace(/\.json$/, '');
+  let rawId = combinedId.replace(/\.json$/, '');
+  try {
+    rawId = decodeURIComponent(rawId);
+  } catch (e) {}
 
   try {
     const metaObj = await getMeta(type, rawId);
@@ -151,46 +218,50 @@ async function handleMeta(req, res) {
   }
 }
 
-app.get('/meta/:type/:id.json', handleMeta);
-app.get('/meta/:type/:prefix/:id.json', handleMeta);
-app.get('/:config/meta/:type/:id.json', handleMeta);
-app.get('/:config/meta/:type/:prefix/:id.json', handleMeta);
+app.get(['/meta/:type/:id.json', '/meta/:type/:id'], handleMeta);
+app.get(['/meta/:type/:prefix/:id.json', '/meta/:type/:prefix/:id'], handleMeta);
+app.get(['/:config/meta/:type/:id.json', '/:config/meta/:type/:id'], handleMeta);
+app.get(['/:config/meta/:type/:prefix/:id.json', '/:config/meta/:type/:prefix/:id'], handleMeta);
 
-// 5. Default Stream Route (/stream/:type/:id.json)
-app.get(['/stream/:type/:id.json', '/stream/:type/:prefix/:id.json'], async (req, res) => {
+// 5. Default and Configured Stream Routes (/stream/:type/:id.json)
+async function handleStream(req, res) {
   try {
     res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-    const { type, prefix } = req.params;
-    const id = prefix ? `${prefix}/${req.params.id || ''}` : req.params.id;
-    const config = parseConfig(null, req.query);
+    const { config: configParam, type, prefix } = req.params;
+    let rawId = prefix ? `${prefix}/${req.params.id || ''}` : (req.params.id || '');
+    let cleanId = rawId.replace(/\.json$/, '');
+    try {
+      cleanId = decodeURIComponent(cleanId);
+    } catch (e) {}
+
+    const config = parseConfig(configParam, req.query);
     config.hostUrl = getHostUrl(req);
     config.clientIp = getClientIp(req);
-    const result = await handleStreamRequest(type, id, config);
-    res.json({ streams: result.streams });
+    const result = await handleStreamRequest(type, cleanId, config);
+    res.json({ streams: result.streams || [] });
   } catch (err) {
     console.error('[Server] Stream error:', err);
     res.json({ streams: [] });
   }
-});
+}
 
-// 6. Configured Stream Route (/:config/stream/:type/:id.json)
-app.get(['/:config/stream/:type/:id.json', '/:config/stream/:type/:prefix/:id.json'], async (req, res) => {
-  try {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-    const { config: configParam, type, prefix } = req.params;
-    const id = prefix ? `${prefix}/${req.params.id || ''}` : req.params.id;
-    const config = parseConfig(configParam, req.query);
-    config.hostUrl = getHostUrl(req);
-    config.clientIp = getClientIp(req);
-    const result = await handleStreamRequest(type, id, config);
-    res.json({ streams: result.streams });
-  } catch (err) {
-    console.error('[Server] Configured stream error:', err);
-    res.json({ streams: [] });
-  }
-});
+const streamRoutes = [
+  '/stream/:type/:id.json',
+  '/stream/:type/:id',
+  '/stream/:type/:prefix/:id.json',
+  '/stream/:type/:prefix/:id'
+];
+const configuredStreamRoutes = [
+  '/:config/stream/:type/:id.json',
+  '/:config/stream/:type/:id',
+  '/:config/stream/:type/:prefix/:id.json',
+  '/:config/stream/:type/:prefix/:id'
+];
+app.get(streamRoutes, handleStream);
+app.get(configuredStreamRoutes, handleStream);
 
 // 7. Live TV HLS Master Playlist Rewriter (Orders 1080p Full HD first so Nuvio starts in 1080p)
 app.get(['/api/live/:streamId', '/hls/live/:streamId'], async (req, res) => {

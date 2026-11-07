@@ -327,23 +327,22 @@ async function resolveImdbId(tmdbId, isSeries = false) {
 function filterPlayableTmdbItems(rawResults, isSeries = false) {
   if (!Array.isArray(rawResults)) return [];
 
+  const todayStr = new Date().toISOString().slice(0, 10);
   return rawResults.filter(item => {
     if (!item || !item.poster_path) return false;
     const dateStr = item.release_date || item.first_air_date;
     if (!dateStr) return false;
-    const yearNum = parseInt(dateStr.slice(0, 4), 10) || 0;
+    // Don't include future unreleased dates
+    if (dateStr > todayStr) return false;
     const votes = item.vote_count || 0;
     const rating = item.vote_average || 0;
     if (rating <= 0) return false;
     if (item.original_language === 'hu') {
-      if (votes < 4) return false;
+      if (votes < 3) return false;
     } else if (isSeries) {
-      if (yearNum >= 2026 && votes < 500) return false;
-      if (votes < 120) return false;
+      if (votes < 30) return false;
     } else {
-      // Movies must already be released on VOD with Hungarian dubs (exclude 2025+ titles unless massive blockbusters)
-      if (yearNum >= 2025) return false;
-      if (votes < 450) return false;
+      if (votes < 60) return false;
     }
     return true;
   });
@@ -580,13 +579,27 @@ async function fetchCatalogItems(catalogId, type, { search = '', skip = 0 } = {}
     }
   }
 
-  // Filter by search query if present
+  // Filter by search query if present, and query TMDB search if needed
   if (search && search.trim()) {
     const qNorm = normalize(search);
-    items = items.filter(item =>
+    const shelfMatches = items.filter(item =>
       normalize(item.name).includes(qNorm) ||
       normalize(item.description || '').includes(qNorm)
     );
+
+    if (shelfMatches.length > 0) {
+      items = shelfMatches;
+    } else {
+      try {
+        const searchType = isSeries ? 'tv' : 'movie';
+        const url = `${TMDB_BASE_URL}/search/${searchType}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(search.trim())}&language=hu-HU&include_adult=false&page=${page}`;
+        const sRes = await fetch(url, { signal: AbortSignal.timeout(3000) }).then(r => r.json()).catch(() => ({}));
+        const searchItems = await enrichTmdbItems(sRes.results || [], isSeries);
+        items = searchItems;
+      } catch (e) {
+        items = [];
+      }
+    }
   }
 
   if (items.length > 0) {
