@@ -154,12 +154,12 @@ function getManifest(config = {}) {
 
   return {
     id: 'org.nuvio.magyar.http',
-    version: '2.6.1',
+    version: '2.6.2',
     name,
     description: desc,
-    logo: `${hostUrl}/logo.png?v=2.6.1`,
-    icon: `${hostUrl}/logo.png?v=2.5.9`,
-    background: `${hostUrl}/logo.png?v=2.5.9`,
+    logo: `${hostUrl}/logo.png?v=2.6.2`,
+    icon: `${hostUrl}/logo.png?v=2.6.2`,
+    background: `${hostUrl}/logo.png?v=2.6.2`,
     resources: [
       {
         name: 'stream',

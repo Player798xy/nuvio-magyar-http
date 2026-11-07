@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <meta name="theme-color" content="#050505" />
   <title>Magyar Streaming Pro — Nuvio & Stremio HTTP Addon</title>
-  <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.6.1" />
-  <link rel="alternate icon" type="image/png" href="/logo.png?v=2.6.1" />
-  <link rel="shortcut icon" href="/favicon.ico?v=2.6.1" />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.6.2" />
+  <link rel="alternate icon" type="image/png" href="/logo.png?v=2.6.2" />
+  <link rel="shortcut icon" href="/favicon.ico?v=2.6.2" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=VT323&display=swap" rel="stylesheet" />
@@ -109,30 +109,6 @@
         box-shadow: 0 0 0 0 rgba(142, 224, 143, 0), 0 0 8px var(--green);
       }
     }
-    @keyframes logoFloat {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-4px);
-      }
-    }
-    @keyframes smpteFlow {
-      0% {
-        background-position: 0% 50%;
-      }
-      100% {
-        background-position: 200% 50%;
-      }
-    }
-    @keyframes btnSheen {
-      0%, 65% {
-        transform: translateX(-140%) skewX(-22deg);
-      }
-      100% {
-        transform: translateX(260%) skewX(-22deg);
-      }
-    }
     @keyframes cbPop {
       0% { transform: scale(0.85); }
       55% { transform: scale(1.22); }
@@ -177,11 +153,10 @@
       border-radius: 10px;
       display: block;
       flex-shrink: 0;
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+      transition: box-shadow 0.2s ease;
     }
     .logo:hover .logo-mark {
-      transform: scale(1.08) rotate(-3deg);
-      box-shadow: 0 0 14px rgba(220, 38, 38, 0.45);
+      box-shadow: 0 0 12px rgba(220, 38, 38, 0.45);
     }
     .logo-word span {
       color: var(--mint);
@@ -299,12 +274,10 @@
       border-radius: 14px;
       flex-shrink: 0;
       display: block;
-      animation: logoFloat 4s ease-in-out infinite;
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+      transition: box-shadow 0.2s ease;
     }
     .hero-logo:hover {
-      transform: scale(1.08) rotate(-3deg);
-      box-shadow: 0 6px 20px rgba(220, 38, 38, 0.45);
+      box-shadow: 0 0 16px rgba(220, 38, 38, 0.45);
     }
     h1 {
       font-family: var(--f-head);
@@ -395,25 +368,12 @@
       justify-content: center;
       gap: 7px;
       text-decoration: none;
-      transition: background-color 0.15s, color 0.15s, filter 0.15s, transform 0.12s;
+      transition: background-color 0.15s, color 0.15s, filter 0.15s, transform 0.12s, box-shadow 0.15s;
       white-space: nowrap;
       position: relative;
-      overflow: hidden;
     }
-    .btn-stremio::after, .btn-nuvio::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 42%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
-      transform: translateX(-140%) skewX(-22deg);
-      animation: btnSheen 4.5s ease-in-out infinite;
-      pointer-events: none;
-    }
-    .btn-nuvio::after {
-      animation-delay: 2.2s;
+    .btn-action:hover {
+      transform: translateY(-1px);
     }
     .btn-action:active {
       transform: scale(0.97);
@@ -430,6 +390,7 @@
     .btn-stremio:hover {
       background: var(--purple-hover);
       color: #ffffff;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
     }
     .btn-nuvio {
       background: var(--cyan-btn);
@@ -439,6 +400,7 @@
     .btn-nuvio:hover {
       background: var(--cyan-hover);
       color: #ffffff;
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
     }
     .btn-copy {
       background: var(--mint);
@@ -447,6 +409,7 @@
     .btn-copy:hover {
       background: #ffffff;
       color: #050505;
+      box-shadow: 0 4px 14px rgba(207, 255, 207, 0.25);
     }
 
     /* SMPTE TV test bar divider */
@@ -462,11 +425,9 @@
         var(--blue) 85%,
         var(--white) 100%
       );
-      background-size: 200% 100%;
-      animation: smpteFlow 6s linear infinite;
       height: 3px;
       border-radius: 2px;
-      opacity: 0.9;
+      opacity: 0.85;
     }
 
     /* Sections */
@@ -529,12 +490,16 @@
       border-radius: 5px;
       padding: 5px 11px;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: background-color 0.15s, color 0.15s, border-color 0.15s, transform 0.12s;
     }
     .btn-chip:hover {
       background: var(--panel);
       color: #ffffff;
       border-color: var(--ink);
+      transform: translateY(-1px);
+    }
+    .btn-chip:active {
+      transform: scale(0.96);
     }
     .btn-chip.active {
       background: var(--mint);
@@ -598,11 +563,12 @@
       cursor: pointer;
       user-select: none;
       border-left: 3px solid transparent;
-      transition: background-color 0.18s, opacity 0.18s, border-color 0.18s, transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: background-color 0.18s, opacity 0.18s, border-color 0.18s, transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s;
     }
     .res-item:hover {
       background: var(--panel);
       transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     }
     .res-item:active {
       transform: scale(0.98);
@@ -851,12 +817,16 @@
       border-radius: 4px;
       padding: 4px 8px;
       cursor: pointer;
-      transition: all 0.12s;
+      transition: color 0.12s, border-color 0.12s, background-color 0.12s, transform 0.12s;
     }
     .preset-link:hover {
       color: var(--mint);
       border-color: var(--mint);
       background: var(--panel);
+      transform: translateY(-1px);
+    }
+    .preset-link:active {
+      transform: scale(0.96);
     }
 
     /* Series Selector Bar */
@@ -1389,9 +1359,9 @@
   <header class="site-head">
     <div class="wrap head-bar">
       <a href="/configure" class="logo">
-        <img src="/logo.svg?v=2.6.1" class="logo-mark" alt="Magyar Streaming Pro" width="44" height="44" />
+        <img src="/logo.svg?v=2.6.2" class="logo-mark" alt="Magyar Streaming Pro" width="44" height="44" />
         <span class="logo-word">Magyar Streaming <span>Pro</span></span>
-        <span class="logo-ver">v2.6.1</span>
+        <span class="logo-ver">v2.6.2</span>
       </a>
 
       <nav class="navlinks">
@@ -1412,7 +1382,7 @@
     <section class="hero">
       <div class="kicker"><span class="live-dot"></span> CH 00 // NUVIO &amp; STREMIO DIRECT HTTP ADDON</div>
       <div class="hero-title-row">
-        <img src="/logo.svg?v=2.6.1" class="hero-logo" alt="Magyar Streaming Pro" width="60" height="60" />
+        <img src="/logo.svg?v=2.6.2" class="hero-logo" alt="Magyar Streaming Pro" width="60" height="60" />
         <h1>Magyar Streaming <span>Pro</span></h1>
       </div>
       <p class="lede">
