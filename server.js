@@ -19,7 +19,15 @@ app.use(cors({
 app.options('*', cors());
 
 // Serve static landing & configuration page + logos + channel icons
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {
+  etag: false,
+  maxAge: 0,
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+    }
+  }
+}));
 
 // Explicit static routes for Vercel Serverless compatibility
 app.get('/logo.png', (req, res) => {
@@ -82,7 +90,7 @@ app.get('/manifest.json', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Cache-Control', 'public, max-age=3600');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
   const config = parseConfig(null, req.query);
   config.hostUrl = getHostUrl(req);
   res.json(getManifest(config));
@@ -93,7 +101,7 @@ app.get('/:config/manifest.json', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Cache-Control', 'public, max-age=3600');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
   const config = parseConfig(req.params.config, req.query);
   config.hostUrl = getHostUrl(req);
   res.json(getManifest(config));
@@ -592,12 +600,14 @@ app.get('/old', (req, res) => {
 });
 
 app.get(['/configure', '/:config/configure'], (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
   const file = req.query.old === '1' ? 'index.old.html' : 'index.html';
   res.sendFile(path.join(__dirname, 'public', file));
 });
 
 // Catch-all route to serve index.html for root
 app.get('/', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
   const file = req.query.old === '1' ? 'index.old.html' : 'index.html';
   res.sendFile(path.join(__dirname, 'public', file));
 });
