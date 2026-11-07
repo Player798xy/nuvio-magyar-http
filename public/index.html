@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <meta name="theme-color" content="#050505" />
   <title>Magyar Streaming Pro — Nuvio & Stremio HTTP Addon</title>
-  <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.5.9" />
-  <link rel="alternate icon" type="image/png" href="/logo.png?v=2.5.9" />
-  <link rel="shortcut icon" href="/favicon.ico?v=2.5.9" />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.6.0" />
+  <link rel="alternate icon" type="image/png" href="/logo.png?v=2.6.0" />
+  <link rel="shortcut icon" href="/favicon.ico?v=2.6.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=VT323&display=swap" rel="stylesheet" />
@@ -99,19 +99,19 @@
     .logo {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       text-decoration: none;
       color: var(--ink);
       font-family: var(--f-head);
       font-weight: 700;
-      font-size: 18px;
+      font-size: 19px;
       letter-spacing: -0.02em;
     }
     .logo:hover { color: #ffffff; }
     .logo-mark {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
       display: block;
       flex-shrink: 0;
     }
@@ -215,6 +215,19 @@
       display: inline-block;
       box-shadow: 0 0 8px var(--green);
     }
+    .hero-title-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+    .hero-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      flex-shrink: 0;
+      display: block;
+    }
     h1 {
       font-family: var(--f-head);
       font-size: clamp(26px, 4vw, 38px);
@@ -222,7 +235,7 @@
       letter-spacing: -0.035em;
       line-height: 1.05;
       color: var(--ink);
-      margin-bottom: 8px;
+      margin-bottom: 0;
     }
     h1 span {
       color: var(--mint);
@@ -969,7 +982,17 @@
       }
       .logo {
         font-size: 16px;
-        gap: 8px;
+        gap: 9px;
+      }
+      .logo-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+      }
+      .hero-logo {
+        width: 48px;
+        height: 48px;
+        border-radius: 11px;
       }
       .navlinks {
         overflow-x: auto;
@@ -1204,9 +1227,9 @@
   <header class="site-head">
     <div class="wrap head-bar">
       <a href="/configure" class="logo">
-        <img src="/logo.svg?v=2.5.9" class="logo-mark" alt="Magyar Streaming Pro" width="28" height="28" />
+        <img src="/logo.svg?v=2.6.0" class="logo-mark" alt="Magyar Streaming Pro" width="44" height="44" />
         <span class="logo-word">Magyar Streaming <span>Pro</span></span>
-        <span class="logo-ver">v2.5.9</span>
+        <span class="logo-ver">v2.6.0</span>
       </a>
 
       <nav class="navlinks">
@@ -1226,7 +1249,10 @@
     <!-- CH 00: HERO & MANIFEST -->
     <section class="hero">
       <div class="kicker"><span class="live-dot"></span> CH 00 // NUVIO &amp; STREMIO DIRECT HTTP ADDON</div>
-      <h1>Magyar Streaming <span>Pro</span></h1>
+      <div class="hero-title-row">
+        <img src="/logo.svg?v=2.6.0" class="hero-logo" alt="Magyar Streaming Pro" width="60" height="60" />
+        <h1>Magyar Streaming <span>Pro</span></h1>
+      </div>
       <p class="lede">
         <strong>Közvetlen MP4 és HLS (.m3u8) magyar szinkronos streamek</strong> torrent és Debrid nélkül.
         Kapcsold ki vagy be a kívánt forrásokat és katalógusokat a lenti listában — a Manifest link azonnal frissül.
