@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <meta name="theme-color" content="#050505" />
   <title>Magyar Streaming Pro — Nuvio & Stremio HTTP Addon</title>
-  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.5.6" />
+  <link rel="alternate icon" type="image/png" href="/logo.png?v=2.5.6" />
+  <link rel="shortcut icon" href="/favicon.ico?v=2.5.6" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=VT323&display=swap" rel="stylesheet" />
@@ -106,18 +108,12 @@
       letter-spacing: -0.02em;
     }
     .logo:hover { color: #ffffff; }
-    .logo-tv {
-      width: 26px;
-      height: 26px;
-      border: 2px solid var(--ink);
-      border-radius: 5px;
-      display: inline-grid;
-      place-items: center;
-      background: var(--band-2);
-      color: var(--mint);
-      font-family: var(--f-ch);
-      font-size: 16px;
-      line-height: 1;
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: block;
+      flex-shrink: 0;
     }
     .logo-word span {
       color: var(--mint);
@@ -971,6 +967,10 @@
         min-height: 50px;
         padding: 6px 0;
       }
+      .logo {
+        font-size: 16px;
+        gap: 8px;
+      }
       .navlinks {
         overflow-x: auto;
         width: 100%;
@@ -1204,9 +1204,9 @@
   <header class="site-head">
     <div class="wrap head-bar">
       <a href="/configure" class="logo">
-        <span class="logo-tv">TV</span>
-        <span class="logo-word">magyar<span>.tv</span></span>
-        <span class="logo-ver">v2.5.5</span>
+        <img src="/logo.svg?v=2.5.6" class="logo-mark" alt="Magyar Streaming Pro" width="28" height="28" />
+        <span class="logo-word">Magyar Streaming <span>Pro</span></span>
+        <span class="logo-ver">v2.5.6</span>
       </a>
 
       <nav class="navlinks">
@@ -1217,7 +1217,6 @@
       </nav>
 
       <div class="head-right">
-        <a href="/configure?old=1" class="pill-btn pill-amber" title="Vissza a régi kártyás nézethez">Régi UI</a>
         <a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener" class="pill-btn pill-gh">GitHub ↗</a>
       </div>
     </div>

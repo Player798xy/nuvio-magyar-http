@@ -32,20 +32,26 @@ app.use(express.static(path.join(__dirname, 'public'), {
 // Explicit static routes for Vercel Serverless compatibility
 app.get('/logo.png', (req, res) => {
   res.setHeader('Content-Type', 'image/png');
-  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
   res.sendFile(path.join(__dirname, 'public', 'logo.png'));
 });
 
 app.get('/icon.png', (req, res) => {
   res.setHeader('Content-Type', 'image/png');
-  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
   res.sendFile(path.join(__dirname, 'public', 'icon.png'));
 });
 
 app.get('/logo.svg', (req, res) => {
   res.setHeader('Content-Type', 'image/svg+xml');
-  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
   res.sendFile(path.join(__dirname, 'public', 'logo.svg'));
+});
+
+app.get('/favicon.ico', (req, res) => {
+  res.setHeader('Content-Type', 'image/x-icon');
+  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  res.sendFile(path.join(__dirname, 'public', 'favicon.ico'));
 });
 
 app.get('/channels/:file', (req, res) => {
