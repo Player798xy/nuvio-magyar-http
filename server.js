@@ -334,10 +334,19 @@ app.get(['/api/live/:streamId', '/hls/live/:streamId'], async (req, res) => {
 // 8. Episodes API for Season/Episode selector
 app.get('/api/episodes', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  const id = req.query.id;
+  const id = (req.query.id || '').trim();
   if (!id) return res.status(400).json({ error: 'Missing id param' });
   try {
-    const data = await getSeriesEpisodes(id);
+    let targetId = id;
+    if (!id.startsWith('tt') && !id.startsWith('tmdb:') && !id.startsWith('mediaklikk:') && !id.startsWith('netmozi:') && !id.startsWith('tvdb:')) {
+      const seriesResults = await searchCatalog('series', id);
+      const cleanQ = id.toLowerCase().trim();
+      const best = (seriesResults || []).find(s => s.name.toLowerCase().includes(cleanQ)) || seriesResults?.[0];
+      if (best && best.id) {
+        targetId = best.id;
+      }
+    }
+    const data = await getSeriesEpisodes(targetId);
     if (data) {
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
       return res.json(data);
@@ -472,6 +481,8 @@ app.get('/api/test', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   let id = (req.query.id || 'tt0179955').trim();
   const typeParam = req.query.type;
+  const reqSeason = req.query.season ? parseInt(req.query.season, 10) : null;
+  const reqEpisode = req.query.episode ? parseInt(req.query.episode, 10) : null;
   const config = parseConfig(null, req.query);
   config.hostUrl = getHostUrl(req);
   config.clientIp = getClientIp(req);
@@ -492,32 +503,95 @@ app.get('/api/test', async (req, res) => {
   }
 
   let matchedItem = null;
-  if (!id.startsWith('tt') && !id.startsWith('tmdb:') && !id.startsWith('mediaklikk:') && !id.startsWith('netmozi:')) {
+  if (!id.startsWith('tt') && !id.startsWith('tmdb:') && !id.startsWith('mediaklikk:') && !id.startsWith('netmozi:') && !id.startsWith('tvdb:')) {
     try {
       const [movies, series] = await Promise.all([
-        searchCatalog('movie', id),
-        searchCatalog('series', id)
+        typeParam === 'series' ? Promise.resolve([]) : searchCatalog('movie', id),
+        typeParam === 'movie' ? Promise.resolve([]) : searchCatalog('series', id)
       ]);
       const cleanId = id.toLowerCase().trim();
-      const exactMovie = movies.find(m => m.name.toLowerCase().includes(cleanId));
-      const exactSeries = series.find(s => s.name.toLowerCase().includes(cleanId));
+      const exactMovie = (movies || []).find(m => m.name.toLowerCase().includes(cleanId));
+      const exactSeries = (series || []).find(s => s.name.toLowerCase().includes(cleanId));
 
-      matchedItem = exactMovie || exactSeries || movies[0] || series[0];
+      matchedItem = typeParam === 'series'
+        ? (exactSeries || series?.[0])
+        : typeParam === 'movie'
+        ? (exactMovie || movies?.[0])
+        : (exactMovie || exactSeries || movies?.[0] || series?.[0]);
+
       if (matchedItem) {
-        if (matchedItem.type === 'series') {
-          id = matchedItem.id.match(/:\d+:\d+$/) ? matchedItem.id : `${matchedItem.id}:1:1`;
-        } else {
-          id = matchedItem.id;
-        }
+        id = matchedItem.id;
       }
     } catch (e) {}
   }
 
-  const type = typeParam || (id.includes(':') && !id.startsWith('mediaklikk:program:') ? 'series' : 'movie');
+  const isSeries = typeParam === 'series' ||
+    (matchedItem && matchedItem.type === 'series') ||
+    (id.includes(':') && !id.startsWith('mediaklikk:program:')) ||
+    id.startsWith('mediaklikk:program:') ||
+    id.startsWith('netmozi:series:');
+
+  let seriesBaseId = null;
+  let targetSeason = reqSeason || 1;
+  let targetEpisode = reqEpisode || 1;
+
+  if (isSeries) {
+    if (id.startsWith('mediaklikk:program:')) {
+      const parts = id.split(':');
+      if (parts.length >= 5) {
+        seriesBaseId = parts.slice(0, parts.length - 2).join(':');
+        targetSeason = reqSeason || parseInt(parts[parts.length - 2], 10) || 1;
+        targetEpisode = reqEpisode || parseInt(parts[parts.length - 1], 10) || 1;
+      } else {
+        seriesBaseId = id;
+      }
+      id = `${seriesBaseId}:${targetSeason}:${targetEpisode}`;
+    } else if (id.startsWith('netmozi:series:')) {
+      const parts = id.split(':');
+      seriesBaseId = `netmozi:series:${parts[2]}`;
+      if (parts.length >= 5 && /^\d+$/.test(parts[3]) && /^\d+$/.test(parts[4])) {
+        targetSeason = reqSeason || parseInt(parts[3], 10) || 1;
+        targetEpisode = reqEpisode || parseInt(parts[4], 10) || 1;
+      }
+      id = `${seriesBaseId}:${targetSeason}:${targetEpisode}`;
+    } else if (id.startsWith('tt') || id.startsWith('tmdb:') || id.startsWith('tvdb:')) {
+      const parts = id.split(':');
+      seriesBaseId = parts[0];
+      if (id.startsWith('tmdb:')) seriesBaseId = `tmdb:${parts[1]}`;
+      if (id.startsWith('tvdb:')) seriesBaseId = `tvdb:${parts[1]}`;
+      if (parts.length >= 3 && /^\d+$/.test(parts[parts.length - 2]) && /^\d+$/.test(parts[parts.length - 1])) {
+        targetSeason = reqSeason || parseInt(parts[parts.length - 2], 10) || 1;
+        targetEpisode = reqEpisode || parseInt(parts[parts.length - 1], 10) || 1;
+      }
+      id = `${seriesBaseId}:${targetSeason}:${targetEpisode}`;
+    } else {
+      seriesBaseId = id.split(':')[0];
+      id = `${seriesBaseId}:${targetSeason}:${targetEpisode}`;
+    }
+  }
+
+  const type = isSeries ? 'series' : (typeParam || 'movie');
   try {
-    const result = await handleStreamRequest(type, id, config);
+    const [result, seriesMeta] = await Promise.all([
+      handleStreamRequest(type, id, config),
+      isSeries && seriesBaseId ? getSeriesEpisodes(seriesBaseId) : Promise.resolve(null)
+    ]);
     const durationMs = Date.now() - startMs;
-    res.json({ ...result, queryId: id, matchedItem, durationMs });
+    const seriesEpisodes = seriesMeta ? {
+      id: seriesBaseId,
+      name: seriesMeta.name,
+      seasons: seriesMeta.seasons,
+      currentSeason: targetSeason,
+      currentEpisode: targetEpisode
+    } : null;
+
+    res.json({
+      ...result,
+      queryId: id,
+      matchedItem,
+      seriesEpisodes,
+      durationMs
+    });
   } catch (err) {
     res.status(500).json({ error: err.message, streams: [] });
   }

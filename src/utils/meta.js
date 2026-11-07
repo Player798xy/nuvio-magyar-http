@@ -732,6 +732,112 @@ function generateSearchQueries(meta) {
   return Array.from(queries);
 }
 
+async function fetchTmdbSeriesEpisodes(cleanId, fallbackTitle = '') {
+  try {
+    let tvId = null;
+    let initialHuTitle = '';
+    let initialEnTitle = '';
+
+    if (cleanId.startsWith('tmdb:')) {
+      tvId = cleanId.split(':')[1];
+    } else if (cleanId.startsWith('tt')) {
+      const findUrl = `https://api.themoviedb.org/3/find/${cleanId}?api_key=${TMDB_API_KEY}&external_source=imdb_id&language=hu-HU`;
+      const fRes = await fetch(findUrl, { signal: AbortSignal.timeout(3500) });
+      if (fRes.ok) {
+        const fData = await fRes.json();
+        const topTv = fData.tv_results?.[0];
+        if (topTv) {
+          tvId = topTv.id;
+          initialHuTitle = topTv.name || '';
+          initialEnTitle = topTv.original_name || '';
+        }
+      }
+    } else if (/^\d+$/.test(cleanId)) {
+      tvId = cleanId;
+    }
+
+    if (!tvId) return null;
+
+    const tvUrl = `https://api.themoviedb.org/3/tv/${tvId}?api_key=${TMDB_API_KEY}&language=hu-HU`;
+    const tvRes = await fetch(tvUrl, { signal: AbortSignal.timeout(4000) });
+    if (!tvRes.ok) return null;
+    const tvData = await tvRes.json();
+
+    const huName = tvData.name || initialHuTitle || fallbackTitle;
+    const enName = tvData.original_name || initialEnTitle || huName;
+    const year = (tvData.first_air_date || '').slice(0, 4);
+    const poster = tvData.poster_path ? `https://image.tmdb.org/t/p/w500${tvData.poster_path}` : '';
+    const background = tvData.backdrop_path ? `https://image.tmdb.org/t/p/original${tvData.backdrop_path}` : '';
+    const description = tvData.overview || '';
+    const genres = (tvData.genres || []).map(g => g.name);
+
+    const rawSeasons = (tvData.seasons || []).filter(s => s.episode_count > 0);
+    const hasNonZero = rawSeasons.some(s => s.season_number > 0);
+    const validSeasons = rawSeasons.filter(s => !hasNonZero || s.season_number > 0);
+
+    if (validSeasons.length === 0) return null;
+
+    const seasonsMap = {};
+    await Promise.all(validSeasons.map(async s => {
+      const sNum = s.season_number;
+      const sCount = s.episode_count;
+      let fetchedEps = null;
+      try {
+        const sUrl = `https://api.themoviedb.org/3/tv/${tvId}/season/${sNum}?api_key=${TMDB_API_KEY}&language=hu-HU`;
+        const sRes = await fetch(sUrl, { signal: AbortSignal.timeout(3500) });
+        if (sRes.ok) {
+          const sData = await sRes.json();
+          if (Array.isArray(sData.episodes) && sData.episodes.length > 0) {
+            fetchedEps = sData.episodes;
+          }
+        }
+      } catch (e) {}
+
+      if (fetchedEps && fetchedEps.length > 0) {
+        seasonsMap[sNum] = fetchedEps.map(e => ({
+          id: `${cleanId}:${sNum}:${e.episode_number}`,
+          season: sNum,
+          episode: e.episode_number,
+          name: e.name || `${e.episode_number}. rész`,
+          overview: e.overview || '',
+          thumbnail: e.still_path ? `https://image.tmdb.org/t/p/w780${e.still_path}` : ''
+        }));
+      } else {
+        const genEps = [];
+        for (let ep = 1; ep <= sCount; ep++) {
+          genEps.push({
+            id: `${cleanId}:${sNum}:${ep}`,
+            season: sNum,
+            episode: ep,
+            name: `${ep}. rész`,
+            overview: '',
+            thumbnail: ''
+          });
+        }
+        seasonsMap[sNum] = genEps;
+      }
+    }));
+
+    for (const sNum of Object.keys(seasonsMap)) {
+      seasonsMap[sNum].sort((a, b) => a.episode - b.episode);
+    }
+
+    return {
+      id: cleanId,
+      name: huName,
+      englishName: enName,
+      year,
+      poster,
+      background,
+      description,
+      genres,
+      seasons: seasonsMap
+    };
+  } catch (err) {
+    return null;
+  }
+}
+
 const seriesEpisodesCache = new Map();
 
 async function getSeriesEpisodes(imdbId) {
@@ -843,70 +949,97 @@ async function getSeriesEpisodes(imdbId) {
     return result;
   }
 
-  try {
-    const cinemetaUrl = `https://v3-cinemeta.strem.io/meta/series/${cleanId}.json`;
-    const res = await fetch(cinemetaUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-      signal: AbortSignal.timeout(8000)
-    });
-    if (!res.ok) return null;
-
-    const data = await res.json();
-    if (!data || !data.meta) return null;
-
-    const huTitle = await resolveHungarianTitle(data.meta.name, cleanId);
-
-    // Group videos by season
-    const videos = data.meta.videos || [];
-    const seasonsMap = {};
-    for (const v of videos) {
-      const sNum = v.season != null ? v.season : 1;
-      if (!seasonsMap[sNum]) {
-        seasonsMap[sNum] = [];
-      }
-      seasonsMap[sNum].push({
-        id: v.id || `${cleanId}:${sNum}:${v.episode || v.number}`,
-        season: sNum,
-        episode: v.episode != null ? v.episode : v.number,
-        name: v.name || `${v.episode || v.number}. rész`,
-        overview: v.overview || v.description || '',
-        thumbnail: v.thumbnail || ''
-      });
+  // 1. If ID starts with tmdb:, directly resolve via TMDB
+  if (cleanId.startsWith('tmdb:')) {
+    const tmdbRes = await fetchTmdbSeriesEpisodes(cleanId);
+    if (tmdbRes) {
+      seriesEpisodesCache.set(cleanId, tmdbRes);
+      return tmdbRes;
     }
-
-    // Sort episodes within each season & enrich with Magyar népmesék canonical titles
-    for (const sNum of Object.keys(seasonsMap)) {
-      seasonsMap[sNum].sort((a, b) => a.episode - b.episode);
-
-      if (cleanId === 'tt0861751' && magyarNepmesekData && magyarNepmesekData[sNum]) {
-        const sEpisodes = magyarNepmesekData[sNum] || [];
-        seasonsMap[sNum].forEach(ep => {
-          const matched = sEpisodes.find(item => item.ep === ep.episode);
-          if (matched && matched.title) {
-            ep.name = matched.title;
-          }
-        });
-      }
-    }
-
-    const result = {
-      id: cleanId,
-      name: huTitle || data.meta.name,
-      englishName: data.meta.name,
-      year: data.meta.year,
-      poster: data.meta.poster,
-      background: data.meta.background,
-      description: data.meta.description,
-      genres: data.meta.genres || [],
-      seasons: seasonsMap
-    };
-
-    seriesEpisodesCache.set(cleanId, result);
-    return result;
-  } catch (err) {
-    console.warn(`[Meta] getSeriesEpisodes failed for ${cleanId}:`, err.message);
-    return null;
   }
+
+  // 2. Fetch Cinemeta metadata if we have an IMDb ID
+  if (cleanId.startsWith('tt')) {
+    try {
+      const cinemetaUrl = `https://v3-cinemeta.strem.io/meta/series/${cleanId}.json`;
+      const res = await fetch(cinemetaUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+        signal: AbortSignal.timeout(6000)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.meta && Array.isArray(data.meta.videos) && data.meta.videos.length > 0) {
+          const rawVideos = data.meta.videos;
+          const hasNonZeroSeasons = rawVideos.some(v => (v.season != null ? v.season : 1) > 0);
+          const validVideos = rawVideos.filter(v => {
+            const s = v.season != null ? v.season : 1;
+            return !hasNonZeroSeasons || s > 0;
+          });
+
+          if (validVideos.length > 0) {
+            const huTitle = await resolveHungarianTitle(data.meta.name, cleanId);
+            const seasonsMap = {};
+            for (const v of validVideos) {
+              const sNum = v.season != null ? v.season : 1;
+              if (!seasonsMap[sNum]) seasonsMap[sNum] = [];
+              const epNum = v.episode != null ? v.episode : (v.number != null ? v.number : 1);
+              const epName = v.name || v.title || `${epNum}. rész`;
+              seasonsMap[sNum].push({
+                id: v.id || `${cleanId}:${sNum}:${epNum}`,
+                season: sNum,
+                episode: epNum,
+                name: epName,
+                overview: v.overview || v.description || '',
+                thumbnail: v.thumbnail || ''
+              });
+            }
+
+            for (const sNum of Object.keys(seasonsMap)) {
+              seasonsMap[sNum].sort((a, b) => a.episode - b.episode);
+            }
+
+            const result = {
+              id: cleanId,
+              name: huTitle || data.meta.name,
+              englishName: data.meta.name,
+              year: data.meta.year,
+              poster: data.meta.poster,
+              background: data.meta.background,
+              description: data.meta.description,
+              genres: data.meta.genres || [],
+              seasons: seasonsMap
+            };
+            seriesEpisodesCache.set(cleanId, result);
+            return result;
+          }
+        }
+      }
+    } catch (err) {
+      console.warn(`[Meta] Cinemeta fetch failed for ${cleanId}:`, err.message);
+    }
+  }
+
+  // 3. Fallback for Hungarian classics: check VERIFIED_MEDIAKLIKK_CLASSICS
+  try {
+    const { VERIFIED_MEDIAKLIKK_CLASSICS, getMediaKlikkSeriesEpisodes } = require('../scrapers/mediaklikk');
+    const matchedClassic = VERIFIED_MEDIAKLIKK_CLASSICS.find(c => c.imdbId === cleanId || c.slug === cleanId || c.id === cleanId);
+    if (matchedClassic) {
+      const mkData = await getMediaKlikkSeriesEpisodes(matchedClassic.id);
+      if (mkData && mkData.seasons && Object.keys(mkData.seasons).length > 0) {
+        seriesEpisodesCache.set(cleanId, mkData);
+        return mkData;
+      }
+    }
+  } catch (e) {}
+
+  // 4. TMDB Fallback
+  const tmdbFallback = await fetchTmdbSeriesEpisodes(cleanId);
+  if (tmdbFallback && tmdbFallback.seasons && Object.keys(tmdbFallback.seasons).length > 0) {
+    seriesEpisodesCache.set(cleanId, tmdbFallback);
+    return tmdbFallback;
+  }
+
+  return null;
 }
 
 module.exports = {
