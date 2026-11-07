@@ -209,7 +209,31 @@ async function handleMeta(req, res) {
   try {
     const metaObj = await getMeta(type, rawId);
     if (metaObj) {
-      return res.json(metaObj.meta ? metaObj : { meta: metaObj });
+      const m = metaObj.meta ? { ...metaObj.meta } : { ...metaObj };
+      if (m.releaseInfo !== undefined && m.releaseInfo !== null) {
+        m.releaseInfo = String(m.releaseInfo);
+      }
+      if (m.poster && !String(m.poster).startsWith('http')) delete m.poster;
+      if (m.background && !String(m.background).startsWith('http')) delete m.background;
+      if (Array.isArray(m.videos)) {
+        m.videos = m.videos.map(v => {
+          const cleanV = { ...v };
+          cleanV.title = String(cleanV.title || cleanV.name || 'Epizód');
+          // Stremio Rust engine (stremio-core) defines `#[serde(alias = "name")] pub title: String` on Video.
+          // Having both `title` and `name` causes serde to fail with `duplicate field 'title'`!
+          delete cleanV.name;
+          delete cleanV.number;
+          if (cleanV.season !== undefined) cleanV.season = Math.max(1, Number(cleanV.season) || 1);
+          if (cleanV.episode !== undefined) cleanV.episode = Math.max(1, Number(cleanV.episode) || 1);
+          if (!cleanV.released) {
+            const sNum = cleanV.season || 1;
+            const epNum = cleanV.episode || 1;
+            cleanV.released = new Date(Date.UTC(2020, (sNum - 1) % 12, Math.min(28, epNum), 12, 0, 0)).toISOString();
+          }
+          return cleanV;
+        });
+      }
+      return res.json({ meta: m });
     }
     res.json({ meta: null });
   } catch (err) {
@@ -241,7 +265,16 @@ async function handleStream(req, res) {
     config.hostUrl = getHostUrl(req);
     config.clientIp = getClientIp(req);
     const result = await handleStreamRequest(type, cleanId, config);
-    res.json({ streams: result.streams || [] });
+    const cleanStreams = (result.streams || []).map(s => {
+      const copy = { ...s };
+      // Stremio Rust engine (stremio-core) defines `#[serde(alias = "title")] pub description: Option<String>` on Stream.
+      // Having both `title` and `description` causes serde to fail with `duplicate field 'description'`!
+      if (copy.title && copy.description) {
+        delete copy.description;
+      }
+      return copy;
+    });
+    res.json({ streams: cleanStreams });
   } catch (err) {
     console.error('[Server] Stream error:', err);
     res.json({ streams: [] });

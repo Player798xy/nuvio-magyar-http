@@ -154,7 +154,7 @@ function getManifest(config = {}) {
 
   return {
     id: 'org.nuvio.magyar.http',
-    version: '2.5.3',
+    version: '2.5.4',
     name,
     description: desc,
     logo: `${hostUrl}/logo.png`,
@@ -326,7 +326,10 @@ async function getStreams(type, rawId, config = {}) {
         s.title = `${cleanTitle}\n⚠️ Közösségi feltöltés – lehet, hogy nem a jó videó`;
       }
     }
-    s.description = s.title;
+    // Never include both `title` and `description` on a Stream object:
+    // Stremio's Rust engine (stremio-core) defines `#[serde(alias = "title")] pub description: Option<String>`,
+    // so sending both `title` and `description` throws `duplicate field 'description'` in serde!
+    delete s.description;
     s.url = String(s.url).trim().replace(/\s+/g, '%20');
     s.behaviorHints = { notWebReady: false, ...(s.behaviorHints || {}) };
 

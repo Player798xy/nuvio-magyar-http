@@ -722,19 +722,17 @@ async function getMeta(type, id) {
 
     if (progData && progData.seasons && Object.keys(progData.seasons).length > 0) {
       const allVideos = Object.values(progData.seasons || {}).flat().map(e => {
-        const sNum = Number(e.season) || 1;
-        const epNum = Number(e.episode) || 1;
+        const sNum = Math.max(1, Number(e.season) || 1);
+        const epNum = Math.max(1, Number(e.episode) || 1);
         const relDate = new Date(Date.UTC(2020, (sNum - 1) % 12, Math.min(28, epNum), 12, 0, 0)).toISOString();
         return {
           id: `${cleanProgramId}:${sNum}:${epNum}`,
-          title: e.name,
-          name: e.name,
+          title: String(e.name || e.title || `${epNum}. rész`),
           season: sNum,
           episode: epNum,
-          number: epNum,
           released: relDate,
-          overview: e.overview || progData.description,
-          thumbnail: e.thumbnail || progData.poster
+          overview: String(e.overview || progData.description || ''),
+          thumbnail: String(e.thumbnail || progData.poster || '')
         };
       });
 
@@ -777,10 +775,8 @@ async function getMeta(type, id) {
           {
             id: `${cleanProgramId}:1:1`,
             title: `${progName} (1. Rész)`,
-            name: `${progName} (1. Rész)`,
             season: 1,
             episode: 1,
-            number: 1,
             released: new Date(Date.UTC(2020, 0, 1, 12, 0, 0)).toISOString(),
             overview: desc,
             thumbnail: poster
@@ -805,15 +801,19 @@ async function getMeta(type, id) {
             description: epData.description,
             releaseInfo: epData.year,
             genres: epData.genres,
-            videos: Object.values(epData.seasons || {}).flat().map(e => ({
-              id: e.id,
-              title: e.name,
-              name: e.name,
-              season: e.season,
-              episode: e.episode,
-              overview: e.overview,
-              thumbnail: e.thumbnail
-            }))
+            videos: Object.values(epData.seasons || {}).flat().map(e => {
+              const sNum = Math.max(1, Number(e.season) || 1);
+              const epNum = Math.max(1, Number(e.episode) || 1);
+              return {
+                id: e.id,
+                title: String(e.name || e.title || `${epNum}. rész`),
+                season: sNum,
+                episode: epNum,
+                released: new Date(Date.UTC(2020, (sNum - 1) % 12, Math.min(28, epNum), 12, 0, 0)).toISOString(),
+                overview: String(e.overview || ''),
+                thumbnail: String(e.thumbnail || epData.poster || '')
+              };
+            })
           }
         };
       }
@@ -872,15 +872,19 @@ async function getMeta(type, id) {
         const { getSeriesEpisodes } = require('./utils/meta');
         const seriesData = await getSeriesEpisodes(id);
         if (seriesData && seriesData.seasons) {
-          const allVids = Object.values(seriesData.seasons || {}).flat().map(e => ({
-            id: e.id,
-            title: e.name,
-            name: e.name,
-            season: e.season,
-            episode: e.episode,
-            overview: e.overview,
-            thumbnail: e.thumbnail
-          }));
+          const allVids = Object.values(seriesData.seasons || {}).flat().map(e => {
+            const sNum = Math.max(1, Number(e.season) || 1);
+            const epNum = Math.max(1, Number(e.episode) || 1);
+            return {
+              id: e.id,
+              title: String(e.name || e.title || `${epNum}. rész`),
+              season: sNum,
+              episode: epNum,
+              released: new Date(Date.UTC(2020, (sNum - 1) % 12, Math.min(28, epNum), 12, 0, 0)).toISOString(),
+              overview: String(e.overview || ''),
+              thumbnail: String(e.thumbnail || seriesData.poster || '')
+            };
+          });
           if (allVids.length > 0) {
             return {
               meta: {
@@ -929,15 +933,19 @@ async function getMeta(type, id) {
       const { getSeriesEpisodes } = require('./utils/meta');
       const seriesData = await getSeriesEpisodes(id);
       if (seriesData) {
-        const allVids = Object.values(seriesData.seasons || {}).flat().map(e => ({
-          id: e.id,
-          title: e.name,
-          name: e.name,
-          season: e.season,
-          episode: e.episode,
-          overview: e.overview,
-          thumbnail: e.thumbnail
-        }));
+        const allVids = Object.values(seriesData.seasons || {}).flat().map(e => {
+          const sNum = Math.max(1, Number(e.season) || 1);
+          const epNum = Math.max(1, Number(e.episode) || 1);
+          return {
+            id: e.id,
+            title: String(e.name || e.title || `${epNum}. rész`),
+            season: sNum,
+            episode: epNum,
+            released: new Date(Date.UTC(2020, (sNum - 1) % 12, Math.min(28, epNum), 12, 0, 0)).toISOString(),
+            overview: String(e.overview || ''),
+            thumbnail: String(e.thumbnail || seriesData.poster || '')
+          };
+        });
         return {
           meta: {
             id: seriesData.id,
