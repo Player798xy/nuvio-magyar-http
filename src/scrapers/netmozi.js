@@ -252,8 +252,8 @@ function parseCandidatesFromHtml(html, isSeries, normTarget, targetYear) {
 
       const normItem = normalize(itemTitle);
       const isWordMatch = normTarget.length <= 3 
-        ? new RegExp(`\\b${normTarget}\\b`, 'i').test(normItem) 
-        : (normItem.includes(normTarget) || normTarget.includes(normItem));
+        ? new RegExp(`(?:^|\\s)${normTarget}(?:\\s|$)`, 'i').test(normItem) 
+        : (new RegExp(`(?:^|\\s)${normTarget}(?:\\s|$)`, 'i').test(normItem) || (normItem.length > 3 && new RegExp(`(?:^|\\s)${normItem}(?:\\s|$)`, 'i').test(normTarget)));
       const matchScore = normItem === normTarget ? 100 : (isWordMatch ? 75 : 0);
       if (isSeries === false && targetYear && itemYear && Math.abs(parseInt(targetYear, 10) - parseInt(itemYear, 10)) > 1) {
         continue;
@@ -309,8 +309,8 @@ function parseCandidatesFromHtml(html, isSeries, normTarget, targetYear) {
 
       const normItem = normalize(itemTitle);
       const isWordMatch = normTarget.length <= 3 
-        ? new RegExp(`\\b${normTarget}\\b`, 'i').test(normItem) 
-        : (normItem.includes(normTarget) || normTarget.includes(normItem));
+        ? new RegExp(`(?:^|\\s)${normTarget}(?:\\s|$)`, 'i').test(normItem) 
+        : (new RegExp(`(?:^|\\s)${normTarget}(?:\\s|$)`, 'i').test(normItem) || (normItem.length > 3 && new RegExp(`(?:^|\\s)${normItem}(?:\\s|$)`, 'i').test(normTarget)));
       const matchScore = normItem === normTarget ? 100 : (isWordMatch ? 75 : 0);
       if (isSeries === false && targetYear && itemYear && Math.abs(parseInt(targetYear, 10) - parseInt(itemYear, 10)) > 1) {
         continue;

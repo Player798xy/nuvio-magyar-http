@@ -92,7 +92,8 @@ async function scrapeJobbMintATV(meta) {
 
           const normTitle = normalize(item.title);
           let score = 0;
-          if (normTitle === normTarget || item.url.toLowerCase().includes(targetSlug)) {
+          const urlLower = item.url.toLowerCase();
+          if (normTitle === normTarget || urlLower.includes('/' + targetSlug + '/') || urlLower.includes('/' + targetSlug + '_')) {
             score += 100;
           } else if (normTitle.startsWith(normTarget) || normTarget.startsWith(normTitle)) {
             score += 60;
@@ -101,7 +102,7 @@ async function scrapeJobbMintATV(meta) {
             const itemWords = normTitle.split(' ').filter(w => w.length > 2);
             let overlap = 0;
             for (const w of targetWords) {
-              if (itemWords.includes(w) || item.url.toLowerCase().includes(w)) overlap++;
+              if (itemWords.includes(w)) overlap++;
             }
             if (overlap === 0) continue;
             score += (overlap / Math.max(targetWords.length, 1)) * 40;

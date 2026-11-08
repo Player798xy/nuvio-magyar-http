@@ -221,7 +221,7 @@ async function scrapeDMDAMedia(meta) {
           .trim();
         const normItem = normalize(cleanCand || item.title);
         if (normItem === normTarget) score += 100;
-        else if (normItem.includes(normTarget) || normTarget.includes(normItem)) score += 50;
+        else if (isTitleMatch(hu, cleanCand || item.title, meta.year, isSeries)) score += 50;
 
         if (!isSeries && targetYear) {
           const candYears = extractCandidateYears(item.title, hu);

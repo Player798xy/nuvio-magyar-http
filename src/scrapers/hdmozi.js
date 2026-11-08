@@ -98,7 +98,7 @@ async function resolveHdmoziUrl(mediaInfo, season = null, episode = null) {
       const rt = normalize(r.title);
       let score = 0;
       if (rt === targetTitle) score += 100;
-      else if (rt.includes(targetTitle) || targetTitle.includes(rt)) score += 60;
+      else if (new RegExp("(?:^|\\s)" + targetTitle + "(?:\\s|$)", "i").test(rt) || (rt.length > 3 && new RegExp("(?:^|\\s)" + rt + "(?:\\s|$)", "i").test(targetTitle))) score += 60;
       if (mediaInfo.type === 'movie' && mediaInfo.year && r.year) {
         const diff = Math.abs(mediaInfo.year - r.year);
         if (diff > 1) return { ...r, score: -1000 };

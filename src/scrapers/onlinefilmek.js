@@ -252,7 +252,7 @@ async function scrapeOnlineFilmek(meta) {
 
             const normMTitle = normalize(mTitle);
             const normHu = normalize(hu);
-            if (normMTitle.includes(normHu) || normHu.includes(normMTitle)) {
+            if (isTitleMatch(hu, mTitle, meta.year, Boolean(meta.season))) {
               itemUrl = mUrl;
               postTitle = mTitle;
               break;

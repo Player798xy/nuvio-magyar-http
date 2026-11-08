@@ -488,8 +488,8 @@ function isTitleMatch(targetTitle, candidateTitle, targetYear, isSeries = false)
   }
 
   const matched = targetWords.filter(w => {
-    if (w.length <= 3) return new RegExp("\\b" + w + "\\b", "i").test(normCand);
-    return normCand.includes(w);
+    if (w.length <= 3) return new RegExp("(?:^|\\s)" + w + "(?:\\s|$)", "i").test(normCand);
+    return new RegExp("(?:^|\\s)" + w, "i").test(normCand);
   });
 
   if (targetWords.length <= 2) {
@@ -502,32 +502,51 @@ function isTitleMatch(targetTitle, candidateTitle, targetYear, isSeries = false)
 function matchesEpisode(title, season, episode, epTitle = '') {
   if (!season && !episode) return true;
   const t = title.toLowerCase();
+  const sNum = season ? parseInt(season, 10) : null;
+  const eNum = episode ? parseInt(episode, 10) : null;
+
+  // Reject immediately if an explicit "X. évad" or "Season X" in the title contradicts the requested season
+  const evadMatch = t.match(/(\d+)\s*\.?\s*[eé]vad/i) || t.match(/season\s*(\d+)/i);
+  if (evadMatch && sNum) {
+    const s = parseInt(evadMatch[1], 10);
+    if (!isNaN(s) && s !== sNum) {
+      return false;
+    }
+  }
+
+  // Check SxxExx or sxxexx or SxEx
+  const seMatch = t.match(/s(\d+)\s*e(\d+)/i) || t.match(/(\d+)x(\d+)/i);
+  if (seMatch) {
+    const s = parseInt(seMatch[1], 10);
+    const e = parseInt(seMatch[2], 10);
+    return e === eNum && (!sNum || s === sNum || isNaN(s));
+  }
+
+  // If requesting Season > 1 and there is no SxxExx / NxM / "X. évad" in the title (unless episode title matches), reject bare "1. rész"
+  if (sNum && sNum > 1 && !evadMatch) {
+    if (epTitle && epTitle.length >= 4 && t.includes(epTitle.toLowerCase())) {
+      return true;
+    }
+    return false;
+  }
 
   // If episode title is known (e.g. "A vérdíj")
   if (epTitle && epTitle.length >= 4 && t.includes(epTitle.toLowerCase())) {
     return true;
   }
 
-  // Check SxxExx or sxxexx or SxEx
-  const seMatch = t.match(/s(\d+)e(\d+)/i) || t.match(/(\d+)x(\d+)/i);
-  if (seMatch) {
-    const s = parseInt(seMatch[1], 10);
-    const e = parseInt(seMatch[2], 10);
-    return e === episode && (s === season || isNaN(s));
-  }
-
   // Check "X. rész" or "X.resz"
   const reszMatch = t.match(/(\d+)\s*\.?\s*r[eé]sz/i);
   if (reszMatch) {
     const e = parseInt(reszMatch[1], 10);
-    return e === episode;
+    return e === eNum;
   }
 
   // Check "X. epizód"
   const epMatch = t.match(/(\d+)\s*\.?\s*epiz[oó]d/i);
   if (epMatch) {
     const e = parseInt(epMatch[1], 10);
-    return e === episode;
+    return e === eNum;
   }
 
   return true;

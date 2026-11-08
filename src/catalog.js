@@ -224,7 +224,7 @@ async function executeMultiSourceSearch(type, query) {
     const normItem = normalize(item.name).replace(/\s+/g, '');
     const normQ = qNorm.replace(/\s+/g, '');
     const isHoHoMatch = normQ.includes('hoho') && normItem.includes('hoho');
-    if (normItem.includes(normQ) || normQ.includes(normItem) || isHoHoMatch || scoreItemRelevance(item.name, cleanQuery) >= 150) {
+    if (isHoHoMatch || scoreItemRelevance(item.name, cleanQuery) >= 150) {
       if (!seenIds.has(item.id)) {
         seenIds.add(item.id);
         results.push({
@@ -272,7 +272,7 @@ async function executeMultiSourceSearch(type, query) {
     for (const prog of allPrograms) {
       if (type && prog.type && prog.type !== type && type !== 'all') continue;
       const normProg = normalize(prog.name);
-      if (normProg.includes(qNorm) || qNorm.includes(normProg) || scoreItemRelevance(prog.name, cleanQuery) >= 150) {
+      if (scoreItemRelevance(prog.name, cleanQuery) >= 150) {
         if (!seenIds.has(prog.id)) {
           seenIds.add(prog.id);
           results.push({
@@ -651,22 +651,25 @@ function scoreItemRelevance(itemTitle, query, itemId = '') {
   const normQuery = query.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
   let baseScore = 0;
+  const escQ = normQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const hasWordStartQ = new RegExp('(?:^|\\s)' + escQ, 'i').test(normTitle);
   if (normTitle === normQuery) baseScore = 1000;
   else if (normTitle.startsWith(normQuery)) baseScore = 500;
-  else if (normTitle.includes(normQuery)) baseScore = 300;
+  else if (hasWordStartQ) baseScore = 300;
   else {
     const cleanT = normTitle.replace(/[^a-z0-9]/g, '');
     const cleanQ = normQuery.replace(/[^a-z0-9]/g, '');
     if (cleanT === cleanQ) baseScore = 1000;
-    else if (cleanT.includes(cleanQ)) baseScore = 850;
-    else if (cleanQ.includes(cleanT)) baseScore = 750;
+    else if (cleanT.startsWith(cleanQ) || (hasWordStartQ && cleanT.includes(cleanQ))) baseScore = 850;
+    else if (cleanQ.startsWith(cleanT)) baseScore = 750;
     else {
       const queryWords = normQuery.split(/\s+/).filter(w => w.length > 1);
       if (queryWords.length === 0) baseScore = 0;
       else {
         let matchedWords = 0;
         for (const w of queryWords) {
-          if (normTitle.includes(w)) matchedWords++;
+          const escW = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          if (new RegExp('(?:^|\\s)' + escW, 'i').test(normTitle)) matchedWords++;
         }
         if (matchedWords === queryWords.length) {
           baseScore = 200 + (matchedWords * 25);

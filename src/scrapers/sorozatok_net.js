@@ -138,7 +138,7 @@ async function scrapeSorozatokNet(meta) {
       if (targetYear && itemYear && Math.abs(targetYear - itemYear) > 2) continue;
       const huNorm = normalizeTitle(item.cat_name);
       const enNorm = normalizeTitle(item.cat_eng);
-      if (normTargets.some((t) => t.length > 3 && (huNorm.includes(t) || enNorm.includes(t)))) {
+      if (normTargets.some((t) => t.length > 3 && (new RegExp("(?:^|\\s)" + t + "(?:\\s|$)", "i").test(huNorm) || new RegExp("(?:^|\\s)" + t + "(?:\\s|$)", "i").test(enNorm)))) {
         matchedSeries = item;
         break;
       }
