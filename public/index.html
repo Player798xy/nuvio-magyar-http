@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <meta name="theme-color" content="#050505" />
   <title>Magyar Streaming Pro — Nuvio & Stremio HTTP Addon</title>
-  <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.6.2" />
-  <link rel="alternate icon" type="image/png" href="/logo.png?v=2.6.2" />
-  <link rel="shortcut icon" href="/favicon.ico?v=2.6.2" />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.6.4" />
+  <link rel="alternate icon" type="image/png" href="/logo.png?v=2.6.4" />
+  <link rel="shortcut icon" href="/favicon.ico?v=2.6.4" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=VT323&display=swap" rel="stylesheet" />
@@ -603,6 +603,158 @@
       font-family: var(--f-ch);
       font-size: 17px;
       color: var(--mint);
+    }
+
+    /* CH 02 & CH 03: Modern Interactive Dropdown Menus */
+    .dropdown-wrap {
+      border: 1.5px solid var(--line-3);
+      border-radius: 6px;
+      background: var(--band);
+      overflow: hidden;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease;
+      margin-bottom: 6px;
+    }
+    .dropdown-wrap:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .dropdown-wrap.is-open {
+      border-color: rgba(0, 223, 162, 0.45);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+    #catalogsDropdownWrap.is-open {
+      border-color: rgba(167, 139, 250, 0.45);
+    }
+    .dropdown-trigger {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      background: var(--band);
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.18s ease;
+    }
+    .dropdown-trigger:hover {
+      background: var(--band-2);
+    }
+    .dropdown-trigger:focus-visible {
+      outline: 2px solid var(--mint);
+      outline-offset: -2px;
+    }
+    .dropdown-trigger-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1 1 auto;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+    .dropdown-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: var(--panel);
+      border: 1px solid var(--line-3);
+      color: var(--green);
+      flex-shrink: 0;
+    }
+    #catalogsDropdownWrap .dropdown-icon {
+      color: var(--violet);
+    }
+    .dropdown-title {
+      font-family: var(--f-head);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+      white-space: nowrap;
+    }
+    .dropdown-badge {
+      font-family: var(--f-ch);
+      font-size: 16px;
+      padding: 1px 8px;
+      border-radius: 4px;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    .badge-sources {
+      background: #0a190b;
+      border: 1px solid #254d27;
+      color: var(--green);
+    }
+    .badge-catalogs {
+      background: #170b1a;
+      border: 1px solid #4c2954;
+      color: var(--violet);
+    }
+    .dropdown-preview {
+      font-size: 12px;
+      color: var(--dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 320px;
+      display: inline-block;
+      opacity: 0.85;
+    }
+    .dropdown-trigger-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .dropdown-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chip-mini {
+      padding: 4px 9px;
+      font-size: 11.5px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .dropdown-chevron {
+      font-size: 11px;
+      color: var(--dim);
+      display: inline-block;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
+      padding: 2px 4px;
+      line-height: 1;
+    }
+    .dropdown-wrap.is-open .dropdown-chevron {
+      transform: rotate(180deg);
+      color: var(--mint);
+    }
+    #catalogsDropdownWrap.is-open .dropdown-chevron {
+      color: var(--violet);
+    }
+
+    /* Smooth accordion animation using grid-template-rows */
+    .dropdown-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+      opacity: 0;
+      border-top: 1px solid transparent;
+    }
+    .dropdown-wrap.is-open .dropdown-panel {
+      grid-template-rows: 1fr;
+      opacity: 1;
+      border-top-color: var(--line);
+    }
+    .dropdown-panel-inner {
+      overflow: hidden;
+      min-height: 0;
+    }
+    .dropdown-panel .clean-list {
+      border: none;
+      border-radius: 0;
+      background: transparent;
     }
 
     /* CH 02 & CH 03: Compact Vertical List (cleanyour.tv guide list) */
@@ -1215,6 +1367,34 @@
         font-size: 12px;
       }
 
+      /* Dropdown on mobile */
+      .dropdown-trigger {
+        padding: 10px 11px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .dropdown-trigger-left {
+        width: 100%;
+        gap: 8px;
+      }
+      .dropdown-preview {
+        width: 100%;
+        max-width: 100%;
+        font-size: 11.5px;
+        order: 4;
+      }
+      .dropdown-trigger-right {
+        width: 100%;
+        justify-content: space-between;
+        padding-top: 6px;
+        border-top: 1px dashed var(--line);
+      }
+      .chip-mini {
+        padding: 4px 8px;
+        font-size: 11px;
+      }
+
       /* Clean stacked list on mobile */
       .list-row {
         display: grid;
@@ -1359,9 +1539,9 @@
   <header class="site-head">
     <div class="wrap head-bar">
       <a href="/configure" class="logo">
-        <img src="/logo.svg?v=2.6.3" class="logo-mark" alt="Magyar Streaming Pro" width="44" height="44" />
+        <img src="/logo.svg?v=2.6.4" class="logo-mark" alt="Magyar Streaming Pro" width="44" height="44" />
         <span class="logo-word">Magyar Streaming <span>Pro</span></span>
-        <span class="logo-ver">v2.6.3</span>
+        <span class="logo-ver">v2.6.4</span>
       </a>
 
       <nav class="navlinks">
@@ -1382,7 +1562,7 @@
     <section class="hero">
       <div class="kicker"><span class="live-dot"></span> CH 00 // NUVIO &amp; STREMIO DIRECT HTTP ADDON</div>
       <div class="hero-title-row">
-        <img src="/logo.svg?v=2.6.2" class="hero-logo" alt="Magyar Streaming Pro" width="60" height="60" />
+        <img src="/logo.svg?v=2.6.4" class="hero-logo" alt="Magyar Streaming Pro" width="60" height="60" />
         <h1>Magyar Streaming <span>Pro</span></h1>
       </div>
       <p class="lede">
@@ -1452,20 +1632,37 @@
       </div>
     </section>
 
-    <!-- CH 02: 13 SOURCES (COMPACT LIST) -->
+    <!-- CH 02: 13 SOURCES (DROPDOWN MENU) -->
     <section class="sec" id="ch02">
       <div class="sec-head">
         <div class="sec-title">
           <span class="ch-badge c-green">CH 02</span>
           <h2>13 Magyar Forrás</h2>
         </div>
-        <div class="sec-actions">
-          <button class="btn-chip" onclick="toggleAllSources(true)">Mind bekapcsolása</button>
-          <button class="btn-chip" onclick="toggleAllSources(false)">Mind kikapcsolása</button>
-        </div>
       </div>
 
-      <div class="clean-list" id="sourcesGrid">
+      <div class="dropdown-wrap" id="sourcesDropdownWrap">
+        <div class="dropdown-trigger" id="sourcesDropdownTrigger" role="button" tabindex="0" aria-expanded="false" aria-controls="sourcesDropdownPanel" onclick="toggleDropdown('sources')">
+          <div class="dropdown-trigger-left">
+            <span class="dropdown-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            </span>
+            <span class="dropdown-title">Források kiválasztása</span>
+            <span class="dropdown-badge badge-sources" id="sourcesDropdownCount">13 / 13 aktív</span>
+            <span class="dropdown-preview" id="sourcesDropdownPreview">Minden forrás aktív (13/13)</span>
+          </div>
+          <div class="dropdown-trigger-right">
+            <div class="dropdown-actions">
+              <button type="button" class="btn-chip chip-mini" onclick="event.stopPropagation(); toggleAllSources(true)">Mind be</button>
+              <button type="button" class="btn-chip chip-mini" onclick="event.stopPropagation(); toggleAllSources(false)">Mind ki</button>
+            </div>
+            <span class="dropdown-chevron" aria-hidden="true">▼</span>
+          </div>
+        </div>
+
+        <div class="dropdown-panel" id="sourcesDropdownPanel">
+          <div class="dropdown-panel-inner">
+            <div class="clean-list" id="sourcesGrid">
         <label class="list-row" data-tier="verified">
           <input type="checkbox" class="clean-cb" value="mediaklikk" checked onchange="onConfigChange()" />
           <span class="row-idx">01</span>
@@ -1557,23 +1754,43 @@
           <span class="row-desc">Magyar szinkronos sorozatok és filmek</span>
           <span class="row-meta"><span class="tag tag-warn">Cím alapú</span><span class="tag tag-sh">Csak Self-Host</span></span>
         </label>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- CH 03: CATALOGS (COMPACT LIST) -->
+    <!-- CH 03: CATALOGS (DROPDOWN MENU) -->
     <section class="sec" id="ch03">
       <div class="sec-head">
         <div class="sec-title">
           <span class="ch-badge c-violet">CH 03</span>
           <h2>Katalógus Polcok (Heti Rotáció)</h2>
         </div>
-        <div class="sec-actions">
-          <button class="btn-chip" onclick="setCatalogPreset('all')">Összes bekapcsolása (12)</button>
-          <button class="btn-chip" onclick="setCatalogPreset('core')">Csak Magyar &amp; Toplista (7)</button>
-        </div>
       </div>
 
-      <div class="clean-list" id="catalogsGrid">
+      <div class="dropdown-wrap" id="catalogsDropdownWrap">
+        <div class="dropdown-trigger" id="catalogsDropdownTrigger" role="button" tabindex="0" aria-expanded="false" aria-controls="catalogsDropdownPanel" onclick="toggleDropdown('catalogs')">
+          <div class="dropdown-trigger-left">
+            <span class="dropdown-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            </span>
+            <span class="dropdown-title">Katalógusok kiválasztása</span>
+            <span class="dropdown-badge badge-catalogs" id="catalogsDropdownCount">12 / 12 aktív</span>
+            <span class="dropdown-preview" id="catalogsDropdownPreview">Mind a 12 katalógus aktív</span>
+          </div>
+          <div class="dropdown-trigger-right">
+            <div class="dropdown-actions">
+              <button type="button" class="btn-chip chip-mini" onclick="event.stopPropagation(); setCatalogPreset('all')">Mind be</button>
+              <button type="button" class="btn-chip chip-mini" onclick="event.stopPropagation(); setCatalogPreset('core')">Csak alap (7)</button>
+            </div>
+            <span class="dropdown-chevron" aria-hidden="true">▼</span>
+          </div>
+        </div>
+
+        <div class="dropdown-panel" id="catalogsDropdownPanel">
+          <div class="dropdown-panel-inner">
+            <div class="clean-list" id="catalogsGrid">
         <label class="list-row" data-cat="livetv">
           <input type="checkbox" class="clean-cb" value="hu-live-tv" checked onchange="onConfigChange()" />
           <span class="row-idx">01</span>
@@ -1658,6 +1875,9 @@
           <span class="row-desc">Amazon Prime Video magyarországi kínálat</span>
           <span class="row-meta"><span class="tag tag-stream s-prime">Prime</span></span>
         </label>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1805,6 +2025,62 @@
         summaryEl.textContent = `${selectedSources.length} forrás · ${selectedCats.length} katalógus · ${selectedRes.length} felbontás`;
       }
 
+      // Update sources dropdown badge & preview
+      const sourcesCountEl = document.getElementById('sourcesDropdownCount');
+      const sourcesPreviewEl = document.getElementById('sourcesDropdownPreview');
+      if (sourcesCountEl) {
+        sourcesCountEl.textContent = `${selectedSources.length} / ${ALL_SOURCE_IDS.length} aktív`;
+      }
+      if (sourcesPreviewEl) {
+        if (selectedSources.length === ALL_SOURCE_IDS.length) {
+          sourcesPreviewEl.textContent = 'Minden forrás aktív (13/13)';
+        } else if (selectedSources.length === 0) {
+          sourcesPreviewEl.textContent = 'Nincs forrás kiválasztva';
+        } else {
+          const nameMap = {
+            'mediaklikk': 'MédiaKlikk', 'jobbmintatv': 'JobbMintATv', 'filmezek': 'Filmezek',
+            'videa': 'Videa', 'indavideo': 'Indavideo', 'filmvilag2': 'Filmvilág2',
+            'mesefilm': 'MeseKincstár', 'videakid': 'Videakid', 'netmozi': 'NetMozi',
+            'onlinefilmek': 'OnlineFilmek', 'sorozatoknet': 'Sorozatok.net', 'hdmozi': 'HDMozi',
+            'dmdamedia': 'DMDamedia'
+          };
+          const names = selectedSources.map(s => nameMap[s] || s);
+          if (names.length <= 3) {
+            sourcesPreviewEl.textContent = names.join(', ');
+          } else {
+            sourcesPreviewEl.textContent = `${names.slice(0, 3).join(', ')} +${names.length - 3}`;
+          }
+        }
+      }
+
+      // Update catalogs dropdown badge & preview
+      const catalogsCountEl = document.getElementById('catalogsDropdownCount');
+      const catalogsPreviewEl = document.getElementById('catalogsDropdownPreview');
+      if (catalogsCountEl) {
+        catalogsCountEl.textContent = `${selectedCats.length} / ${DEFAULT_CATALOG_IDS.length} aktív`;
+      }
+      if (catalogsPreviewEl) {
+        if (selectedCats.length === DEFAULT_CATALOG_IDS.length) {
+          catalogsPreviewEl.textContent = 'Mind a 12 katalógus aktív';
+        } else if (selectedCats.length === 0) {
+          catalogsPreviewEl.textContent = 'Nincs katalógus kiválasztva';
+        } else {
+          const catNameMap = {
+            'hu-live-tv': 'Élő TV', 'hu-mediaklikk-classics': 'MédiaKlikk', 'hu-trending-movies': 'Heti Filmek',
+            'hu-trending-series': 'Heti Sorozatok', 'hu-cinema-movies': 'Friss Mozifilmek',
+            'hu-hungarian-movies': 'Magyar Filmek', 'hu-hungarian-series': 'Magyar Sorozatok',
+            'hu-stream-netflix': 'Netflix', 'hu-stream-max': 'Max', 'hu-stream-disney': 'Disney+',
+            'hu-stream-skyshowtime': 'SkyShowtime', 'hu-stream-prime': 'Prime'
+          };
+          const names = selectedCats.map(c => catNameMap[c] || c);
+          if (names.length <= 3) {
+            catalogsPreviewEl.textContent = names.join(', ');
+          } else {
+            catalogsPreviewEl.textContent = `${names.slice(0, 3).join(', ')} +${names.length - 3}`;
+          }
+        }
+      }
+
       let manifestUrl = `${origin}/manifest.json`;
       const cfgObj = {};
       if (selectedSources.length > 0 && selectedSources.length < ALL_SOURCE_IDS.length) {
@@ -1855,6 +2131,26 @@
         cb.checked = mode === 'all' ? true : set.has(cb.value);
       });
       onConfigChange();
+    }
+
+    function toggleDropdown(type) {
+      const wrap = document.getElementById(type === 'sources' ? 'sourcesDropdownWrap' : 'catalogsDropdownWrap');
+      const trigger = document.getElementById(type === 'sources' ? 'sourcesDropdownTrigger' : 'catalogsDropdownTrigger');
+      if (!wrap) return;
+      const isOpen = wrap.classList.toggle('is-open');
+      if (trigger) {
+        trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      }
+    }
+
+    function openDropdown(type) {
+      const wrap = document.getElementById(type === 'sources' ? 'sourcesDropdownWrap' : 'catalogsDropdownWrap');
+      const trigger = document.getElementById(type === 'sources' ? 'sourcesDropdownTrigger' : 'catalogsDropdownTrigger');
+      if (!wrap) return;
+      wrap.classList.add('is-open');
+      if (trigger) {
+        trigger.setAttribute('aria-expanded', 'true');
+      }
     }
 
     function copyManifest() {
@@ -2183,6 +2479,26 @@
         out.innerHTML = '<div class="results-empty">Hiba: ' + e.message + '</div>';
       }
     }
+
+    // Dropdown keyboard accessibility & navlink auto-open
+    ['sourcesDropdownTrigger', 'catalogsDropdownTrigger'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            el.click();
+          }
+        });
+      }
+    });
+
+    document.querySelectorAll('a[href="#ch02"]').forEach(a => {
+      a.addEventListener('click', () => openDropdown('sources'));
+    });
+    document.querySelectorAll('a[href="#ch03"]').forEach(a => {
+      a.addEventListener('click', () => openDropdown('catalogs'));
+    });
 
     updateManifestUrl();
   </script>
