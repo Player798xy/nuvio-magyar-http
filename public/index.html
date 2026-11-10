@@ -768,6 +768,9 @@
     #liveCatalogsDropdownWrap.is-open .dropdown-chevron {
       color: var(--rose);
     }
+    #tvToolsDropdownWrap.is-open .dropdown-chevron {
+      color: var(--amber);
+    }
 
     /* Smooth accordion animation using grid-template-rows */
     .dropdown-panel {
@@ -1622,15 +1625,6 @@
             <button class="btn-action btn-copy" onclick="copyManifest()" id="copyBtn">
               <span class="btn-ico">📋</span> Link másolása
             </button>
-            <a class="btn-action" style="background:linear-gradient(135deg, #e67e22, #d35400);color:#fff;text-decoration:none;" href="/playlist.xspf" download="nuvio-magyar-tv.xspf" title="VLC és Kodi XSPF Lejátszási Lista">
-              <span class="btn-ico">📻</span> VLC XSPF
-            </a>
-            <a class="btn-action" style="background:linear-gradient(135deg, #27ae60, #219653);color:#fff;text-decoration:none;" href="/playlist.m3u" download="nuvio-magyar-tv.m3u" title="IPTV M3U Lejátszási Lista">
-              <span class="btn-ico">📺</span> M3U IPTV
-            </a>
-            <a class="btn-action" style="background:linear-gradient(135deg, #1f4e79, #2b5797);color:#fff;text-decoration:none;" href="/live_tv_1080p_audit.xlsx" download="live_tv_1080p_audit.xlsx" title="1080p Felbontás & Forrás Audit (Excel .xlsx)">
-              <span class="btn-ico">📊</span> 1080p Excel Audit
-            </a>
           </div>
         </div>
       </div>
@@ -2120,9 +2114,45 @@
       </div>
     </section>
 
+    <!-- TV LEJÁTSZÁSI LISTÁK & 1080P AUDIT (KÜLSŐ LEJÁTSZÓK) -->
+    <section class="sec" id="tvToolsSec" style="padding-top: 14px; padding-bottom: 6px;">
+      <div class="dropdown-wrap" id="tvToolsDropdownWrap">
+        <div class="dropdown-trigger" id="tvToolsDropdownTrigger" role="button" tabindex="0" aria-expanded="false" aria-controls="tvToolsDropdownPanel" onclick="toggleDropdown('tvTools')">
+          <div class="dropdown-trigger-left">
+            <span class="dropdown-icon" style="color:var(--amber);background:#181204;border-color:#523b08;">📻</span>
+            <span class="dropdown-title">Élő TV Lejátszási Listák &amp; 1080p Audit</span>
+            <span class="dropdown-badge" style="background:#1c1305;border:1px solid #5a3c09;color:var(--gold);">VLC · M3U · Excel</span>
+            <span class="dropdown-preview">XSPF, M3U IPTV lista és 1080p audit táblázat</span>
+          </div>
+          <div class="dropdown-trigger-right">
+            <span class="dropdown-chevron" aria-hidden="true">▼</span>
+          </div>
+        </div>
+
+        <div class="dropdown-panel" id="tvToolsDropdownPanel">
+          <div class="dropdown-panel-inner" style="padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.22);">
+            <div style="font-size: 12.5px; color: var(--dim); line-height: 1.45;">
+              Közvetlen lejátszási listák külső médialejátszókhoz (VLC, Kodi, TiviMate, IPTV Smarters), valamint a 146 csatornás felbontás- és forrás-ellenőrzési táblázat:
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+              <a class="btn-action" style="border-radius:6px;background:linear-gradient(135deg, #e67e22, #d35400);color:#ffffff;text-decoration:none;min-height:38px;padding:0 16px;font-size:13px;" href="/playlist.xspf" download="nuvio-magyar-tv.xspf" title="VLC és Kodi XSPF Lejátszási Lista">
+                <span class="btn-ico">📻</span> VLC (.xspf)
+              </a>
+              <a class="btn-action" style="border-radius:6px;background:linear-gradient(135deg, #27ae60, #219653);color:#ffffff;text-decoration:none;min-height:38px;padding:0 16px;font-size:13px;" href="/playlist.m3u" download="nuvio-magyar-tv.m3u" title="IPTV M3U Lejátszási Lista">
+                <span class="btn-ico">📺</span> M3U (.m3u)
+              </a>
+              <a class="btn-action" style="border-radius:6px;background:linear-gradient(135deg, #1f4e79, #2b5797);color:#ffffff;text-decoration:none;min-height:38px;padding:0 16px;font-size:13px;" href="/live_tv_1080p_audit.xlsx" download="live_tv_1080p_audit.xlsx" title="1080p Felbontás &amp; Forrás Audit (Excel .xlsx)">
+                <span class="btn-ico">📊</span> 1080p Audit (.xlsx)
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <footer class="footer">
       <span>Magyar Streaming Pro · Nem tárol és nem hosztol médiafájlokat (kizárólag nyilvános linkeket indexel).</span>
-      <span><a href="/configure?old=1">Régi kártyás felület megnyitása</a> · <a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener">GitHub</a></span>
+      <span><a href="#tvToolsSec">📺 TV Listák &amp; Audit</a> · <a href="/configure?old=1">Régi felület</a> · <a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener">GitHub</a></span>
     </footer>
   </main>
 
@@ -2389,7 +2419,8 @@
         'sources': { wrap: 'sourcesDropdownWrap', trigger: 'sourcesDropdownTrigger' },
         'liveSources': { wrap: 'liveSourcesDropdownWrap', trigger: 'liveSourcesDropdownTrigger' },
         'vodCatalogs': { wrap: 'vodCatalogsDropdownWrap', trigger: 'vodCatalogsDropdownTrigger' },
-        'liveCatalogs': { wrap: 'liveCatalogsDropdownWrap', trigger: 'liveCatalogsDropdownTrigger' }
+        'liveCatalogs': { wrap: 'liveCatalogsDropdownWrap', trigger: 'liveCatalogsDropdownTrigger' },
+        'tvTools': { wrap: 'tvToolsDropdownWrap', trigger: 'tvToolsDropdownTrigger' }
       };
       const item = map[type];
       if (!item) return;
@@ -2407,7 +2438,8 @@
         'sources': { wrap: 'sourcesDropdownWrap', trigger: 'sourcesDropdownTrigger' },
         'liveSources': { wrap: 'liveSourcesDropdownWrap', trigger: 'liveSourcesDropdownTrigger' },
         'vodCatalogs': { wrap: 'vodCatalogsDropdownWrap', trigger: 'vodCatalogsDropdownTrigger' },
-        'liveCatalogs': { wrap: 'liveCatalogsDropdownWrap', trigger: 'liveCatalogsDropdownTrigger' }
+        'liveCatalogs': { wrap: 'liveCatalogsDropdownWrap', trigger: 'liveCatalogsDropdownTrigger' },
+        'tvTools': { wrap: 'tvToolsDropdownWrap', trigger: 'tvToolsDropdownTrigger' }
       };
       const item = map[type];
       if (!item) return;
@@ -2722,7 +2754,7 @@
     }
 
     // Dropdown keyboard accessibility & navlink auto-open
-    ['sourcesDropdownTrigger', 'liveSourcesDropdownTrigger', 'vodCatalogsDropdownTrigger', 'liveCatalogsDropdownTrigger'].forEach(id => {
+    ['sourcesDropdownTrigger', 'liveSourcesDropdownTrigger', 'vodCatalogsDropdownTrigger', 'liveCatalogsDropdownTrigger', 'tvToolsDropdownTrigger'].forEach(id => {
       const el = document.getElementById(id);
       if (el) {
         el.addEventListener('keydown', e => {
@@ -2744,6 +2776,11 @@
       a.addEventListener('click', () => {
         openDropdown('vodCatalogs');
         openDropdown('liveCatalogs');
+      });
+    });
+    document.querySelectorAll('a[href="#tvToolsSec"]').forEach(a => {
+      a.addEventListener('click', () => {
+        openDropdown('tvTools');
       });
     });
 
