@@ -985,31 +985,6 @@ async function getLiveChannelStreams(channelIdOrKey, clientIp = null, hostUrl = 
 
   const officialPageUrl = channel.pageUrl || `https://mediaklikk.hu/elo/${channel.streamId}/`;
   const instant1080Url = `${hostUrl}/api/live/${channel.streamId}.m3u8`;
-  const isVercel = Boolean(process.env.VERCEL || (hostUrl || '').includes('vercel.app'));
-
-  if (isVercel) {
-    // Vercelen mindig a közvetlen MTVA CDN stream kerül a legtetejére (0 ms késleltetés, nincs felhő-blokkolás)
-    return [
-      {
-        name: `🔴 ${channel.name} — 1080p FHD (.m3u8)`,
-        title: `📡 Hivatalos MTVA CDN Élő Közvetítés (1080p Full HD .m3u8)\n${channel.description}\nKözvetlen HLS adás TV-re és mobilra optimalizálva.`,
-        url: hlsUrl,
-        behaviorHints: {
-          notWebReady: false,
-          isLive: true
-        }
-      },
-      {
-        name: `🔴 ${channel.name} — Auto (.m3u8)`,
-        title: `📡 1080p FULL HD Adaptív MTVA HLS (.m3u8)\n${channel.description}\nKözvetlen 1080p indítás az első másodperctől, nulla felbontásugrálás.`,
-        url: instant1080Url,
-        behaviorHints: {
-          notWebReady: false,
-          isLive: true
-        }
-      }
-    ];
-  }
 
   return [
     {

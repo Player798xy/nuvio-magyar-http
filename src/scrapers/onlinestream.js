@@ -3427,8 +3427,8 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
     results.push(streamObj);
   };
 
-  // 1. Hivatalos MTVA adások (M1, M2, Duna, M4 Sport, M5) Vercelen legelöl:
-  if (ch.mtvaKey && isVercel) {
+  // 1. Hivatalos MTVA adások (M1, M2, Duna, M4 Sport, M5) legelöl:
+  if (ch.mtvaKey) {
     try {
       const mtvaStreams = await getLiveChannelStreams(ch.mtvaKey, clientIp, cleanHost);
       if (Array.isArray(mtvaStreams) && mtvaStreams.length > 0) {
@@ -3524,12 +3524,9 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
         });
       }
 
-      // Dinamikus sorrendezés:
-      // Vercelen mindig a közvetlen .m3u8 kerül legfelülre (a felhő-blokkolás és 502/503 elkerülésére),
-      // lokális szerveren pedig a mérés szerint optimális stream (buffer és sebesség alapján).
-      if (isVercel) {
-        for (const str of serverDirectStreams) addStream(str);
-      } else if (isDirectBetter) {
+      // Dinamikus sorrendezés: Mindkét típus (⚡ HLS Proxy ÉS 🔴 .m3u8) MINDIG bekerül!
+      // A tetejére az kerül, amelyik az adott csatornán / szerveren a mérések szerint jobban teljesít:
+      if (isDirectBetter) {
         for (const str of serverDirectStreams) addStream(str);
         for (const str of serverProxyStreams) addStream(str);
       } else {
@@ -3538,18 +3535,6 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
       }
 
       activeIndex++;
-    }
-  }
-
-  // 3. MTVA official fallback (lokális szerveren ha még nem lett hozzáadva)
-  if (ch.mtvaKey && !isVercel) {
-    try {
-      const mtvaStreams = await getLiveChannelStreams(ch.mtvaKey, clientIp, cleanHost);
-      if (Array.isArray(mtvaStreams) && mtvaStreams.length > 0) {
-        for (const s of mtvaStreams) addStream(s);
-      }
-    } catch (err) {
-      console.warn(`[OnlineStream] MTVA stream fallback for ${ch.name}:`, err.message);
     }
   }
 
