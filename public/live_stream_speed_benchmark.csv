@@ -1,113 +1,113 @@
-﻿ID,Csatorna Név,Kategória,Ajánlott Mód (Tetején),Közvetlen .m3u8 Státusz,Közvetlen Buffer (mp),Közvetlen Latency (ms),HLS Proxy Státusz,HLS Proxy Latency (ms),Szerver Host,Mérés / Indoklás
-6141,RTL,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6143,TV2,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5901,M1,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5905,Duna,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6723,Super TV2,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6142,RTL Kettő,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6147,RTL Három,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5911,Viasat 3,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-4739,ATV,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-4740,Hír TV,hu-live-orszagos,Közvetlen .m3u8,200 (Működik),47.9s,265 ms,200 (Működik),278 ms,videa.hu,"Közvetlen stream stabil (47.9s buffer, 265ms) -> gyorsabb közvetlenül"
-6704,Prime,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6184,TV4,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6236,Viasat 6,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6148,RTL Gold,hu-live-orszagos,Közvetlen .m3u8,200 (Működik),50s,54 ms,200 (Nem),38 ms,budapest-cache-1.antik.sk,"A Proxy sikertelen, de a közvetlen stream fut"
-5902,M2 / Petőfi TV,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5906,Duna World / M4 Sport+,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5904,M5,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-8716,Viasat 2,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5855,Euronews,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-4695,Pannon RTV,hu-live-orszagos,Offline,404 (Nem),0s,0 ms,200 (Nem),32 ms,stream2.nmih.hu,Mindkét mód hibát ad
-9073,RTV-1 Vajdaság,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,212.200.230.50,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-8999,RTV-2 Vajdaság,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,212.200.230.50,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-1819,Budapest Európa Televízió,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5927,Apostol TV,hu-live-orszagos,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,live.apostoltv.hu,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-4798,EWTN,hu-live-orszagos,Közvetlen .m3u8,200 (Működik),47.7s,140 ms,200 (Működik),68 ms,hls.iptvservice.eu,"Közvetlen stream stabil (47.7s buffer, 140ms) -> gyorsabb közvetlenül"
-6150,Film+,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6152,Mozi+,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6146,Cool TV,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6652,AMC,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6720,Moziverzum,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-7069,HBO,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-7158,HBO 2,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-7159,HBO 3,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6254,Film4,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-7060,TV2 Comedy,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6149,Sorozat+,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-7074,Film Café,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-7154,AXN Black,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-7422,Galaxy 4,hu-live-film,Közvetlen .m3u8,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-8714,Max4,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6163,Izaura TV,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6701,Jocky TV,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-8489,Magyar Mozi TV,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-9310,Moziklub,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-9312,Sorozatklub,hu-live-film,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-9745,Classics TV Magyarország,hu-live-film,Offline,200 (Nem),23.1s,58 ms,200 (Nem),67 ms,s01.diazol.hu,Mindkét mód hibát ad
-5936,National Geographic,hu-live-doksi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5937,National Geographic Wild,hu-live-doksi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6749,Spektrum,hu-live-doksi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-7325,History,hu-live-doksi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6589,Spektrum Home,hu-live-doksi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-8124,Ozone TV,hu-live-doksi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5903,M4 Sport,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6721,Spíler 1 TV,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6722,Spíler 2 TV,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6718,Sport 1,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6719,Sport 2,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-7084,Arena4,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,m3m8.gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-8271,Match 4,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6748,TV Paprika,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,141.94.193.53,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-7087,TV2 Séf,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6751,TLC,hu-live-sport,Közvetlen .m3u8,200 (Működik),49.9s,41 ms,200 (Működik),29 ms,88.212.7.14,"Közvetlen stream stabil (49.9s buffer, 41ms) -> gyorsabb közvetlenül"
-6603,Life TV,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6455,FEM3,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-9311,RTL Otthon,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6159,Sláger TV,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6151,Muzsika TV,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6162,Zenebutik,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5939,Lóverseny közvetítés,hu-live-sport,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront41.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-7079,Minimax,hu-live-gyerek,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6764,Nickelodeon,hu-live-gyerek,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6765,Nick Jr,hu-live-gyerek,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6705,Nicktoons,hu-live-gyerek,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6707,TV2 Kids,hu-live-gyerek,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-7080,JimJam,hu-live-gyerek,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-9309,Kölyökklub,hu-live-gyerek,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,gradetv.net,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-4247,Debrecen TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5982,Sopron TV,hu-live-helyi,Offline,FAIL (Nem),0s,0 ms,FAIL (Nem),0 ms,N/A,Nincs aktív stream
-1815,Fehérvár TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-1853,Nyíregyházi TV,hu-live-helyi,Közvetlen .m3u8,200 (Működik),51.3s,93 ms,200 (Működik),96 ms,nytvlive.hu,"Közvetlen stream stabil (51.3s buffer, 93ms) -> gyorsabb közvetlenül"
-1901,Kecskeméti TV,hu-live-helyi,Közvetlen .m3u8,200 (Működik),123.4s,44 ms,200 (Működik),19 ms,rtmp1.40e.hu,"Közvetlen stream stabil (123.4s buffer, 44ms) -> gyorsabb közvetlenül"
-1829,Zalaegerszegi TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5137,Kapos TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-1035,TV Eger,hu-live-helyi,Offline,200 (Nem),15.6s,17 ms,200 (Nem),21 ms,stream.tveger.hu,Mindkét mód hibát ad
-4788,Szolnok TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-1821,Gyöngyösi TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5425,7.tv (Békéscsaba),hu-live-helyi,HLS Proxy,200 (Működik),15s,162 ms,200 (Működik),72 ms,stream.y5.hu,Proxy gyorsabban szállítja a szegmenseket (72ms vs 162ms)
-3858,Bajai TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront41.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-1811,Kanizsa TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-1812,TV Keszthely,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-4590,Komáromi TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-4650,Móri Városi TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-4662,Karcag TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront41.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-4699,Halom TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,212.92.13.108,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-4738,Ózdi TV,hu-live-helyi,Offline,200 (Nem),30s,23 ms,200 (Nem),21 ms,stream.nmih.hu,Mindkét mód hibát ad
-4792,XVTV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-4794,Jászsági Térségi TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront41.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5026,Líceum TV,hu-live-helyi,Közvetlen .m3u8,200 (Működik),22.4s,45 ms,200 (Működik),25 ms,193.225.32.62,"Közvetlen stream stabil (22.4s buffer, 45ms) -> gyorsabb közvetlenül"
-5462,TV13,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,tv13.medialivecdn.hu,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5656,Vásárhelyi TV,hu-live-helyi,Offline,FAIL (Nem),0s,0 ms,FAIL (Nem),0 ms,N/A,Nincs aktív stream
-5838,TelePaks,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-5913,Balaton TV,hu-live-helyi,Közvetlen .m3u8,200 (Működik),47.4s,145 ms,200 (Működik),97 ms,stream.iptvservice.eu,"Közvetlen stream stabil (47.4s buffer, 145ms) -> gyorsabb közvetlenül"
-6144,ESTV (Vác),hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6491,Alföld TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront41.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6638,Oroszlányi TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-6676,Móra-Net TV,hu-live-helyi,Közvetlen .m3u8,200 (Működik),60s,114 ms,200 (Működik),48 ms,stream.moranettv.hu,"Közvetlen stream stabil (60s buffer, 114ms) -> gyorsabb közvetlenül"
-7371,Bicskei TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-7374,Hévízi TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-9068,Sixo TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-9081,Gran TV (Esztergom),hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,grantv.medialivecdn.hu,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-9332,Cegléd TV,hu-live-helyi,HLS Proxy,200 (Működik),0s,0 ms,200 (Működik),0 ms,cloudfront44.lexanetwork.com,"Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
-1802,City TV,hu-live-helyi,Közvetlen .m3u8,200 (Működik),110s,94 ms,200 (Működik),49 ms,citytv.hu,"Közvetlen stream stabil (110s buffer, 94ms) -> gyorsabb közvetlenül"
+﻿ID,Csatorna Név,Kategória,Ajánlott Mód (Tetején),Mért Puffer (mp),Puffer Szeletek,Vercel Válaszidő (ms),Szelet Letöltési Idő,Mért Sebesség (Mbps),Elsődleges Host,Legfelső Stream Állapot
+6141,RTL,hu-live-orszagos,⚡ HLS Proxy,49.3s,10 szelet,254 ms,73 ms,171.8 Mbps,m3m8.gradetv.net,⚡ [HU] RTL — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6143,TV2,hu-live-orszagos,⚡ HLS Proxy,50s,10 szelet,469 ms,69 ms,152.8 Mbps,m3m8.gradetv.net,⚡ [HU] TV2 — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5901,M1,hu-live-orszagos,⚡ HLS Proxy,64s,0,151 ms,44 ms,581.1 Mbps,c801-node63-cdn.connectmedia.hu,⚡ M1 Híradó Élő — 1080p FHD (HLS Proxy)
+5905,Duna,hu-live-orszagos,⚡ HLS Proxy,64s,0,140 ms,44 ms,567.4 Mbps,c401-node61-cdn.connectmedia.hu,⚡ Duna TV Élő — 1080p FHD (HLS Proxy)
+6723,Super TV2,hu-live-orszagos,⚡ HLS Proxy,50.2s,10 szelet,677 ms,99 ms,67.6 Mbps,m3m8.gradetv.net,⚡ [HU] Super TV2 — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6142,RTL Kettő,hu-live-orszagos,⚡ HLS Proxy,49.9s,10 szelet,808 ms,78 ms,244.3 Mbps,m3m8.gradetv.net,⚡ [HU] RTL Kettő — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6147,RTL Három,hu-live-orszagos,⚡ HLS Proxy,49.9s,10 szelet,1004 ms,78 ms,161.1 Mbps,m3m8.gradetv.net,⚡ [HU] RTL Három — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5911,Viasat 3,hu-live-orszagos,⚡ HLS Proxy,50s,10 szelet,636 ms,81 ms,266.1 Mbps,m3m8.gradetv.net,⚡ [HU] Viasat 3 — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+4739,ATV,hu-live-orszagos,🔴 Közvetlen .m3u8,40s,4 szelet,85 ms,N/A,N/A,141.94.193.53,🔴 [HU] ATV — 1080p FHD (.m3u8) [Tartalék Szerver]
+4740,Hír TV,hu-live-orszagos,🔴 Közvetlen .m3u8,48s,6 szelet,258 ms,231 ms,84.5 Mbps,videa.hu,🔴 [HU] Hír TV — 1080p FHD (.m3u8) [Leggyorsabb]
+6704,Prime,hu-live-orszagos,⚡ HLS Proxy,50.1s,10 szelet,633 ms,81 ms,269.3 Mbps,m3m8.gradetv.net,⚡ [HU] Prime — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6184,TV4,hu-live-orszagos,🔴 Közvetlen .m3u8,50s,10 szelet,307 ms,73 ms,126.7 Mbps,m3m8.gradetv.net,🔴 [HU] TV4 — 1080p FHD (.m3u8) [Leggyorsabb]
+6236,Viasat 6,hu-live-orszagos,⚡ HLS Proxy,50s,10 szelet,1942 ms,85 ms,149.3 Mbps,m3m8.gradetv.net,⚡ [HU] Viasat 6 — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6148,RTL Gold,hu-live-orszagos,⚡ HLS Proxy,50.3s,10 szelet,973 ms,63 ms,127 Mbps,m3m8.gradetv.net,⚡ [HU] RTL Gold — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5902,M2 / Petőfi TV,hu-live-orszagos,⚡ HLS Proxy,64s,0,167 ms,58 ms,504.5 Mbps,c801-node63-cdn.connectmedia.hu,⚡ M2 Gyerek & Petőfi TV Élő — 1080p FHD (HLS Proxy)
+5906,Duna World / M4 Sport+,hu-live-orszagos,⚡ HLS Proxy,64s,0,99 ms,37 ms,602.2 Mbps,c401-node61-cdn.connectmedia.hu,⚡ Duna TV Élő — 1080p FHD (HLS Proxy)
+5904,M5,hu-live-orszagos,⚡ HLS Proxy,56s,0,141 ms,39 ms,572.4 Mbps,c802-node63-cdn.connectmedia.hu,⚡ M5 Kultúra Élő — 1080p FHD (HLS Proxy)
+8716,Viasat 2,hu-live-orszagos,⚡ HLS Proxy,50.2s,10 szelet,741 ms,87 ms,107.2 Mbps,m3m8.gradetv.net,⚡ [HU] Viasat 2 — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5855,Euronews,hu-live-orszagos,⚡ HLS Proxy,60s,10 szelet,68 ms,79 ms,252.5 Mbps,cdn-euronews.akamaized.net,⚡ [HU] Euronews — 720p HD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+4695,Pannon RTV,hu-live-orszagos,⚡ HLS Proxy,18s,3 szelet,74 ms,N/A,N/A,stream2.nmih.hu,⚡ [HU] Pannon RTV — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+9073,RTV-1 Vajdaság,hu-live-orszagos,⚡ HLS Proxy,30s,3 szelet,99 ms,74 ms,94.5 Mbps,212.200.230.50,⚡ [HU] RTV-1 Vajdaság — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+8999,RTV-2 Vajdaság,hu-live-orszagos,⚡ HLS Proxy,29.8s,3 szelet,93 ms,73 ms,88 Mbps,212.200.230.50,⚡ [HU] RTV-2 Vajdaság — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+1819,Budapest Európa Televízió,hu-live-orszagos,⚡ HLS Proxy,36s,0,90 ms,89 ms,44 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Budapest Európa Televízió — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5927,Apostol TV,hu-live-orszagos,⚡ HLS Proxy,20.9s,10 szelet,63 ms,71 ms,57.6 Mbps,live.apostoltv.hu,⚡ [HU] Apostol TV — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+4798,EWTN,hu-live-orszagos,🔴 Közvetlen .m3u8,43.8s,5 szelet,74 ms,N/A,N/A,hls.iptvservice.eu,🔴 [HU] EWTN — 720p HD (.m3u8) [Leggyorsabb]
+6150,Film+,hu-live-film,⚡ HLS Proxy,50s,10 szelet,631 ms,73 ms,197.1 Mbps,m3m8.gradetv.net,⚡ [HU] Film+ — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6152,Mozi+,hu-live-film,⚡ HLS Proxy,50s,10 szelet,677 ms,67 ms,281.3 Mbps,m3m8.gradetv.net,⚡ [HU] Mozi+ — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6146,Cool TV,hu-live-film,⚡ HLS Proxy,40s,4 szelet,74 ms,N/A,N/A,141.94.193.53,⚡ [HU] Cool TV — 1080p FHD (HLS Proxy) [Tartalék Szerver]
+6652,AMC,hu-live-film,⚡ HLS Proxy,40s,4 szelet,340 ms,N/A,N/A,141.94.193.53,⚡ [HU] AMC — 1080p FHD (HLS Proxy) [Tartalék Szerver]
+6720,Moziverzum,hu-live-film,⚡ HLS Proxy,49.9s,10 szelet,638 ms,70 ms,199.1 Mbps,m3m8.gradetv.net,⚡ [HU] Moziverzum — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+7069,HBO,hu-live-film,⚡ HLS Proxy,40s,4 szelet,66 ms,N/A,N/A,141.94.193.53,⚡ [HU] HBO — 1080p FHD (HLS Proxy) [Tartalék Szerver]
+7158,HBO 2,hu-live-film,⚡ HLS Proxy,40s,4 szelet,143 ms,N/A,N/A,141.94.193.53,⚡ [HU] HBO 2 — 1080p FHD (HLS Proxy) [Tartalék Szerver]
+7159,HBO 3,hu-live-film,⚡ HLS Proxy,40s,4 szelet,142 ms,N/A,N/A,141.94.193.53,⚡ [HU] HBO 3 — 1080p FHD (HLS Proxy) [Tartalék Szerver]
+6254,Film4,hu-live-film,⚡ HLS Proxy,50.1s,10 szelet,364 ms,72 ms,142.7 Mbps,m3m8.gradetv.net,⚡ [HU] Film4 — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+7060,TV2 Comedy,hu-live-film,⚡ HLS Proxy,49.8s,10 szelet,631 ms,56 ms,148.1 Mbps,m3m8.gradetv.net,⚡ [HU] TV2 Comedy — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6149,Sorozat+,hu-live-film,⚡ HLS Proxy,51.1s,10 szelet,608 ms,67 ms,178.8 Mbps,m3m8.gradetv.net,⚡ [HU] Sorozat+ — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+7074,Film Café,hu-live-film,⚡ HLS Proxy,50s,10 szelet,762 ms,55 ms,393.1 Mbps,m3m8.gradetv.net,⚡ [HU] Film Café — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+7154,AXN Black,hu-live-film,⚡ HLS Proxy,40s,4 szelet,58 ms,N/A,N/A,141.94.193.53,⚡ [HU] AXN Black — 576p SD (HLS Proxy) [Tartalék Szerver]
+7422,Galaxy 4,hu-live-film,⚡ HLS Proxy,50s,10 szelet,997 ms,56 ms,217.1 Mbps,m3m8.gradetv.net,⚡ [HU] Galaxy 4 — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+8714,Max4,hu-live-film,⚡ HLS Proxy,10s,4 szelet,55 ms,72 ms,101 Mbps,141.94.193.53,⚡ [HU] Max4 — 1080p FHD (HLS Proxy) [Tartalék Szerver]
+6163,Izaura TV,hu-live-film,⚡ HLS Proxy,50.1s,10 szelet,630 ms,86 ms,215.4 Mbps,m3m8.gradetv.net,⚡ [HU] Izaura TV — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6701,Jocky TV,hu-live-film,⚡ HLS Proxy,50.2s,10 szelet,642 ms,76 ms,120 Mbps,m3m8.gradetv.net,⚡ [HU] Jocky TV — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+8489,Magyar Mozi TV,hu-live-film,⚡ HLS Proxy,49.9s,10 szelet,788 ms,70 ms,206.6 Mbps,m3m8.gradetv.net,⚡ [HU] Magyar Mozi TV — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+9310,Moziklub,hu-live-film,⚡ HLS Proxy,50s,10 szelet,711 ms,78 ms,165.9 Mbps,m3m8.gradetv.net,⚡ [HU] Moziklub — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+9312,Sorozatklub,hu-live-film,⚡ HLS Proxy,50s,10 szelet,651 ms,63 ms,207.7 Mbps,m3m8.gradetv.net,⚡ [HU] Sorozatklub — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+9745,Classics TV Magyarország,hu-live-film,⚡ HLS Proxy,33.8s,3 szelet,116 ms,N/A,N/A,s01.diazol.hu,⚡ [HU] Classics TV Magyarország — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5936,National Geographic,hu-live-doksi,⚡ HLS Proxy,50s,10 szelet,659 ms,90 ms,143.6 Mbps,m3m8.gradetv.net,⚡ [HU] National Geographic — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5937,National Geographic Wild,hu-live-doksi,⚡ HLS Proxy,50s,10 szelet,636 ms,65 ms,221.2 Mbps,m3m8.gradetv.net,⚡ [HU] National Geographic Wild — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6749,Spektrum,hu-live-doksi,⚡ HLS Proxy,50s,10 szelet,644 ms,80 ms,272.8 Mbps,m3m8.gradetv.net,⚡ [HU] Spektrum — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+7325,History,hu-live-doksi,⚡ HLS Proxy,49.9s,10 szelet,653 ms,66 ms,217.7 Mbps,m3m8.gradetv.net,⚡ [HU] History — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6589,Spektrum Home,hu-live-doksi,⚡ HLS Proxy,40s,4 szelet,72 ms,N/A,N/A,141.94.193.53,⚡ [HU] Spektrum Home — 1080p FHD (HLS Proxy) [Tartalék Szerver]
+8124,Ozone TV,hu-live-doksi,⚡ HLS Proxy,50s,10 szelet,843 ms,79 ms,158.2 Mbps,m3m8.gradetv.net,⚡ [HU] Ozone TV — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5903,M4 Sport,hu-live-sport,⚡ HLS Proxy,64s,0,144 ms,69 ms,418.4 Mbps,c201-node62-cdn.connectmedia.hu,⚡ M4 Sport Élő — 1080p FHD (HLS Proxy)
+6721,Spíler 1 TV,hu-live-sport,⚡ HLS Proxy,50.1s,10 szelet,611 ms,66 ms,392.5 Mbps,m3m8.gradetv.net,⚡ [HU] Spíler 1 TV — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6722,Spíler 2 TV,hu-live-sport,⚡ HLS Proxy,49.9s,10 szelet,618 ms,82 ms,207.5 Mbps,m3m8.gradetv.net,⚡ [HU] Spíler 2 TV — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6718,Sport 1,hu-live-sport,⚡ HLS Proxy,50s,10 szelet,289 ms,56 ms,293 Mbps,m3m8.gradetv.net,⚡ [HU] Sport 1 — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6719,Sport 2,hu-live-sport,⚡ HLS Proxy,50.1s,10 szelet,636 ms,84 ms,198.3 Mbps,m3m8.gradetv.net,⚡ [HU] Sport 2 — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+7084,Arena4,hu-live-sport,⚡ HLS Proxy,49.9s,10 szelet,710 ms,71 ms,243.6 Mbps,m3m8.gradetv.net,⚡ [HU] Arena4 — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+8271,Match 4,hu-live-sport,⚡ HLS Proxy,14s,4 szelet,83 ms,N/A,N/A,141.94.193.53,⚡ [HU] Match 4 — 1080p FHD (HLS Proxy) [Tartalék Szerver]
+6748,TV Paprika,hu-live-sport,⚡ HLS Proxy,40s,4 szelet,160 ms,N/A,N/A,141.94.193.53,⚡ [HU] TV Paprika — 1080p FHD (HLS Proxy) [Tartalék Szerver]
+7087,TV2 Séf,hu-live-sport,⚡ HLS Proxy,49.9s,10 szelet,1198 ms,75 ms,104.2 Mbps,m3m8.gradetv.net,⚡ [HU] TV2 Séf — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6751,TLC,hu-live-sport,🔴 Közvetlen .m3u8,49.9s,10 szelet,59 ms,62 ms,348.9 Mbps,88.212.7.14,🔴 [HU] TLC — 1080p FHD (.m3u8) [Leggyorsabb]
+6603,Life TV,hu-live-sport,⚡ HLS Proxy,50.2s,10 szelet,684 ms,60 ms,205.3 Mbps,m3m8.gradetv.net,⚡ [HU] Life TV — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6455,FEM3,hu-live-sport,⚡ HLS Proxy,51.9s,10 szelet,629 ms,69 ms,158.3 Mbps,m3m8.gradetv.net,⚡ [HU] FEM3 — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+9311,RTL Otthon,hu-live-sport,⚡ HLS Proxy,50s,10 szelet,676 ms,87 ms,160.6 Mbps,m3m8.gradetv.net,⚡ [HU] RTL Otthon — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6159,Sláger TV,hu-live-sport,🔴 Közvetlen .m3u8,49.9s,10 szelet,698 ms,82 ms,95.1 Mbps,m3m8.gradetv.net,🔴 [HU] Sláger TV — 576p SD (.m3u8) [Leggyorsabb]
+6151,Muzsika TV,hu-live-sport,⚡ HLS Proxy,50.9s,10 szelet,637 ms,125 ms,92.3 Mbps,m3m8.gradetv.net,⚡ [HU] Muzsika TV — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6162,Zenebutik,hu-live-sport,⚡ HLS Proxy,49.9s,10 szelet,684 ms,131 ms,70.7 Mbps,m3m8.gradetv.net,⚡ [HU] Zenebutik — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5939,Lóverseny közvetítés,hu-live-sport,⚡ HLS Proxy,36s,0,150 ms,142 ms,34 Mbps,cloudfront41.lexanetwork.com,⚡ [HU] Lóverseny közvetítés — 420p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+7079,Minimax,hu-live-gyerek,⚡ HLS Proxy,50s,10 szelet,703 ms,110 ms,82.7 Mbps,m3m8.gradetv.net,⚡ [HU] Minimax — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6764,Nickelodeon,hu-live-gyerek,⚡ HLS Proxy,49.9s,10 szelet,672 ms,108 ms,91.8 Mbps,m3m8.gradetv.net,⚡ [HU] Nickelodeon — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6765,Nick Jr,hu-live-gyerek,⚡ HLS Proxy,49.9s,10 szelet,694 ms,152 ms,53.8 Mbps,m3m8.gradetv.net,⚡ [HU] Nick Jr — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6705,Nicktoons,hu-live-gyerek,⚡ HLS Proxy,50s,10 szelet,667 ms,69 ms,248 Mbps,m3m8.gradetv.net,⚡ [HU] Nicktoons — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6707,TV2 Kids,hu-live-gyerek,⚡ HLS Proxy,50.2s,10 szelet,631 ms,78 ms,166.5 Mbps,m3m8.gradetv.net,⚡ [HU] TV2 Kids — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+7080,JimJam,hu-live-gyerek,⚡ HLS Proxy,50s,10 szelet,688 ms,237 ms,43.8 Mbps,m3m8.gradetv.net,⚡ [HU] JimJam — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+9309,Kölyökklub,hu-live-gyerek,⚡ HLS Proxy,50s,10 szelet,629 ms,94 ms,164.6 Mbps,m3m8.gradetv.net,⚡ [HU] Kölyökklub — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+4247,Debrecen TV,hu-live-helyi,⚡ HLS Proxy,36s,0,94 ms,91 ms,139.2 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Debrecen TV — 720p HD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5982,Sopron TV,hu-live-helyi,❌ Offline,N/A,0,0 ms,N/A,N/A,N/A,Nincs elérhető stream
+1815,Fehérvár TV,hu-live-helyi,⚡ HLS Proxy,36s,0,77 ms,303 ms,44.8 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Fehérvár TV — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+1853,Nyíregyházi TV,hu-live-helyi,🔴 Közvetlen .m3u8,52.4s,5 szelet,121 ms,113 ms,469.9 Mbps,nytvlive.hu,🔴 [HU] Nyíregyházi TV — 1080p FHD (.m3u8) [Leggyorsabb]
+1901,Kecskeméti TV,hu-live-helyi,🔴 Közvetlen .m3u8,120.1s,0,104 ms,217 ms,30 Mbps,rtmp1.40e.hu,🔴 [HU] Kecskeméti TV — SD (.m3u8) [Leggyorsabb]
+1829,Zalaegerszegi TV,hu-live-helyi,⚡ HLS Proxy,51.7s,0,93 ms,84 ms,42.3 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Zalaegerszegi TV — 576p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5137,Kapos TV,hu-live-helyi,⚡ HLS Proxy,36s,0,87 ms,78 ms,235.6 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Kapos TV — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+1035,TV Eger,hu-live-helyi,⚡ HLS Proxy,16s,3 szelet,95 ms,N/A,N/A,stream.tveger.hu,⚡ [HU] TV Eger — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+4788,Szolnok TV,hu-live-helyi,⚡ HLS Proxy,36s,0,95 ms,79 ms,154.1 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Szolnok TV — 720p HD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+1821,Gyöngyösi TV,hu-live-helyi,⚡ HLS Proxy,36s,0,87 ms,62 ms,25.6 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Gyöngyösi TV — 420p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5425,7.tv (Békéscsaba),hu-live-helyi,⚡ HLS Proxy,15s,5 szelet,213 ms,91 ms,35.8 Mbps,stream.y5.hu,⚡ [HU] 7.tv (Békéscsaba) — SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+3858,Bajai TV,hu-live-helyi,⚡ HLS Proxy,36s,0,87 ms,90 ms,412.3 Mbps,cloudfront41.lexanetwork.com,⚡ [HU] Bajai TV — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+1811,Kanizsa TV,hu-live-helyi,⚡ HLS Proxy,36s,0,99 ms,95 ms,47.8 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Kanizsa TV — 400p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+1812,TV Keszthely,hu-live-helyi,⚡ HLS Proxy,34.2s,0,86 ms,80 ms,37 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] TV Keszthely — 360p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+4590,Komáromi TV,hu-live-helyi,⚡ HLS Proxy,35.4s,0,81 ms,72 ms,34.4 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Komáromi TV — 400p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+4650,Móri Városi TV,hu-live-helyi,⚡ HLS Proxy,36s,0,85 ms,82 ms,19.3 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Móri Városi TV — 360p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+4662,Karcag TV,hu-live-helyi,⚡ HLS Proxy,36s,0,82 ms,86 ms,115.6 Mbps,cloudfront41.lexanetwork.com,⚡ [HU] Karcag TV — 720p HD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+4699,Halom TV,hu-live-helyi,🔴 Közvetlen .m3u8,60.8s,6 szelet,107 ms,105 ms,21 Mbps,212.92.13.108,🔴 [HU] Halom TV — 576p SD (.m3u8) [Leggyorsabb]
+4738,Ózdi TV,hu-live-helyi,⚡ HLS Proxy,30s,3 szelet,90 ms,N/A,N/A,stream.nmih.hu,⚡ [HU] Ózdi TV — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+4792,XVTV,hu-live-helyi,🔴 Közvetlen .m3u8,37s,0,89 ms,91 ms,37.3 Mbps,cloudfront44.lexanetwork.com,🔴 [HU] XVTV — 576p SD (.m3u8) [Leggyorsabb]
+4794,Jászsági Térségi TV,hu-live-helyi,⚡ HLS Proxy,35.2s,0,86 ms,86 ms,182.1 Mbps,cloudfront41.lexanetwork.com,⚡ [HU] Jászsági Térségi TV — 720p HD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5026,Líceum TV,hu-live-helyi,🔴 Közvetlen .m3u8,28.1s,3 szelet,92 ms,71 ms,16.9 Mbps,193.225.32.62,🔴 [HU] Líceum TV — 576p SD (.m3u8) [Leggyorsabb]
+5462,TV13,hu-live-helyi,⚡ HLS Proxy,36s,6 szelet,90 ms,80 ms,200.6 Mbps,tv13.medialivecdn.hu,⚡ [HU] TV13 — 720p HD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5656,Vásárhelyi TV,hu-live-helyi,❌ Offline,N/A,0,0 ms,N/A,N/A,N/A,Nincs elérhető stream
+5838,TelePaks,hu-live-helyi,⚡ HLS Proxy,34.8s,0,131 ms,82 ms,25.6 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] TelePaks — 394p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+5913,Balaton TV,hu-live-helyi,🔴 Közvetlen .m3u8,47.4s,5 szelet,72 ms,N/A,N/A,stream.iptvservice.eu,🔴 [HU] Balaton TV — SD (.m3u8) [Leggyorsabb]
+6144,ESTV (Vác),hu-live-helyi,⚡ HLS Proxy,36s,0,83 ms,89 ms,41.3 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] ESTV (Vác) — 360p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6491,Alföld TV,hu-live-helyi,⚡ HLS Proxy,36.6s,0,135 ms,83 ms,344.8 Mbps,cloudfront41.lexanetwork.com,⚡ [HU] Alföld TV — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6638,Oroszlányi TV,hu-live-helyi,⚡ HLS Proxy,36s,0,94 ms,71 ms,113.2 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Oroszlányi TV — 720p HD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+6676,Móra-Net TV,hu-live-helyi,🔴 Közvetlen .m3u8,60s,6 szelet,69 ms,107 ms,141.4 Mbps,stream.moranettv.hu,🔴 [HU] Móra-Net TV — 576p SD (.m3u8) [Leggyorsabb]
+7371,Bicskei TV,hu-live-helyi,⚡ HLS Proxy,35.2s,0,85 ms,72 ms,26.5 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Bicskei TV — 410p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+7374,Hévízi TV,hu-live-helyi,⚡ HLS Proxy,36s,0,166 ms,69 ms,113.9 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Hévízi TV — 1080p FHD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+9068,Sixo TV,hu-live-helyi,🔴 Közvetlen .m3u8,36s,0,84 ms,68 ms,77.5 Mbps,cloudfront44.lexanetwork.com,🔴 [HU] Sixo TV — 360p SD (.m3u8) [Leggyorsabb]
+9081,Gran TV (Esztergom),hu-live-helyi,⚡ HLS Proxy,36s,6 szelet,95 ms,80 ms,97.5 Mbps,grantv.medialivecdn.hu,⚡ [HU] Gran TV (Esztergom) — 720p HD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+9332,Cegléd TV,hu-live-helyi,⚡ HLS Proxy,36s,0,164 ms,141 ms,28.8 Mbps,cloudfront44.lexanetwork.com,⚡ [HU] Cegléd TV — 360p SD (HLS Proxy) [Ajánlott - Nagy Sebesség]
+1802,City TV,hu-live-helyi,🔴 Közvetlen .m3u8,110s,10 szelet,69 ms,79 ms,321.2 Mbps,citytv.hu,🔴 [HU] City TV — 576p SD (.m3u8) [Leggyorsabb]

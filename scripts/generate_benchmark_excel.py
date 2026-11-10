@@ -14,33 +14,39 @@ def build_excel_and_csv():
     csv_path = os.path.join(os.path.dirname(__file__), '..', 'public', 'live_stream_speed_benchmark.csv')
     csv_headers = [
         'ID', 'Csatorna Név', 'Kategória', 'Ajánlott Mód (Tetején)', 
-        'Közvetlen .m3u8 Státusz', 'Közvetlen Buffer (mp)', 'Közvetlen Latency (ms)',
-        'HLS Proxy Státusz', 'HLS Proxy Latency (ms)', 'Szerver Host', 'Mérés / Indoklás'
+        'Mért Puffer (mp)', 'Puffer Szeletek', 'Vercel Válaszidő (ms)',
+        'Szelet Letöltési Idő', 'Mért Sebesség (Mbps)', 'Elsődleges Host', 'Legfelső Stream Állapot'
     ]
 
     csv_rows = []
     for ch in data:
-        s = ch['streams'][0] if ch['streams'] else None
-        d = s['direct'] if s else {}
-        p = s['proxy'] if s else {}
-        host = s['serverHost'] if s else 'N/A'
-        reason = s['reason'] if s else 'Nincs aktív stream'
+        rec = ch.get('bestRecommendation', 'HLS Proxy')
+        rec_hu = '🔴 Közvetlen .m3u8' if 'Közvetlen' in rec else ('⚡ HLS Proxy' if 'Proxy' in rec else '❌ Offline')
 
-        rec = ch['bestRecommendation']
-        rec_hu = 'Közvetlen .m3u8' if rec == 'DIRECT_FIRST' else ('HLS Proxy' if rec == 'PROXY_FIRST' else 'Offline')
+        buffer_sec = ch.get('bufferSec') or 0
+        buffer_str = f"{buffer_sec}s" if buffer_sec > 0 else "N/A"
+        segs = ch.get('segmentCount') or 0
+        segs_str = f"{segs} szelet" if segs > 0 else "0"
+
+        latency = ch.get('proxyMs') or ch.get('directMs') or 0
+        seg_ms = ch.get('segDownloadMs') or 0
+        speed = ch.get('speedMbps') or 0
+        speed_str = f"{speed} Mbps" if speed > 0 else "N/A"
+        host = ch.get('serverHost') or 'CDN'
+        stream_name = ch.get('topStreamName') or ch.get('statusDesc') or 'Aktív'
 
         csv_rows.append([
-            ch['channelId'],
-            ch['name'],
-            ch.get('category', 'livetv'),
+            ch.get('channelId', ''),
+            ch.get('name', ''),
+            ch.get('category', 'hu-live-orszagos'),
             rec_hu,
-            f"{d.get('status', 'FAIL')} ({'Működik' if d.get('works') else 'Nem'})",
-            f"{d.get('bufferSec', 0)}s",
-            f"{d.get('segMs', d.get('plMs', 0))} ms",
-            f"{p.get('status', 'FAIL')} ({'Működik' if p.get('works') else 'Nem'})",
-            f"{p.get('segMs', p.get('plMs', 0))} ms",
+            buffer_str,
+            segs_str,
+            f"{latency} ms",
+            f"{seg_ms} ms" if seg_ms > 0 else "N/A",
+            speed_str,
             host,
-            reason
+            stream_name
         ])
 
     with open(csv_path, 'w', encoding='utf-8-sig', newline='') as f:
@@ -52,13 +58,13 @@ def build_excel_and_csv():
     # 2. Excel (.xlsx) generation with high-quality styling
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "Stream Sebesség & Mérés"
+    ws.title = "Vercel Éles Mérés"
     ws.views.sheetView[0].showGridLines = True
 
     # Title Banner
     ws.merge_cells('A1:K1')
     title_cell = ws['A1']
-    title_cell.value = "MAGYAR STREAMING PRO — ÉLŐ TV STREAM MÉRÉSI AUDIT (HLS PROXY VS KÖZVETLEN .M3U8)"
+    title_cell.value = "MAGYAR STREAMING PRO — VERCEL ÉLES STREAM MÉRÉSI AUDIT"
     title_cell.font = Font(name='Calibri', size=14, bold=True, color='FFFFFF')
     title_cell.fill = PatternFill(start_color='1F4E79', end_color='1F4E79', fill_type='solid')
     title_cell.alignment = Alignment(horizontal='center', vertical='center')
@@ -67,7 +73,7 @@ def build_excel_and_csv():
     # Subtitle
     ws.merge_cells('A2:K2')
     sub_cell = ws['A2']
-    sub_cell.value = "112 élő magyar TV csatorna sebesség-, buffer- és latency tesztje. Az optimális stream automatikusan a lista legtetejére kerül."
+    sub_cell.value = "112 élő magyar TV csatorna valós Vercel szerveres sebesség-, buffer- és sávszélesség-auditja. Valós mérési adatok (nem elméleti becslés)."
     sub_cell.font = Font(name='Calibri', size=10, italic=True, color='555555')
     sub_cell.alignment = Alignment(horizontal='center', vertical='center')
     ws.row_dimensions[2].height = 20
@@ -75,8 +81,8 @@ def build_excel_and_csv():
     # Headers
     headers = [
         'ID', 'Csatorna Név', 'Kategória', 'Ajánlott Mód (Tetején)', 
-        'Közvetlen .m3u8', 'Közvetlen Buffer', 'Közv. Válaszidő',
-        'HLS Proxy', 'Proxy Válaszidő', 'Elsődleges Host', 'Mérési Eredmény & Indoklás'
+        'Valós Puffer (mp)', 'Szeletek Száma', 'Vercel Válaszidő',
+        'Szelet Letöltés', 'Mért Sávszélesség', 'Elsődleges Host', 'Legfelső Stream Állapot'
     ]
     ws.append([]) # row 3 is blank
     ws.append(headers) # row 4
@@ -139,7 +145,10 @@ def build_excel_and_csv():
     ws.column_dimensions['A'].width = 8
     ws.column_dimensions['B'].width = 24
     ws.column_dimensions['D'].width = 22
-    ws.column_dimensions['J'].width = 26
+    ws.column_dimensions['E'].width = 18
+    ws.column_dimensions['F'].width = 16
+    ws.column_dimensions['I'].width = 20
+    ws.column_dimensions['J'].width = 24
     ws.column_dimensions['K'].width = 54
 
     xlsx_path = os.path.join(os.path.dirname(__file__), '..', 'public', 'live_stream_speed_benchmark.xlsx')
