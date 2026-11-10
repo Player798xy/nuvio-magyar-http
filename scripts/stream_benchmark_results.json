@@ -1,0 +1,4040 @@
+[
+  {
+    "channelId": "6141",
+    "name": "RTL",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/RTL_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 112,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 99,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://m3m8.gradetv.net:443/api/s/RTL.hu%3ASD%3Ahf6083936cade3711c894e3ebac6bc1b7?via=grade",
+        "serverHost": "m3m8.gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 691,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 662,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6143",
+    "name": "TV2",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/TV2_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 49,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 43,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://m3m8.gradetv.net:443/api/s/TV2.hu%3ASD%3Ah66d8a8e8a3d1038652a0709d94a0f4a6.m3u8",
+        "serverHost": "m3m8.gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 236,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 225,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5901",
+    "name": "M1",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/M1_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 40,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 41,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/M1.hu:HD:8787.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 942,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 920,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5905",
+    "name": "Duna",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/Duna_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 37,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 42,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Duna.hu:SD:5871.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 462,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 455,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6723",
+    "name": "Super TV2",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/SuperTV2.hu:SD:14067.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 476,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 504,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6142",
+    "name": "RTL Kettő",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/RTLKetto.hu:SD:12556.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 467,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 466,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6147",
+    "name": "RTL Három",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/RTLHarom.hu:SD:12555.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 462,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 460,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5911",
+    "name": "Viasat 3",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Viasat3.hu:SD:16394.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 471,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 454,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "4739",
+    "name": "ATV",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/ATV_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 76,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 76,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "4740",
+    "name": "Hír TV",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8",
+        "serverHost": "videa.hu",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 359,
+          "segMs": 265,
+          "segBytes": 2254308,
+          "bufferSec": 47.9,
+          "segs": 6
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 282,
+          "segMs": 278,
+          "segBytes": 961244,
+          "bufferSec": 95.9,
+          "segs": 12
+        },
+        "recommendation": "DIRECT_FIRST",
+        "reason": "Közvetlen stream stabil (47.9s buffer, 265ms) -> gyorsabb közvetlenül"
+      }
+    ],
+    "bestRecommendation": "DIRECT_FIRST"
+  },
+  {
+    "channelId": "6704",
+    "name": "Prime",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Prime.hu:SD:11599.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 498,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 449,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6184",
+    "name": "TV4",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/TV4_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 37,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 38,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/TV4.hu:SD:15267.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 577,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 490,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6236",
+    "name": "Viasat 6",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Viasat6.hu:SD:16395.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 501,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 464,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6148",
+    "name": "RTL Gold",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://budapest-cache-1.antik.sk:443/live/test_film_plus_2_hungary_1200_atk/playlist.m3u8",
+        "serverHost": "budapest-cache-1.antik.sk",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 66,
+          "segMs": 54,
+          "segBytes": 1053364,
+          "bufferSec": 50,
+          "segs": 10
+        },
+        "proxy": {
+          "works": false,
+          "status": 200,
+          "plMs": 78,
+          "segMs": 38,
+          "segBytes": 0,
+          "bufferSec": 60,
+          "segs": 12
+        },
+        "recommendation": "DIRECT_FIRST",
+        "reason": "A Proxy sikertelen, de a közvetlen stream fut"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/RTLGold.hu:SD:12553.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 494,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 602,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "DIRECT_FIRST"
+  },
+  {
+    "channelId": "5902",
+    "name": "M2 / Petőfi TV",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/M2.hu:SD:8792.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 575,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 591,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5906",
+    "name": "Duna World / M4 Sport+",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/DunaWorld.hu:SD:5873.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 538,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 678,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5904",
+    "name": "M5",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/M5_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 79,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 84,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/M5.hu:SD:8798.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 466,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 458,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "8716",
+    "name": "Viasat 2",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Viasat2.hu:SD:16393.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 471,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 470,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5855",
+    "name": "Euronews",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/EuroNews_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 41,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 38,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://cdn-euronews.akamaized.net:443/live/eds/euronews-hu/25075/index.m3u8",
+        "serverHost": "cdn-euronews.akamaized.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 190,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 125,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "4695",
+    "name": "Pannon RTV",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://stream2.nmih.hu:4102/live.m3u8",
+        "serverHost": "stream2.nmih.hu",
+        "direct": {
+          "works": false,
+          "status": 404,
+          "plMs": 326,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": false,
+          "status": 200,
+          "plMs": 250,
+          "segMs": 32,
+          "segBytes": 0,
+          "bufferSec": 18,
+          "segs": 3
+        },
+        "recommendation": "OFFLINE",
+        "reason": "Mindkét mód hibát ad"
+      }
+    ],
+    "bestRecommendation": "OFFLINE"
+  },
+  {
+    "channelId": "9073",
+    "name": "RTV-1 Vajdaság",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "http://212.200.230.50:1935/RTV/rtv2/playlist.m3u8",
+        "serverHost": "212.200.230.50",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 52,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 121,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "8999",
+    "name": "RTV-2 Vajdaság",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "http://212.200.230.50:1935/RTV/rtv2/playlist.m3u8",
+        "serverHost": "212.200.230.50",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 29,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 94,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "1819",
+    "name": "Budapest Európa Televízió",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/bpetv.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 240,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 183,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5927",
+    "name": "Apostol TV",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://live.apostoltv.hu:443/live/playlist.m3u8",
+        "serverHost": "live.apostoltv.hu",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 111,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 74,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "4798",
+    "name": "EWTN",
+    "category": "hu-live-orszagos",
+    "streams": [
+      {
+        "streamUrl": "https://hls.iptvservice.eu:443/hls/ewtn-hd.m3u8",
+        "serverHost": "hls.iptvservice.eu",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 236,
+          "segMs": 140,
+          "segBytes": 1034752,
+          "bufferSec": 47.7,
+          "segs": 5
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 113,
+          "segMs": 68,
+          "segBytes": 1034752,
+          "bufferSec": 47.7,
+          "segs": 5
+        },
+        "recommendation": "DIRECT_FIRST",
+        "reason": "Közvetlen stream stabil (47.7s buffer, 140ms) -> gyorsabb közvetlenül"
+      }
+    ],
+    "bestRecommendation": "DIRECT_FIRST"
+  },
+  {
+    "channelId": "6150",
+    "name": "Film+",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/Film+_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 37,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 40,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/FilmPlus.hu:SD:6529.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 468,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 473,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6152",
+    "name": "Mozi+",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/Mozi+_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 36,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 43,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/MoziPlus.hu:SD:9444.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 495,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 449,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6146",
+    "name": "Cool TV",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/Cool_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 39,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 43,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6652",
+    "name": "AMC",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/AMC_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 44,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 44,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6720",
+    "name": "Moziverzum",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Moziverzum.hu:SD:9445.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 485,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 475,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "7069",
+    "name": "HBO",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/HBO_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 37,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 40,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "7158",
+    "name": "HBO 2",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/HBO_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 39,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 46,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "7159",
+    "name": "HBO 3",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/HBO3_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 49,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 38,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6254",
+    "name": "Film4",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/Film4_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 40,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 39,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Film4.hu:SD:6487.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 460,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 507,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "7060",
+    "name": "TV2 Comedy",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/TV2Comedy.hu:SD:15244.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 473,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 541,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6149",
+    "name": "Sorozat+",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/SorozatPlus.hu:SD:13632.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 546,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 460,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "7074",
+    "name": "Film Café",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/FilmCafe.hu:Hungary:6522.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 465,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 457,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "7154",
+    "name": "AXN Black",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/axn_black/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 37,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 41,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "7422",
+    "name": "Galaxy 4",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/Galaxy4_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 38,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 42,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://budapest-cache-1.antik.sk:443/live/test_galaxy_4_atk_1200/playlist.m3u8",
+        "serverHost": "budapest-cache-1.antik.sk",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 70,
+          "segMs": 57,
+          "segBytes": 1593864,
+          "bufferSec": 50,
+          "segs": 10
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 67,
+          "segMs": 19,
+          "segBytes": 1593864,
+          "bufferSec": 50,
+          "segs": 10
+        },
+        "recommendation": "DIRECT_FIRST",
+        "reason": "Közvetlen stream stabil (50s buffer, 57ms) -> gyorsabb közvetlenül"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Galaxy4.hu:SD:6806.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 474,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 474,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "DIRECT_FIRST"
+  },
+  {
+    "channelId": "8714",
+    "name": "Max4",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/MAX4_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 47,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 43,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6163",
+    "name": "Izaura TV",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/Izaura_TV_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 41,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 38,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/IzauraTV.hu:SD:7838.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 485,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 451,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6701",
+    "name": "Jocky TV",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/JockyTV.hu:SD:7973.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 560,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 555,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "8489",
+    "name": "Magyar Mozi TV",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/MagyarMoziTV.hu:SD:8843.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 607,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 640,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "9310",
+    "name": "Moziklub",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Moziklub.hu:SD:9443.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 534,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 463,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "9312",
+    "name": "Sorozatklub",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Sorozatklub.hu:SD:13631.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 465,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 557,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "9745",
+    "name": "Classics TV Magyarország",
+    "category": "hu-live-film",
+    "streams": [
+      {
+        "streamUrl": "https://s01.diazol.hu:9152/live.m3u8",
+        "serverHost": "s01.diazol.hu",
+        "direct": {
+          "works": false,
+          "status": 200,
+          "plMs": 242,
+          "segMs": 58,
+          "segBytes": 0,
+          "bufferSec": 23.1,
+          "segs": 3
+        },
+        "proxy": {
+          "works": false,
+          "status": 200,
+          "plMs": 141,
+          "segMs": 67,
+          "segBytes": 0,
+          "bufferSec": 23.1,
+          "segs": 3
+        },
+        "recommendation": "OFFLINE",
+        "reason": "Mindkét mód hibát ad"
+      }
+    ],
+    "bestRecommendation": "OFFLINE"
+  },
+  {
+    "channelId": "5936",
+    "name": "National Geographic",
+    "category": "hu-live-doksi",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/NationalGeographic.hu:SD:9787.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 478,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 469,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5937",
+    "name": "National Geographic Wild",
+    "category": "hu-live-doksi",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/NationalGeographicWild.hu:SD:9808.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 515,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 462,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6749",
+    "name": "Spektrum",
+    "category": "hu-live-doksi",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/Spektrum_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 77,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 80,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Spektrum.hu:SD:13719.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 456,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 498,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "7325",
+    "name": "History",
+    "category": "hu-live-doksi",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/History.hu:SD:7313.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 472,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 470,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6589",
+    "name": "Spektrum Home",
+    "category": "hu-live-doksi",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/Spektrum_Home_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 38,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 40,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "8124",
+    "name": "Ozone TV",
+    "category": "hu-live-doksi",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/OzoneTV.hu:SD:10728.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 460,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 465,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5903",
+    "name": "M4 Sport",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/M4_Sport_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 540,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 45,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/M4Sport.hu:SD:8795.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 492,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 561,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6721",
+    "name": "Spíler 1 TV",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Spiler1.hu:SD:13725.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 467,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 474,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6722",
+    "name": "Spíler 2 TV",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Spiler2.hu:SD:13726.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 470,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 466,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6718",
+    "name": "Sport 1",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/Sport_1_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 41,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 45,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Sport1.hu:SD:13734.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 500,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 447,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6719",
+    "name": "Sport 2",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/Sport_2_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 549,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 41,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      },
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Sport2.hu:SD:13738.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 472,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 469,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "7084",
+    "name": "Arena4",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "https://m3m8.gradetv.net:443/api/s/Arena4.hu%3ASD%3Ahb714938e342762caf6e3f167878e7ac8.m3u8",
+        "serverHost": "m3m8.gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 228,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 236,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "8271",
+    "name": "Match 4",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/Match4_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 38,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 43,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6748",
+    "name": "TV Paprika",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "http://141.94.193.53:80/TV_Paprika_HD/index.m3u8",
+        "serverHost": "141.94.193.53",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 37,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 40,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "7087",
+    "name": "TV2 Séf",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/TV2Sef.hu:SD:15246.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 480,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 461,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6751",
+    "name": "TLC",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "http://88.212.7.14:80/live/tlc_hungary/index.m3u8",
+        "serverHost": "88.212.7.14",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 44,
+          "segMs": 41,
+          "segBytes": 1583524,
+          "bufferSec": 49.9,
+          "segs": 10
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 43,
+          "segMs": 29,
+          "segBytes": 1583524,
+          "bufferSec": 49.9,
+          "segs": 10
+        },
+        "recommendation": "DIRECT_FIRST",
+        "reason": "Közvetlen stream stabil (49.9s buffer, 41ms) -> gyorsabb közvetlenül"
+      },
+      {
+        "streamUrl": "https://m3m8.gradetv.net:443/api/s/TLC.hu%3ASD%3Ahf8e1737fc1316e7280f335874d18a060.m3u8",
+        "serverHost": "m3m8.gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 271,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 230,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "DIRECT_FIRST"
+  },
+  {
+    "channelId": "6603",
+    "name": "Life TV",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/LifeTV.hu:SD:8641.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 464,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 462,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6455",
+    "name": "FEM3",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/FEM3.hu:SD:6439.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 507,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 456,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "9311",
+    "name": "RTL Otthon",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/RTLOtthon.hu:SD:12557.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 472,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 450,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6159",
+    "name": "Sláger TV",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/SlagerTV.hu:SD:13498.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 468,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 449,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6151",
+    "name": "Muzsika TV",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/MuzsikaTV.hu:SD:9659.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 466,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 491,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6162",
+    "name": "Zenebutik",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Zenebutik.hu:SD:17121.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 500,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 449,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5939",
+    "name": "Lóverseny közvetítés",
+    "category": "hu-live-sport",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront41.lexanetwork.com:1344/xrelay/loverseny2.sdp/playlist.m3u8",
+        "serverHost": "cloudfront41.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 184,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 172,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "7079",
+    "name": "Minimax",
+    "category": "hu-live-gyerek",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Minimax.hu:SD:9212.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 463,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 448,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6764",
+    "name": "Nickelodeon",
+    "category": "hu-live-gyerek",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Nickelodeon.hu:SD:10127.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 466,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 456,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6765",
+    "name": "Nick Jr",
+    "category": "hu-live-gyerek",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/NickJr.hu:SD:10158.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 478,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 457,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6705",
+    "name": "Nicktoons",
+    "category": "hu-live-gyerek",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Nicktoons.hu:SD:10177.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 465,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 473,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6707",
+    "name": "TV2 Kids",
+    "category": "hu-live-gyerek",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/TV2Kids.hu:SD:15245.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 473,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 555,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "7080",
+    "name": "JimJam",
+    "category": "hu-live-gyerek",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/JimJam.hu:SD:7958.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 969,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 565,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "9309",
+    "name": "Kölyökklub",
+    "category": "hu-live-gyerek",
+    "streams": [
+      {
+        "streamUrl": "https://gradetv.net:443/api/s/Kolyokklub.hu:SD:8335.m3u8?via=grade",
+        "serverHost": "gradetv.net",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 515,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 555,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "4247",
+    "name": "Debrecen TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay44_1/livestream002.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 148,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 190,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5982",
+    "name": "Sopron TV",
+    "category": "hu-live-helyi",
+    "streams": [],
+    "bestRecommendation": "OFFLINE"
+  },
+  {
+    "channelId": "1815",
+    "name": "Fehérvár TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE046.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 24,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 91,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "1853",
+    "name": "Nyíregyházi TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://nytvlive.hu:443/nytv/playlist.m3u8",
+        "serverHost": "nytvlive.hu",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 132,
+          "segMs": 93,
+          "segBytes": 8974751,
+          "bufferSec": 51.3,
+          "segs": 5
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 81,
+          "segMs": 96,
+          "segBytes": 8974751,
+          "bufferSec": 51.3,
+          "segs": 5
+        },
+        "recommendation": "DIRECT_FIRST",
+        "reason": "Közvetlen stream stabil (51.3s buffer, 93ms) -> gyorsabb közvetlenül"
+      }
+    ],
+    "bestRecommendation": "DIRECT_FIRST"
+  },
+  {
+    "channelId": "1901",
+    "name": "Kecskeméti TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "http://rtmp1.40e.hu:8000/live/ktv.m3u8",
+        "serverHost": "rtmp1.40e.hu",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 1179,
+          "segMs": 44,
+          "segBytes": 2437984,
+          "bufferSec": 123.4,
+          "segs": 20
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 40,
+          "segMs": 19,
+          "segBytes": 2237388,
+          "bufferSec": 69.8,
+          "segs": 12
+        },
+        "recommendation": "DIRECT_FIRST",
+        "reason": "Közvetlen stream stabil (123.4s buffer, 44ms) -> gyorsabb közvetlenül"
+      }
+    ],
+    "bestRecommendation": "DIRECT_FIRST"
+  },
+  {
+    "channelId": "1829",
+    "name": "Zalaegerszegi TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/zegtv.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 108,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 232,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5137",
+    "name": "Kapos TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast004.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 21,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 79,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "1035",
+    "name": "TV Eger",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://stream.tveger.hu:8012/live.m3u8",
+        "serverHost": "stream.tveger.hu",
+        "direct": {
+          "works": false,
+          "status": 200,
+          "plMs": 161,
+          "segMs": 17,
+          "segBytes": 0,
+          "bufferSec": 15.6,
+          "segs": 3
+        },
+        "proxy": {
+          "works": false,
+          "status": 200,
+          "plMs": 129,
+          "segMs": 21,
+          "segBytes": 0,
+          "bufferSec": 16.2,
+          "segs": 3
+        },
+        "recommendation": "OFFLINE",
+        "reason": "Mindkét mód hibát ad"
+      }
+    ],
+    "bestRecommendation": "OFFLINE"
+  },
+  {
+    "channelId": "4788",
+    "name": "Szolnok TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 17,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 78,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "1821",
+    "name": "Gyöngyösi TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE043.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 17,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 76,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5425",
+    "name": "7.tv (Békéscsaba)",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://stream.y5.hu:443/stream/stream_bekescsaba/stream.m3u8",
+        "serverHost": "stream.y5.hu",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 182,
+          "segMs": 162,
+          "segBytes": 292528,
+          "bufferSec": 15,
+          "segs": 5
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 123,
+          "segMs": 72,
+          "segBytes": 292528,
+          "bufferSec": 15,
+          "segs": 5
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Proxy gyorsabban szállítja a szegmenseket (72ms vs 162ms)"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "3858",
+    "name": "Bajai TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront41.lexanetwork.com:1344/relay01/livestream002.sdp/playlist.m3u8",
+        "serverHost": "cloudfront41.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 127,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 159,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "1811",
+    "name": "Kanizsa TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/kanizsavtv.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 21,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 93,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "1812",
+    "name": "TV Keszthely",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/keszthelyivtv.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 21,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 80,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "4590",
+    "name": "Komáromi TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE017.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 18,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 90,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "4650",
+    "name": "Móri Városi TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE041.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 19,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 83,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "4662",
+    "name": "Karcag TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront41.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8",
+        "serverHost": "cloudfront41.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 17,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 93,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "4699",
+    "name": "Halom TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "http://212.92.13.108:8080/live/livestream1.m3u8",
+        "serverHost": "212.92.13.108",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 42,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 110,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "4738",
+    "name": "Ózdi TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://stream.nmih.hu:7982/live.m3u8",
+        "serverHost": "stream.nmih.hu",
+        "direct": {
+          "works": false,
+          "status": 200,
+          "plMs": 221,
+          "segMs": 23,
+          "segBytes": 0,
+          "bufferSec": 30,
+          "segs": 3
+        },
+        "proxy": {
+          "works": false,
+          "status": 200,
+          "plMs": 132,
+          "segMs": 21,
+          "segBytes": 0,
+          "bufferSec": 30,
+          "segs": 3
+        },
+        "recommendation": "OFFLINE",
+        "reason": "Mindkét mód hibát ad"
+      },
+      {
+        "streamUrl": "http://stream.nmih.hu:7980/live.m3u8",
+        "serverHost": "stream.nmih.hu",
+        "direct": {
+          "works": false,
+          "status": 200,
+          "plMs": 1147,
+          "segMs": 23,
+          "segBytes": 0,
+          "bufferSec": 30,
+          "segs": 3
+        },
+        "proxy": {
+          "works": false,
+          "status": 200,
+          "plMs": 82,
+          "segMs": 20,
+          "segBytes": 0,
+          "bufferSec": 30,
+          "segs": 3
+        },
+        "recommendation": "OFFLINE",
+        "reason": "Mindkét mód hibát ad"
+      }
+    ],
+    "bestRecommendation": "OFFLINE"
+  },
+  {
+    "channelId": "4792",
+    "name": "XVTV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE051.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 18,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 78,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "4794",
+    "name": "Jászsági Térségi TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront41.lexanetwork.com:1344/relay41_1/livestream001.sdp/playlist.m3u8",
+        "serverHost": "cloudfront41.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 18,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 79,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5026",
+    "name": "Líceum TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "http://193.225.32.62:8890/live.m3u8",
+        "serverHost": "193.225.32.62",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 55,
+          "segMs": 45,
+          "segBytes": 437852,
+          "bufferSec": 22.4,
+          "segs": 3
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 49,
+          "segMs": 25,
+          "segBytes": 437852,
+          "bufferSec": 22.4,
+          "segs": 3
+        },
+        "recommendation": "DIRECT_FIRST",
+        "reason": "Közvetlen stream stabil (22.4s buffer, 45ms) -> gyorsabb közvetlenül"
+      }
+    ],
+    "bestRecommendation": "DIRECT_FIRST"
+  },
+  {
+    "channelId": "5462",
+    "name": "TV13",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://tv13.medialivecdn.hu:443/tv13/3e4c201d9e403330d294e24760e49164.sdp/playlist.m3u8",
+        "serverHost": "tv13.medialivecdn.hu",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 407,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 155,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5656",
+    "name": "Vásárhelyi TV",
+    "category": "hu-live-helyi",
+    "streams": [],
+    "bestRecommendation": "OFFLINE"
+  },
+  {
+    "channelId": "5838",
+    "name": "TelePaks",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay02/livestream004.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 22,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 94,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "5913",
+    "name": "Balaton TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://stream.iptvservice.eu:443/hls/balatontv.m3u8",
+        "serverHost": "stream.iptvservice.eu",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 226,
+          "segMs": 145,
+          "segBytes": 2006712,
+          "bufferSec": 47.4,
+          "segs": 5
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 80,
+          "segMs": 97,
+          "segBytes": 2006712,
+          "bufferSec": 47.4,
+          "segs": 5
+        },
+        "recommendation": "DIRECT_FIRST",
+        "reason": "Közvetlen stream stabil (47.4s buffer, 145ms) -> gyorsabb közvetlenül"
+      },
+      {
+        "streamUrl": "http://stream.iptvservice.eu:80/hls/balatontv.m3u8",
+        "serverHost": "stream.iptvservice.eu",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 67,
+          "segMs": 33,
+          "segBytes": 2006712,
+          "bufferSec": 47.4,
+          "segs": 5
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 64,
+          "segMs": 3,
+          "segBytes": 2006712,
+          "bufferSec": 47.4,
+          "segs": 5
+        },
+        "recommendation": "DIRECT_FIRST",
+        "reason": "Közvetlen stream stabil (47.4s buffer, 33ms) -> gyorsabb közvetlenül"
+      }
+    ],
+    "bestRecommendation": "DIRECT_FIRST"
+  },
+  {
+    "channelId": "6144",
+    "name": "ESTV (Vác)",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE040.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 17,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 126,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6491",
+    "name": "Alföld TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront41.lexanetwork.com:1344/relay01/livestream006.sdp/playlist.m3u8",
+        "serverHost": "cloudfront41.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 21,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 79,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6638",
+    "name": "Oroszlányi TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast002.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 19,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 99,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "6676",
+    "name": "Móra-Net TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://stream.moranettv.hu:443/live/index.m3u8",
+        "serverHost": "stream.moranettv.hu",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 214,
+          "segMs": 114,
+          "segBytes": 1963096,
+          "bufferSec": 60,
+          "segs": 6
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 116,
+          "segMs": 48,
+          "segBytes": 1963096,
+          "bufferSec": 60,
+          "segs": 6
+        },
+        "recommendation": "DIRECT_FIRST",
+        "reason": "Közvetlen stream stabil (60s buffer, 114ms) -> gyorsabb közvetlenül"
+      }
+    ],
+    "bestRecommendation": "DIRECT_FIRST"
+  },
+  {
+    "channelId": "7371",
+    "name": "Bicskei TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay02/broadcast003.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 18,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 83,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "7374",
+    "name": "Hévízi TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 18,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 109,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "9068",
+    "name": "Sixo TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE038.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 16,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 99,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "9081",
+    "name": "Gran TV (Esztergom)",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://grantv.medialivecdn.hu:443/gran/51328567842cc1ba78b4b851ee9c46b4.sdp/playlist.m3u8",
+        "serverHost": "grantv.medialivecdn.hu",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 340,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 163,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "9332",
+    "name": "Cegléd TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE031.sdp/playlist.m3u8",
+        "serverHost": "cloudfront44.lexanetwork.com",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 17,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 92,
+          "segMs": 0,
+          "segBytes": 0,
+          "bufferSec": 0,
+          "segs": 0
+        },
+        "recommendation": "PROXY_FIRST",
+        "reason": "Közvetlen buffer túl alacsony (0s < 10s) -> akadozna, Proxy kell"
+      }
+    ],
+    "bestRecommendation": "PROXY_FIRST"
+  },
+  {
+    "channelId": "1802",
+    "name": "City TV",
+    "category": "hu-live-helyi",
+    "streams": [
+      {
+        "streamUrl": "https://citytv.hu:443/playlist.m3u8",
+        "serverHost": "citytv.hu",
+        "direct": {
+          "works": true,
+          "status": 200,
+          "plMs": 145,
+          "segMs": 94,
+          "segBytes": 3528760,
+          "bufferSec": 110,
+          "segs": 10
+        },
+        "proxy": {
+          "works": true,
+          "status": 200,
+          "plMs": 77,
+          "segMs": 49,
+          "segBytes": 3528760,
+          "bufferSec": 110,
+          "segs": 10
+        },
+        "recommendation": "DIRECT_FIRST",
+        "reason": "Közvetlen stream stabil (110s buffer, 94ms) -> gyorsabb közvetlenül"
+      }
+    ],
+    "bestRecommendation": "DIRECT_FIRST"
+  }
+]

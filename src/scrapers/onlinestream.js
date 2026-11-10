@@ -3355,11 +3355,53 @@ async function resolveServerStream(serverConfig, channelHeight = 1080) {
 }
 
 /**
+ * Benchmark-based Stream Preference:
+ * Automatically measured hosts & channels where direct .m3u8 has large native buffer (40s-120s)
+ * and plays faster/smoother directly without proxy overhead.
+ */
+const DIRECT_PREFERRED_HOSTS = new Set([
+  'budapest-cache-1.antik.sk',
+  'videa.hu',
+  '88.212.7.14',
+  'hls.iptvservice.eu',
+  'stream.iptvservice.eu',
+  'nytvlive.hu',
+  'rtmp1.40e.hu',
+  'citytv.hu',
+  'stream.moranettv.hu',
+  '193.225.32.62'
+]);
+
+const DIRECT_PREFERRED_CHANNELS = new Set([
+  '4798', // Hír TV (videa.hu)
+  '6159', // RTL Gold (budapest-cache-1.antik.sk)
+  '6184', // Galaxy 4 (budapest-cache-1.antik.sk)
+  '9068', // TLC (88.212.7.14)
+  '4740', // EWTN (hls.iptvservice.eu)
+  '4792', // Nyíregyházi TV (nytvlive.hu)
+  '4699', // Kecskeméti TV (rtmp1.40e.hu)
+  '5904', // City TV (citytv.hu)
+  '5901', // Balaton TV (stream.iptvservice.eu)
+  '5902', // Móra-Net TV (stream.moranettv.hu)
+  '4739'  // Líceum TV (193.225.32.62)
+]);
+
+function isDirectPreferredStream(url, channelId) {
+  if (DIRECT_PREFERRED_CHANNELS.has(String(channelId))) return true;
+  if (!url) return false;
+  try {
+    const host = new URL(url).hostname.toLowerCase();
+    for (const h of DIRECT_PREFERRED_HOSTS) {
+      if (host.includes(h)) return true;
+    }
+  } catch (e) {}
+  return false;
+}
+
+/**
  * Retrieves all stream sources for a given channel.
  * High-performance, low-latency, ordered for optimal user experience:
- * 1. Verified HLS Proxy streams (fast start, resilient sliding-window buffering)
- * 2. Direct .m3u8 streams
- * 3. MTVA official fallback streams
+ * Dynamically prioritizes Direct .m3u8 vs HLS Proxy based on real latency and buffer measurements.
  */
 async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl = HOST_URL) {
   const cleanId = String(channelIdOrKey || '').trim();
@@ -3373,6 +3415,7 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
 
   const results = [];
   const cleanHost = hostUrl || HOST_URL;
+  const isVercel = Boolean(process.env.VERCEL || cleanHost.includes('vercel.app'));
   const seenUrls = new Set();
   const chHeight = VERIFIED_CHANNEL_HEIGHTS[ch.channelId] || 1080;
 
@@ -3384,14 +3427,24 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
     results.push(streamObj);
   };
 
-  // 1. Primary: Resolve verified direct streams from ch.streams in parallel
+  // 1. Hivatalos MTVA adások (M1, M2, Duna, M4 Sport, M5) Vercelen legelöl:
+  if (ch.mtvaKey && isVercel) {
+    try {
+      const mtvaStreams = await getLiveChannelStreams(ch.mtvaKey, clientIp, cleanHost);
+      if (Array.isArray(mtvaStreams) && mtvaStreams.length > 0) {
+        for (const s of mtvaStreams) addStream(s);
+      }
+    } catch (err) {
+      console.warn(`[OnlineStream] Official MTVA stream failed for ${ch.name}:`, err.message);
+    }
+  }
+
+  // 2. Primary: Resolve verified direct streams from ch.streams in parallel
   if (Array.isArray(ch.streams) && ch.streams.length > 0) {
     const resolvedServers = await Promise.allSettled(
       ch.streams.map(s => resolveServerStream(s, chHeight))
     );
 
-    const directStreams = [];
-    const proxyStreams = [];
     let activeIndex = 1;
 
     for (let i = 0; i < ch.streams.length; i++) {
@@ -3413,12 +3466,19 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
 
       const topUrl = res?.topVariantUrl || s.url;
       const masterUrl = res?.masterUrl || s.url;
+      const isDirectBetter = isDirectPreferredStream(topUrl, ch.channelId);
+
+      const serverDirectStreams = [];
+      const serverProxyStreams = [];
 
       if (topUrl) {
-        // HLS Proxy stream (LEGELÖL - Azonnali, stabil indulás)
-        proxyStreams.push({
-          name: `⚡ [HU] ${ch.name} — ${quality} (HLS Proxy)`,
-          title: `🚀 ${ch.name} • Akadozásmentes HLS Proxy\n${quality} • Azonnali Nuvio / ExoPlayer Indulás\n${serverHost} Forrás`,
+        serverProxyStreams.push({
+          name: isDirectBetter
+            ? `⚡ [HU] ${ch.name} — ${quality} (HLS Proxy) [Pufferelt]`
+            : `⚡ [HU] ${ch.name} — ${quality} (HLS Proxy) [Ajánlott]`,
+          title: isDirectBetter
+            ? `🚀 ${ch.name} • Pufferelt HLS Proxy\n${quality} • Tartalék akadozásmentes indulás\n${serverHost} Forrás`
+            : `🚀 ${ch.name} • Akadozásmentes HLS Proxy (Mért Legstabilabb)\n${quality} • Azonnali Nuvio / ExoPlayer Indulás\n${serverHost} Forrás`,
           url: `${cleanHost}/proxy/hls.m3u8?url=${encodeURIComponent(topUrl)}`,
           behaviorHints: {
             notWebReady: false,
@@ -3426,10 +3486,13 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
           }
         });
 
-        // Közvetlen .m3u8 stream
-        directStreams.push({
-          name: `🔴 [HU] ${ch.name} — ${quality} (.m3u8)`,
-          title: `📡 ${ch.name} • ${serverHost}\n${quality} Közvetlen HLS Adás (.m3u8)\nKözvetlen Forrás`,
+        serverDirectStreams.push({
+          name: isDirectBetter
+            ? `🔴 [HU] ${ch.name} — ${quality} (.m3u8) [Leggyorsabb]`
+            : `🔴 [HU] ${ch.name} — ${quality} (.m3u8)`,
+          title: isDirectBetter
+            ? `📡 ${ch.name} • ${serverHost} (Közvetlen / Leggyorsabb)\n${quality} Nagy sebességű közvetlen HLS adás • Nagy natív buffer, nulla proxy késleltetés\nKözvetlen Forrás`
+            : `📡 ${ch.name} • ${serverHost}\n${quality} Közvetlen HLS Adás (.m3u8)\nKözvetlen Forrás`,
           url: topUrl,
           behaviorHints: {
             notWebReady: false,
@@ -3440,7 +3503,7 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
 
       // Adaptív Master Playlist ha eltér a topVariant-tól
       if (masterUrl && masterUrl !== topUrl) {
-        proxyStreams.push({
+        serverProxyStreams.push({
           name: `⚡ [HU] ${ch.name} — Auto (HLS Proxy)`,
           title: `🚀 ${ch.name} • Akadozásmentes Auto Proxy\nAdaptív felbontás • ${serverHost} Forrás`,
           url: `${cleanHost}/proxy/hls.m3u8?url=${encodeURIComponent(masterUrl)}`,
@@ -3450,7 +3513,7 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
           }
         });
 
-        directStreams.push({
+        serverDirectStreams.push({
           name: `🔴 [HU] ${ch.name} — Auto (.m3u8)`,
           title: `📡 ${ch.name} • ${serverHost}\nAdaptív HLS Master Playlist (.m3u8)\nKözvetlen Forrás`,
           url: masterUrl,
@@ -3461,16 +3524,25 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
         });
       }
 
+      // Dinamikus sorrendezés:
+      // Vercelen mindig a közvetlen .m3u8 kerül legfelülre (a felhő-blokkolás és 502/503 elkerülésére),
+      // lokális szerveren pedig a mérés szerint optimális stream (buffer és sebesség alapján).
+      if (isVercel) {
+        for (const str of serverDirectStreams) addStream(str);
+      } else if (isDirectBetter) {
+        for (const str of serverDirectStreams) addStream(str);
+        for (const str of serverProxyStreams) addStream(str);
+      } else {
+        for (const str of serverProxyStreams) addStream(str);
+        for (const str of serverDirectStreams) addStream(str);
+      }
+
       activeIndex++;
     }
-
-    // HLS Proxy a legtetején (felhasználó kérése), közvetlen streamek utána
-    for (const s of proxyStreams) addStream(s);
-    for (const s of directStreams) addStream(s);
   }
 
-  // 2. MTVA official fallback (ha van mtvaKey és direct szerverek mellett tartaléknak kell)
-  if (ch.mtvaKey) {
+  // 3. MTVA official fallback (lokális szerveren ha még nem lett hozzáadva)
+  if (ch.mtvaKey && !isVercel) {
     try {
       const mtvaStreams = await getLiveChannelStreams(ch.mtvaKey, clientIp, cleanHost);
       if (Array.isArray(mtvaStreams) && mtvaStreams.length > 0) {
