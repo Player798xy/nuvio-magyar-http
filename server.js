@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const { Readable } = require('stream');
+const { Readable, pipeline } = require('stream');
 const pkg = require('./package.json');
 const { getManifest, handleStreamRequest, parseConfig: parseAddonConfig, ALL_SCRAPERS } = require('./src/addon');
 const { getOnlineStreamMeta } = require('./src/scrapers/onlinestream');
@@ -483,18 +483,11 @@ app.get(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
 
     if (upstreamRes.body) {
       const nodeStream = Readable.fromWeb(upstreamRes.body);
-      nodeStream.on('error', () => {
-        if (!res.headersSent) {
+      return pipeline(nodeStream, res, (err) => {
+        if (err && !res.headersSent) {
           try { res.status(502).end(); } catch (e) {}
         }
       });
-      req.on('close', () => {
-        try { nodeStream.destroy(); } catch (e) {}
-      });
-      res.on('close', () => {
-        try { nodeStream.destroy(); } catch (e) {}
-      });
-      return nodeStream.pipe(res);
     } else {
       return res.end();
     }

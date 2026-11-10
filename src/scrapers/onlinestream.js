@@ -3399,6 +3399,25 @@ function isDirectPreferredStream(url, channelId) {
 }
 
 /**
+ * Prioritizes fast CDN hosts (40-75 Mbps) and demotes overloaded single-node hosts (1 Mbps)
+ */
+function getStreamHostPriority(s) {
+  if (!s) return 0;
+  const host = ((s.host || '') + ' ' + (s.url || '')).toLowerCase();
+  // 1. High-speed CDNs with 40-75 Mbps throughput (gradetv, antik, videa, MTVA)
+  if (host.includes('gradetv') || host.includes('88.212.7.14')) return 100;
+  if (host.includes('budapest-cache') || host.includes('antik.sk')) return 95;
+  if (host.includes('videa')) return 90;
+  if (host.includes('mediaklikk') || host.includes('connectmedia')) return 85;
+
+  // 2. Local / municipal TV streams that are reliable
+  if (!host.includes('141.94.193.53')) return 50;
+
+  // 3. Overloaded OVH single-node VPS (choked to ~1 Mbps in peak evening hours) -> Fallback only!
+  return 10;
+}
+
+/**
  * Retrieves all stream sources for a given channel.
  * High-performance, low-latency, ordered for optimal user experience:
  * Dynamically prioritizes Direct .m3u8 vs HLS Proxy based on real latency and buffer measurements.
@@ -3439,22 +3458,24 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
     }
   }
 
-  // 2. Primary: Resolve verified direct streams from ch.streams in parallel
+  // 2. Primary: Resolve verified direct streams from ch.streams in parallel (CDN szerverek legelöl!)
   if (Array.isArray(ch.streams) && ch.streams.length > 0) {
+    const sortedStreams = [...ch.streams].sort((a, b) => getStreamHostPriority(b) - getStreamHostPriority(a));
     const resolvedServers = await Promise.allSettled(
-      ch.streams.map(s => resolveServerStream(s, chHeight))
+      sortedStreams.map(s => resolveServerStream(s, chHeight))
     );
 
     let activeIndex = 1;
 
-    for (let i = 0; i < ch.streams.length; i++) {
+    for (let i = 0; i < sortedStreams.length; i++) {
       const outcome = resolvedServers[i];
-      const s = ch.streams[i];
+      const s = sortedStreams[i];
       const res = outcome.status === 'fulfilled' ? outcome.value : null;
 
       if (!res && !s.url) continue;
 
       const serverHost = s.host || (res?.masterUrl ? new URL(res.masterUrl).hostname : `Szerver #${activeIndex}`);
+      const isSlowServer = (s.host || '').includes('141.94.193.53') || (s.url || '').includes('141.94.193.53');
       
       let quality = res?.quality;
       if (!quality) {
@@ -3471,14 +3492,22 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
       const serverDirectStreams = [];
       const serverProxyStreams = [];
 
+      const proxyTag = isSlowServer
+        ? ' [Tartalék Szerver]'
+        : (isDirectBetter ? ' [Pufferelt]' : ' [Ajánlott - Nagy Sebesség]');
+
+      const directTag = isSlowServer
+        ? ' [Tartalék Szerver]'
+        : (isDirectBetter ? ' [Leggyorsabb]' : '');
+
       if (topUrl) {
         serverProxyStreams.push({
-          name: isDirectBetter
-            ? `⚡ [HU] ${ch.name} — ${quality} (HLS Proxy) [Pufferelt]`
-            : `⚡ [HU] ${ch.name} — ${quality} (HLS Proxy) [Ajánlott]`,
-          title: isDirectBetter
-            ? `🚀 ${ch.name} • Pufferelt HLS Proxy\n${quality} • Tartalék akadozásmentes indulás\n${serverHost} Forrás`
-            : `🚀 ${ch.name} • Akadozásmentes HLS Proxy (Mért Legstabilabb)\n${quality} • Azonnali Nuvio / ExoPlayer Indulás\n${serverHost} Forrás`,
+          name: `⚡ [HU] ${ch.name} — ${quality} (HLS Proxy)${proxyTag}`,
+          title: isSlowServer
+            ? `⚠️ ${ch.name} • Tartalék Szerver (Lassabb sávszélesség)\n${quality} • ${serverHost} Forrás`
+            : (isDirectBetter
+              ? `🚀 ${ch.name} • Pufferelt HLS Proxy\n${quality} • Tartalék akadozásmentes indulás\n${serverHost} Forrás`
+              : `🚀 ${ch.name} • Akadozásmentes Nagy Sebességű CDN Proxy\n${quality} • Azonnali Nuvio / ExoPlayer Indulás\n${serverHost} Forrás`),
           url: `${cleanHost}/proxy/hls.m3u8?url=${encodeURIComponent(topUrl)}`,
           behaviorHints: {
             notWebReady: false,
@@ -3487,12 +3516,12 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
         });
 
         serverDirectStreams.push({
-          name: isDirectBetter
-            ? `🔴 [HU] ${ch.name} — ${quality} (.m3u8) [Leggyorsabb]`
-            : `🔴 [HU] ${ch.name} — ${quality} (.m3u8)`,
-          title: isDirectBetter
-            ? `📡 ${ch.name} • ${serverHost} (Közvetlen / Leggyorsabb)\n${quality} Nagy sebességű közvetlen HLS adás • Nagy natív buffer, nulla proxy késleltetés\nKözvetlen Forrás`
-            : `📡 ${ch.name} • ${serverHost}\n${quality} Közvetlen HLS Adás (.m3u8)\nKözvetlen Forrás`,
+          name: `🔴 [HU] ${ch.name} — ${quality} (.m3u8)${directTag}`,
+          title: isSlowServer
+            ? `⚠️ ${ch.name} • Tartalék Közvetlen Stream\n${quality} • ${serverHost} Forrás`
+            : (isDirectBetter
+              ? `📡 ${ch.name} • ${serverHost} (Közvetlen / Leggyorsabb)\n${quality} Nagy sebességű közvetlen HLS adás • Nagy natív buffer, nulla proxy késleltetés\nKözvetlen Forrás`
+              : `📡 ${ch.name} • ${serverHost}\n${quality} Közvetlen HLS Adás (.m3u8)\nKözvetlen Forrás`),
           url: topUrl,
           behaviorHints: {
             notWebReady: false,
@@ -3504,7 +3533,7 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
       // Adaptív Master Playlist ha eltér a topVariant-tól
       if (masterUrl && masterUrl !== topUrl) {
         serverProxyStreams.push({
-          name: `⚡ [HU] ${ch.name} — Auto (HLS Proxy)`,
+          name: `⚡ [HU] ${ch.name} — Auto (HLS Proxy)${isSlowServer ? ' [Tartalék]' : ''}`,
           title: `🚀 ${ch.name} • Akadozásmentes Auto Proxy\nAdaptív felbontás • ${serverHost} Forrás`,
           url: `${cleanHost}/proxy/hls.m3u8?url=${encodeURIComponent(masterUrl)}`,
           behaviorHints: {
@@ -3514,7 +3543,7 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
         });
 
         serverDirectStreams.push({
-          name: `🔴 [HU] ${ch.name} — Auto (.m3u8)`,
+          name: `🔴 [HU] ${ch.name} — Auto (.m3u8)${isSlowServer ? ' [Tartalék]' : ''}`,
           title: `📡 ${ch.name} • ${serverHost}\nAdaptív HLS Master Playlist (.m3u8)\nKözvetlen Forrás`,
           url: masterUrl,
           behaviorHints: {
