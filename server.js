@@ -1,14 +1,26 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
+const { Readable } = require('stream');
 const pkg = require('./package.json');
 const { getManifest, handleStreamRequest, parseConfig: parseAddonConfig, ALL_SCRAPERS } = require('./src/addon');
+const { getOnlineStreamMeta } = require('./src/scrapers/onlinestream');
+const { generateTvPosterSvg, generateTvBackgroundSvg, generateTvLogoSvg } = require('./src/tv_graphics');
 const { searchCatalog, getMeta } = require('./src/catalog');
 const { getMediaMeta, getSeriesEpisodes } = require('./src/utils/meta');
 const { getLiveHlsStream, getRewrittenMasterPlaylist } = require('./src/scrapers/mediaklikk');
 
 const app = express();
 const PORT = process.env.PORT || 7000;
+
+// Prevent unexpected upstream disconnects or pipe errors from crashing the server
+process.on('uncaughtException', (err) => {
+  console.warn('[Server Warning] Uncaught exception:', err.message);
+});
+process.on('unhandledRejection', (reason) => {
+  console.warn('[Server Warning] Unhandled rejection:', reason);
+});
 
 // Enable CORS for Stremio & Nuvio Web/Mobile clients (full wildcard header support)
 app.use(cors({
@@ -193,7 +205,7 @@ async function handleCatalog(req, res) {
   }
 
   try {
-    const rawMetas = await searchCatalog(type, searchQuery, cleanId, { skip, search: searchQuery });
+    const rawMetas = await searchCatalog(type, searchQuery, cleanId, { skip, search: searchQuery, hostUrl: getHostUrl(req) });
     const metas = (rawMetas || []).map(m => sanitizeMetaPreview(m, type)).filter(Boolean);
     res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=1200');
     res.json({ metas });
@@ -221,7 +233,7 @@ async function handleMeta(req, res) {
   } catch (e) {}
 
   try {
-    const metaObj = await getMeta(type, rawId);
+    const metaObj = await getMeta(type, rawId, getHostUrl(req));
     if (metaObj) {
       const m = metaObj.meta ? { ...metaObj.meta } : { ...metaObj };
       if (m.releaseInfo !== undefined && m.releaseInfo !== null) {
@@ -311,6 +323,439 @@ app.get(streamRoutes, handleStream);
 app.get(configuredStreamRoutes, handleStream);
 
 // 7. Live TV HLS Master Playlist Rewriter (Orders 1080p Full HD first so Nuvio starts in 1080p)
+
+// 7b. Universal High-Performance HLS Streaming Proxy with Rolling Buffer & Chunk Prefetching
+const SLIDING_WINDOW_MAP = new Map(); // targetUrl -> { segments: Map<seq, { inf, absUrl, seq }>, targetDuration, updatedAt }
+const CHUNK_CACHE = new Map(); // chunkUrl -> { buffer: Buffer, contentType: string, timestamp: number }
+const MAX_CHUNK_CACHE_COUNT = 60;
+
+function pruneChunkCache() {
+  while (CHUNK_CACHE.size > MAX_CHUNK_CACHE_COUNT) {
+    const oldestKey = CHUNK_CACHE.keys().next().value;
+    CHUNK_CACHE.delete(oldestKey);
+  }
+}
+
+// Background prefetcher for the next segment in a stream
+function triggerNextChunkPrefetch(currentChunkUrl, upstreamHeaders) {
+  for (const [playlistUrl, win] of SLIDING_WINDOW_MAP.entries()) {
+    const segList = Array.from(win.segments.values());
+    const idx = segList.findIndex(s => s.absUrl === currentChunkUrl);
+    if (idx !== -1 && idx + 1 < segList.length) {
+      const nextSeg = segList[idx + 1];
+      if (nextSeg && !CHUNK_CACHE.has(nextSeg.absUrl)) {
+        fetch(nextSeg.absUrl, {
+          headers: upstreamHeaders,
+          signal: AbortSignal.timeout(6000)
+        }).then(async res => {
+          if (res.ok) {
+            const buf = Buffer.from(await res.arrayBuffer());
+            const ct = res.headers.get('content-type') || 'video/mp2t';
+            CHUNK_CACHE.set(nextSeg.absUrl, { buffer: buf, contentType: ct, timestamp: Date.now() });
+            pruneChunkCache();
+          }
+        }).catch(() => {});
+      }
+      break;
+    }
+  }
+}
+
+app.get(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  const targetUrl = (req.query.url || '').trim();
+  if (!targetUrl) {
+    return res.status(400).send('#EXTM3U\n#EXT-X-ERROR: Missing url param\n');
+  }
+
+  let parsed;
+  try {
+    parsed = new URL(targetUrl);
+  } catch (e) {
+    return res.status(400).send('#EXTM3U\n#EXT-X-ERROR: Invalid target URL\n');
+  }
+
+  const host = parsed.hostname.toLowerCase();
+  const upstreamHeaders = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+    'Accept': '*/*'
+  };
+
+  if (host.includes('onlinestream') || host.includes('gradetv') || host.includes('antik') || host.includes('141.94.193.53') || host.includes('lexanetwork')) {
+    upstreamHeaders['Referer'] = 'https://onlinestream.live/';
+    upstreamHeaders['Origin'] = 'https://onlinestream.live';
+  } else if (host.includes('mediaklikk') || host.includes('connectmedia')) {
+    upstreamHeaders['Referer'] = 'https://mediaklikk.hu/';
+    upstreamHeaders['Origin'] = 'https://mediaklikk.hu';
+  } else if (host.includes('videa')) {
+    upstreamHeaders['Referer'] = 'https://videa.hu/';
+    upstreamHeaders['Origin'] = 'https://videa.hu';
+  } else {
+    upstreamHeaders['Referer'] = `${parsed.protocol}//${parsed.host}/`;
+  }
+
+  // Check in-memory chunk cache first for media chunks! (0 ms delivery)
+  const cachedChunk = CHUNK_CACHE.get(targetUrl);
+  if (cachedChunk) {
+    res.status(200);
+    res.setHeader('Content-Type', cachedChunk.contentType || 'video/mp2t');
+    res.setHeader('Content-Length', cachedChunk.buffer.length);
+    res.setHeader('Cache-Control', 'public, max-age=86400, immutable');
+    res.setHeader('Accept-Ranges', 'bytes');
+    res.end(cachedChunk.buffer);
+
+    triggerNextChunkPrefetch(targetUrl, upstreamHeaders);
+    return;
+  }
+
+  const controller = new AbortController();
+  req.on('close', () => controller.abort());
+
+  try {
+    if (req.headers['range']) {
+      upstreamHeaders['Range'] = req.headers['range'];
+    }
+
+    const upstreamRes = await fetch(targetUrl, {
+      headers: upstreamHeaders,
+      signal: controller.signal
+    });
+
+    if (!upstreamRes.ok) {
+      return res.status(upstreamRes.status).send(`#EXTM3U\n#EXT-X-ERROR: Upstream returned ${upstreamRes.status}\n`);
+    }
+
+    const contentType = (upstreamRes.headers.get('content-type') || '').toLowerCase();
+    const hostUrl = getHostUrl(req);
+    const isPlaylist = targetUrl.includes('.m3u8') ||
+                       targetUrl.includes('api/s/') ||
+                       contentType.includes('mpegurl') ||
+                       contentType.includes('application/x-mpegurl');
+
+    if (isPlaylist) {
+      const text = await upstreamRes.text();
+      res.setHeader('Content-Type', 'application/vnd.apple.mpegurl; charset=utf-8');
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+
+      const isMediaPlaylist = text.includes('#EXTINF:');
+
+      if (isMediaPlaylist) {
+        // Live Media Playlist: Expand buffer window so players have 20-35s of content!
+        const lines = text.split(/\r?\n/);
+        let seq = 0;
+        let targetDuration = 6;
+        const seqMatch = text.match(/#EXT-X-MEDIA-SEQUENCE:(\d+)/);
+        if (seqMatch) seq = parseInt(seqMatch[1], 10);
+        const tdMatch = text.match(/#EXT-X-TARGETDURATION:(\d+)/);
+        if (tdMatch) targetDuration = parseInt(tdMatch[1], 10);
+
+        let win = SLIDING_WINDOW_MAP.get(targetUrl);
+        if (!win || (Date.now() - win.updatedAt > 90000)) {
+          win = { segments: new Map(), targetDuration, updatedAt: Date.now() };
+          SLIDING_WINDOW_MAP.set(targetUrl, win);
+        }
+        win.updatedAt = Date.now();
+        if (targetDuration) win.targetDuration = targetDuration;
+
+        let currentInf = null;
+        let currentSeq = seq;
+        for (let i = 0; i < lines.length; i++) {
+          const l = lines[i].trim();
+          if (l.startsWith('#EXTINF:')) {
+            currentInf = l;
+          } else if (currentInf && !l.startsWith('#') && l.length > 0) {
+            try {
+              const absUrl = new URL(l, targetUrl).toString();
+              win.segments.set(currentSeq, {
+                inf: currentInf,
+                absUrl,
+                seq: currentSeq
+              });
+              currentSeq++;
+            } catch (e) {}
+            currentInf = null;
+          }
+        }
+
+        // Keep last 12 segments in rolling map
+        const sortedSeqs = Array.from(win.segments.keys()).sort((a, b) => a - b);
+        while (sortedSeqs.length > 12) {
+          const dropSeq = sortedSeqs.shift();
+          win.segments.delete(dropSeq);
+        }
+
+        const activeSegments = sortedSeqs.map(s => win.segments.get(s)).filter(Boolean);
+        const minMediaSeq = activeSegments.length > 0 ? activeSegments[0].seq : seq;
+
+        const outLines = [];
+        let segmentsEmitted = false;
+
+        for (let i = 0; i < lines.length; i++) {
+          const l = lines[i].trim();
+          if (!l) continue;
+
+          if (l.startsWith('#EXT-X-MEDIA-SEQUENCE:')) {
+            outLines.push(`#EXT-X-MEDIA-SEQUENCE:${minMediaSeq}`);
+          } else if (l.startsWith('#EXTINF:') || (!l.startsWith('#') && l.length > 0)) {
+            if (!segmentsEmitted) {
+              segmentsEmitted = true;
+              for (const seg of activeSegments) {
+                outLines.push(seg.inf);
+                outLines.push(`${hostUrl}/proxy/hls?url=${encodeURIComponent(seg.absUrl)}`);
+              }
+            }
+          } else {
+            const rewritten = l.replace(/URI=["']([^"']+)["']/g, (match, uri) => {
+              try {
+                const absUri = new URL(uri, targetUrl).toString();
+                const isSubPl = absUri.includes('.m3u8') || absUri.includes('api/s/') || absUri.includes('faixa=');
+                const ep = isSubPl ? '/proxy/hls.m3u8' : '/proxy/hls';
+                return `URI="${hostUrl}${ep}?url=${encodeURIComponent(absUri)}"`;
+              } catch (e) {
+                return match;
+              }
+            });
+            outLines.push(rewritten);
+          }
+        }
+
+        return res.send(outLines.join('\n'));
+      }
+
+      // Master Playlist: Rewrite sub-variant URLs
+      const lines = text.split(/\r?\n/);
+      const rewritten = lines.map(line => {
+        const trimmed = line.trim();
+        if (!trimmed) return line;
+
+        if (trimmed.startsWith('#')) {
+          return trimmed.replace(/URI=["']([^"']+)["']/g, (match, uri) => {
+            try {
+              const absUri = new URL(uri, targetUrl).toString();
+              const isSubPl = absUri.includes('.m3u8') || absUri.includes('api/s/') || absUri.includes('faixa=');
+              const ep = isSubPl ? '/proxy/hls.m3u8' : '/proxy/hls';
+              return `URI="${hostUrl}${ep}?url=${encodeURIComponent(absUri)}"`;
+            } catch (e) {
+              return match;
+            }
+          });
+        }
+
+        try {
+          const absUrl = new URL(trimmed, targetUrl).toString();
+          const isSubPlaylist = absUrl.includes('.m3u8') || absUrl.includes('faixa=') || absUrl.includes('api/s/');
+          const proxyEndpoint = isSubPlaylist ? '/proxy/hls.m3u8' : '/proxy/hls';
+          return `${hostUrl}${proxyEndpoint}?url=${encodeURIComponent(absUrl)}`;
+        } catch (e) {
+          return line;
+        }
+      });
+
+      return res.send(rewritten.join('\n'));
+    }
+
+    // Binary media segment (.ts, .m4s, .aac, .mp4)
+    if (upstreamRes.status === 206) {
+      res.status(206);
+      const contentRange = upstreamRes.headers.get('content-range');
+      if (contentRange) res.setHeader('Content-Range', contentRange);
+    } else {
+      res.status(200);
+    }
+
+    const contentLength = upstreamRes.headers.get('content-length');
+    if (contentLength) res.setHeader('Content-Length', contentLength);
+    res.setHeader('Content-Type', contentType || 'video/mp2t');
+    res.setHeader('Cache-Control', 'public, max-age=86400, immutable');
+    res.setHeader('Accept-Ranges', 'bytes');
+
+    if (upstreamRes.body) {
+      const nodeStream = Readable.fromWeb(upstreamRes.body);
+      const chunks = [];
+      nodeStream.on('data', chunk => {
+        chunks.push(chunk);
+      });
+      nodeStream.on('end', () => {
+        const fullBuf = Buffer.concat(chunks);
+        CHUNK_CACHE.set(targetUrl, {
+          buffer: fullBuf,
+          contentType: contentType || 'video/mp2t',
+          timestamp: Date.now()
+        });
+        pruneChunkCache();
+        triggerNextChunkPrefetch(targetUrl, upstreamHeaders);
+      });
+      nodeStream.on('error', () => {
+        if (!res.headersSent) {
+          try { res.status(502).end(); } catch (e) {}
+        }
+      });
+      req.on('close', () => {
+        try { nodeStream.destroy(); } catch (e) {}
+      });
+      res.on('close', () => {
+        try { nodeStream.destroy(); } catch (e) {}
+      });
+      return nodeStream.pipe(res);
+    } else {
+      return res.end();
+    }
+  } catch (err) {
+    if (controller.signal.aborted) return;
+    if (!res.headersSent) {
+      res.status(502).send(`#EXTM3U\n#EXT-X-ERROR: Proxy error: ${err.message}\n`);
+    }
+  }
+});
+
+// 7b2. XSPF Playlist Endpoint for VLC Media Player and Kodi
+app.get(['/playlist.xspf', '/tv.xspf'], async (req, res) => {
+  res.setHeader('Content-Type', 'application/xspf+xml; charset=utf-8');
+  res.setHeader('Content-Disposition', 'inline; filename="nuvio-magyar-tv.xspf"');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
+  const hostUrl = getHostUrl(req);
+  const { ALL_CHANNELS, ONLINESTREAM_CATEGORIES } = require('./src/scrapers/onlinestream');
+  const catMap = new Map(ONLINESTREAM_CATEGORIES.map(c => [c.id, c.name]));
+
+  const escapeXml = (unsafe) => (unsafe || '').replace(/[<>&'"]/g, c => {
+    switch (c) {
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '&': return '&amp;';
+      case '\'': return '&apos;';
+      case '"': return '&quot;';
+    }
+  });
+
+  const tracks = [];
+  for (const ch of ALL_CHANNELS) {
+    const catName = catMap.get(ch.category) || 'Magyar TV';
+    let targetStream = '';
+
+    if (ch.channelId === '4740') {
+      targetStream = 'https://videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8';
+    } else if (ch.streams && ch.streams.length > 0) {
+      targetStream = ch.streams[0].url || ch.streams[0].playerUrl;
+    }
+
+    if (!targetStream && ch.mtvaKey) {
+      targetStream = `https://nuvio-magyar-http.vercel.app/api/live/mtv1live.m3u8`;
+    }
+
+    if (targetStream) {
+      const proxyUrl = `${hostUrl}/proxy/hls.m3u8?url=${encodeURIComponent(targetStream)}`;
+      const logoUrl = `${hostUrl}/tv-logos/${ch.channelId}.png`;
+      tracks.push(`    <track>
+      <title>${escapeXml(ch.name)}</title>
+      <creator>${escapeXml(catName)}</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>${escapeXml(proxyUrl)}</location>
+      <image>${escapeXml(logoUrl)}</image>
+      <annotation>${escapeXml(ch.description)}</annotation>
+    </track>`);
+    }
+  }
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<playlist version="1" xmlns="http://xspf.org/ns/0/">
+  <title>Nuvio Magyar TV - Élő TV Csatornák (112 Adó)</title>
+  <creator>Nuvio Magyar Streaming Pro</creator>
+  <info>${hostUrl}</info>
+  <trackList>
+${tracks.join('\n')}
+  </trackList>
+</playlist>`;
+
+  res.send(xml);
+});
+
+// 7b3. M3U / M3U8 Playlist Endpoint for IPTV Players
+app.get(['/playlist.m3u', '/playlist.m3u8', '/tv.m3u', '/tv.m3u8'], async (req, res) => {
+  res.setHeader('Content-Type', 'application/vnd.apple.mpegurl; charset=utf-8');
+  res.setHeader('Content-Disposition', 'inline; filename="nuvio-magyar-tv.m3u"');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
+  const hostUrl = getHostUrl(req);
+  const { ALL_CHANNELS, ONLINESTREAM_CATEGORIES } = require('./src/scrapers/onlinestream');
+  const catMap = new Map(ONLINESTREAM_CATEGORIES.map(c => [c.id, c.name]));
+
+  const lines = ['#EXTM3U name="Nuvio Magyar TV"'];
+
+  for (const ch of ALL_CHANNELS) {
+    const catName = catMap.get(ch.category) || 'Magyar TV';
+    let targetStream = '';
+
+    if (ch.channelId === '4740') {
+      targetStream = 'https://videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8';
+    } else if (ch.streams && ch.streams.length > 0) {
+      targetStream = ch.streams[0].url || ch.streams[0].playerUrl;
+    }
+
+    if (targetStream) {
+      const proxyUrl = `${hostUrl}/proxy/hls.m3u8?url=${encodeURIComponent(targetStream)}`;
+      const logoUrl = `${hostUrl}/tv-logos/${ch.channelId}.png`;
+      lines.push(`#EXTINF:-1 tvg-id="${ch.channelId}" tvg-name="${ch.name}" tvg-logo="${logoUrl}" group-title="${catName}",${ch.name}`);
+      lines.push(proxyUrl);
+    }
+  }
+
+  res.send(lines.join('\n'));
+});
+
+// 7c. High-Resolution Dynamic TV Artwork (600x900 PNG Poster, 1280x720 PNG Backdrop, 500x500 PNG Logo)
+app.get(['/tv-poster/:id', '/tv-poster/:id.png', '/tv-poster/:id.svg'], (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+  const rawId = (req.params.id || '').replace(/\.(svg|png)$/i, '');
+  const pngPath = path.join(__dirname, 'public', 'tv-posters', `${rawId}.png`);
+  if (fs.existsSync(pngPath)) {
+    res.setHeader('Content-Type', 'image/png');
+    return res.sendFile(pngPath);
+  }
+  res.setHeader('Content-Type', 'image/svg+xml; charset=utf-8');
+  const meta = getOnlineStreamMeta(rawId, getHostUrl(req));
+  const chData = meta?.meta || { name: 'Élő TV', category: 'hu-live-orszagos' };
+  res.send(generateTvPosterSvg(chData));
+});
+
+app.get(['/tv-background/:id', '/tv-background/:id.png', '/tv-background/:id.svg'], (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+  const rawId = (req.params.id || '').replace(/\.(svg|png)$/i, '');
+  const pngPath = path.join(__dirname, 'public', 'tv-backgrounds', `${rawId}.png`);
+  if (fs.existsSync(pngPath)) {
+    res.setHeader('Content-Type', 'image/png');
+    return res.sendFile(pngPath);
+  }
+  res.setHeader('Content-Type', 'image/svg+xml; charset=utf-8');
+  const meta = getOnlineStreamMeta(rawId, getHostUrl(req));
+  const chData = meta?.meta || { name: 'Élő TV', category: 'hu-live-orszagos' };
+  res.send(generateTvBackgroundSvg(chData));
+});
+
+app.get(['/tv-logo/:id', '/tv-logo/:id.png', '/tv-logo/:id.svg'], (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+  const rawId = (req.params.id || '').replace(/\.(svg|png)$/i, '');
+  const pngPath = path.join(__dirname, 'public', 'tv-logos', `${rawId}.png`);
+  if (fs.existsSync(pngPath)) {
+    res.setHeader('Content-Type', 'image/png');
+    return res.sendFile(pngPath);
+  }
+  res.setHeader('Content-Type', 'image/svg+xml; charset=utf-8');
+  const meta = getOnlineStreamMeta(rawId, getHostUrl(req));
+  const chData = meta?.meta || { name: 'Élő TV', category: 'hu-live-orszagos' };
+  res.send(generateTvLogoSvg(chData));
+});
+
 app.get(['/api/live/:streamId', '/hls/live/:streamId'], async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
@@ -495,7 +940,7 @@ app.get('/api/test', async (req, res) => {
 
   const startMs = Date.now();
 
-  if (id.startsWith('mediaklikk-live-')) {
+  if (id.startsWith('mediaklikk-live-') || id.startsWith('onlinestream-live-')) {
     try {
       const liveResult = await handleStreamRequest('movie', id, config);
       return res.json({
@@ -509,7 +954,7 @@ app.get('/api/test', async (req, res) => {
   }
 
   let matchedItem = null;
-  if (!id.startsWith('tt') && !id.startsWith('tmdb:') && !id.startsWith('mediaklikk:') && !id.startsWith('netmozi:') && !id.startsWith('tvdb:')) {
+  if (!id.startsWith('tt') && !id.startsWith('tmdb:') && !id.startsWith('mediaklikk:') && !id.startsWith('netmozi:') && !id.startsWith('tvdb:') && !id.startsWith('onlinestream-live-')) {
     try {
       const [movies, series] = await Promise.all([
         typeParam === 'series' ? Promise.resolve([]) : searchCatalog('movie', id),
@@ -529,6 +974,20 @@ app.get('/api/test', async (req, res) => {
         id = matchedItem.id;
       }
     } catch (e) {}
+  }
+
+  if (id.startsWith('mediaklikk-live-') || id.startsWith('onlinestream-live-')) {
+    try {
+      const liveResult = await handleStreamRequest('movie', id, config);
+      return res.json({
+        streams: liveResult.streams || [],
+        matchedItem,
+        queryId: id,
+        durationMs: Date.now() - startMs
+      });
+    } catch (e) {
+      return res.status(500).json({ error: e.message, streams: [] });
+    }
   }
 
   const isSeries = typeParam === 'series' ||

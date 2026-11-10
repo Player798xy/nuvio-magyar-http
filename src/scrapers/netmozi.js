@@ -179,7 +179,7 @@ function netmoziTlsRequest(targetUrl, options = {}, cookieJar = new Map()) {
       }
 
       if (options.debug) {
-        console.log(`[NetMozi TLS Debug] rawBody: ${rawBody.length}, decoded: ${bodyStr.length}, TE: ${headers['transfer-encoding']}, CL: ${headers['content-length']}`);
+        // debug log removed
       }
 
       resolve({ statusCode, headers, body: bodyStr });
@@ -513,7 +513,7 @@ async function searchAndScrapeNetMozi(cleanTitle, targetYear, isSeries, season, 
 
     candidates.sort((a, b) => b.score - a.score);
     const best = candidates[0];
-    console.log(`[NetMozi] Best match: "${best.title}" (${best.year}) [${best.isSeries ? 'Series' : 'Movie'}] -> ${best.link}`);
+    // query log removed for privacy
 
     // Step 3: Fetch details/episode page with automatic 301/302 redirect following
     let targetPageUrl = best.link.startsWith('http') ? best.link : (`https://netmozi.com${best.link}`);
@@ -667,7 +667,7 @@ async function searchAndScrapeNetMozi(cleanTitle, targetYear, isSeries, season, 
       }
     }));
 
-    console.log(`[NetMozi] Found ${streams.length} stream(s) for "${cleanTitle}"`);
+    // query log removed for privacy
   } catch (err) {
     console.warn('[NetMozi] Scraping error:', err.message);
   }

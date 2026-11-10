@@ -5,6 +5,7 @@
  */
 
 const { LIVE_CHANNELS, VERIFIED_MEDIAKLIKK_CLASSICS } = require('./scrapers/mediaklikk');
+const { ONLINESTREAM_CATEGORIES, getOnlineStreamChannels } = require('./scrapers/onlinestream');
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY || 'ffe7ef8916c61835264d2df68276ddc2';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
@@ -55,19 +56,19 @@ const VERIFIED_HUNGARIAN_MOVIES_POOL = [
   { id: 'tt0065067', name: 'A tanú', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0065067/img', releaseInfo: '1969', imdbRating: '8.7', description: 'Pelikán József gátőr legendás szatírája Bacsó Péter filmjében.' },
   { id: 'tt0257290', name: 'Üvegtigris', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0257290/img', releaseInfo: '2001', imdbRating: '7.5', description: 'Kultikus magyar vígjáték Rudolf Péter rendezésében Lali és az út menti büfékocsi történeteivel.' },
   { id: 'tt0131636', name: 'Vuk', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0131636/img', releaseInfo: '1981', imdbRating: '8.2', description: 'Fekete István regényéből készült rajzfilmklasszikus Dargay Attila rendezésében.' },
-  { id: 'tt0089984', name: 'Szaffi', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0089984/img', releaseInfo: '1985', imdbRating: '8.1', description: 'Jókai Mór A cigánybáró című regényéből készült klasszikus Dargay Attila rajzfilm.' },
-  { id: 'tt0074824', name: 'Lúdas Matyi', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0074824/img', releaseInfo: '1977', imdbRating: '7.9', description: 'Fazekas Mihály elbeszélő költeményének klasszikus rajzfilmváltozata Dargay Attila rendezésében.' },
+  { id: 'tt0137226', name: 'Szaffi', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0137226/img', releaseInfo: '1985', imdbRating: '8.1', description: 'Jókai Mór A cigánybáró című regényéből készült klasszikus Dargay Attila rajzfilm.' },
+  { id: 'tt0142632', name: 'Lúdas Matyi', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0142632/img', releaseInfo: '1977', imdbRating: '7.9', description: 'Fazekas Mihály elbeszélő költeményének klasszikus rajzfilmváltozata Dargay Attila rendezésében.' },
   { id: 'tt0303184', name: 'Valami Amerika', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0303184/img', releaseInfo: '2002', imdbRating: '7.2', description: 'Herendi Gábor sikeres magyar közönségfilmje a három testvérről és az amerikai producerről.' },
-  { id: 'tt0120461', name: 'Csinibaba', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0120461/img', releaseInfo: '1997', imdbRating: '7.6', description: 'Tímár Péter zenés retro vígjátéka a hatvanas évek Ki mit tud? versenyéről.' },
-  { id: 'tt0120546', name: 'A miniszter félrelép', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0120546/img', releaseInfo: '1997', imdbRating: '7.0', description: 'Kern András és Koltai Róbert fergeteges helyzetkomédiája.' },
-  { id: 'tt0063462', name: 'A Pál utcai fiúk', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0063462/img', releaseInfo: '1968', imdbRating: '8.2', description: 'Molnár Ferenc világhírű regényének Oscar-díjra jelölt adaptációja Fábri Zoltán rendezésében.' },
+  { id: 'tt0118906', name: 'Csinibaba', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0118906/img', releaseInfo: '1997', imdbRating: '7.6', description: 'Tímár Péter zenés retro vígjátéka a hatvanas évek Ki mit tud? versenyéről.' },
+  { id: 'tt0119677', name: 'A miniszter félrelép', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0119677/img', releaseInfo: '1997', imdbRating: '7.0', description: 'Kern András és Koltai Róbert fergeteges helyzetkomédiája.' },
+  { id: 'tt0062164', name: 'A Pál utcai fiúk', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0062164/img', releaseInfo: '1968', imdbRating: '8.2', description: 'Molnár Ferenc világhírű regényének Oscar-díjra jelölt adaptációja Fábri Zoltán rendezésében.' },
   { id: 'tt0062925', name: 'Egri csillagok', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0062925/img', releaseInfo: '1968', imdbRating: '8.0', description: 'Gárdonyi Géza történelmi regényének monumentális filmváltozata Várkonyi Zoltán rendezésében.' },
-  { id: 'tt0388182', name: 'Kontroll', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0388182/img', releaseInfo: '2003', imdbRating: '7.6', description: 'Antal Nimród kultikus thriller-vígjátéka a budapesti metró ellenőrökről Csányi Sándor főszereplésével.' },
-  { id: 'tt6067832', name: 'Kincsem', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt6067832/img', releaseInfo: '2017', imdbRating: '7.2', description: 'A legyőzhetetlen magyar csodakanca látványos kalandfilmje Nagy Ervin főszereplésével.' },
-  { id: 'tt0082806', name: 'Mephisto', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0082806/img', releaseInfo: '1981', imdbRating: '7.7', description: 'Szabó István Oscar-díjas filmdrámája Klaus Maria Brandauer főszereplésével.' },
-  { id: 'tt0108188', name: 'Sose halunk meg', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0108188/img', releaseInfo: '1993', imdbRating: '7.9', description: 'Koltai Róbert megható és humoros története Gyuszi bácsiról, a vállfás ügynökről.' },
-  { id: 'tt0074195', name: 'Az ötödik pecsét', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0074195/img', releaseInfo: '1976', imdbRating: '8.6', description: 'Fábri Zoltán filmtörténeti remekműve Latinovits Zoltán és Őze Lajos főszereplésével.' },
-  { id: 'tt0087219', name: 'Az élet muzsikája - Kálmán Imre', type: 'movie', poster: 'https://cdn.cms.mtv.hu/wp-content/uploads/sites/4/2017/11/KalmanImre_16-9.jpg', releaseInfo: '1984', imdbRating: '7.3', description: 'Életrajzi zenés film Kálmán Imre zeneszerző életéről Huszti Péter főszereplésével.' }
+  { id: 'tt0373981', name: 'Kontroll', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0373981/img', releaseInfo: '2003', imdbRating: '7.6', description: 'Antal Nimród kultikus thriller-vígjátéka a budapesti metró ellenőrökről Csányi Sándor főszereplésével.' },
+  { id: 'tt4964310', name: 'Kincsem', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt4964310/img', releaseInfo: '2017', imdbRating: '7.2', description: 'A legyőzhetetlen magyar csodakanca látványos kalandfilmje Nagy Ervin főszereplésével.' },
+  { id: 'tt0082736', name: 'Mephisto', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0082736/img', releaseInfo: '1981', imdbRating: '7.7', description: 'Szabó István Oscar-díjas filmdrámája Klaus Maria Brandauer főszereplésével.' },
+  { id: 'tt0108194', name: 'Sose halunk meg', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0108194/img', releaseInfo: '1993', imdbRating: '7.9', description: 'Koltai Róbert megható és humoros története Gyuszi bácsiról, a vállfás ügynökről.' },
+  { id: 'tt0075467', name: 'Az ötödik pecsét', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0075467/img', releaseInfo: '1976', imdbRating: '8.6', description: 'Fábri Zoltán filmtörténeti remekműve Latinovits Zoltán és Őze Lajos főszereplésével.' },
+  { id: 'tt0059812', name: 'A tizedes meg a többiek', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0059812/img', releaseInfo: '1965', imdbRating: '8.4', description: 'Keleti Márton felejthetetlen háborús vígjátéka Sinkovits Imre, Darvas Iván és Major Tamás főszereplésével.' }
 ];
 
 /**
@@ -120,20 +121,20 @@ const VERIFIED_POPULAR_SERIES_POOL = [
  *Catalog Definitions
  */
 const CATALOG_DEFINITIONS = [
-  // 1. Live TV & MTVA Archive
-  {
-    id: 'hu-live-tv',
-    name: '🔴 Magyar Élő TV (M4 Sport, M1, Duna)',
+  // 1. Live TV Catalogs (6 Categories in Popularity Order)
+  ...ONLINESTREAM_CATEGORIES.map(c => ({
+    id: c.id,
+    name: c.name,
     type: 'movie',
-    category: 'tv',
-    description: 'M4 Sport, M1, Duna, M2, M5 és magyar élő televíziócsatornák közvetlen 1080p HLS adása.',
+    category: 'livetv',
+    description: c.description,
     defaultEnabled: true
-  },
+  })),
   {
     id: 'hu-mediaklikk-classics',
     name: '🏛️ MédiaKlikk Klasszikusok (MTVA)',
     type: 'series',
-    category: 'tv',
+    category: 'classics',
     description: '30 ellenőrzött magyar retro sorozat és klasszikus az MTVA archívumából + Magyar népmesék.',
     defaultEnabled: true
   },
@@ -400,7 +401,7 @@ async function fetchTwoTmdbPages(buildUrlFn, isSeries = false, allowRecentDays =
 /**
  * Fetches catalog items for a given catalog ID and options
  */
-async function fetchCatalogItems(catalogId, type, { search = '', skip = 0 } = {}) {
+async function fetchCatalogItems(catalogId, type, { search = '', skip = 0, hostUrl = null } = {}) {
   const isSeries = type === 'series' || catalogId.includes('series');
   const page = Math.floor(skip / 20) + 1;
   const weekSeed = getWeeklyRotationSeed();
@@ -419,6 +420,33 @@ async function fetchCatalogItems(catalogId, type, { search = '', skip = 0 } = {}
   if (items.length === 0) {
     try {
       switch (catalogId) {
+      case 'hu-live-orszagos':
+      case 'hu-live-film':
+      case 'hu-live-doksi':
+      case 'hu-live-sport':
+      case 'hu-live-gyerek':
+      case 'hu-live-helyi':
+      case 'hu-live-tv': {
+        const liveChannels = getOnlineStreamChannels(catalogId === 'hu-live-tv' ? 'all' : catalogId, search, hostUrl);
+        items = liveChannels.map(ch => ({
+          id: ch.id,
+          name: ch.name,
+          type: 'movie',
+          poster: ch.poster,
+          background: ch.background,
+          logo: ch.logo,
+          description: ch.description,
+          releaseInfo: ch.releaseInfo || 'ÉLŐ • TV',
+          year: ch.year || 'ÉLŐ • TV',
+          posterShape: 'poster',
+          behaviorHints: {
+            defaultVideoId: ch.id,
+            isLive: true
+          }
+        }));
+        break;
+      }
+
       case 'hu-trending-movies': {
         if (page === 1) {
           const verifiedRotated = rotateWeekly([...VERIFIED_POPULAR_MOVIES_POOL], catalogId, 0);

@@ -13,6 +13,7 @@ const {
 } = require('./scrapers/mediaklikk');
 const { searchNetMozi, getNetMoziSeriesEpisodes } = require('./scrapers/netmozi');
 const { fetchCatalogItems, rotateWeekly } = require('./catalogs');
+const { getOnlineStreamChannels, getOnlineStreamMeta } = require('./scrapers/onlinestream');
 
 function normalize(str) {
   return (str || '')
@@ -352,8 +353,18 @@ async function executeMultiSourceSearch(type, query) {
   return results;
 }
 
+const CATALOG_SEARCH_CACHE = new Map();
+const SEARCH_CACHE_TTL_MS = 5 * 60 * 1000;
+
 async function searchCatalog(type, query, catalogId = null, extra = {}) {
   const skipNum = typeof extra === 'number' ? extra : (extra?.skip || 0);
+  const cacheKey = String(type || 'all') + ':' + String(catalogId || 'all') + ':' + String(query || '').trim().toLowerCase() + ':' + String(skipNum);
+  if (query) {
+    const cached = CATALOG_SEARCH_CACHE.get(cacheKey);
+    if (cached && (Date.now() - cached.timestamp < SEARCH_CACHE_TTL_MS)) {
+      return cached.data;
+    }
+  }
 
   // If dynamic toplist or streaming catalog requested (TMDB / Mafab)
   if (catalogId && (
@@ -364,7 +375,6 @@ async function searchCatalog(type, query, catalogId = null, extra = {}) {
     catalogId.startsWith('hu-stream-')
   )) {
     if (!query) {
-      return await fetchCatalogItems(catalogId, type, { search: '', skip: skipNum });
     }
     const shelfResults = await fetchCatalogItems(catalogId, type, { search: query, skip: skipNum });
     const searchResults = await executeMultiSourceSearch(type, query);
@@ -406,30 +416,25 @@ async function searchCatalog(type, query, catalogId = null, extra = {}) {
   }
 
   // If Live TV catalog requested (either by catalog id or by type)
-  if (catalogId === 'hu-live-tv' || catalogId === 'hu-live-tv-channel' || type === 'tv' || type === 'channel') {
-    const list = LIVE_CHANNELS.map(ch => ({
+  if (catalogId && (catalogId.startsWith('hu-live-') || catalogId === 'hu-live-tv' || catalogId === 'hu-live-tv-channel' || type === 'tv' || type === 'channel')) {
+    const baseHost = (extra && extra.hostUrl) || process.env.HOST_URL || 'https://nuvio-magyar-http.vercel.app';
+    const list = getOnlineStreamChannels(catalogId === 'hu-live-tv' ? 'all' : catalogId, query, baseHost).map(ch => ({
       id: ch.id,
       name: ch.name,
       type: type || 'movie',
       poster: ch.poster,
-      background: ch.poster,
+      background: ch.background,
       logo: ch.logo,
       description: ch.description,
-      releaseInfo: ch.year || 'ÉLŐ • 1080p FHD',
-      year: ch.year || 'ÉLŐ • 1080p FHD',
+      releaseInfo: ch.releaseInfo || 'ÉLŐ • TV',
+      year: ch.year || 'ÉLŐ • TV',
       posterShape: 'poster',
       behaviorHints: {
         defaultVideoId: ch.id,
         isLive: true
       }
     }));
-    if (!query) return list;
-    const qNorm = normalize(query);
-    return list.filter(ch => 
-      normalize(ch.name).includes(qNorm) || 
-      normalize(ch.description).includes(qNorm) ||
-      ch.channelKey.includes(qNorm)
-    );
+    return list;
   }
 
   if (!query) {
@@ -450,7 +455,9 @@ async function searchCatalog(type, query, catalogId = null, extra = {}) {
     return [...liveItems, ...FEATURED_HUNGARIAN_MOVIES, ...FEATURED_HUNGARIAN_SERIES];
   }
 
-  return await executeMultiSourceSearch(type, query);
+  const searchOut = await executeMultiSourceSearch(type, query);
+  if (query) CATALOG_SEARCH_CACHE.set(cacheKey, { data: searchOut, timestamp: Date.now() });
+  return searchOut;
 }
 
 const TMDB_API_KEY = 'ffe7ef8916c61835264d2df68276ddc2';
@@ -688,11 +695,15 @@ function scoreItemRelevance(itemTitle, query, itemId = '') {
   return baseScore;
 }
 
-async function getMeta(type, id) {
+async function getMeta(type, id, hostUrl = null) {
   if (!id) return null;
+  const baseHost = hostUrl || process.env.HOST_URL || 'https://nuvio-magyar-http.vercel.app';
 
-  // Handle Live TV channels
-  if (type === 'tv' || type === 'channel' || type === 'movie' || (id && id.startsWith('mediaklikk-live-'))) {
+  // Handle Live TV channels (OnlineStream or MédiaKlikk)
+  if (type === 'tv' || type === 'channel' || (id && (id.startsWith('onlinestream-live-') || id.startsWith('mediaklikk-live-')))) {
+    const onlineMeta = getOnlineStreamMeta(id, baseHost);
+    if (onlineMeta) return onlineMeta;
+
     const channel = LIVE_CHANNELS.find(ch => ch.id === id || ch.channelKey === id);
     if (channel) {
       return {

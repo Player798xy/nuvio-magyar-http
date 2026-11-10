@@ -407,7 +407,7 @@ async function scrapeHDMozi(meta) {
       });
     }
 
-    console.log(`[HDMozi] Extracted ${streams.length} stream(s) for "${title}"`);
+    // query log removed for privacy
   } catch (err) {
     console.warn('[HDMozi] Scraper error:', err.message);
   }

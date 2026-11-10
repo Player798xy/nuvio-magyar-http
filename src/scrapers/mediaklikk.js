@@ -988,26 +988,27 @@ async function getLiveChannelStreams(channelIdOrKey, clientIp = null, hostUrl = 
 
   return [
     {
-      name: `🔴 ${channel.name} [1080p FHD Élő Közvetítés]`,
-      title: `⚡ Hivatalos MTVA CDN Élő Közvetítés (1080p Full HD)\n${channel.description}\nKözvetlen adás TV-re és mobilra optimalizálva.`,
-      url: hlsUrl,
-      playerUrl: officialPageUrl,
-      quality: '1080p',
-      height: 1080,
-      source: 'mediaklikk',
+      name: `⚡ ${channel.name} — 1080p FHD (HLS Proxy)`,
+      title: `🚀 ${channel.name} • Akadozásmentes HLS Proxy\n1080p Full HD • Azonnali Nuvio / ExoPlayer Indulás\nHivatalos MTVA Forrás`,
+      url: `${hostUrl}/proxy/hls.m3u8?url=${encodeURIComponent(hlsUrl)}`,
       behaviorHints: {
         notWebReady: false,
         isLive: true
       }
     },
     {
-      name: `🔴 ${channel.name} [1080p FHD Azonnali Rewriter]`,
-      title: `⚡ 1080p FULL HD AZONNALI INDÍTÁS • MTVA HLS Rewriter\n${channel.description}\nKözvetlen 1080p indítás az első másodperctől, nulla felbontásugrálás.`,
+      name: `🔴 ${channel.name} — 1080p FHD (.m3u8)`,
+      title: `📡 Hivatalos MTVA CDN Élő Közvetítés (1080p Full HD .m3u8)\n${channel.description}\nKözvetlen HLS adás TV-re és mobilra optimalizálva.`,
+      url: hlsUrl,
+      behaviorHints: {
+        notWebReady: false,
+        isLive: true
+      }
+    },
+    {
+      name: `🔴 ${channel.name} — Auto (.m3u8)`,
+      title: `📡 1080p FULL HD Adaptív MTVA HLS (.m3u8)\n${channel.description}\nKözvetlen 1080p indítás az első másodperctől, nulla felbontásugrálás.`,
       url: instant1080Url,
-      playerUrl: officialPageUrl,
-      quality: '1080p',
-      height: 1080,
-      source: 'mediaklikk',
       behaviorHints: {
         notWebReady: false,
         isLive: true
@@ -1336,6 +1337,7 @@ module.exports = {
   getReorderedMasterPlaylist,
   getRewrittenMasterPlaylist: getReorderedMasterPlaylist,
   getLiveChannelStreams,
+  getMediaKlikkLiveStreams: getLiveChannelStreams,
   getMediaKlikkPrograms,
   getMediaKlikkSeriesEpisodes,
   scrapeMediaKlikk

@@ -1,0 +1,1272 @@
+{
+  "1035": {
+    "name": "TV Eger",
+    "working": [
+      {
+        "url": "https://stream.tveger.hu:8012/live.m3u8",
+        "isMaster": false,
+        "host": "stream.tveger.hu"
+      }
+    ]
+  },
+  "1802": {
+    "name": "City TV",
+    "working": [
+      {
+        "url": "https://citytv.hu:443/playlist.m3u8",
+        "isMaster": false,
+        "host": "citytv.hu"
+      }
+    ]
+  },
+  "1811": {
+    "name": "Kanizsa TV",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/kanizsavtv.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      },
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/kanizsavtv.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "1812": {
+    "name": "TV Keszthely",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/keszthelyivtv.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      },
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/keszthelyivtv.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "1815": {
+    "name": "Fehérvár TV",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE046.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "1819": {
+    "name": "Budapest Európa Televízió",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/bpetv.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "1821": {
+    "name": "Gyöngyösi TV",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE043.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "1829": {
+    "name": "Zalaegerszegi Televízió",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/zegtv.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "1853": {
+    "name": "Nyíregyházi Televízió",
+    "working": [
+      {
+        "url": "https://nytvlive.hu:443/nytv/playlist.m3u8",
+        "isMaster": false,
+        "host": "nytvlive.hu"
+      }
+    ]
+  },
+  "1901": {
+    "name": "Kecskeméti Televízió",
+    "working": [
+      {
+        "url": "http://rtmp1.40e.hu:8000/live/ktv.m3u8",
+        "isMaster": false,
+        "host": "rtmp1.40e.hu"
+      },
+      {
+        "url": "http://rtmp1.40e.hu:8000/live/ktv.m3u8",
+        "isMaster": false,
+        "host": "rtmp1.40e.hu"
+      }
+    ]
+  },
+  "4247": {
+    "name": "Debrecen Televízió",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/livestream002.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "4590": {
+    "name": "Komáromi Televízió",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE017.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      },
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE017.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "4650": {
+    "name": "Móri Városi TV",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE041.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "4695": {
+    "name": "Pannon RTV",
+    "working": [
+      {
+        "url": "https://stream2.nmih.hu:4102/live.m3u8",
+        "isMaster": false,
+        "host": "stream2.nmih.hu"
+      }
+    ]
+  },
+  "4699": {
+    "name": "Halom TV",
+    "working": [
+      {
+        "url": "http://212.92.13.108:8080/live/livestream1.m3u8",
+        "isMaster": true,
+        "host": "212.92.13.108"
+      }
+    ]
+  },
+  "4738": {
+    "name": "Ózdi Városi Televízió",
+    "working": [
+      {
+        "url": "https://stream.nmih.hu:7982/live.m3u8",
+        "isMaster": false,
+        "host": "stream.nmih.hu"
+      },
+      {
+        "url": "https://stream.nmih.hu:7982/live.m3u8",
+        "isMaster": false,
+        "host": "stream.nmih.hu"
+      },
+      {
+        "url": "http://stream.nmih.hu:7980/live.m3u8",
+        "isMaster": false,
+        "host": "stream.nmih.hu"
+      }
+    ]
+  },
+  "4739": {
+    "name": "ATV",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/ATV_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      }
+    ]
+  },
+  "4788": {
+    "name": "Szolnok TV",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "4792": {
+    "name": "XVTV",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE051.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "4798": {
+    "name": "EWTN",
+    "working": [
+      {
+        "url": "https://hls.iptvservice.eu:443/hls/ewtn-hd.m3u8",
+        "isMaster": false,
+        "host": "hls.iptvservice.eu"
+      }
+    ]
+  },
+  "5026": {
+    "name": "Líceum TV",
+    "working": [
+      {
+        "url": "http://193.225.32.62:8890/live.m3u8",
+        "isMaster": false,
+        "host": "193.225.32.62"
+      }
+    ]
+  },
+  "5137": {
+    "name": "Kapos TV",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast004.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "5425": {
+    "name": "7.tv",
+    "working": [
+      {
+        "url": "https://stream.y5.hu:443/stream/stream_bekescsaba/stream.m3u8",
+        "isMaster": false,
+        "host": "stream.y5.hu"
+      }
+    ]
+  },
+  "5462": {
+    "name": "TV13",
+    "working": [
+      {
+        "url": "https://tv13.medialivecdn.hu:443/tv13/3e4c201d9e403330d294e24760e49164.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "tv13.medialivecdn.hu"
+      }
+    ]
+  },
+  "5656": {
+    "name": "Vásárhelyi Televízió",
+    "working": [
+      {
+        "url": "https://stream.vasarhelyitelevizio.hu:443/stream/stream.m3u8",
+        "isMaster": false,
+        "host": "stream.vasarhelyitelevizio.hu"
+      }
+    ]
+  },
+  "5838": {
+    "name": "TelePaks",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay02/livestream004.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "5855": {
+    "name": "Euronews",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/EuroNews_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/EuroNews_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://cdn-euronews.akamaized.net:443/live/eds/euronews-hu/25075/index.m3u8",
+        "isMaster": true,
+        "host": "cdn-euronews.akamaized.net"
+      }
+    ]
+  },
+  "5901": {
+    "name": "M1",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/M1_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://gradetv.net:443/api/s/M1.hu:HD:8787.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "5902": {
+    "name": "M2 / Petőfi TV",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/M2.hu:SD:8792.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "5903": {
+    "name": "M4 Sport",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/M4_Sport_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      }
+    ]
+  },
+  "5904": {
+    "name": "M5",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/M5_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://gradetv.net:443/api/s/M5.hu:SD:8798.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "5905": {
+    "name": "Duna",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/Duna_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://gradetv.net:443/api/s/Duna.hu:SD:5871.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "5906": {
+    "name": "Duna World / M4 Sport+",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/DunaWorld.hu:SD:5873.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "5911": {
+    "name": "Viasat 3",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Viasat3.hu:SD:16394.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "5913": {
+    "name": "Balaton TV",
+    "working": [
+      {
+        "url": "https://stream.iptvservice.eu:443/hls/balatontv.m3u8",
+        "isMaster": false,
+        "host": "stream.iptvservice.eu"
+      },
+      {
+        "url": "https://stream.iptvservice.eu:443/hls/balatontv.m3u8",
+        "isMaster": false,
+        "host": "stream.iptvservice.eu"
+      },
+      {
+        "url": "http://stream.iptvservice.eu:80/hls/balatontv.m3u8",
+        "isMaster": false,
+        "host": "stream.iptvservice.eu"
+      }
+    ]
+  },
+  "5927": {
+    "name": "Apostol TV",
+    "working": [
+      {
+        "url": "https://live.apostoltv.hu:443/live/playlist.m3u8",
+        "isMaster": true,
+        "host": "live.apostoltv.hu"
+      }
+    ]
+  },
+  "5936": {
+    "name": "National Geographic",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/NationalGeographic.hu:SD:9787.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "5937": {
+    "name": "National Geographic Wild",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/NationalGeographicWild.hu:SD:9808.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6141": {
+    "name": "RTL",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/RTL_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/RTL_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://cdn.mediaklikk.org:2082/rtl_0YjMxATM5EDO.m3u8",
+        "isMaster": false,
+        "host": "cdn.mediaklikk.org"
+      },
+      {
+        "url": "https://m3m8.gradetv.net:443/api/s/RTL.hu%3ASD%3Ahf6083936cade3711c894e3ebac6bc1b7?via=grade",
+        "isMaster": true,
+        "host": "m3m8.gradetv.net"
+      }
+    ]
+  },
+  "6142": {
+    "name": "RTL Kettő",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/RTLKetto.hu:SD:12556.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6143": {
+    "name": "TV2",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/TV2_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/TV2_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://cdn.mediaklikk.org:2082/tv2_0YjMxATM5EDO.m3u8",
+        "isMaster": false,
+        "host": "cdn.mediaklikk.org"
+      },
+      {
+        "url": "https://m3m8.gradetv.net:443/api/s/TV2.hu%3ASD%3Ah66d8a8e8a3d1038652a0709d94a0f4a6.m3u8",
+        "isMaster": true,
+        "host": "m3m8.gradetv.net"
+      }
+    ]
+  },
+  "6144": {
+    "name": "ESTV - A térség televíziója",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE040.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "6146": {
+    "name": "Cool TV",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/Cool_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      }
+    ]
+  },
+  "6147": {
+    "name": "RTL Három",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/RTLHarom.hu:SD:12555.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6148": {
+    "name": "RTL Gold",
+    "working": [
+      {
+        "url": "https://budapest-cache-1.antik.sk:443/live/test_film_plus_2_hungary_1200_atk/playlist.m3u8",
+        "isMaster": false,
+        "host": "budapest-cache-1.antik.sk"
+      },
+      {
+        "url": "https://budapest-cache-1.antik.sk:443/live/test_film_plus_2_hungary_1200_atk/playlist.m3u8",
+        "isMaster": false,
+        "host": "budapest-cache-1.antik.sk"
+      },
+      {
+        "url": "https://gradetv.net:443/api/s/RTLGold.hu:SD:12553.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6149": {
+    "name": "Sorozat+",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/SorozatPlus.hu:SD:13632.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6150": {
+    "name": "Film+",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/Film+_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/Film+_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://gradetv.net:443/api/s/FilmPlus.hu:SD:6529.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6151": {
+    "name": "Muzsika TV",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/MuzsikaTV.hu:SD:9659.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6152": {
+    "name": "Mozi+",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/Mozi+_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/Mozi+_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://gradetv.net:443/api/s/MoziPlus.hu:SD:9444.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6159": {
+    "name": "Sláger TV",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/SlagerTV.hu:SD:13498.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6162": {
+    "name": "Zenebutik",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Zenebutik.hu:SD:17121.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6163": {
+    "name": "Izaura TV - A romantikus sorozatok rabjainak",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/Izaura_TV_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/Izaura_TV_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://gradetv.net:443/api/s/IzauraTV.hu:SD:7838.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6184": {
+    "name": "TV4",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/TV4_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/TV4_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://gradetv.net:443/api/s/TV4.hu:SD:15267.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6236": {
+    "name": "Viasat 6",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Viasat6.hu:SD:16395.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6254": {
+    "name": "Film4",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/Film4_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/Film4_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://gradetv.net:443/api/s/Film4.hu:SD:6487.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6455": {
+    "name": "FEM3",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/FEM3.hu:SD:6439.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6589": {
+    "name": "Spektrum Home",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/Spektrum_Home_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/Spektrum_Home_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://cdn.mediaklikk.org:2082/spektrumhome_0YjMxATM5EDO.m3u8",
+        "isMaster": false,
+        "host": "cdn.mediaklikk.org"
+      }
+    ]
+  },
+  "6603": {
+    "name": "Life TV",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/LifeTV.hu:SD:8641.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6638": {
+    "name": "Oroszlányi Városi Televízió",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast002.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "6652": {
+    "name": "AMC",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/AMC_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      }
+    ]
+  },
+  "6676": {
+    "name": "Móra-Net TV - A térség televíziója",
+    "working": [
+      {
+        "url": "https://stream.moranettv.hu:443/live/index.m3u8",
+        "isMaster": false,
+        "host": "stream.moranettv.hu"
+      }
+    ]
+  },
+  "6701": {
+    "name": "Jocky TV",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/JockyTV.hu:SD:7973.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6704": {
+    "name": "Prime",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Prime.hu:SD:11599.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6705": {
+    "name": "Nicktoons",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Nicktoons.hu:SD:10177.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6707": {
+    "name": "TV2 Kids",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/TV2Kids.hu:SD:15245.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6718": {
+    "name": "Sport 1",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/Sport_1_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/Sport_1_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://gradetv.net:443/api/s/Sport1.hu:SD:13734.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6719": {
+    "name": "Sport 2",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/Sport_2_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/Sport_2_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://gradetv.net:443/api/s/Sport2.hu:SD:13738.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6720": {
+    "name": "Moziverzum",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Moziverzum.hu:SD:9445.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6721": {
+    "name": "Spíler 1",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Spiler1.hu:SD:13725.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6722": {
+    "name": "Spíler 2",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Spiler2.hu:SD:13726.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6723": {
+    "name": "Super TV2",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/SuperTV2.hu:SD:14067.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6748": {
+    "name": "TV Paprika",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/TV_Paprika_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      }
+    ]
+  },
+  "6749": {
+    "name": "Spektrum",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/Spektrum_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/Spektrum_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://gradetv.net:443/api/s/Spektrum.hu:SD:13719.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6751": {
+    "name": "TLC",
+    "working": [
+      {
+        "url": "http://88.212.7.14:80/live/tlc_hungary/index.m3u8",
+        "isMaster": false,
+        "host": "88.212.7.14"
+      }
+    ]
+  },
+  "6764": {
+    "name": "Nickelodeon",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Nickelodeon.hu:SD:10127.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "6765": {
+    "name": "Nick Jr",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/NickJr.hu:SD:10158.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "7060": {
+    "name": "TV2 Comedy",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/TV2Comedy.hu:SD:15244.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "7069": {
+    "name": "HBO",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/HBO_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      }
+    ]
+  },
+  "7074": {
+    "name": "Film Café",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/FilmCafe.hu:Hungary:6522.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "7079": {
+    "name": "Minimax",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Minimax.hu:SD:9212.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "7080": {
+    "name": "JimJam",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/JimJam.hu:SD:7958.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "7084": {
+    "name": "Arena4",
+    "working": [
+      {
+        "url": "https://m3m8.gradetv.net:443/api/s/Arena4.hu%3ASD%3Ahb714938e342762caf6e3f167878e7ac8.m3u8",
+        "isMaster": true,
+        "host": "m3m8.gradetv.net"
+      }
+    ]
+  },
+  "7087": {
+    "name": "TV2 Séf",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/TV2Sef.hu:SD:15246.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "7154": {
+    "name": "AXN Black",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/axn_black/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      }
+    ]
+  },
+  "7158": {
+    "name": "HBO2",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/HBO_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      }
+    ]
+  },
+  "7159": {
+    "name": "HBO3",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/HBO3_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      }
+    ]
+  },
+  "7325": {
+    "name": "History",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/History.hu:SD:7313.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "7371": {
+    "name": "Bicskei Városi Televízió",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay02/broadcast003.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "7374": {
+    "name": "Hévízi TV",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "7422": {
+    "name": "Galaxy 4",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/Galaxy4_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/Galaxy4_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://budapest-cache-1.antik.sk:443/live/test_galaxy_4_atk_1200/playlist.m3u8",
+        "isMaster": false,
+        "host": "budapest-cache-1.antik.sk"
+      },
+      {
+        "url": "https://gradetv.net:443/api/s/Galaxy4.hu:SD:6806.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "8124": {
+    "name": "Ozone TV",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/OzoneTV.hu:SD:10728.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "8271": {
+    "name": "Match 4",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/Match4_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      }
+    ]
+  },
+  "8489": {
+    "name": "Magyar Mozi TV",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/MagyarMoziTV.hu:SD:8843.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "8714": {
+    "name": "Max4",
+    "working": [
+      {
+        "url": "http://141.94.193.53:80/MAX4_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "http://141.94.193.53:80/MAX4_HD/index.m3u8",
+        "isMaster": true,
+        "host": "141.94.193.53"
+      },
+      {
+        "url": "https://cdn.mediaklikk.org:2082/max4_0YjMxATM5EDO.m3u8",
+        "isMaster": false,
+        "host": "cdn.mediaklikk.org"
+      }
+    ]
+  },
+  "8716": {
+    "name": "Viasat 2",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Viasat2.hu:SD:16393.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "8999": {
+    "name": "RTV-2 Vajdaság",
+    "working": [
+      {
+        "url": "http://212.200.230.50:1935/RTV/rtv2/playlist.m3u8",
+        "isMaster": true,
+        "host": "212.200.230.50"
+      }
+    ]
+  },
+  "9068": {
+    "name": "Sixo TV",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE038.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "9073": {
+    "name": "RTV-1 Vajdaság",
+    "working": [
+      {
+        "url": "http://212.200.230.50:1935/RTV/rtv2/playlist.m3u8",
+        "isMaster": true,
+        "host": "212.200.230.50"
+      }
+    ]
+  },
+  "9081": {
+    "name": "Gran TV - Esztergom és térsége televíziója",
+    "working": [
+      {
+        "url": "https://grantv.medialivecdn.hu:443/gran/51328567842cc1ba78b4b851ee9c46b4.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "grantv.medialivecdn.hu"
+      }
+    ]
+  },
+  "9309": {
+    "name": "Kölyökklub",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Kolyokklub.hu:SD:8335.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "9310": {
+    "name": "Moziklub",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Moziklub.hu:SD:9443.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "9311": {
+    "name": "RTL Otthon",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/RTLOtthon.hu:SD:12557.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "9312": {
+    "name": "Sorozatklub",
+    "working": [
+      {
+        "url": "https://gradetv.net:443/api/s/Sorozatklub.hu:SD:13631.m3u8?via=grade",
+        "isMaster": true,
+        "host": "gradetv.net"
+      }
+    ]
+  },
+  "9332": {
+    "name": "Cegléd Városi TV",
+    "working": [
+      {
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE031.sdp/playlist.m3u8",
+        "isMaster": true,
+        "host": "cloudfront44.lexanetwork.com"
+      }
+    ]
+  },
+  "9787": {
+    "name": "TCL",
+    "working": [
+      {
+        "url": "https://m3m8.gradetv.net:443/api/s/TLC.hu%3ASD%3Ahf8e1737fc1316e7280f335874d18a060.m3u8",
+        "isMaster": true,
+        "host": "m3m8.gradetv.net"
+      }
+    ]
+  }
+}
