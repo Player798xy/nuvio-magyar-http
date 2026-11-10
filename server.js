@@ -324,43 +324,7 @@ app.get(configuredStreamRoutes, handleStream);
 
 // 7. Live TV HLS Master Playlist Rewriter (Orders 1080p Full HD first so Nuvio starts in 1080p)
 
-// 7b. Universal High-Performance HLS Streaming Proxy with Rolling Buffer & Chunk Prefetching
-const SLIDING_WINDOW_MAP = new Map(); // targetUrl -> { segments: Map<seq, { inf, absUrl, seq }>, targetDuration, updatedAt }
-const CHUNK_CACHE = new Map(); // chunkUrl -> { buffer: Buffer, contentType: string, timestamp: number }
-const MAX_CHUNK_CACHE_COUNT = 60;
-
-function pruneChunkCache() {
-  while (CHUNK_CACHE.size > MAX_CHUNK_CACHE_COUNT) {
-    const oldestKey = CHUNK_CACHE.keys().next().value;
-    CHUNK_CACHE.delete(oldestKey);
-  }
-}
-
-// Background prefetcher for the next segment in a stream
-function triggerNextChunkPrefetch(currentChunkUrl, upstreamHeaders) {
-  for (const [playlistUrl, win] of SLIDING_WINDOW_MAP.entries()) {
-    const segList = Array.from(win.segments.values());
-    const idx = segList.findIndex(s => s.absUrl === currentChunkUrl);
-    if (idx !== -1 && idx + 1 < segList.length) {
-      const nextSeg = segList[idx + 1];
-      if (nextSeg && !CHUNK_CACHE.has(nextSeg.absUrl)) {
-        fetch(nextSeg.absUrl, {
-          headers: upstreamHeaders,
-          signal: AbortSignal.timeout(6000)
-        }).then(async res => {
-          if (res.ok) {
-            const buf = Buffer.from(await res.arrayBuffer());
-            const ct = res.headers.get('content-type') || 'video/mp2t';
-            CHUNK_CACHE.set(nextSeg.absUrl, { buffer: buf, contentType: ct, timestamp: Date.now() });
-            pruneChunkCache();
-          }
-        }).catch(() => {});
-      }
-      break;
-    }
-  }
-}
-
+// 7b. Universal High-Performance HLS Streaming Proxy
 app.get(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
@@ -401,20 +365,6 @@ app.get(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
     upstreamHeaders['Referer'] = `${parsed.protocol}//${parsed.host}/`;
   }
 
-  // Check in-memory chunk cache first for media chunks! (0 ms delivery)
-  const cachedChunk = CHUNK_CACHE.get(targetUrl);
-  if (cachedChunk) {
-    res.status(200);
-    res.setHeader('Content-Type', cachedChunk.contentType || 'video/mp2t');
-    res.setHeader('Content-Length', cachedChunk.buffer.length);
-    res.setHeader('Cache-Control', 'public, max-age=86400, immutable');
-    res.setHeader('Accept-Ranges', 'bytes');
-    res.end(cachedChunk.buffer);
-
-    triggerNextChunkPrefetch(targetUrl, upstreamHeaders);
-    return;
-  }
-
   const controller = new AbortController();
   req.on('close', () => controller.abort());
 
@@ -447,71 +397,18 @@ app.get(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
       const isMediaPlaylist = text.includes('#EXTINF:');
 
       if (isMediaPlaylist) {
-        // Live Media Playlist: Expand buffer window so players have 20-35s of content!
+        // Live Media Playlist: Szigorú valós idejű szinkronizáció
+        // Pontosan megőrizzük az upstream #EXT-X-MEDIA-SEQUENCE, #EXTINF és #EXT-X-DISCONTINUITY tageket,
+        // így elkerüljük az ismétlődő részeket, visszaugrásokat és puffer-hurkokat!
         const lines = text.split(/\r?\n/);
-        let seq = 0;
-        let targetDuration = 6;
-        const seqMatch = text.match(/#EXT-X-MEDIA-SEQUENCE:(\d+)/);
-        if (seqMatch) seq = parseInt(seqMatch[1], 10);
-        const tdMatch = text.match(/#EXT-X-TARGETDURATION:(\d+)/);
-        if (tdMatch) targetDuration = parseInt(tdMatch[1], 10);
-
-        let win = SLIDING_WINDOW_MAP.get(targetUrl);
-        if (!win || (Date.now() - win.updatedAt > 90000)) {
-          win = { segments: new Map(), targetDuration, updatedAt: Date.now() };
-          SLIDING_WINDOW_MAP.set(targetUrl, win);
-        }
-        win.updatedAt = Date.now();
-        if (targetDuration) win.targetDuration = targetDuration;
-
-        let currentInf = null;
-        let currentSeq = seq;
-        for (let i = 0; i < lines.length; i++) {
-          const l = lines[i].trim();
-          if (l.startsWith('#EXTINF:')) {
-            currentInf = l;
-          } else if (currentInf && !l.startsWith('#') && l.length > 0) {
-            try {
-              const absUrl = new URL(l, targetUrl).toString();
-              win.segments.set(currentSeq, {
-                inf: currentInf,
-                absUrl,
-                seq: currentSeq
-              });
-              currentSeq++;
-            } catch (e) {}
-            currentInf = null;
-          }
-        }
-
-        // Keep last 12 segments in rolling map
-        const sortedSeqs = Array.from(win.segments.keys()).sort((a, b) => a - b);
-        while (sortedSeqs.length > 12) {
-          const dropSeq = sortedSeqs.shift();
-          win.segments.delete(dropSeq);
-        }
-
-        const activeSegments = sortedSeqs.map(s => win.segments.get(s)).filter(Boolean);
-        const minMediaSeq = activeSegments.length > 0 ? activeSegments[0].seq : seq;
-
         const outLines = [];
-        let segmentsEmitted = false;
 
         for (let i = 0; i < lines.length; i++) {
           const l = lines[i].trim();
           if (!l) continue;
 
-          if (l.startsWith('#EXT-X-MEDIA-SEQUENCE:')) {
-            outLines.push(`#EXT-X-MEDIA-SEQUENCE:${minMediaSeq}`);
-          } else if (l.startsWith('#EXTINF:') || (!l.startsWith('#') && l.length > 0)) {
-            if (!segmentsEmitted) {
-              segmentsEmitted = true;
-              for (const seg of activeSegments) {
-                outLines.push(seg.inf);
-                outLines.push(`${hostUrl}/proxy/hls?url=${encodeURIComponent(seg.absUrl)}`);
-              }
-            }
-          } else {
+          if (l.startsWith('#')) {
+            // URI="..." attribútumok átírása (pl. feliratok, hangok, kulcsok)
             const rewritten = l.replace(/URI=["']([^"']+)["']/g, (match, uri) => {
               try {
                 const absUri = new URL(uri, targetUrl).toString();
@@ -523,6 +420,14 @@ app.get(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
               }
             });
             outLines.push(rewritten);
+          } else {
+            // Szegmens URL átírása proxy végpontra
+            try {
+              const absUrl = new URL(l, targetUrl).toString();
+              outLines.push(`${hostUrl}/proxy/hls?url=${encodeURIComponent(absUrl)}`);
+            } catch (e) {
+              outLines.push(l);
+            }
           }
         }
 
@@ -578,20 +483,6 @@ app.get(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
 
     if (upstreamRes.body) {
       const nodeStream = Readable.fromWeb(upstreamRes.body);
-      const chunks = [];
-      nodeStream.on('data', chunk => {
-        chunks.push(chunk);
-      });
-      nodeStream.on('end', () => {
-        const fullBuf = Buffer.concat(chunks);
-        CHUNK_CACHE.set(targetUrl, {
-          buffer: fullBuf,
-          contentType: contentType || 'video/mp2t',
-          timestamp: Date.now()
-        });
-        pruneChunkCache();
-        triggerNextChunkPrefetch(targetUrl, upstreamHeaders);
-      });
       nodeStream.on('error', () => {
         if (!res.headersSent) {
           try { res.status(502).end(); } catch (e) {}
