@@ -892,6 +892,8 @@ app.get('/api/netmozi-debug', async (req, res) => {
         headers: pageRes.headers,
         bodyLen: pageRes.body ? pageRes.body.length : 0,
         attrs,
+        csrfMatches: pageRes.body ? pageRes.body.match(/[a-zA-Z0-9_-]*csrf[a-zA-Z0-9_-]*(=["'][^"']*["'])?/gi) : null,
+        tokenMatches: pageRes.body ? pageRes.body.match(/[a-zA-Z0-9_-]*token[a-zA-Z0-9_-]*(=["'][^"']*["'])?/gi) : null,
         bodySnippet: pageRes.body ? pageRes.body.slice(0, 400) : ''
       };
       const dStreams = await scrapeNetMoziDetailPage(req.query.detailUrl, testTitle, getClientIp(req), new Map(), testSeason, testEpisode);
