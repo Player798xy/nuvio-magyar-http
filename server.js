@@ -346,6 +346,20 @@ app.get(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
     return res.status(400).send('#EXTM3U\n#EXT-X-ERROR: Invalid target URL\n');
   }
 
+  // Vercel Fast Origin Transfer védelem:
+  // A bináris média szegmenseket (.ts, .m4s, .aac, .mp4) soha ne streameljük át Vercel szerverless függvényeken (10 GB kvóta limit)!
+  // Helyette azonnali HTTP 302-vel átirányítjuk a klienst az eredeti CDN-re (0 bájt Vercel forgalom, nulla akadozás).
+  const isLikelySegment = !targetUrl.includes('.m3u8') &&
+                          !targetUrl.includes('api/s/') &&
+                          !targetUrl.includes('faixa=') &&
+                          (targetUrl.includes('.ts') || targetUrl.includes('.m4s') || targetUrl.includes('.aac') || targetUrl.includes('.mp4'));
+
+  if (isLikelySegment) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'public, max-age=86400, immutable');
+    return res.redirect(302, targetUrl);
+  }
+
   const host = parsed.hostname.toLowerCase();
   const upstreamHeaders = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
@@ -413,18 +427,21 @@ app.get(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
               try {
                 const absUri = new URL(uri, targetUrl).toString();
                 const isSubPl = absUri.includes('.m3u8') || absUri.includes('api/s/') || absUri.includes('faixa=');
-                const ep = isSubPl ? '/proxy/hls.m3u8' : '/proxy/hls';
-                return `URI="${hostUrl}${ep}?url=${encodeURIComponent(absUri)}"`;
+                if (isSubPl) {
+                  return `URI="${hostUrl}/proxy/hls.m3u8?url=${encodeURIComponent(absUri)}"`;
+                }
+                return `URI="${absUri}"`;
               } catch (e) {
                 return match;
               }
             });
             outLines.push(rewritten);
           } else {
-            // Szegmens URL átírása proxy végpontra
+            // Közvetlen szegmens URL (CDN): Zero Vercel sávszélesség-fogyasztás, nulla 10 GB limit terhelés!
+            // A TV és lejátszók közvetlenül a forrás CDN-ről kapják a biteket maximális sebességgel.
             try {
               const absUrl = new URL(l, targetUrl).toString();
-              outLines.push(`${hostUrl}/proxy/hls?url=${encodeURIComponent(absUrl)}`);
+              outLines.push(absUrl);
             } catch (e) {
               outLines.push(l);
             }
@@ -445,8 +462,10 @@ app.get(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
             try {
               const absUri = new URL(uri, targetUrl).toString();
               const isSubPl = absUri.includes('.m3u8') || absUri.includes('api/s/') || absUri.includes('faixa=');
-              const ep = isSubPl ? '/proxy/hls.m3u8' : '/proxy/hls';
-              return `URI="${hostUrl}${ep}?url=${encodeURIComponent(absUri)}"`;
+              if (isSubPl) {
+                return `URI="${hostUrl}/proxy/hls.m3u8?url=${encodeURIComponent(absUri)}"`;
+              }
+              return `URI="${absUri}"`;
             } catch (e) {
               return match;
             }
@@ -456,8 +475,10 @@ app.get(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
         try {
           const absUrl = new URL(trimmed, targetUrl).toString();
           const isSubPlaylist = absUrl.includes('.m3u8') || absUrl.includes('faixa=') || absUrl.includes('api/s/');
-          const proxyEndpoint = isSubPlaylist ? '/proxy/hls.m3u8' : '/proxy/hls';
-          return `${hostUrl}${proxyEndpoint}?url=${encodeURIComponent(absUrl)}`;
+          if (isSubPlaylist) {
+            return `${hostUrl}/proxy/hls.m3u8?url=${encodeURIComponent(absUrl)}`;
+          }
+          return absUrl;
         } catch (e) {
           return line;
         }
@@ -466,31 +487,11 @@ app.get(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
       return res.send(rewritten.join('\n'));
     }
 
-    // Binary media segment (.ts, .m4s, .aac, .mp4)
-    if (upstreamRes.status === 206) {
-      res.status(206);
-      const contentRange = upstreamRes.headers.get('content-range');
-      if (contentRange) res.setHeader('Content-Range', contentRange);
-    } else {
-      res.status(200);
-    }
-
-    const contentLength = upstreamRes.headers.get('content-length');
-    if (contentLength) res.setHeader('Content-Length', contentLength);
-    res.setHeader('Content-Type', contentType || 'video/mp2t');
+    // Binary media segment fallback (.ts, .m4s, .aac, .mp4)
+    // Sávszélesség-védelem: 302 átirányítás a forrás CDN-re, soha ne húzzunk le sok megabájtot a szerverless függvényben!
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Cache-Control', 'public, max-age=86400, immutable');
-    res.setHeader('Accept-Ranges', 'bytes');
-
-    if (upstreamRes.body) {
-      const nodeStream = Readable.fromWeb(upstreamRes.body);
-      return pipeline(nodeStream, res, (err) => {
-        if (err && !res.headersSent) {
-          try { res.status(502).end(); } catch (e) {}
-        }
-      });
-    } else {
-      return res.end();
-    }
+    return res.redirect(302, targetUrl);
   } catch (err) {
     if (controller.signal.aborted) return;
     if (!res.headersSent) {
