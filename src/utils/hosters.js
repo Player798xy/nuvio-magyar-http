@@ -38,6 +38,8 @@ async function extractVidmoly(embedUrl, sourceLabel = 'Vidmoly', customTitle = '
         name: `🇭🇺 ${sourceLabel}\nHD HLS`,
         title: `🎬 ${customTitle || sourceLabel}\n📺 HD HLS (m3u8) • 🔊 Magyar • 🌐 Vidmoly Direct`,
         url: m3u8[1],
+        playerUrl: url,
+        externalUrl: url,
         quality: 1080,
         isHls: true,
         headers: {
@@ -133,6 +135,8 @@ async function extractVoe(embedUrl, sourceLabel = 'VOE', customTitle = '', clien
             name: `🇭🇺 ${sourceLabel}\nHD HLS`,
             title: `🎬 ${customTitle || sourceLabel}\n📺 HD HLS (m3u8) • 🔊 Magyar • 🌐 VOE Direct`,
             url: data.source,
+            playerUrl: currentUrl,
+            externalUrl: currentUrl,
             quality: 1080,
             isHls: true,
             headers
@@ -143,6 +147,8 @@ async function extractVoe(embedUrl, sourceLabel = 'VOE', customTitle = '', clien
             name: `🇭🇺 ${sourceLabel}\nMP4`,
             title: `🎬 ${customTitle || sourceLabel}\n📺 Direct MP4 • 🔊 Magyar • 🌐 VOE Direct`,
             url: data.direct_access_url,
+            playerUrl: currentUrl,
+            externalUrl: currentUrl,
             quality: 720,
             headers
           });

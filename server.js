@@ -856,33 +856,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-app.get('/api/debug-hosters', async (req, res) => {
-  const { extractVoe, extractVidmoly, resolveAnyEmbed } = require('./src/utils/hosters');
-  const clientIp = getClientIp(req);
-  const results = { clientIp };
-  try {
-    results.voe = await extractVoe('https://voe.sx/0pzy2oqywvu7', 'NetMozi', 'test', clientIp);
-    if (results.voe && results.voe.length > 0) {
-      const vHlsRes = await fetch(results.voe[0].url, { headers: results.voe[0].headers });
-      results.voeHlsStatus = vHlsRes.status;
-      results.voeHlsLength = (await vHlsRes.text()).length;
-    }
-  } catch (e) {
-    results.voeError = e.message;
-  }
-  try {
-    results.vidmoly = await extractVidmoly('https://vidmoly.me/w/42jj5q0kxuri', 'NetMozi', 'test', clientIp);
-    if (results.vidmoly && results.vidmoly.length > 0) {
-      const vidRes = await fetch(results.vidmoly[0].url, { headers: results.vidmoly[0].headers });
-      results.vidmolyStatus = vidRes.status;
-      results.vidmolyLength = (await vidRes.text()).length;
-    }
-  } catch (e) {
-    results.vidmolyError = e.message;
-  }
-  res.json(results);
-});
-
 // Configure Route & Index Page (supports ?old=1 or /old for legacy UI)
 app.get('/old', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.old.html'));
