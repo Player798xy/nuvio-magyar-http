@@ -1,0 +1,2298 @@
+[
+  {
+    "id": "16tvBudapest.hu",
+    "name": "16tv Budapest",
+    "slug": "16tv-budapest",
+    "logo_url": "https://gradetv.net/logos/16tvBudapest.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/16tvBudapest.hu%3ASD%3A2085.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/freerelay/16tv.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 3598
+      }
+    ]
+  },
+  {
+    "id": "7TV.hu",
+    "name": "7.TV",
+    "slug": "7-tv",
+    "logo_url": "https://gradetv.net/logos/7TV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/7TV.hu%3ASD%3A2033.m3u8",
+        "provider_url": "https://stream.y5.hu/stream/stream_bekescsaba/stream.m3u8",
+        "feed": "SD",
+        "latency_ms": 2502
+      }
+    ]
+  },
+  {
+    "id": "ATV.hu",
+    "name": "ATV",
+    "slug": "atv-7",
+    "logo_url": "https://gradetv.net/logos/ATV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ATV.hu%3ASD%3A3141.m3u8",
+        "provider_url": "https://stream.atv.hu/atvlive/atvstream_2_aac/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10488
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ATV.hu%3ASD%3A3142.m3u8",
+        "provider_url": "https://streamservers.atv.hu/atvlive/atvstream_1_aac/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10229
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ATV.hu%3ASD%3Ahda66db61ab5b7a2358d4b38ec63fecb0.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_atv_hungary_1200_atk/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 216
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ATV.hu%3Afree-tv%3Ah1243a5a0c9e7110c64209348b9ee22fe.m3u8",
+        "provider_url": "http://141.94.193.53:80/ATV_HD/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "ATVSpirit.hu",
+    "name": "ATV Spirit",
+    "slug": "atv-spirit",
+    "logo_url": "https://gradetv.net/logos/ATVSpirit.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ATVSpirit.hu%3ASD%3A3164.m3u8",
+        "provider_url": "https://streamservers.atv.hu/atvliveedge/_definst_/atvstream_2_aac/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10001
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ATVSpirit.hu%3ASD%3Ah8675f09aedd818eb8b91421296733a4f.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_atv_spirit/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 324
+      }
+    ]
+  },
+  {
+    "id": "AXNSpin.hu",
+    "name": "AXN Spin",
+    "slug": "axn-spin",
+    "logo_url": "https://gradetv.net/logos/AXNSpin.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/AXNSpin.hu%3APoland%3A3257.m3u8",
+        "provider_url": "https://polska.hach.workers.dev/14847.m3u8",
+        "feed": "Poland",
+        "latency_ms": 2168
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/AXNSpin.hu%3ASD%3A3258.m3u8",
+        "provider_url": "https://cronos.mangora1.cfd/spyn/usergencs85ja0j1rrnd.m3u8",
+        "feed": "SD",
+        "latency_ms": 723
+      }
+    ]
+  },
+  {
+    "id": "AlfoldTV.hu",
+    "name": "Alfold TV",
+    "slug": "alfold-tv",
+    "logo_url": "https://gradetv.net/logos/AlfoldTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/AlfoldTV.hu%3ASD%3A2525.m3u8",
+        "provider_url": "https://cloudfront41.lexanetwork.com:1344/relay01/livestream006.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 4167
+      }
+    ]
+  },
+  {
+    "id": "AnimalPlanet.hu",
+    "name": "Animal Planet",
+    "slug": "animal-planet-10",
+    "logo_url": "https://static.wikia.nocookie.net/logopedia/images/3/30/Animal_Planet_2018_II.svg/revision/latest?cb=20191206182106",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/AnimalPlanet.hu%3ASD%3Ahe6a49505498c493eb4a4b186ec1bd1a7.m3u8",
+        "provider_url": "http://88.212.7.14/live/animal_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 125
+      }
+    ]
+  },
+  {
+    "id": "ApostolTV.hu",
+    "name": "Apostol TV",
+    "slug": "apostol-tv",
+    "logo_url": "https://gradetv.net/logos/ApostolTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ApostolTV.hu%3ASD%3A2912.m3u8",
+        "provider_url": "https://live.apostoltv.hu/live/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 2828
+      }
+    ]
+  },
+  {
+    "id": "Arena4.hu",
+    "name": "Arena4",
+    "slug": "arena4",
+    "logo_url": "https://i.imgur.com/uAaQDr6.png",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Arena4.hu%3ASD%3Ahb714938e342762caf6e3f167878e7ac8.m3u8",
+        "provider_url": "http://88.212.7.14/live/arena4/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 270
+      }
+    ]
+  },
+  {
+    "id": "BTV.hu",
+    "name": "BTV",
+    "slug": "btv-2",
+    "logo_url": "https://gradetv.net/logos/BTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/BTV.hu%3ASD%3A4015.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/freerelay/babolnatv.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 3155
+      }
+    ]
+  },
+  {
+    "id": "BajaiTV.hu",
+    "name": "Bajai TV",
+    "slug": "bajai-tv",
+    "logo_url": "https://gradetv.net/logos/BajaiTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/BajaiTV.hu%3ASD%3A3344.m3u8",
+        "provider_url": "https://cloudfront41.lexanetwork.com:1344/relay01/livestream002.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 3950
+      }
+    ]
+  },
+  {
+    "id": "BalatonTV.hu",
+    "name": "Balaton TV",
+    "slug": "balaton-tv",
+    "logo_url": "https://gradetv.net/logos/BalatonTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/BalatonTV.hu%3ASD%3A3351.m3u8",
+        "provider_url": "https://stream.iptvservice.eu/hls/balatontv.m3u8",
+        "feed": "SD",
+        "latency_ms": 2508
+      }
+    ]
+  },
+  {
+    "id": "BartokRadio.hu",
+    "name": "Bartók Rádió",
+    "slug": "bartok-radio-2",
+    "logo_url": "https://upload.wikimedia.org/wikipedia/hu/c/ce/MR3-BARTOK.png?utm_source=hu.wikipedia.org&utm_campaign=index&utm_content=original",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/BartokRadio.hu%3Afree-tv%3Ah0868d5c90c342a741eb9f3ac485e0559.m3u8",
+        "provider_url": "https://budapest-cache-1.antik.sk/live/bartok_radio/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "BerenteTV.hu",
+    "name": "Berente TV",
+    "slug": "berente-tv",
+    "logo_url": "https://gradetv.net/logos/BerenteTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/BerenteTV.hu%3ASD%3A3685.m3u8",
+        "provider_url": "https://stream.streaming4u.hu/BerenteTV/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 3618
+      }
+    ]
+  },
+  {
+    "id": "BudapestEuropaTelevizio.hu",
+    "name": "Budapest Europa Televizio",
+    "slug": "budapest-europa-televizio",
+    "logo_url": "https://gradetv.net/logos/BudapestEuropaTelevizio.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/BudapestEuropaTelevizio.hu%3ASD%3A4028.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/freerelay/bpetv.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 2339
+      }
+    ]
+  },
+  {
+    "id": "CityTV.hu",
+    "name": "City TV",
+    "slug": "city-tv-4",
+    "logo_url": "https://gradetv.net/logos/CityTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/CityTV.hu%3ASD%3A5001.m3u8",
+        "provider_url": "https://citytv.hu/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 2078
+      }
+    ]
+  },
+  {
+    "id": "Cool.hu",
+    "name": "Cool",
+    "slug": "cool-2",
+    "logo_url": "https://media.port.hu/images/001/591/100x100/760.jpg",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Cool.hu%3Afree-tv%3Ah906fc3e0f3728d14d9decbe4dedfa1cb.m3u8",
+        "provider_url": "http://141.94.193.53:80/Cool_HD/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "CsurgoTV.hu",
+    "name": "Csurgo TV",
+    "slug": "csurgo-tv",
+    "logo_url": "https://gradetv.net/logos/CsurgoTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/CsurgoTV.hu%3ASD%3A5286.m3u8",
+        "provider_url": "https://cstv.medialivecdn.hu/csurgotv/27725804dc13aa23b3970414524d2dbf.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 2238
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/CsurgoTV.hu%3ASD%3A5287.m3u8",
+        "provider_url": "http://79.120.178.90:1935/csurgotv/csurgolive/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10488
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/CsurgoTV.hu%3ASD%3A5288.m3u8",
+        "provider_url": "https://5cd03f21c7193.streamlock.net/csurgotv/csurgolive/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10257
+      }
+    ]
+  },
+  {
+    "id": "DSTV.hu",
+    "name": "DSTV",
+    "slug": "dstv-2",
+    "logo_url": "https://gradetv.net/logos/DSTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/DSTV.hu%3ASD%3A5839.m3u8",
+        "provider_url": "http://79.120.178.90:1935/dstv/dstvlive/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10070
+      }
+    ]
+  },
+  {
+    "id": "DTV.hu",
+    "name": "DTV",
+    "slug": "dtv-2",
+    "logo_url": "https://gradetv.net/logos/DTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/DTV.hu%3ASD%3A5841.m3u8",
+        "provider_url": "http://cloudfront44.lexanetwork.com:1732/hlsrelay003/hls/livestream.sdp.m3u8",
+        "feed": "SD",
+        "latency_ms": 2111
+      }
+    ]
+  },
+  {
+    "id": "DankoRadio.hu",
+    "name": "Dankó Rádió",
+    "slug": "danko-radio-2",
+    "logo_url": "https://upload.wikimedia.org/wikipedia/hu/c/c4/Danko-radio-logo.png?utm_source=hu.wikipedia.org&utm_campaign=index&utm_content=original",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/DankoRadio.hu%3Afree-tv%3Ah12b6ac8f219e981c2f80198eab91151b.m3u8",
+        "provider_url": "https://icast.connectmedia.hu/4747/mr7.aac",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "DaruTV.hu",
+    "name": "Daru TV",
+    "slug": "daru-tv",
+    "logo_url": "https://gradetv.net/logos/DaruTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/DaruTV.hu%3ASD%3A5408.m3u8",
+        "provider_url": "https://5cd03f21c7193.streamlock.net/darutv/darutvlive/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10410
+      }
+    ]
+  },
+  {
+    "id": "DikhTV.hu",
+    "name": "Dikh TV",
+    "slug": "dikh-tv",
+    "logo_url": "https://gradetv.net/logos/DikhTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/DikhTV.hu%3ASD%3Ah42c38bf4cd3312eecda6ca1252dcb9df.m3u8",
+        "provider_url": "http://88.212.7.14/live/dikh/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 99
+      }
+    ]
+  },
+  {
+    "id": "DiscoveryChannel.hu",
+    "name": "Discovery Channel",
+    "slug": "discovery-channel-10",
+    "logo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/2019_Discovery_logo.svg/960px-2019_Discovery_logo.svg.png",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/DiscoveryChannel.hu%3ASD%3Ahcb466bb867301bd6546a396b2133e133.m3u8",
+        "provider_url": "http://88.212.7.14/live/discovery_hungary/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 125
+      }
+    ]
+  },
+  {
+    "id": "DisneyChannel.hu",
+    "name": "Disney Channel",
+    "slug": "disney-channel-7",
+    "logo_url": "https://gradetv.net/logos/DisneyChannel.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/DisneyChannel.hu%3ASD%3Ahe17cdd0d579805c208ab84ae0663738c.m3u8",
+        "provider_url": "http://193.33.39.108:9019/play/a00n",
+        "feed": "SD",
+        "latency_ms": 227
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/DisneyChannel.hu%3ASD%3Ahe678b067b6f5e5fccb9a70f2692cb1bd.m3u8",
+        "provider_url": "http://88.212.7.14/live/disney_channel_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 126
+      }
+    ]
+  },
+  {
+    "id": "Duna.hu",
+    "name": "Duna",
+    "slug": "duna",
+    "logo_url": "https://gradetv.net/logos/Duna.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Duna.hu%3ASD%3Ah2794468769cc760fd6ce20379bf3e387.m3u8",
+        "provider_url": "http://88.212.7.14/live/duna_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 99
+      }
+    ]
+  },
+  {
+    "id": "DunaWorld.hu",
+    "name": "Duna World",
+    "slug": "duna-world",
+    "logo_url": "https://gradetv.net/logos/DunaWorld.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/DunaWorld.hu%3ASD%3Ahcbe499f1e107c6064f201195be32c03e.m3u8",
+        "provider_url": "http://88.212.7.14/live/duna_world_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 104
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/DunaWorld.hu%3Afree-tv%3Ah7bd8c4628fe7bf9116a149e2dc7b55b1.m3u8",
+        "provider_url": "http://141.94.193.53:80/Duna_World_M4_Sport+_HD/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "ESTV.hu",
+    "name": "ESTV",
+    "slug": "estv",
+    "logo_url": "https://gradetv.net/logos/ESTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ESTV.hu%3ASD%3A6191.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE032.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 1610
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ESTV.hu%3ASD%3A6192.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE040.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 2681
+      }
+    ]
+  },
+  {
+    "id": "BonumTV.hu",
+    "name": "EWTN TV",
+    "slug": "ewtn-tv",
+    "logo_url": "https://gradetv.net/logos/BonumTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/BonumTV.hu%3Afree-tv%3A211.m3u8",
+        "provider_url": "https://hls.iptvservice.eu/hls/ewtn-hd.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "EWTNBonumTV.hu",
+    "name": "EWTN/Bonum TV",
+    "slug": "ewtn-bonum-tv",
+    "logo_url": "https://gradetv.net/logos/EWTNBonumTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/EWTNBonumTV.hu%3ASD%3A6316.m3u8",
+        "provider_url": "https://dash2.antik.sk/live/ewtn_bonum/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 2538
+      }
+    ]
+  },
+  {
+    "id": "EgykerTV.hu",
+    "name": "Egyker TV",
+    "slug": "egyker-tv",
+    "logo_url": "https://gradetv.net/logos/EgykerTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/EgykerTV.hu%3ASD%3A5974.m3u8",
+        "provider_url": "https://iptv01.eurocable.co.hu/EC-EGYKERTVHD/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 10467
+      }
+    ]
+  },
+  {
+    "id": "Eurosport1.hu",
+    "name": "EuroSport1",
+    "slug": "eurosport1",
+    "logo_url": "https://files.cdn.magio.tv/tv_logos/eurosport-1-hd.png",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Eurosport1.hu%3Afree-tv%3Ahad6db7a7690bf1ac6b9ff88215f7518e.m3u8",
+        "provider_url": "http://141.94.193.53:80/Eurosport_1_HD/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "FEM3.hu",
+    "name": "FEM3",
+    "slug": "fem3",
+    "logo_url": "https://gradetv.net/logos/FEM3.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/FEM3.hu%3ASD%3Ah1fa44163e2be4480d85fbf5305220b84.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_fem3_atktv/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 154
+      }
+    ]
+  },
+  {
+    "id": "FIXTV.hu",
+    "name": "FIX TV",
+    "slug": "fix-tv",
+    "logo_url": "https://gradetv.net/logos/FIXTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/FIXTV.hu%3ASD%3A6561.m3u8",
+        "provider_url": "https://fixhd.tv:8082/fix/1080i/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 3408
+      }
+    ]
+  },
+  {
+    "id": "FehervarTV.hu",
+    "name": "Fehervar TV",
+    "slug": "fehervar-tv",
+    "logo_url": "https://gradetv.net/logos/FehervarTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/FehervarTV.hu%3ASD%3A6440.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/freerelay/fehervartv.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 4148
+      }
+    ]
+  },
+  {
+    "id": "FilmCafe.hu",
+    "name": "Film Cafe",
+    "slug": "film-cafe",
+    "logo_url": "https://gradetv.net/logos/FilmCafe.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/FilmCafe.hu%3AHungary%3Aha1d37b4e2be581b337ebf214c16fef08.m3u8",
+        "provider_url": "http://88.212.7.14/live/film_cafe/index.m3u8",
+        "feed": "Hungary",
+        "latency_ms": 120
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/FilmCafe.hu%3ARomania%3A6525.m3u8",
+        "provider_url": "https://atlantida1.aquax1.cfd/cofyfilm/usergendxn8lzrnd.m3u8",
+        "feed": "Romania",
+        "latency_ms": 1003
+      }
+    ]
+  },
+  {
+    "id": "FilmMania.hu",
+    "name": "Film Mania",
+    "slug": "film-mania",
+    "logo_url": "https://gradetv.net/logos/FilmMania.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/FilmMania.hu%3ASD%3Ah7ae0df6fa220ceba59c0965792b3bfbd.m3u8",
+        "provider_url": "http://205.237.104.26:8080/stream/340/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 10231
+      }
+    ]
+  },
+  {
+    "id": "FilmPlus.hu",
+    "name": "Film+",
+    "slug": "film-2",
+    "logo_url": "https://gradetv.net/logos/FilmPlus.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/FilmPlus.hu%3ASD%3Ah67e925e5063a665152fe6b957952fe27.m3u8",
+        "provider_url": "http://88.212.7.14/live/film_plus_hun_atk/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 99
+      }
+    ]
+  },
+  {
+    "id": "Film4.hu",
+    "name": "Film4",
+    "slug": "film4",
+    "logo_url": "https://gradetv.net/logos/Film4.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Film4.hu%3ASD%3Ahf2d12259a66c2cea1d04274bb9b6f0c8.m3u8",
+        "provider_url": "http://88.212.7.14/live/film4_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 317
+      }
+    ]
+  },
+  {
+    "id": "FoodNetwork.hu",
+    "name": "Food Network",
+    "slug": "food-network-9",
+    "logo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Food_Network_New_Logo.png/960px-Food_Network_New_Logo.png",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/FoodNetwork.hu%3ASD%3Ah3e5d3b4360fba079948c3626841e35ba.m3u8",
+        "provider_url": "http://88.212.7.14/live/fn_hungary/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 337
+      }
+    ]
+  },
+  {
+    "id": "Galaxy4.hu",
+    "name": "Galaxy4",
+    "slug": "galaxy4",
+    "logo_url": "https://gradetv.net/logos/Galaxy4.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Galaxy4.hu%3ASD%3A6808.m3u8",
+        "provider_url": "https://budapest-cache-1.antik.sk/live/test_galaxy_4_atk_1200/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 1429
+      }
+    ]
+  },
+  {
+    "id": "GloboTV.hu",
+    "name": "Globo TV",
+    "slug": "globo-tv-2",
+    "logo_url": "https://gradetv.net/logos/GloboTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/GloboTV.hu%3ASD%3A6950.m3u8",
+        "provider_url": "https://stream.streaming4u.hu/GloboTV/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 3058
+      }
+    ]
+  },
+  {
+    "id": "GolyaTV.hu",
+    "name": "Golya TV",
+    "slug": "golya-tv",
+    "logo_url": "https://gradetv.net/logos/GolyaTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/GolyaTV.hu%3ASD%3A7015.m3u8",
+        "provider_url": "https://stream.streaming4u.hu/GolyaTV/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 2438
+      }
+    ]
+  },
+  {
+    "id": "GranTV.hu",
+    "name": "Gran TV",
+    "slug": "gran-tv",
+    "logo_url": "https://gradetv.net/logos/GranTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/GranTV.hu%3ASD%3A7053.m3u8",
+        "provider_url": "https://stream.medialive.hu/gran/grantvlive/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10280
+      }
+    ]
+  },
+  {
+    "id": "GyongyosiTV.hu",
+    "name": "Gyongyosi TV",
+    "slug": "gyongyosi-tv",
+    "logo_url": "https://gradetv.net/logos/GyongyosiTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/GyongyosiTV.hu%3ASD%3A7140.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE043.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 2799
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/GyongyosiTV.hu%3ASD%3A7141.m3u8",
+        "provider_url": "https://cloudfront41.lexanetwork.com:1344/relay02/livestream005.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 3036
+      }
+    ]
+  },
+  {
+    "id": "HGTV.hu",
+    "name": "HGTV",
+    "slug": "hgtv-10",
+    "logo_url": "https://i.imgur.com/KMcR9z9.png",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/HGTV.hu%3ASD%3Ahbfb42720c447580dbea923563adb760c.m3u8",
+        "provider_url": "http://88.212.7.14/live/hgtv_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 125
+      }
+    ]
+  },
+  {
+    "id": "HangulatTV.hu",
+    "name": "Hangulat TV",
+    "slug": "hangulat-tv",
+    "logo_url": "https://gradetv.net/logos/HangulatTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/HangulatTV.hu%3ASD%3A7179.m3u8",
+        "provider_url": "https://iptv01.eurocable.co.hu/EC-HANGULATTV/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 10376
+      }
+    ]
+  },
+  {
+    "id": "HegyvidekTV.hu",
+    "name": "Hegyvidek TV",
+    "slug": "hegyvidek-tv",
+    "logo_url": "https://gradetv.net/logos/HegyvidekTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/HegyvidekTV.hu%3ASD%3A7236.m3u8",
+        "provider_url": "https://iptv02.eurocable.co.hu:15400/EC-HEGYVIDEKTV-FTA/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 1635
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/HegyvidekTV.hu%3ASD%3A7237.m3u8",
+        "provider_url": "https://tv.hegyvidek.hu/stream_mpeg.flv",
+        "feed": "SD",
+        "latency_ms": 3010
+      }
+    ]
+  },
+  {
+    "id": "HeviziTV.hu",
+    "name": "Hevizi TV",
+    "slug": "hevizi-tv",
+    "logo_url": "https://gradetv.net/logos/HeviziTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/HeviziTV.hu%3ASD%3A7262.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 3129
+      }
+    ]
+  },
+  {
+    "id": "HirTV.hu",
+    "name": "Hir TV",
+    "slug": "hir-tv",
+    "logo_url": "https://gradetv.net/logos/HirTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/HirTV.hu%3Afree-tv%3Ah8e2bda4ddc24c0e4c944d6edeab2b43a.m3u8",
+        "provider_url": "https://video11.videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "History.hu",
+    "name": "History",
+    "slug": "history-7",
+    "logo_url": "https://gradetv.net/logos/History.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/History.hu%3ASD%3Ahcbd246de3c789c2a8dc1da3cb6dc2d30.m3u8",
+        "provider_url": "http://88.212.7.14/live/history_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 99
+      }
+    ]
+  },
+  {
+    "id": "InvestigationDiscovery.hu",
+    "name": "Investigation Discovery",
+    "slug": "investigation-discovery-5",
+    "logo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/InvestigationDiscoveryLogo2020.svg/960px-InvestigationDiscoveryLogo2020.svg.png",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/InvestigationDiscovery.hu%3ASD%3Ahf8ff88717816b388afe55c6542f785e8.m3u8",
+        "provider_url": "http://88.212.7.14/live/id_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 210
+      }
+    ]
+  },
+  {
+    "id": "IzauraTV.hu",
+    "name": "Izaura TV",
+    "slug": "izaura-tv",
+    "logo_url": "https://gradetv.net/logos/IzauraTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/IzauraTV.hu%3ASD%3Ahf394f4eff0583739b8917956b9a0c90f.m3u8",
+        "provider_url": "http://88.212.7.14/live/izaura/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 170
+      }
+    ]
+  },
+  {
+    "id": "JaszsagiTersegiTV.hu",
+    "name": "Jaszsagi Tersegi TV",
+    "slug": "jaszsagi-tersegi-tv",
+    "logo_url": "https://gradetv.net/logos/JaszsagiTersegiTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/JaszsagiTersegiTV.hu%3ASD%3A7865.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast007.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 126
+      }
+    ]
+  },
+  {
+    "id": "JimJam.hu",
+    "name": "JimJam",
+    "slug": "jimjam",
+    "logo_url": "https://gradetv.net/logos/JimJam.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/JimJam.hu%3ASD%3Ahc2f91c3b2ffd0f8a338b55dc5cde039e.m3u8",
+        "provider_url": "http://88.212.7.14/live/jim_jam_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 138
+      }
+    ]
+  },
+  {
+    "id": "JockyTV.hu",
+    "name": "Jocky TV",
+    "slug": "jocky-tv",
+    "logo_url": "https://gradetv.net/logos/JockyTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/JockyTV.hu%3ASD%3Ahcd80d5de357f3a9f29d9617751ae849f.m3u8",
+        "provider_url": "http://88.212.7.14/live/jocky/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 154
+      }
+    ]
+  },
+  {
+    "id": "KanizsaTV.hu",
+    "name": "Kanizsa TV",
+    "slug": "kanizsa-tv",
+    "logo_url": "https://gradetv.net/logos/KanizsaTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/KanizsaTV.hu%3ASD%3A8119.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/freerelay/kanizsavtv.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 2960
+      }
+    ]
+  },
+  {
+    "id": "KaposTV.hu",
+    "name": "Kapos TV",
+    "slug": "kapos-tv",
+    "logo_url": "https://gradetv.net/logos/KaposTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/KaposTV.hu%3ASD%3A8130.m3u8",
+        "provider_url": "https://cloudfront63.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 4908
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/KaposTV.hu%3Afree-tv%3A214.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast004.sdp/playlist.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "KarcagTV.hu",
+    "name": "Karcag TV",
+    "slug": "karcag-tv",
+    "logo_url": "https://gradetv.net/logos/KarcagTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/KarcagTV.hu%3ASD%3A8135.m3u8",
+        "provider_url": "https://cloudfront41.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 2665
+      }
+    ]
+  },
+  {
+    "id": "KecskemetiTV.hu",
+    "name": "Kecskemeti TV",
+    "slug": "kecskemeti-tv",
+    "logo_url": "https://gradetv.net/logos/KecskemetiTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/KecskemetiTV.hu%3ASD%3A8174.m3u8",
+        "provider_url": "http://rtmp1.40e.hu:8000/live/ktv.m3u8",
+        "feed": "SD",
+        "latency_ms": 1744
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/KecskemetiTV.hu%3ASD%3A8175.m3u8",
+        "provider_url": "https://eurobioinvest.hu:444/live/ktv.m3u8",
+        "feed": "SD",
+        "latency_ms": 3033
+      }
+    ]
+  },
+  {
+    "id": "KiskorosTV.hu",
+    "name": "Kiskoros TV",
+    "slug": "kiskoros-tv",
+    "logo_url": "https://gradetv.net/logos/KiskorosTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/KiskorosTV.hu%3ASD%3A8278.m3u8",
+        "provider_url": "https://5cd03f21c7193.streamlock.net/kiskorostv/korostvlive/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10332
+      }
+    ]
+  },
+  {
+    "id": "Kolyokklub.hu",
+    "name": "Kolyokklub",
+    "slug": "kolyokklub",
+    "logo_url": "https://gradetv.net/logos/Kolyokklub.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Kolyokklub.hu%3ASD%3Ah2f76fff8d24e1f2f0f45d49b405364af.m3u8",
+        "provider_url": "http://88.212.7.14/live/kolyokklub_atk/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 320
+      }
+    ]
+  },
+  {
+    "id": "KomaromiTelevizio.hu",
+    "name": "Komaromi Televizio",
+    "slug": "komaromi-televizio",
+    "logo_url": "https://gradetv.net/logos/KomaromiTelevizio.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/KomaromiTelevizio.hu%3ASD%3A8326.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE017.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 162
+      }
+    ]
+  },
+  {
+    "id": "KomlosTV.hu",
+    "name": "Komlos TV",
+    "slug": "komlos-tv",
+    "logo_url": "https://gradetv.net/logos/KomlosTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/KomlosTV.hu%3ASD%3A8329.m3u8",
+        "provider_url": "https://stream.streaming4u.hu/KomlosTV/tracks-v1a1/mono.m3u8",
+        "feed": "SD",
+        "latency_ms": 2746
+      }
+    ]
+  },
+  {
+    "id": "KossuthRadio.hu",
+    "name": "Kossuth Rádió",
+    "slug": "kossuth-radio-3",
+    "logo_url": "https://upload.wikimedia.org/wikipedia/hu/6/69/Mr1.png?utm_source=hu.wikipedia.org&utm_campaign=index&utm_content=original",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/KossuthRadio.hu%3Afree-tv%3Ahfcdcb7c4055864d2828dbf67060fb072.m3u8",
+        "provider_url": "https://budapest-cache-1.antik.sk/live/kossuth_radio/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "LiceumTV.hu",
+    "name": "Liceum TV",
+    "slug": "liceum-tv",
+    "logo_url": "https://gradetv.net/logos/LiceumTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/LiceumTV.hu%3ASD%3A8612.m3u8",
+        "provider_url": "http://193.225.32.62:8890/live.m3u8",
+        "feed": "SD",
+        "latency_ms": 246
+      }
+    ]
+  },
+  {
+    "id": "LifeTV.hu",
+    "name": "Life TV",
+    "slug": "life-tv-3",
+    "logo_url": "https://gradetv.net/logos/LifeTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/LifeTV.hu%3ASD%3Ah9a6f5e75151cbaa5c3f00c23a77ac0f7.m3u8",
+        "provider_url": "http://88.212.7.14/live/lifetv/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 126
+      }
+    ]
+  },
+  {
+    "id": "Loversenykozvetites.hu",
+    "name": "Loverseny kozvetites",
+    "slug": "loverseny-kozvetites",
+    "logo_url": "https://gradetv.net/logos/Loversenykozvetites.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Loversenykozvetites.hu%3ASD%3A8729.m3u8",
+        "provider_url": "http://87.229.103.60:1935/liverelay/loverseny2.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10488
+      }
+    ]
+  },
+  {
+    "id": "M1.hu",
+    "name": "M1",
+    "slug": "m1",
+    "logo_url": "https://gradetv.net/logos/M1.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/M1.hu%3AHD%3Ah9dc76580db845f13ee56f1d4c07ddfb2.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_m_1_hungary_1200_atk/playlist.m3u8",
+        "feed": "HD",
+        "latency_ms": 266
+      }
+    ]
+  },
+  {
+    "id": "M2.hu",
+    "name": "M2",
+    "slug": "m2",
+    "logo_url": "https://gradetv.net/logos/M2.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/M2.hu%3ASD%3Ah72bdccb4c976e4728994a4852fb92f76.m3u8",
+        "provider_url": "http://88.212.7.14/live/m2_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 143
+      }
+    ]
+  },
+  {
+    "id": "M4Sport.hu",
+    "name": "M4 Sport",
+    "slug": "m4-sport",
+    "logo_url": "https://gradetv.net/logos/M4Sport.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/M4Sport.hu%3ASD%3Ah2c388977d6cbafd9c9614dc4fb054bed.m3u8",
+        "provider_url": "http://88.212.7.14/live/uatlmvixrr/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 163
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/M4Sport.hu%3ASD%3Ah50d542259abc0eb4ae2e238160ab7624.m3u8",
+        "provider_url": "http://88.212.7.14/live/m4_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 154
+      }
+    ]
+  },
+  {
+    "id": "M5.hu",
+    "name": "M5",
+    "slug": "m5",
+    "logo_url": "https://gradetv.net/logos/M5.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/M5.hu%3ASD%3Ah81b507e77410b005d0e650546bfe938a.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_m_5_hun_atk_1200/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 120
+      }
+    ]
+  },
+  {
+    "id": "MAX4.hu",
+    "name": "MAX4",
+    "slug": "max4",
+    "logo_url": "https://gradetv.net/logos/MAX4.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/MAX4.hu%3ASD%3Ah47850344b5c3103583cec6000e75c380.m3u8",
+        "provider_url": "http://141.94.193.53/MAX4_HD/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 1299
+      }
+    ]
+  },
+  {
+    "id": "MagyarMoziTV.hu",
+    "name": "Magyar Mozi TV",
+    "slug": "magyar-mozi-tv",
+    "logo_url": "https://gradetv.net/logos/MagyarMoziTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/MagyarMoziTV.hu%3ASD%3Ah526b36b8f6367452a1a5d41b7b2f797b.m3u8",
+        "provider_url": "http://88.212.7.14/live/mozi/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 144
+      }
+    ]
+  },
+  {
+    "id": "MakoiVarosiTelevizio.hu",
+    "name": "Makoi Varosi Televizio",
+    "slug": "makoi-varosi-televizio",
+    "logo_url": "https://gradetv.net/logos/MakoiVarosiTelevizio.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/MakoiVarosiTelevizio.hu%3ASD%3A8858.m3u8",
+        "provider_url": "http://makomedia.mikrohalo.hu/hls/makotv.m3u8",
+        "feed": "SD",
+        "latency_ms": 4264
+      }
+    ]
+  },
+  {
+    "id": "Match4.hu",
+    "name": "Match4",
+    "slug": "match4",
+    "logo_url": "https://gradetv.net/logos/Match4.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Match4.hu%3ASD%3Ahc38ffc01c7ce66366bd98028553a13ea.m3u8",
+        "provider_url": "http://141.94.193.53/Match4_HD/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 748
+      }
+    ]
+  },
+  {
+    "id": "MezokovesdiTelevizio.hu",
+    "name": "Mezokovesdi Televizio",
+    "slug": "mezokovesdi-televizio",
+    "logo_url": "https://gradetv.net/logos/MezokovesdiTelevizio.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/MezokovesdiTelevizio.hu%3ASD%3A9152.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/freerelay/mezokovesdvtv.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 7105
+      }
+    ]
+  },
+  {
+    "id": "Minimax.hu",
+    "name": "Minimax",
+    "slug": "minimax",
+    "logo_url": "https://gradetv.net/logos/Minimax.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Minimax.hu%3ASD%3Ah830e170de3450d133fa15a29687cd6e4.m3u8",
+        "provider_url": "http://88.212.7.14/live/minimax_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 142
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Minimax.hu%3Afree-tv%3Ahdb24e9df50ac589b9481553e03338574.m3u8",
+        "provider_url": "http://141.94.193.53:80/Minimax/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "MoraNetTV.hu",
+    "name": "Mora-Net TV",
+    "slug": "mora-net-tv",
+    "logo_url": "https://gradetv.net/logos/MoraNetTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/MoraNetTV.hu%3ASD%3A9360.m3u8",
+        "provider_url": "https://stream.moranettv.hu/live/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 2222
+      }
+    ]
+  },
+  {
+    "id": "MoziPlus.hu",
+    "name": "Mozi+",
+    "slug": "mozi",
+    "logo_url": "https://gradetv.net/logos/MoziPlus.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/MoziPlus.hu%3ASD%3Ahf5373b48622d5ca9168d297bbc1bb7b0.m3u8",
+        "provider_url": "http://88.212.7.14/live/mozi_plusz/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 154
+      }
+    ]
+  },
+  {
+    "id": "Moziklub.hu",
+    "name": "Moziklub",
+    "slug": "moziklub",
+    "logo_url": "https://gradetv.net/logos/Moziklub.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Moziklub.hu%3ASD%3Ah521350af8cc634df623f7e3d9bc439dd.m3u8",
+        "provider_url": "http://88.212.7.14/live/moziklub_atk/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 126
+      }
+    ]
+  },
+  {
+    "id": "Moziverzum.hu",
+    "name": "Moziverzum",
+    "slug": "moziverzum",
+    "logo_url": "https://gradetv.net/logos/Moziverzum.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Moziverzum.hu%3ASD%3Ahec58430ec2828174ffc7245f281b9e9c.m3u8",
+        "provider_url": "http://88.212.7.14/live/moziverzum/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 215
+      }
+    ]
+  },
+  {
+    "id": "MuzsikaTV.hu",
+    "name": "Muzsika TV",
+    "slug": "muzsika-tv",
+    "logo_url": "https://gradetv.net/logos/MuzsikaTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/MuzsikaTV.hu%3ASD%3Ahd9b6c9ac18a670b3de14445051efebf0.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_muzsika_hungary_1200_atk/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 159
+      }
+    ]
+  },
+  {
+    "id": "NationalGeographic.hu",
+    "name": "National Geographic",
+    "slug": "national-geographic-10",
+    "logo_url": "https://gradetv.net/logos/NationalGeographic.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/NationalGeographic.hu%3ASD%3Ah3bcbfebe04224633822d43631a592a51.m3u8",
+        "provider_url": "http://88.212.7.14/live/ngc_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 158
+      }
+    ]
+  },
+  {
+    "id": "NationalGeographicWild.hu",
+    "name": "National Geographic Wild",
+    "slug": "national-geographic-wild-12",
+    "logo_url": "https://gradetv.net/logos/NationalGeographicWild.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/NationalGeographicWild.hu%3ASD%3Ah97034fbbc0683b4b03d0bd594c7188dc.m3u8",
+        "provider_url": "http://88.212.7.14/live/ngw_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 154
+      }
+    ]
+  },
+  {
+    "id": "NickJr.hu",
+    "name": "Nick Jr.",
+    "slug": "nick-jr-7",
+    "logo_url": "https://gradetv.net/logos/NickJr.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/NickJr.hu%3ASD%3Ah53774c1119fc75f0bd2a59609975dc83.m3u8",
+        "provider_url": "http://88.212.7.14/live/nick_junior_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 131
+      }
+    ]
+  },
+  {
+    "id": "Nickelodeon.hu",
+    "name": "Nickelodeon",
+    "slug": "nickelodeon-9",
+    "logo_url": "https://gradetv.net/logos/Nickelodeon.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Nickelodeon.hu%3ASD%3Ah8ef9c5e88e0dad1b5d23b20265abc480.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_nickelodeon_hu_1200_atk/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 165
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Nickelodeon.hu%3ASD%3Ahc3fcd58f69cb8586aa75ebf9d51e2124.m3u8",
+        "provider_url": "http://193.33.39.108:9011/play/a017",
+        "feed": "SD",
+        "latency_ms": 347
+      }
+    ]
+  },
+  {
+    "id": "Nicktoons.hu",
+    "name": "Nicktoons",
+    "slug": "nicktoons-7",
+    "logo_url": "https://gradetv.net/logos/Nicktoons.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Nicktoons.hu%3ASD%3Ah4f24a0f925b8ef7494dcdd8d5ce32779.m3u8",
+        "provider_url": "http://88.212.7.14/live/nicktoons_hungary/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 143
+      }
+    ]
+  },
+  {
+    "id": "OroszlanyiVarosiTelevizio.hu",
+    "name": "Oroszlanyi Varosi Televizio",
+    "slug": "oroszlanyi-varosi-televizio",
+    "logo_url": "https://gradetv.net/logos/OroszlanyiVarosiTelevizio.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/OroszlanyiVarosiTelevizio.hu%3ASD%3A10651.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast002.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 2759
+      }
+    ]
+  },
+  {
+    "id": "OrszaggyulesOGYTAB.hu",
+    "name": "Orszaggyules: OGY TAB",
+    "slug": "orszaggyules-ogy-tab",
+    "logo_url": "https://gradetv.net/logos/OrszaggyulesOGYTAB.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/OrszaggyulesOGYTAB.hu%3ASD%3A10654.m3u8",
+        "provider_url": "http://tab.parlament.hu:1935/edgelive/smil:mkogytab.smil/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10332
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/OrszaggyulesOGYTAB.hu%3ASD%3A10655.m3u8",
+        "provider_url": "https://tab.parlament.hu:446/edgelive/smil:mkogytab.smil/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 4558
+      }
+    ]
+  },
+  {
+    "id": "OrszaggyulesOGYplenaris.hu",
+    "name": "Orszaggyules: OGY plenaris",
+    "slug": "orszaggyules-ogy-plenaris",
+    "logo_url": "https://gradetv.net/logos/OrszaggyulesOGYplenaris.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/OrszaggyulesOGYplenaris.hu%3ASD%3A10652.m3u8",
+        "provider_url": "http://plenaris.parlament.hu:1935/edgelive/smil:mkogyplen.smil/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10128
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/OrszaggyulesOGYplenaris.hu%3ASD%3A10653.m3u8",
+        "provider_url": "https://plenaris.parlament.hu:446/edgelive/smil:mkogyplen.smil/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 1968
+      }
+    ]
+  },
+  {
+    "id": "OxygenMusic.hu",
+    "name": "Oxygen Music",
+    "slug": "oxygen-music",
+    "logo_url": "https://gradetv.net/logos/OxygenMusic.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/OxygenMusic.hu%3AHD%3A10709.m3u8",
+        "provider_url": "https://oxygenmusic.hu:2443/hls/oxygenmusic.m3u8",
+        "feed": "HD",
+        "latency_ms": 2267
+      }
+    ]
+  },
+  {
+    "id": "OzdiVarosiTV.hu",
+    "name": "Ozdi Varosi TV",
+    "slug": "ozdi-varosi-tv",
+    "logo_url": "https://gradetv.net/logos/OzdiVarosiTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/OzdiVarosiTV.hu%3ASD%3A10713.m3u8",
+        "provider_url": "http://stream.nmih.hu:7980/live.m3u8",
+        "feed": "SD",
+        "latency_ms": 2923
+      }
+    ]
+  },
+  {
+    "id": "OzoneTV.hu",
+    "name": "Ozone TV",
+    "slug": "ozone-tv",
+    "logo_url": "https://gradetv.net/logos/OzoneTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/OzoneTV.hu%3ASD%3Ah963e3b64af54c2438319b94a39a4523b.m3u8",
+        "provider_url": "http://88.212.7.14/live/ozone/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 131
+      }
+    ]
+  },
+  {
+    "id": "PVTV.hu",
+    "name": "PVTV",
+    "slug": "pvtv",
+    "logo_url": "https://gradetv.net/logos/PVTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/PVTV.hu%3ASD%3A11710.m3u8",
+        "provider_url": "http://78.47.126.198:5080/LiveApp/streams/902003217052313577741820.m3u8?token=null",
+        "feed": "SD",
+        "latency_ms": 10362
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/PVTV.hu%3Afree-tv%3A215.m3u8",
+        "provider_url": "http://91.147.248.75:5080/LiveApp/streams/nvUds5LHykQyOVXZ1706907141950.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "PetofiRadio.hu",
+    "name": "Petőfi Rádió",
+    "slug": "petofi-radio-5",
+    "logo_url": "https://upload.wikimedia.org/wikipedia/hu/0/0c/MR2-Pet%C5%91fi.png?utm_source=hu.wikipedia.org&utm_campaign=index&utm_content=original",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/PetofiRadio.hu%3Afree-tv%3Ah50a6be4b113ffd85890fcb4ece884a4f.m3u8",
+        "provider_url": "https://budapest-cache-1.antik.sk/live/petofi_radio/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "PilisTV.hu",
+    "name": "PilisTV",
+    "slug": "pilistv",
+    "logo_url": "https://gradetv.net/logos/PilisTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/PilisTV.hu%3ASD%3A10955.m3u8",
+        "provider_url": "https://stream.streaming4u.hu/PilisTV/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 2693
+      }
+    ]
+  },
+  {
+    "id": "Prime.hu",
+    "name": "Prime",
+    "slug": "prime",
+    "logo_url": "https://gradetv.net/logos/Prime.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Prime.hu%3ASD%3Ah7e56c20ff3b5e655542c1dcef8e29f35.m3u8",
+        "provider_url": "http://88.212.7.14/live/prime/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 199
+      }
+    ]
+  },
+  {
+    "id": "RTL.hu",
+    "name": "RTL",
+    "slug": "rtl-2",
+    "logo_url": "https://gradetv.net/logos/RTL.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/RTL.hu%3ASD%3Ahf6083936cade3711c894e3ebac6bc1b7.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_rtl_klub_hungary_1200_atk/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 236
+      }
+    ]
+  },
+  {
+    "id": "RTLGold.hu",
+    "name": "RTL Gold",
+    "slug": "rtl-gold",
+    "logo_url": "https://gradetv.net/logos/RTLGold.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/RTLGold.hu%3ASD%3A12539.m3u8",
+        "provider_url": "https://budapest-cache-1.antik.sk/live/test_film_plus_2_hungary_1200_atk/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 4211
+      }
+    ]
+  },
+  {
+    "id": "RTLHarom.hu",
+    "name": "RTL Harom",
+    "slug": "rtl-harom",
+    "logo_url": "https://gradetv.net/logos/RTLHarom.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/RTLHarom.hu%3ASD%3Ah83659105fd16be26528745894acf7e43.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_rtl_plus_hungary_1200_atk/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 309
+      }
+    ]
+  },
+  {
+    "id": "RTLKetto.hu",
+    "name": "RTL Ketto",
+    "slug": "rtl-ketto",
+    "logo_url": "https://gradetv.net/logos/RTLKetto.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/RTLKetto.hu%3ASD%3Ahae96b92facbd116b0e876c1751205a19.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_rtl2_hungary_1200_atk/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 321
+      }
+    ]
+  },
+  {
+    "id": "RTLKlub.hu",
+    "name": "RTL Klub",
+    "slug": "rtl-klub",
+    "logo_url": "https://i.imgur.com/ruRshE1.png",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/RTLKlub.hu%3Afree-tv%3Ahb6282b6588e8583806e959bb0a3682f9.m3u8",
+        "provider_url": "http://141.94.193.53:80/RTL_HD/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "RTLOtthon.hu",
+    "name": "RTL Otthon",
+    "slug": "rtl-otthon",
+    "logo_url": "https://gradetv.net/logos/RTLOtthon.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/RTLOtthon.hu%3ASD%3Ah2ee512b6493968a09a8124eef20cb172.m3u8",
+        "provider_url": "http://88.212.7.14/live/rtl_otthon_atk/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 252
+      }
+    ]
+  },
+  {
+    "id": "RakosmenteTV.hu",
+    "name": "Rakosmente TV",
+    "slug": "rakosmente-tv",
+    "logo_url": "https://gradetv.net/logos/RakosmenteTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/RakosmenteTV.hu%3ASD%3A12009.m3u8",
+        "provider_url": "http://rakosmentetv.hu:8080/hls/rmtv.m3u8",
+        "feed": "SD",
+        "latency_ms": 10200
+      }
+    ]
+  },
+  {
+    "id": "RegioPluszTV.hu",
+    "name": "RegioPlusz TV",
+    "slug": "regioplusz-tv",
+    "logo_url": "https://gradetv.net/logos/RegioPluszTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/RegioPluszTV.hu%3ASD%3A12254.m3u8",
+        "provider_url": "https://stream.streaming4u.hu/RegioPluszTV/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 1846
+      }
+    ]
+  },
+  {
+    "id": "SIXOTV.hu",
+    "name": "SIXO TV",
+    "slug": "sixo-tv",
+    "logo_url": "https://gradetv.net/logos/SIXOTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/SIXOTV.hu%3ASD%3A13439.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE038.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 2781
+      }
+    ]
+  },
+  {
+    "id": "SlagerTV.hu",
+    "name": "Slager TV",
+    "slug": "slager-tv",
+    "logo_url": "https://gradetv.net/logos/SlagerTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/SlagerTV.hu%3ASD%3Ah70d5723da4f66db1b1fac6cbe1e20d4a.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_slager_tv_hungary_1200_atk/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 100
+      }
+    ]
+  },
+  {
+    "id": "SoltvadkertiTelevizio.hu",
+    "name": "Soltvadkerti Televizio",
+    "slug": "soltvadkerti-televizio",
+    "logo_url": "https://gradetv.net/logos/SoltvadkertiTelevizio.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/SoltvadkertiTelevizio.hu%3ASD%3A13552.m3u8",
+        "provider_url": "http://79.120.178.90:1935/soltvadkerttv/soltvlive/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10310
+      }
+    ]
+  },
+  {
+    "id": "SorozatPlus.hu",
+    "name": "Sorozat+",
+    "slug": "sorozat",
+    "logo_url": "https://gradetv.net/logos/SorozatPlus.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/SorozatPlus.hu%3ASD%3Ah95d3cac9c594397d3324f447e9933deb.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_sorozat_hungary_1200_atk/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 100
+      }
+    ]
+  },
+  {
+    "id": "Sorozatklub.hu",
+    "name": "Sorozatklub",
+    "slug": "sorozatklub",
+    "logo_url": "https://gradetv.net/logos/Sorozatklub.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Sorozatklub.hu%3ASD%3Ah31931df2089da4b07fafcbdc342af03b.m3u8",
+        "provider_url": "http://88.212.7.14/live/sorozatklub_atk/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 259
+      }
+    ]
+  },
+  {
+    "id": "Spektrum.hu",
+    "name": "Spektrum",
+    "slug": "spektrum-2",
+    "logo_url": "https://gradetv.net/logos/Spektrum.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Spektrum.hu%3ASD%3Ah33af341374629476073d2cca96cfc98f.m3u8",
+        "provider_url": "http://88.212.7.14/live/spektrum_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 154
+      }
+    ]
+  },
+  {
+    "id": "SpektrumHome.hu",
+    "name": "Spektrum Home",
+    "slug": "spektrum-home-2",
+    "logo_url": "https://gradetv.net/logos/SpektrumHome.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/SpektrumHome.hu%3ASD%3Ahc1c89881df5704828d83d3252fd5f6e3.m3u8",
+        "provider_url": "http://88.212.7.14/live/spektrum_home_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 125
+      }
+    ]
+  },
+  {
+    "id": "Spiler1.hu",
+    "name": "Spiler 1",
+    "slug": "spiler-1",
+    "logo_url": "https://gradetv.net/logos/Spiler1.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Spiler1.hu%3ASD%3Ah6d25ffa748753d799a7cee62b5e9a565.m3u8",
+        "provider_url": "http://88.212.7.14/live/spiler1/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 328
+      }
+    ]
+  },
+  {
+    "id": "Spiler2.hu",
+    "name": "Spiler 2",
+    "slug": "spiler-2",
+    "logo_url": "https://gradetv.net/logos/Spiler2.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Spiler2.hu%3ASD%3Ah178dcbce4ff3247705696430ecd5ebe7.m3u8",
+        "provider_url": "http://88.212.7.14/live/spiler2/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 143
+      }
+    ]
+  },
+  {
+    "id": "Sport1.hu",
+    "name": "Sport 1",
+    "slug": "sport-1",
+    "logo_url": "https://gradetv.net/logos/Sport1.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Sport1.hu%3ASD%3Ah1a1cbafda50b742e832be1d9798c27d5.m3u8",
+        "provider_url": "http://88.212.7.14/live/sport1_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 125
+      }
+    ]
+  },
+  {
+    "id": "Sport2.hu",
+    "name": "Sport 2",
+    "slug": "sport-2-2",
+    "logo_url": "https://gradetv.net/logos/Sport2.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Sport2.hu%3ASD%3Ah3db8f082735c36145134ece467adae39.m3u8",
+        "provider_url": "http://88.212.7.14/live/sport2_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 126
+      }
+    ]
+  },
+  {
+    "id": "Story4.hu",
+    "name": "Story4",
+    "slug": "story4",
+    "logo_url": "https://gradetv.net/logos/Story4.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Story4.hu%3ACzechia%3Ah11b2c24005345581f5f21cc67734bce6.m3u8",
+        "provider_url": "http://88.212.7.14/live/story_4_cze_atk/index.m3u8",
+        "feed": "Czechia",
+        "latency_ms": 308
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Story4.hu%3ASD%3Ahe8fbdc324bc3a1ce3730a6ea7e9cd022.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_story_4_atk_1200/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 329
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Story4.hu%3Afree-tv%3Ah8f73517d5b38f14e758ac74d32ce23c4.m3u8",
+        "provider_url": "http://141.94.193.53:80/Story4_HD/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "SuperTV2.hu",
+    "name": "Super TV2",
+    "slug": "super-tv2",
+    "logo_url": "https://gradetv.net/logos/SuperTV2.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/SuperTV2.hu%3ASD%3Ah1cddc78e1c15e0d949bcc69af23ea295.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_super_tv2_hungary_1200_atk/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 241
+      }
+    ]
+  },
+  {
+    "id": "SzecsenyTV.hu",
+    "name": "Szecseny TV",
+    "slug": "szecseny-tv",
+    "logo_url": "https://gradetv.net/logos/SzecsenyTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/SzecsenyTV.hu%3ASD%3A14188.m3u8",
+        "provider_url": "http://iptv.eurocable.co.hu/EC-SZECSENYTVHD/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 10449
+      }
+    ]
+  },
+  {
+    "id": "SzolnokTV.hu",
+    "name": "Szolnok TV",
+    "slug": "szolnok-tv",
+    "logo_url": "https://gradetv.net/logos/SzolnokTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/SzolnokTV.hu%3ASD%3A14189.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 2392
+      }
+    ]
+  },
+  {
+    "id": "TLC.hu",
+    "name": "TLC",
+    "slug": "tlc-9",
+    "logo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/TLC_Logo.svg/960px-TLC_Logo.svg.png",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TLC.hu%3ASD%3Ahf8e1737fc1316e7280f335874d18a060.m3u8",
+        "provider_url": "http://88.212.7.14/live/tlc_hungary/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 125
+      }
+    ]
+  },
+  {
+    "id": "TVBudakalasz.hu",
+    "name": "TV Budakalasz",
+    "slug": "tv-budakalasz",
+    "logo_url": "https://gradetv.net/logos/TVBudakalasz.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TVBudakalasz.hu%3ASD%3A15448.m3u8",
+        "provider_url": "https://stream.streaming4u.hu/TVBudakalasz/tracks-v1a1/mono.m3u8",
+        "feed": "SD",
+        "latency_ms": 3662
+      }
+    ]
+  },
+  {
+    "id": "TVEger.hu",
+    "name": "TV Eger",
+    "slug": "tv-eger",
+    "logo_url": "https://gradetv.net/logos/TVEger.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TVEger.hu%3ASD%3A15562.m3u8",
+        "provider_url": "http://stream.tveger.hu:8010/live.m3u8",
+        "feed": "SD",
+        "latency_ms": 4016
+      }
+    ]
+  },
+  {
+    "id": "TVKeszthely.hu",
+    "name": "TV Keszthely",
+    "slug": "tv-keszthely",
+    "logo_url": "https://gradetv.net/logos/TVKeszthely.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TVKeszthely.hu%3ASD%3A15654.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/freerelay/keszthelyivtv.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 3843
+      }
+    ]
+  },
+  {
+    "id": "TVPaprika.hu",
+    "name": "TV Paprika",
+    "slug": "tv-paprika-2",
+    "logo_url": "https://gradetv.net/logos/TVPaprika.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TVPaprika.hu%3ASD%3Ah023b44ef6a2772d7fc32f7f5486af445.m3u8",
+        "provider_url": "http://88.212.7.14/live/parpika_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 106
+      }
+    ]
+  },
+  {
+    "id": "TVSzentendre.hu",
+    "name": "TV Szentendre",
+    "slug": "tv-szentendre",
+    "logo_url": "https://gradetv.net/logos/TVSzentendre.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TVSzentendre.hu%3ASD%3A16023.m3u8",
+        "provider_url": "https://stream.streaming4u.hu/TVSzentendre/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 2150
+      }
+    ]
+  },
+  {
+    "id": "TV2.hu",
+    "name": "TV2",
+    "slug": "tv2-2",
+    "logo_url": "https://gradetv.net/logos/TV2.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TV2.hu%3ASD%3Ah66d8a8e8a3d1038652a0709d94a0f4a6.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_tv_2_hungary_1200_atk/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 142
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TV2.hu%3Afree-tv%3Ah6cf15649b89a649541b11420bad75551.m3u8",
+        "provider_url": "http://141.94.193.53:80/TV2_HD/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "TV2Comedy.hu",
+    "name": "TV2 Comedy",
+    "slug": "tv2-comedy",
+    "logo_url": "https://gradetv.net/logos/TV2Comedy.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TV2Comedy.hu%3ASD%3Ahcfd38eed3fbf858d26cc665e1a29960f.m3u8",
+        "provider_url": "http://88.212.7.14/live/tv2_comedy/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 323
+      }
+    ]
+  },
+  {
+    "id": "TV2Kids.hu",
+    "name": "TV2 Kids",
+    "slug": "tv2-kids",
+    "logo_url": "https://gradetv.net/logos/TV2Kids.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TV2Kids.hu%3ASD%3Ahf5674b1740a12a61d38dae6e37329cca.m3u8",
+        "provider_url": "http://88.212.7.14/live/tv2_kids/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 160
+      }
+    ]
+  },
+  {
+    "id": "TV2Sef.hu",
+    "name": "TV2 Sef",
+    "slug": "tv2-sef",
+    "logo_url": "https://gradetv.net/logos/TV2Sef.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TV2Sef.hu%3ASD%3Ah1fdf309ab4a90a871aaf5d93429ef2bd.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_lichi_tv_atk_tv/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 252
+      }
+    ]
+  },
+  {
+    "id": "TV4.hu",
+    "name": "TV4",
+    "slug": "tv4-3",
+    "logo_url": "https://gradetv.net/logos/TV4.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TV4.hu%3ASD%3Ah050ff0780073cafda6eec4d6b7df7b9b.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_tv_4_hun_atk_1200/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 242
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TV4.hu%3Afree-tv%3Ah2468258edf06dae17ad81c1bddb70e46.m3u8",
+        "provider_url": "http://141.94.193.53:80/TV4_HD/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "TataiTV.hu",
+    "name": "Tatai TV",
+    "slug": "tatai-tv",
+    "logo_url": "https://gradetv.net/logos/TataiTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TataiTV.hu%3ASD%3A14257.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast006.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 2062
+      }
+    ]
+  },
+  {
+    "id": "TelePaks.hu",
+    "name": "TelePaks",
+    "slug": "telepaks",
+    "logo_url": "https://gradetv.net/logos/TelePaks.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TelePaks.hu%3ASD%3A14492.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/relay02/livestream004.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 2752
+      }
+    ]
+  },
+  {
+    "id": "TheFishingHuntingChannel.hu",
+    "name": "The Fishing & Hunting Channel",
+    "slug": "the-fishing-hunting-channel",
+    "logo_url": "https://gradetv.net/logos/TheFishingHuntingChannel.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TheFishingHuntingChannel.hu%3AHD%3Ahf84ad0a896e80f58a358b00022008225.m3u8",
+        "provider_url": "http://88.212.7.14/live/fishing_hun/index.m3u8",
+        "feed": "HD",
+        "latency_ms": 148
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TheFishingHuntingChannel.hu%3ASD%3Ah4efffedb7dc6a3233017e19ba48e883e.m3u8",
+        "provider_url": "http://88.212.7.14/live/test_fishing_hunting/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 287
+      }
+    ]
+  },
+  {
+    "id": "TiszaTV.hu",
+    "name": "Tisza TV",
+    "slug": "tisza-tv",
+    "logo_url": "https://gradetv.net/logos/TiszaTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TiszaTV.hu%3ASD%3A14897.m3u8",
+        "provider_url": "https://www.tiszatv.hu/onlinetv/tiszatv_1.m3u8",
+        "feed": "SD",
+        "latency_ms": 2136
+      }
+    ]
+  },
+  {
+    "id": "TravelChannel.hu",
+    "name": "Travel Channel",
+    "slug": "travel-channel-7",
+    "logo_url": "https://static.wikia.nocookie.net/logopedia/images/a/a3/Travel_Channel_2D_2014.svg/revision/latest?cb=20180112215118",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TravelChannel.hu%3ASD%3Ah858076ba5e3fbe4a0ba82d1ae0d8ca35.m3u8",
+        "provider_url": "http://88.212.7.14/live/travel_hun/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 317
+      }
+    ]
+  },
+  {
+    "id": "TrimedioTV.hu",
+    "name": "Trimedio TV",
+    "slug": "trimedio-tv",
+    "logo_url": "https://gradetv.net/logos/TrimedioTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/TrimedioTV.hu%3ASD%3A15142.m3u8",
+        "provider_url": "https://stream.streaming4u.hu/TriMedioTV/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 1066
+      }
+    ]
+  },
+  {
+    "id": "VTVFuzesabony.hu",
+    "name": "VTV Fuzesabony",
+    "slug": "vtv-fuzesabony",
+    "logo_url": "https://gradetv.net/logos/VTVFuzesabony.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/VTVFuzesabony.hu%3ASD%3A16648.m3u8",
+        "provider_url": "https://stream.nmih.hu:7962/live.m3u8",
+        "feed": "SD",
+        "latency_ms": 1791
+      }
+    ]
+  },
+  {
+    "id": "VTVMor.hu",
+    "name": "VTV Mor",
+    "slug": "vtv-mor",
+    "logo_url": "https://gradetv.net/logos/VTVMor.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/VTVMor.hu%3ASD%3A16649.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/freerelay/morvtv.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10574
+      }
+    ]
+  },
+  {
+    "id": "VasarhelyiTelevizio.hu",
+    "name": "Vasarhelyi Televizio",
+    "slug": "vasarhelyi-televizio",
+    "logo_url": "https://gradetv.net/logos/VasarhelyiTelevizio.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/VasarhelyiTelevizio.hu%3ASD%3A16312.m3u8",
+        "provider_url": "https://stream.vasarhelyitelevizio.hu/stream/stream.m3u8",
+        "feed": "SD",
+        "latency_ms": 1871
+      }
+    ]
+  },
+  {
+    "id": "Viasat3.hu",
+    "name": "Viasat 3",
+    "slug": "viasat-3",
+    "logo_url": "https://gradetv.net/logos/Viasat3.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Viasat3.hu%3ASD%3Ah163e0a8b2196394a5bb3332d45b04158.m3u8",
+        "provider_url": "http://88.212.7.14/live/viasat3/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 129
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Viasat3.hu%3Afree-tv%3Ah8357237cdad712db14d0d07292e730bd.m3u8",
+        "provider_url": "http://141.94.193.53:80/VIASAT3_HD/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "Viasat6.hu",
+    "name": "Viasat 6",
+    "slug": "viasat-6",
+    "logo_url": "https://gradetv.net/logos/Viasat6.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Viasat6.hu%3ASD%3Ah217b03b18c8d7bc9abf933dbe49bfa21.m3u8",
+        "provider_url": "http://88.212.7.14/live/viasat6/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 315
+      }
+    ]
+  },
+  {
+    "id": "ViasatExplore.hu",
+    "name": "Viasat Explore",
+    "slug": "viasat-explore-5",
+    "logo_url": "https://gradetv.net/logos/ViasatExplore.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ViasatExplore.hu%3ASD%3Ahb888983c2129932b708a8fbd15cd1278.m3u8",
+        "provider_url": "http://205.237.104.26:8080/stream/345/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 10175
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ViasatExplore.hu%3Afree-tv%3Aha2ebb27881b523295e80e10c206c2c24.m3u8",
+        "provider_url": "http://141.94.193.53:80/Viasat_Explore_HD/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "ViasatHistory.hu",
+    "name": "Viasat History",
+    "slug": "viasat-history-5",
+    "logo_url": "https://gradetv.net/logos/ViasatHistory.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ViasatHistory.hu%3ASD%3Ahcb8b709dc9485e99b0e663a785933661.m3u8",
+        "provider_url": "http://193.33.39.108:9007/play/a00p",
+        "feed": "SD",
+        "latency_ms": 227
+      },
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ViasatHistory.hu%3Afree-tv%3Aha5b2629c4198a79a810eac053d5c0f7b.m3u8",
+        "provider_url": "http://141.94.193.53:80/Viasat_History_HD/index.m3u8",
+        "feed": null
+      }
+    ]
+  },
+  {
+    "id": "ViasatNature.hu",
+    "name": "Viasat Nature",
+    "slug": "viasat-nature-5",
+    "logo_url": "https://gradetv.net/logos/ViasatNature.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ViasatNature.hu%3ASD%3Ahbaff39d0f346d4c61159a058174a6016.m3u8",
+        "provider_url": "http://193.33.39.108:9000/play/a05r",
+        "feed": "SD",
+        "latency_ms": 258
+      }
+    ]
+  },
+  {
+    "id": "Viasat2.hu",
+    "name": "Viasat2",
+    "slug": "viasat2",
+    "logo_url": "https://gradetv.net/logos/Viasat2.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Viasat2.hu%3ASD%3Ah7440644a2df4fb561c925c404f719e76.m3u8",
+        "provider_url": "http://88.212.7.14/live/viasat2/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 144
+      }
+    ]
+  },
+  {
+    "id": "VolgyhidTV.hu",
+    "name": "Volgyhid TV",
+    "slug": "volgyhid-tv",
+    "logo_url": "https://gradetv.net/logos/VolgyhidTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/VolgyhidTV.hu%3ASD%3A16549.m3u8",
+        "provider_url": "https://5cd03f21c7193.streamlock.net/volgyhidtv/mediakft/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10424
+      }
+    ]
+  },
+  {
+    "id": "WilliamsTV.hu",
+    "name": "Williams TV",
+    "slug": "williams-tv",
+    "logo_url": "https://gradetv.net/logos/WilliamsTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/WilliamsTV.hu%3ASD%3A16777.m3u8",
+        "provider_url": "http://79.120.178.90:1935/williams/williamstv/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 10058
+      }
+    ]
+  },
+  {
+    "id": "XVTV.hu",
+    "name": "XV TV",
+    "slug": "xv-tv",
+    "logo_url": "https://gradetv.net/logos/XVTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/XVTV.hu%3ASD%3A16952.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE051.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 3048
+      }
+    ]
+  },
+  {
+    "id": "ZalaegerszegiTV.hu",
+    "name": "Zalaegerszegi TV",
+    "slug": "zalaegerszegi-tv",
+    "logo_url": "https://gradetv.net/logos/ZalaegerszegiTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ZalaegerszegiTV.hu%3ASD%3A17045.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/freerelay/zegtv.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 3302
+      }
+    ]
+  },
+  {
+    "id": "Zenebutik.hu",
+    "name": "Zenebutik",
+    "slug": "zenebutik",
+    "logo_url": "https://gradetv.net/logos/Zenebutik.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/Zenebutik.hu%3ASD%3Ahc93465eb9db26da9f2f9da5073381207.m3u8",
+        "provider_url": "http://88.212.7.14/live/zenebutik/index.m3u8",
+        "feed": "SD",
+        "latency_ms": 116
+      }
+    ]
+  },
+  {
+    "id": "ZugloTV.hu",
+    "name": "Zuglo TV",
+    "slug": "zuglo-tv",
+    "logo_url": "https://gradetv.net/logos/ZugloTV.hu",
+    "streams": [
+      {
+        "url": "https://m3m8.gradetv.net/api/s/ZugloTV.hu%3ASD%3A17198.m3u8",
+        "provider_url": "https://cloudfront44.lexanetwork.com:1344/freerelay/zuglotv.sdp/playlist.m3u8",
+        "feed": "SD",
+        "latency_ms": 9144
+      }
+    ]
+  }
+]

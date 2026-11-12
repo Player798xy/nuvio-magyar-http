@@ -132,7 +132,7 @@ const ONLINESTREAM_CATEGORIES = [
     "category": "tv",
     "description": "Fő országos kereskedelmi és közszolgálati televíziók nézettségi sorrendben: RTL, TV2, M1, Duna, Super TV2, ATV, stb.",
     "defaultEnabled": true,
-    "count": 25
+    "count": 28
   },
   {
     "id": "hu-live-film",
@@ -141,7 +141,7 @@ const ONLINESTREAM_CATEGORIES = [
     "category": "tv",
     "description": "Prémium mozifilmes és sorozatcsatornák népszerűségi sorrendben: Film+, Mozi+, Cool TV, AMC, Moziverzum, HBO 1-3, stb.",
     "defaultEnabled": true,
-    "count": 21
+    "count": 24
   },
   {
     "id": "hu-live-doksi",
@@ -150,7 +150,7 @@ const ONLINESTREAM_CATEGORIES = [
     "category": "tv",
     "description": "Természetfilmek, történelem, tudomány és dokumentumfilmek népszerűségi sorrendben: Nat Geo, History, Spektrum, stb.",
     "defaultEnabled": true,
-    "count": 6
+    "count": 15
   },
   {
     "id": "hu-live-sport",
@@ -159,7 +159,7 @@ const ONLINESTREAM_CATEGORIES = [
     "category": "tv",
     "description": "Élő sportközvetítések, zenei csatornák és életmód népszerűségi sorrendben: M4 Sport, Spíler 1-2, Sport 1-2, Arena4, TV Paprika, Sláger TV, stb.",
     "defaultEnabled": true,
-    "count": 17
+    "count": 20
   },
   {
     "id": "hu-live-gyerek",
@@ -168,7 +168,7 @@ const ONLINESTREAM_CATEGORIES = [
     "category": "tv",
     "description": "Rajzfilmek, animációk és ifjúsági műsorok népszerűségi sorrendben: Minimax, Nickelodeon, TV2 Kids, stb.",
     "defaultEnabled": true,
-    "count": 7
+    "count": 8
   },
   {
     "id": "hu-live-helyi",
@@ -177,7 +177,7 @@ const ONLINESTREAM_CATEGORIES = [
     "category": "tv",
     "description": "Magyar városok és térségek működő helyi televíziói fontossági sorrendben: Debrecen, Sopron, Fehérvár, Nyíregyháza, stb.",
     "defaultEnabled": true,
-    "count": 36
+    "count": 69
   }
 ];
 
@@ -196,6 +196,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/test_rtl_klub_hungary_1200_atk/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=RTL",
+        "onlineUrl": "http://88.212.7.14/live/test_rtl_klub_hungary_1200_atk/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/RTL.hu%3ASD%3Ahf6083936cade3711c894e3ebac6bc1b7.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=RTL",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/RTL.hu%3ASD%3Ahf6083936cade3711c894e3ebac6bc1b7.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/RTL_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "3",
@@ -203,7 +219,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/rtl/online/6141-1"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://m3m8.gradetv.net:443/api/s/RTL.hu%3ASD%3Ahf6083936cade3711c894e3ebac6bc1b7?via=grade",
         "host": "m3m8.gradetv.net",
         "features": "3",
@@ -229,14 +245,38 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
-        "url": "http://141.94.193.53:80/TV2_HD/index.m3u8",
-        "host": "141.94.193.53",
-        "features": "3",
-        "playerUrl": "",
-        "onlineUrl": "https://onlinestream.live/tv2/online/6143-1"
+        "url": "http://88.212.7.14/live/test_tv_2_hungary_1200_atk/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV2",
+        "onlineUrl": "http://88.212.7.14/live/test_tv_2_hungary_1200_atk/playlist.m3u8"
       },
       {
         "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TV2.hu%3ASD%3Ah66d8a8e8a3d1038652a0709d94a0f4a6.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV2",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TV2.hu%3ASD%3Ah66d8a8e8a3d1038652a0709d94a0f4a6.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://141.94.193.53:80/TV2_HD/index.m3u8",
+        "host": "141.94.193.53",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=TV2",
+        "onlineUrl": "http://141.94.193.53:80/TV2_HD/index.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/TV2.hu%3Afree-tv%3Ah6cf15649b89a649541b11420bad75551.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=TV2",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TV2.hu%3Afree-tv%3Ah6cf15649b89a649541b11420bad75551.m3u8"
+      },
+      {
+        "sub_idx": 5,
         "url": "https://m3m8.gradetv.net:443/api/s/TV2.hu%3ASD%3Ah66d8a8e8a3d1038652a0709d94a0f4a6.m3u8",
         "host": "m3m8.gradetv.net",
         "features": "3",
@@ -262,6 +302,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/test_m_1_hungary_1200_atk/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "HD",
+        "playerUrl": "https://gradetv.net/?q=M1",
+        "onlineUrl": "http://88.212.7.14/live/test_m_1_hungary_1200_atk/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/M1.hu%3AHD%3Ah9dc76580db845f13ee56f1d4c07ddfb2.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "HD",
+        "playerUrl": "https://gradetv.net/?q=M1",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/M1.hu%3AHD%3Ah9dc76580db845f13ee56f1d4c07ddfb2.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/M1_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "3",
@@ -269,7 +325,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/m1/online/5901-2"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://gradetv.net:443/api/s/M1.hu:HD:8787.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "3",
@@ -295,6 +351,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/duna_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Duna",
+        "onlineUrl": "http://88.212.7.14/live/duna_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Duna.hu%3ASD%3Ah2794468769cc760fd6ce20379bf3e387.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Duna",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Duna.hu%3ASD%3Ah2794468769cc760fd6ce20379bf3e387.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/Duna_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "3",
@@ -302,7 +374,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/duna/online/5905-2"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://gradetv.net:443/api/s/Duna.hu:SD:5871.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "3",
@@ -328,6 +400,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/test_super_tv2_hungary_1200_atk/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Super%20TV2",
+        "onlineUrl": "http://88.212.7.14/live/test_super_tv2_hungary_1200_atk/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/SuperTV2.hu%3ASD%3Ah1cddc78e1c15e0d949bcc69af23ea295.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Super%20TV2",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/SuperTV2.hu%3ASD%3Ah1cddc78e1c15e0d949bcc69af23ea295.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/SuperTV2.hu:SD:14067.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1024 x 576 48",
@@ -353,6 +441,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/test_rtl2_hungary_1200_atk/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=RTL%20Kett%C5%91",
+        "onlineUrl": "http://88.212.7.14/live/test_rtl2_hungary_1200_atk/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/RTLKetto.hu%3ASD%3Ahae96b92facbd116b0e876c1751205a19.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=RTL%20Kett%C5%91",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/RTLKetto.hu%3ASD%3Ahae96b92facbd116b0e876c1751205a19.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/RTLKetto.hu:SD:12556.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -378,6 +482,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/test_rtl_plus_hungary_1200_atk/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=RTL%20H%C3%A1rom",
+        "onlineUrl": "http://88.212.7.14/live/test_rtl_plus_hungary_1200_atk/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/RTLHarom.hu%3ASD%3Ah83659105fd16be26528745894acf7e43.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=RTL%20H%C3%A1rom",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/RTLHarom.hu%3ASD%3Ah83659105fd16be26528745894acf7e43.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/RTLHarom.hu:SD:12555.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -403,6 +523,38 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/viasat3/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%203",
+        "onlineUrl": "http://88.212.7.14/live/viasat3/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Viasat3.hu%3ASD%3Ah163e0a8b2196394a5bb3332d45b04158.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%203",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Viasat3.hu%3ASD%3Ah163e0a8b2196394a5bb3332d45b04158.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://141.94.193.53:80/VIASAT3_HD/index.m3u8",
+        "host": "141.94.193.53",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%203",
+        "onlineUrl": "http://141.94.193.53:80/VIASAT3_HD/index.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/Viasat3.hu%3Afree-tv%3Ah8357237cdad712db14d0d07292e730bd.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%203",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Viasat3.hu%3Afree-tv%3Ah8357237cdad712db14d0d07292e730bd.m3u8"
+      },
+      {
+        "sub_idx": 5,
         "url": "https://gradetv.net:443/api/s/Viasat3.hu:SD:16394.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -428,11 +580,67 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://stream.atv.hu/atvlive/atvstream_2_aac/playlist.m3u8",
+        "host": "stream.atv.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ATV",
+        "onlineUrl": "https://stream.atv.hu/atvlive/atvstream_2_aac/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/ATV.hu%3ASD%3A3141.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ATV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ATV.hu%3ASD%3A3141.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "https://streamservers.atv.hu/atvlive/atvstream_1_aac/playlist.m3u8",
+        "host": "streamservers.atv.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ATV",
+        "onlineUrl": "https://streamservers.atv.hu/atvlive/atvstream_1_aac/playlist.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/ATV.hu%3ASD%3A3142.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ATV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ATV.hu%3ASD%3A3142.m3u8"
+      },
+      {
+        "sub_idx": 5,
+        "url": "http://88.212.7.14/live/test_atv_hungary_1200_atk/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ATV",
+        "onlineUrl": "http://88.212.7.14/live/test_atv_hungary_1200_atk/playlist.m3u8"
+      },
+      {
+        "sub_idx": 6,
+        "url": "https://m3m8.gradetv.net/api/s/ATV.hu%3ASD%3Ahda66db61ab5b7a2358d4b38ec63fecb0.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ATV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ATV.hu%3ASD%3Ahda66db61ab5b7a2358d4b38ec63fecb0.m3u8"
+      },
+      {
+        "sub_idx": 7,
         "url": "http://141.94.193.53:80/ATV_HD/index.m3u8",
         "host": "141.94.193.53",
-        "features": ", 1920 x 1080 44.1",
-        "playerUrl": "http://onlinestream.live/atv/videoplayer/4739-1",
-        "onlineUrl": "https://onlinestream.live/atv/online/4739-1"
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=ATV",
+        "onlineUrl": "http://141.94.193.53:80/ATV_HD/index.m3u8"
+      },
+      {
+        "sub_idx": 8,
+        "url": "https://m3m8.gradetv.net/api/s/ATV.hu%3Afree-tv%3Ah1243a5a0c9e7110c64209348b9ee22fe.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=ATV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ATV.hu%3Afree-tv%3Ah1243a5a0c9e7110c64209348b9ee22fe.m3u8"
       }
     ],
     "behaviorHints": {
@@ -453,6 +661,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://video11.videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8",
+        "host": "video11.videa.hu",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=H%C3%ADr%20TV",
+        "onlineUrl": "https://video11.videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/HirTV.hu%3Afree-tv%3Ah8e2bda4ddc24c0e4c944d6edeab2b43a.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=H%C3%ADr%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/HirTV.hu%3Afree-tv%3Ah8e2bda4ddc24c0e4c944d6edeab2b43a.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8",
         "host": "videa.hu",
         "features": "1080p FHD",
@@ -478,6 +702,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/prime/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Prime",
+        "onlineUrl": "http://88.212.7.14/live/prime/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Prime.hu%3ASD%3Ah7e56c20ff3b5e655542c1dcef8e29f35.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Prime",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Prime.hu%3ASD%3Ah7e56c20ff3b5e655542c1dcef8e29f35.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/Prime.hu:SD:11599.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -503,14 +743,38 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
-        "url": "http://141.94.193.53:80/TV4_HD/index.m3u8",
-        "host": "141.94.193.53",
-        "features": "2",
-        "playerUrl": "",
-        "onlineUrl": "https://onlinestream.live/tv4/online/6184-1"
+        "url": "http://88.212.7.14/live/test_tv_4_hun_atk_1200/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV4",
+        "onlineUrl": "http://88.212.7.14/live/test_tv_4_hun_atk_1200/playlist.m3u8"
       },
       {
         "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TV4.hu%3ASD%3Ah050ff0780073cafda6eec4d6b7df7b9b.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV4",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TV4.hu%3ASD%3Ah050ff0780073cafda6eec4d6b7df7b9b.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://141.94.193.53:80/TV4_HD/index.m3u8",
+        "host": "141.94.193.53",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=TV4",
+        "onlineUrl": "http://141.94.193.53:80/TV4_HD/index.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/TV4.hu%3Afree-tv%3Ah2468258edf06dae17ad81c1bddb70e46.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=TV4",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TV4.hu%3Afree-tv%3Ah2468258edf06dae17ad81c1bddb70e46.m3u8"
+      },
+      {
+        "sub_idx": 5,
         "url": "https://gradetv.net:443/api/s/TV4.hu:SD:15267.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "2",
@@ -536,6 +800,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/viasat6/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%206",
+        "onlineUrl": "http://88.212.7.14/live/viasat6/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Viasat6.hu%3ASD%3Ah217b03b18c8d7bc9abf933dbe49bfa21.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%206",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Viasat6.hu%3ASD%3Ah217b03b18c8d7bc9abf933dbe49bfa21.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/Viasat6.hu:SD:16395.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -561,6 +841,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://budapest-cache-1.antik.sk/live/test_film_plus_2_hungary_1200_atk/playlist.m3u8",
+        "host": "budapest-cache-1.antik.sk",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=RTL%20Gold",
+        "onlineUrl": "https://budapest-cache-1.antik.sk/live/test_film_plus_2_hungary_1200_atk/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/RTLGold.hu%3ASD%3A12539.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=RTL%20Gold",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/RTLGold.hu%3ASD%3A12539.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://budapest-cache-1.antik.sk:443/live/test_film_plus_2_hungary_1200_atk/playlist.m3u8",
         "host": "budapest-cache-1.antik.sk",
         "features": "2",
@@ -568,7 +864,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/rtl-gold/online/6148-1"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://gradetv.net:443/api/s/RTLGold.hu:SD:12553.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "2",
@@ -594,6 +890,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/m2_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=M2%20%2F%20Pet%C5%91fi%20TV",
+        "onlineUrl": "http://88.212.7.14/live/m2_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/M2.hu%3ASD%3Ah72bdccb4c976e4728994a4852fb92f76.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=M2%20%2F%20Pet%C5%91fi%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/M2.hu%3ASD%3Ah72bdccb4c976e4728994a4852fb92f76.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/M2.hu:SD:8792.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "2",
@@ -619,6 +931,38 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/duna_world_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Duna%20World%20%2F%20M4%20Sport%2B",
+        "onlineUrl": "http://88.212.7.14/live/duna_world_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/DunaWorld.hu%3ASD%3Ahcbe499f1e107c6064f201195be32c03e.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Duna%20World%20%2F%20M4%20Sport%2B",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/DunaWorld.hu%3ASD%3Ahcbe499f1e107c6064f201195be32c03e.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://141.94.193.53:80/Duna_World_M4_Sport+_HD/index.m3u8",
+        "host": "141.94.193.53",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Duna%20World%20%2F%20M4%20Sport%2B",
+        "onlineUrl": "http://141.94.193.53:80/Duna_World_M4_Sport+_HD/index.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/DunaWorld.hu%3Afree-tv%3Ah7bd8c4628fe7bf9116a149e2dc7b55b1.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Duna%20World%20%2F%20M4%20Sport%2B",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/DunaWorld.hu%3Afree-tv%3Ah7bd8c4628fe7bf9116a149e2dc7b55b1.m3u8"
+      },
+      {
+        "sub_idx": 5,
         "url": "https://gradetv.net:443/api/s/DunaWorld.hu:SD:5873.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "3",
@@ -644,6 +988,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/test_m_5_hun_atk_1200/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=M5",
+        "onlineUrl": "http://88.212.7.14/live/test_m_5_hun_atk_1200/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/M5.hu%3ASD%3Ah81b507e77410b005d0e650546bfe938a.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=M5",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/M5.hu%3ASD%3Ah81b507e77410b005d0e650546bfe938a.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/M5_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "3",
@@ -651,7 +1011,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/m5/online/5904-2"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://gradetv.net:443/api/s/M5.hu:SD:8798.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "3",
@@ -677,6 +1037,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/viasat2/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%202",
+        "onlineUrl": "http://88.212.7.14/live/viasat2/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Viasat2.hu%3ASD%3Ah7440644a2df4fb561c925c404f719e76.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%202",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Viasat2.hu%3ASD%3Ah7440644a2df4fb561c925c404f719e76.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/Viasat2.hu:SD:16393.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 720 x 576 48",
@@ -812,9 +1188,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/bpetv.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
-        "features": ", 720 x 576 44.1",
-        "playerUrl": "https://onlinestream.live/budapest-europa-televizio/videoplayer/1819-1",
-        "onlineUrl": "https://onlinestream.live/budapest-europa-televizio/online/1819-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Budapest%20Eur%C3%B3pa%20Telev%C3%ADzi%C3%B3",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/bpetv.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/BudapestEuropaTelevizio.hu%3ASD%3A4028.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Budapest%20Eur%C3%B3pa%20Telev%C3%ADzi%C3%B3",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/BudapestEuropaTelevizio.hu%3ASD%3A4028.m3u8"
       }
     ],
     "behaviorHints": {
@@ -835,6 +1219,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://live.apostoltv.hu/live/playlist.m3u8",
+        "host": "live.apostoltv.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Apostol%20TV",
+        "onlineUrl": "https://live.apostoltv.hu/live/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/ApostolTV.hu%3ASD%3A2912.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Apostol%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ApostolTV.hu%3ASD%3A2912.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://live.apostoltv.hu:443/live/playlist.m3u8",
         "host": "live.apostoltv.hu",
         "features": ", 1024 x 576 48",
@@ -860,6 +1260,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://hls.iptvservice.eu/hls/ewtn-hd.m3u8",
+        "host": "hls.iptvservice.eu",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=EWTN",
+        "onlineUrl": "https://hls.iptvservice.eu/hls/ewtn-hd.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/BonumTV.hu%3Afree-tv%3A211.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=EWTN",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/BonumTV.hu%3Afree-tv%3A211.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://hls.iptvservice.eu:443/hls/ewtn-hd.m3u8",
         "host": "hls.iptvservice.eu",
         "features": ", 1252 x 720 48",
@@ -885,6 +1301,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/film_plus_hun_atk/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Film%2B",
+        "onlineUrl": "http://88.212.7.14/live/film_plus_hun_atk/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/FilmPlus.hu%3ASD%3Ah67e925e5063a665152fe6b957952fe27.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Film%2B",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/FilmPlus.hu%3ASD%3Ah67e925e5063a665152fe6b957952fe27.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/Film+_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "2",
@@ -892,7 +1324,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/film/online/6150-1"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://gradetv.net:443/api/s/FilmPlus.hu:SD:6529.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "2",
@@ -918,6 +1350,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/mozi_plusz/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Mozi%2B",
+        "onlineUrl": "http://88.212.7.14/live/mozi_plusz/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/MoziPlus.hu%3ASD%3Ahf5373b48622d5ca9168d297bbc1bb7b0.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Mozi%2B",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/MoziPlus.hu%3ASD%3Ahf5373b48622d5ca9168d297bbc1bb7b0.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/Mozi+_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "2",
@@ -925,7 +1373,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/mozi/online/6152-1"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://gradetv.net:443/api/s/MoziPlus.hu:SD:9444.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "2",
@@ -953,9 +1401,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "http://141.94.193.53:80/Cool_HD/index.m3u8",
         "host": "141.94.193.53",
-        "features": ", 1920 x 1080 44.1",
-        "playerUrl": "http://onlinestream.live/cool-tv/videoplayer/6146-1",
-        "onlineUrl": "https://onlinestream.live/cool-tv/online/6146-1"
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Cool%20TV",
+        "onlineUrl": "http://141.94.193.53:80/Cool_HD/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Cool.hu%3Afree-tv%3Ah906fc3e0f3728d14d9decbe4dedfa1cb.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Cool%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Cool.hu%3Afree-tv%3Ah906fc3e0f3728d14d9decbe4dedfa1cb.m3u8"
       }
     ],
     "behaviorHints": {
@@ -1001,6 +1457,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/moziverzum/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Moziverzum",
+        "onlineUrl": "http://88.212.7.14/live/moziverzum/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Moziverzum.hu%3ASD%3Ahec58430ec2828174ffc7245f281b9e9c.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Moziverzum",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Moziverzum.hu%3ASD%3Ahec58430ec2828174ffc7245f281b9e9c.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/Moziverzum.hu:SD:9445.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -1101,6 +1573,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/film4_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Film4",
+        "onlineUrl": "http://88.212.7.14/live/film4_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Film4.hu%3ASD%3Ahf2d12259a66c2cea1d04274bb9b6f0c8.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Film4",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Film4.hu%3ASD%3Ahf2d12259a66c2cea1d04274bb9b6f0c8.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/Film4_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "2",
@@ -1108,7 +1596,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/film4/online/6254-1"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://gradetv.net:443/api/s/Film4.hu:SD:6487.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "2",
@@ -1134,6 +1622,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/tv2_comedy/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV2%20Comedy",
+        "onlineUrl": "http://88.212.7.14/live/tv2_comedy/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TV2Comedy.hu%3ASD%3Ahcfd38eed3fbf858d26cc665e1a29960f.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV2%20Comedy",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TV2Comedy.hu%3ASD%3Ahcfd38eed3fbf858d26cc665e1a29960f.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/TV2Comedy.hu:SD:15244.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 720 x 576 48",
@@ -1159,6 +1663,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/test_sorozat_hungary_1200_atk/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sorozat%2B",
+        "onlineUrl": "http://88.212.7.14/live/test_sorozat_hungary_1200_atk/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/SorozatPlus.hu%3ASD%3Ah95d3cac9c594397d3324f447e9933deb.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sorozat%2B",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/SorozatPlus.hu%3ASD%3Ah95d3cac9c594397d3324f447e9933deb.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/SorozatPlus.hu:SD:13632.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1024 x 576 48",
@@ -1184,6 +1704,38 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/film_cafe/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "Hungary",
+        "playerUrl": "https://gradetv.net/?q=Film%20Caf%C3%A9",
+        "onlineUrl": "http://88.212.7.14/live/film_cafe/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/FilmCafe.hu%3AHungary%3Aha1d37b4e2be581b337ebf214c16fef08.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "Hungary",
+        "playerUrl": "https://gradetv.net/?q=Film%20Caf%C3%A9",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/FilmCafe.hu%3AHungary%3Aha1d37b4e2be581b337ebf214c16fef08.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "https://atlantida1.aquax1.cfd/cofyfilm/usergendxn8lzrnd.m3u8",
+        "host": "atlantida1.aquax1.cfd",
+        "features": "Romania",
+        "playerUrl": "https://gradetv.net/?q=Film%20Caf%C3%A9",
+        "onlineUrl": "https://atlantida1.aquax1.cfd/cofyfilm/usergendxn8lzrnd.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/FilmCafe.hu%3ARomania%3A6525.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "Romania",
+        "playerUrl": "https://gradetv.net/?q=Film%20Caf%C3%A9",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/FilmCafe.hu%3ARomania%3A6525.m3u8"
+      },
+      {
+        "sub_idx": 5,
         "url": "https://gradetv.net:443/api/s/FilmCafe.hu:Hungary:6522.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -1234,6 +1786,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://budapest-cache-1.antik.sk/live/test_galaxy_4_atk_1200/playlist.m3u8",
+        "host": "budapest-cache-1.antik.sk",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Galaxy%204",
+        "onlineUrl": "https://budapest-cache-1.antik.sk/live/test_galaxy_4_atk_1200/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Galaxy4.hu%3ASD%3A6808.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Galaxy%204",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Galaxy4.hu%3ASD%3A6808.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/Galaxy4_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "3",
@@ -1241,7 +1809,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/galaxy-4/online/7422-1"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://budapest-cache-1.antik.sk:443/live/test_galaxy_4_atk_1200/playlist.m3u8",
         "host": "budapest-cache-1.antik.sk",
         "features": "3",
@@ -1249,7 +1817,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/galaxy-4/online/7422-2"
       },
       {
-        "sub_idx": 3,
+        "sub_idx": 5,
         "url": "https://gradetv.net:443/api/s/Galaxy4.hu:SD:6806.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "3",
@@ -1275,6 +1843,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://141.94.193.53/MAX4_HD/index.m3u8",
+        "host": "141.94.193.53",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Max4",
+        "onlineUrl": "http://141.94.193.53/MAX4_HD/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/MAX4.hu%3ASD%3Ah47850344b5c3103583cec6000e75c380.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Max4",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/MAX4.hu%3ASD%3Ah47850344b5c3103583cec6000e75c380.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/MAX4_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "2",
@@ -1300,6 +1884,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/izaura/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Izaura%20TV",
+        "onlineUrl": "http://88.212.7.14/live/izaura/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/IzauraTV.hu%3ASD%3Ahf394f4eff0583739b8917956b9a0c90f.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Izaura%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/IzauraTV.hu%3ASD%3Ahf394f4eff0583739b8917956b9a0c90f.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/Izaura_TV_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "2",
@@ -1307,7 +1907,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/izaura-tv/online/6163-1"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://gradetv.net:443/api/s/IzauraTV.hu:SD:7838.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "2",
@@ -1333,6 +1933,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/jocky/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Jocky%20TV",
+        "onlineUrl": "http://88.212.7.14/live/jocky/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/JockyTV.hu%3ASD%3Ahcd80d5de357f3a9f29d9617751ae849f.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Jocky%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/JockyTV.hu%3ASD%3Ahcd80d5de357f3a9f29d9617751ae849f.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/JockyTV.hu:SD:7973.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 720 x 576 48",
@@ -1358,6 +1974,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/mozi/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Magyar%20Mozi%20TV",
+        "onlineUrl": "http://88.212.7.14/live/mozi/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/MagyarMoziTV.hu%3ASD%3Ah526b36b8f6367452a1a5d41b7b2f797b.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Magyar%20Mozi%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/MagyarMoziTV.hu%3ASD%3Ah526b36b8f6367452a1a5d41b7b2f797b.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/MagyarMoziTV.hu:SD:8843.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -1383,6 +2015,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/moziklub_atk/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Moziklub",
+        "onlineUrl": "http://88.212.7.14/live/moziklub_atk/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Moziklub.hu%3ASD%3Ah521350af8cc634df623f7e3d9bc439dd.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Moziklub",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Moziklub.hu%3ASD%3Ah521350af8cc634df623f7e3d9bc439dd.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/Moziklub.hu:SD:9443.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1024 x 576 48",
@@ -1408,6 +2056,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/sorozatklub_atk/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sorozatklub",
+        "onlineUrl": "http://88.212.7.14/live/sorozatklub_atk/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Sorozatklub.hu%3ASD%3Ah31931df2089da4b07fafcbdc342af03b.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sorozatklub",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Sorozatklub.hu%3ASD%3Ah31931df2089da4b07fafcbdc342af03b.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/Sorozatklub.hu:SD:13631.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1024 x 576 48",
@@ -1458,6 +2122,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/ngc_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=National%20Geographic",
+        "onlineUrl": "http://88.212.7.14/live/ngc_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/NationalGeographic.hu%3ASD%3Ah3bcbfebe04224633822d43631a592a51.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=National%20Geographic",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/NationalGeographic.hu%3ASD%3Ah3bcbfebe04224633822d43631a592a51.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/NationalGeographic.hu:SD:9787.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -1483,6 +2163,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/ngw_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=National%20Geographic%20Wild",
+        "onlineUrl": "http://88.212.7.14/live/ngw_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/NationalGeographicWild.hu%3ASD%3Ah97034fbbc0683b4b03d0bd594c7188dc.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=National%20Geographic%20Wild",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/NationalGeographicWild.hu%3ASD%3Ah97034fbbc0683b4b03d0bd594c7188dc.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/NationalGeographicWild.hu:SD:9808.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -1508,6 +2204,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/spektrum_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Spektrum",
+        "onlineUrl": "http://88.212.7.14/live/spektrum_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Spektrum.hu%3ASD%3Ah33af341374629476073d2cca96cfc98f.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Spektrum",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Spektrum.hu%3ASD%3Ah33af341374629476073d2cca96cfc98f.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/Spektrum_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "2",
@@ -1515,7 +2227,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/spektrum/online/6749-1"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://gradetv.net:443/api/s/Spektrum.hu:SD:13719.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "2",
@@ -1541,6 +2253,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/history_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=History",
+        "onlineUrl": "http://88.212.7.14/live/history_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/History.hu%3ASD%3Ahcbd246de3c789c2a8dc1da3cb6dc2d30.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=History",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/History.hu%3ASD%3Ahcbd246de3c789c2a8dc1da3cb6dc2d30.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/History.hu:SD:7313.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -1566,14 +2294,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
-        "url": "https://m3m8.gradetv.net/api/s/SpektrumHome.hu%3ASD%3Ahc1c89881df5704828d83d3252fd5f6e3.m3u8",
-        "host": "m3m8.gradetv.net",
-        "features": "1",
+        "url": "http://88.212.7.14/live/spektrum_home_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
         "playerUrl": "https://gradetv.net/?q=Spektrum%20Home",
-        "onlineUrl": "https://gradetv.net/?q=Spektrum%20Home"
+        "onlineUrl": "http://88.212.7.14/live/spektrum_home_hun/index.m3u8"
       },
       {
         "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/SpektrumHome.hu%3ASD%3Ahc1c89881df5704828d83d3252fd5f6e3.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Spektrum%20Home",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/SpektrumHome.hu%3ASD%3Ahc1c89881df5704828d83d3252fd5f6e3.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/Spektrum_Home_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "2",
@@ -1599,6 +2335,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/ozone/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Ozone%20TV",
+        "onlineUrl": "http://88.212.7.14/live/ozone/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/OzoneTV.hu%3ASD%3Ah963e3b64af54c2438319b94a39a4523b.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Ozone%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/OzoneTV.hu%3ASD%3Ah963e3b64af54c2438319b94a39a4523b.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/OzoneTV.hu:SD:10728.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -1624,6 +2376,38 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/uatlmvixrr/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=M4%20Sport",
+        "onlineUrl": "http://88.212.7.14/live/uatlmvixrr/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/M4Sport.hu%3ASD%3Ah2c388977d6cbafd9c9614dc4fb054bed.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=M4%20Sport",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/M4Sport.hu%3ASD%3Ah2c388977d6cbafd9c9614dc4fb054bed.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://88.212.7.14/live/m4_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=M4%20Sport",
+        "onlineUrl": "http://88.212.7.14/live/m4_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/M4Sport.hu%3ASD%3Ah50d542259abc0eb4ae2e238160ab7624.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=M4%20Sport",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/M4Sport.hu%3ASD%3Ah50d542259abc0eb4ae2e238160ab7624.m3u8"
+      },
+      {
+        "sub_idx": 5,
         "url": "http://141.94.193.53:80/M4_Sport_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "7",
@@ -1631,7 +2415,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/m4-sport/online/5903-6"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 6,
         "url": "https://gradetv.net:443/api/s/M4Sport.hu:SD:8795.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "7",
@@ -1657,6 +2441,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/spiler1/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sp%C3%ADler%201%20TV",
+        "onlineUrl": "http://88.212.7.14/live/spiler1/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Spiler1.hu%3ASD%3Ah6d25ffa748753d799a7cee62b5e9a565.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sp%C3%ADler%201%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Spiler1.hu%3ASD%3Ah6d25ffa748753d799a7cee62b5e9a565.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/Spiler1.hu:SD:13725.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -1682,6 +2482,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/spiler2/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sp%C3%ADler%202%20TV",
+        "onlineUrl": "http://88.212.7.14/live/spiler2/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Spiler2.hu%3ASD%3Ah178dcbce4ff3247705696430ecd5ebe7.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sp%C3%ADler%202%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Spiler2.hu%3ASD%3Ah178dcbce4ff3247705696430ecd5ebe7.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/Spiler2.hu:SD:13726.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -1707,6 +2523,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/sport1_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sport%201",
+        "onlineUrl": "http://88.212.7.14/live/sport1_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Sport1.hu%3ASD%3Ah1a1cbafda50b742e832be1d9798c27d5.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sport%201",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Sport1.hu%3ASD%3Ah1a1cbafda50b742e832be1d9798c27d5.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/Sport_1_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "2",
@@ -1714,7 +2546,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/sport-1/online/6718-1"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://gradetv.net:443/api/s/Sport1.hu:SD:13734.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "2",
@@ -1740,6 +2572,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/sport2_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sport%202",
+        "onlineUrl": "http://88.212.7.14/live/sport2_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Sport2.hu%3ASD%3Ah3db8f082735c36145134ece467adae39.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sport%202",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Sport2.hu%3ASD%3Ah3db8f082735c36145134ece467adae39.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/Sport_2_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "2",
@@ -1747,7 +2595,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/sport-2/online/6719-1"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://gradetv.net:443/api/s/Sport2.hu:SD:13738.m3u8?via=grade",
         "host": "gradetv.net",
         "features": "2",
@@ -1773,6 +2621,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/arena4/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Arena4",
+        "onlineUrl": "http://88.212.7.14/live/arena4/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Arena4.hu%3ASD%3Ahb714938e342762caf6e3f167878e7ac8.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Arena4",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Arena4.hu%3ASD%3Ahb714938e342762caf6e3f167878e7ac8.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://m3m8.gradetv.net:443/api/s/Arena4.hu%3ASD%3Ahb714938e342762caf6e3f167878e7ac8.m3u8",
         "host": "m3m8.gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -1798,6 +2662,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://141.94.193.53/Match4_HD/index.m3u8",
+        "host": "141.94.193.53",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Match%204",
+        "onlineUrl": "http://141.94.193.53/Match4_HD/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Match4.hu%3ASD%3Ahc38ffc01c7ce66366bd98028553a13ea.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Match%204",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Match4.hu%3ASD%3Ahc38ffc01c7ce66366bd98028553a13ea.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/Match4_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": ", 1920 x 1080 44.1",
@@ -1823,6 +2703,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/parpika_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV%20Paprika",
+        "onlineUrl": "http://88.212.7.14/live/parpika_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TVPaprika.hu%3ASD%3Ah023b44ef6a2772d7fc32f7f5486af445.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV%20Paprika",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TVPaprika.hu%3ASD%3Ah023b44ef6a2772d7fc32f7f5486af445.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://141.94.193.53:80/TV_Paprika_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": ", 1920 x 1080 44.1",
@@ -1848,6 +2744,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/test_lichi_tv_atk_tv/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV2%20S%C3%A9f",
+        "onlineUrl": "http://88.212.7.14/live/test_lichi_tv_atk_tv/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TV2Sef.hu%3ASD%3Ah1fdf309ab4a90a871aaf5d93429ef2bd.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV2%20S%C3%A9f",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TV2Sef.hu%3ASD%3Ah1fdf309ab4a90a871aaf5d93429ef2bd.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/TV2Sef.hu:SD:15246.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1024 x 576 48",
@@ -1873,6 +2785,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/tlc_hungary/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TLC",
+        "onlineUrl": "http://88.212.7.14/live/tlc_hungary/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TLC.hu%3ASD%3Ahf8e1737fc1316e7280f335874d18a060.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TLC",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TLC.hu%3ASD%3Ahf8e1737fc1316e7280f335874d18a060.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "http://88.212.7.14:80/live/tlc_hungary/index.m3u8",
         "host": "88.212.7.14",
         "features": ", 1920 x 1080 48",
@@ -1880,7 +2808,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/tlc/online/6751-1"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "https://m3m8.gradetv.net:443/api/s/TLC.hu%3ASD%3Ahf8e1737fc1316e7280f335874d18a060.m3u8",
         "host": "m3m8.gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -1906,6 +2834,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/lifetv/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Life%20TV",
+        "onlineUrl": "http://88.212.7.14/live/lifetv/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/LifeTV.hu%3ASD%3Ah9a6f5e75151cbaa5c3f00c23a77ac0f7.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Life%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/LifeTV.hu%3ASD%3Ah9a6f5e75151cbaa5c3f00c23a77ac0f7.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/LifeTV.hu:SD:8641.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -1931,6 +2875,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/test_fem3_atktv/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=FEM3",
+        "onlineUrl": "http://88.212.7.14/live/test_fem3_atktv/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/FEM3.hu%3ASD%3Ah1fa44163e2be4480d85fbf5305220b84.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=FEM3",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/FEM3.hu%3ASD%3Ah1fa44163e2be4480d85fbf5305220b84.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/FEM3.hu:SD:6439.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1024 x 576 48",
@@ -1956,6 +2916,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/rtl_otthon_atk/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=RTL%20Otthon",
+        "onlineUrl": "http://88.212.7.14/live/rtl_otthon_atk/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/RTLOtthon.hu%3ASD%3Ah2ee512b6493968a09a8124eef20cb172.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=RTL%20Otthon",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/RTLOtthon.hu%3ASD%3Ah2ee512b6493968a09a8124eef20cb172.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/RTLOtthon.hu:SD:12557.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -1981,6 +2957,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/test_slager_tv_hungary_1200_atk/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sl%C3%A1ger%20TV",
+        "onlineUrl": "http://88.212.7.14/live/test_slager_tv_hungary_1200_atk/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/SlagerTV.hu%3ASD%3Ah70d5723da4f66db1b1fac6cbe1e20d4a.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sl%C3%A1ger%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/SlagerTV.hu%3ASD%3Ah70d5723da4f66db1b1fac6cbe1e20d4a.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/SlagerTV.hu:SD:13498.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1024 x 576 48",
@@ -2006,6 +2998,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/test_muzsika_hungary_1200_atk/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Muzsika%20TV",
+        "onlineUrl": "http://88.212.7.14/live/test_muzsika_hungary_1200_atk/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/MuzsikaTV.hu%3ASD%3Ahd9b6c9ac18a670b3de14445051efebf0.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Muzsika%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/MuzsikaTV.hu%3ASD%3Ahd9b6c9ac18a670b3de14445051efebf0.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/MuzsikaTV.hu:SD:9659.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1024 x 576 48",
@@ -2031,6 +3039,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/zenebutik/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Zenebutik",
+        "onlineUrl": "http://88.212.7.14/live/zenebutik/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Zenebutik.hu%3ASD%3Ahc93465eb9db26da9f2f9da5073381207.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Zenebutik",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Zenebutik.hu%3ASD%3Ahc93465eb9db26da9f2f9da5073381207.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/Zenebutik.hu:SD:17121.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 720 x 576 48",
@@ -2056,6 +3080,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://87.229.103.60:1935/liverelay/loverseny2.sdp/playlist.m3u8",
+        "host": "87.229.103.60",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=L%C3%B3verseny%20k%C3%B6zvet%C3%ADt%C3%A9s",
+        "onlineUrl": "http://87.229.103.60:1935/liverelay/loverseny2.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Loversenykozvetites.hu%3ASD%3A8729.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=L%C3%B3verseny%20k%C3%B6zvet%C3%ADt%C3%A9s",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Loversenykozvetites.hu%3ASD%3A8729.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://cloudfront41.lexanetwork.com:1344/xrelay/loverseny2.sdp/playlist.m3u8",
         "host": "cloudfront41.lexanetwork.com",
         "features": ", 720 x 420 44.1",
@@ -2081,6 +3121,38 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/minimax_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Minimax",
+        "onlineUrl": "http://88.212.7.14/live/minimax_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Minimax.hu%3ASD%3Ah830e170de3450d133fa15a29687cd6e4.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Minimax",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Minimax.hu%3ASD%3Ah830e170de3450d133fa15a29687cd6e4.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://141.94.193.53:80/Minimax/index.m3u8",
+        "host": "141.94.193.53",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Minimax",
+        "onlineUrl": "http://141.94.193.53:80/Minimax/index.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/Minimax.hu%3Afree-tv%3Ahdb24e9df50ac589b9481553e03338574.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Minimax",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Minimax.hu%3Afree-tv%3Ahdb24e9df50ac589b9481553e03338574.m3u8"
+      },
+      {
+        "sub_idx": 5,
         "url": "https://gradetv.net:443/api/s/Minimax.hu:SD:9212.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 720 x 576 48",
@@ -2106,6 +3178,38 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/test_nickelodeon_hu_1200_atk/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Nickelodeon",
+        "onlineUrl": "http://88.212.7.14/live/test_nickelodeon_hu_1200_atk/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Nickelodeon.hu%3ASD%3Ah8ef9c5e88e0dad1b5d23b20265abc480.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Nickelodeon",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Nickelodeon.hu%3ASD%3Ah8ef9c5e88e0dad1b5d23b20265abc480.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://193.33.39.108:9011/play/a017",
+        "host": "193.33.39.108",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Nickelodeon",
+        "onlineUrl": "http://193.33.39.108:9011/play/a017"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/Nickelodeon.hu%3ASD%3Ahc3fcd58f69cb8586aa75ebf9d51e2124.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Nickelodeon",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Nickelodeon.hu%3ASD%3Ahc3fcd58f69cb8586aa75ebf9d51e2124.m3u8"
+      },
+      {
+        "sub_idx": 5,
         "url": "https://gradetv.net:443/api/s/Nickelodeon.hu:SD:10127.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1024 x 576 48",
@@ -2131,6 +3235,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/nick_junior_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Nick%20Jr",
+        "onlineUrl": "http://88.212.7.14/live/nick_junior_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/NickJr.hu%3ASD%3Ah53774c1119fc75f0bd2a59609975dc83.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Nick%20Jr",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/NickJr.hu%3ASD%3Ah53774c1119fc75f0bd2a59609975dc83.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/NickJr.hu:SD:10158.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1024 x 576 48",
@@ -2156,6 +3276,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/nicktoons_hungary/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Nicktoons",
+        "onlineUrl": "http://88.212.7.14/live/nicktoons_hungary/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Nicktoons.hu%3ASD%3Ah4f24a0f925b8ef7494dcdd8d5ce32779.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Nicktoons",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Nicktoons.hu%3ASD%3Ah4f24a0f925b8ef7494dcdd8d5ce32779.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/Nicktoons.hu:SD:10177.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -2181,6 +3317,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/tv2_kids/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV2%20Kids",
+        "onlineUrl": "http://88.212.7.14/live/tv2_kids/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TV2Kids.hu%3ASD%3Ahf5674b1740a12a61d38dae6e37329cca.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV2%20Kids",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TV2Kids.hu%3ASD%3Ahf5674b1740a12a61d38dae6e37329cca.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/TV2Kids.hu:SD:15245.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 720 x 576 48",
@@ -2206,6 +3358,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/jim_jam_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=JimJam",
+        "onlineUrl": "http://88.212.7.14/live/jim_jam_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/JimJam.hu%3ASD%3Ahc2f91c3b2ffd0f8a338b55dc5cde039e.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=JimJam",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/JimJam.hu%3ASD%3Ahc2f91c3b2ffd0f8a338b55dc5cde039e.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/JimJam.hu:SD:7958.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 720 x 576 48",
@@ -2231,6 +3399,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://88.212.7.14/live/kolyokklub_atk/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=K%C3%B6ly%C3%B6kklub",
+        "onlineUrl": "http://88.212.7.14/live/kolyokklub_atk/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Kolyokklub.hu%3ASD%3Ah2f76fff8d24e1f2f0f45d49b405364af.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=K%C3%B6ly%C3%B6kklub",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Kolyokklub.hu%3ASD%3Ah2f76fff8d24e1f2f0f45d49b405364af.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://gradetv.net:443/api/s/Kolyokklub.hu:SD:8335.m3u8?via=grade",
         "host": "gradetv.net",
         "features": ", 1920 x 1080 48",
@@ -2297,6 +3481,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/fehervartv.sdp/playlist.m3u8",
+        "host": "cloudfront44.lexanetwork.com",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Feh%C3%A9rv%C3%A1r%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/fehervartv.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/FehervarTV.hu%3ASD%3A6440.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Feh%C3%A9rv%C3%A1r%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/FehervarTV.hu%3ASD%3A6440.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE046.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
         "features": ", 1920 x 1080 48",
@@ -2349,9 +3549,33 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "http://rtmp1.40e.hu:8000/live/ktv.m3u8",
         "host": "rtmp1.40e.hu",
-        "features": "3",
-        "playerUrl": "",
-        "onlineUrl": "https://onlinestream.live/kecskemeti-televizio/online/1901-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Kecskem%C3%A9ti%20TV",
+        "onlineUrl": "http://rtmp1.40e.hu:8000/live/ktv.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/KecskemetiTV.hu%3ASD%3A8174.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Kecskem%C3%A9ti%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/KecskemetiTV.hu%3ASD%3A8174.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "https://eurobioinvest.hu:444/live/ktv.m3u8",
+        "host": "eurobioinvest.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Kecskem%C3%A9ti%20TV",
+        "onlineUrl": "https://eurobioinvest.hu:444/live/ktv.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/KecskemetiTV.hu%3ASD%3A8175.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Kecskem%C3%A9ti%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/KecskemetiTV.hu%3ASD%3A8175.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2374,9 +3598,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/zegtv.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
-        "features": ", 720 x 480 44.1",
-        "playerUrl": "https://onlinestream.live/zalaegerszegi-televizio/videoplayer/1829-1",
-        "onlineUrl": "https://onlinestream.live/zalaegerszegi-televizio/online/1829-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Zalaegerszegi%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/zegtv.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/ZalaegerszegiTV.hu%3ASD%3A17045.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Zalaegerszegi%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ZalaegerszegiTV.hu%3ASD%3A17045.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2397,11 +3629,35 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://cloudfront63.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8",
+        "host": "cloudfront63.lexanetwork.com",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Kapos%20TV",
+        "onlineUrl": "https://cloudfront63.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/KaposTV.hu%3ASD%3A8130.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Kapos%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/KaposTV.hu%3ASD%3A8130.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast004.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
-        "features": ", 1920 x 1080 48",
-        "playerUrl": "https://onlinestream.live/kapos-tv/videoplayer/5137-1",
-        "onlineUrl": "https://onlinestream.live/kapos-tv/online/5137-1"
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Kapos%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast004.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/KaposTV.hu%3Afree-tv%3A214.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Kapos%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/KaposTV.hu%3Afree-tv%3A214.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2422,6 +3678,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://stream.tveger.hu:8010/live.m3u8",
+        "host": "stream.tveger.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV%20Eger",
+        "onlineUrl": "http://stream.tveger.hu:8010/live.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TVEger.hu%3ASD%3A15562.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV%20Eger",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TVEger.hu%3ASD%3A15562.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://stream.tveger.hu:8012/live.m3u8",
         "host": "stream.tveger.hu",
         "features": ", 1920 x 1080 48",
@@ -2449,9 +3721,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront44.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
-        "features": ", 1280 x 720 48",
-        "playerUrl": "https://onlinestream.live/szolnok-tv/videoplayer/4788-1",
-        "onlineUrl": "https://onlinestream.live/szolnok-tv/online/4788-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Szolnok%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/SzolnokTV.hu%3ASD%3A14189.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Szolnok%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/SzolnokTV.hu%3ASD%3A14189.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2474,9 +3754,33 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE043.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
-        "features": ", 720 x 420 44.1",
-        "playerUrl": "https://onlinestream.live/gyongyosi-tv/videoplayer/1821-1",
-        "onlineUrl": "https://onlinestream.live/gyongyosi-tv/online/1821-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Gy%C3%B6ngy%C3%B6si%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE043.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/GyongyosiTV.hu%3ASD%3A7140.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Gy%C3%B6ngy%C3%B6si%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/GyongyosiTV.hu%3ASD%3A7140.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "https://cloudfront41.lexanetwork.com:1344/relay02/livestream005.sdp/playlist.m3u8",
+        "host": "cloudfront41.lexanetwork.com",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Gy%C3%B6ngy%C3%B6si%20TV",
+        "onlineUrl": "https://cloudfront41.lexanetwork.com:1344/relay02/livestream005.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/GyongyosiTV.hu%3ASD%3A7141.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Gy%C3%B6ngy%C3%B6si%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/GyongyosiTV.hu%3ASD%3A7141.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2497,6 +3801,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://stream.y5.hu/stream/stream_bekescsaba/stream.m3u8",
+        "host": "stream.y5.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=7.tv%20(B%C3%A9k%C3%A9scsaba)",
+        "onlineUrl": "https://stream.y5.hu/stream/stream_bekescsaba/stream.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/7TV.hu%3ASD%3A2033.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=7.tv%20(B%C3%A9k%C3%A9scsaba)",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/7TV.hu%3ASD%3A2033.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://stream.y5.hu:443/stream/stream_bekescsaba/stream.m3u8",
         "host": "stream.y5.hu",
         "features": ", 640 x 360 44.1",
@@ -2524,9 +3844,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront41.lexanetwork.com:1344/relay01/livestream002.sdp/playlist.m3u8",
         "host": "cloudfront41.lexanetwork.com",
-        "features": ", 1920 x 1080 44.1",
-        "playerUrl": "https://onlinestream.live/bajai-tv/videoplayer/3858-1",
-        "onlineUrl": "https://onlinestream.live/bajai-tv/online/3858-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Bajai%20TV",
+        "onlineUrl": "https://cloudfront41.lexanetwork.com:1344/relay01/livestream002.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/BajaiTV.hu%3ASD%3A3344.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Bajai%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/BajaiTV.hu%3ASD%3A3344.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2549,9 +3877,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/kanizsavtv.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
-        "features": "2",
-        "playerUrl": "",
-        "onlineUrl": "https://onlinestream.live/kanizsa-tv/online/1811-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Kanizsa%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/kanizsavtv.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/KanizsaTV.hu%3ASD%3A8119.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Kanizsa%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/KanizsaTV.hu%3ASD%3A8119.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2574,9 +3910,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/keszthelyivtv.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
-        "features": "2",
-        "playerUrl": "",
-        "onlineUrl": "https://onlinestream.live/tv-keszthely/online/1812-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV%20Keszthely",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/keszthelyivtv.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TVKeszthely.hu%3ASD%3A15654.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV%20Keszthely",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TVKeszthely.hu%3ASD%3A15654.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2599,9 +3943,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE017.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
-        "features": "2",
-        "playerUrl": "",
-        "onlineUrl": "https://onlinestream.live/komaromi-televizio/online/4590-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Kom%C3%A1romi%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE017.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/KomaromiTelevizio.hu%3ASD%3A8326.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Kom%C3%A1romi%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/KomaromiTelevizio.hu%3ASD%3A8326.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2622,6 +3974,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/morvtv.sdp/playlist.m3u8",
+        "host": "cloudfront44.lexanetwork.com",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=M%C3%B3ri%20V%C3%A1rosi%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/morvtv.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/VTVMor.hu%3ASD%3A16649.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=M%C3%B3ri%20V%C3%A1rosi%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/VTVMor.hu%3ASD%3A16649.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE041.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
         "features": ", 640 x 360 44.1",
@@ -2649,9 +4017,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront41.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8",
         "host": "cloudfront41.lexanetwork.com",
-        "features": ", 1280 x 720 48",
-        "playerUrl": "https://onlinestream.live/karcag-tv/videoplayer/4662-1",
-        "onlineUrl": "https://onlinestream.live/karcag-tv/online/4662-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Karcag%20TV",
+        "onlineUrl": "https://cloudfront41.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/KarcagTV.hu%3ASD%3A8135.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Karcag%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/KarcagTV.hu%3ASD%3A8135.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2697,19 +4073,27 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "http://stream.nmih.hu:7980/live.m3u8",
+        "host": "stream.nmih.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=%C3%93zdi%20TV",
+        "onlineUrl": "http://stream.nmih.hu:7980/live.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/OzdiVarosiTV.hu%3ASD%3A10713.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=%C3%93zdi%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/OzdiVarosiTV.hu%3ASD%3A10713.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://stream.nmih.hu:7982/live.m3u8",
         "host": "stream.nmih.hu",
         "features": "2",
         "playerUrl": "",
         "onlineUrl": "https://onlinestream.live/ozdi-varosi-televizio/online/4738-1"
-      },
-      {
-        "sub_idx": 2,
-        "url": "http://stream.nmih.hu:7980/live.m3u8",
-        "host": "stream.nmih.hu",
-        "features": "2",
-        "playerUrl": "http://onlinestream.live/ozdi-varosi-televizio/videoplayer/4738-2",
-        "onlineUrl": "https://onlinestream.live/ozdi-varosi-televizio/online/4738-2"
       }
     ],
     "behaviorHints": {
@@ -2732,9 +4116,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE051.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
-        "features": ", 720 x 480 44.1",
-        "playerUrl": "https://onlinestream.live/xvtv/videoplayer/4792-1",
-        "onlineUrl": "https://onlinestream.live/xvtv/online/4792-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=XVTV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE051.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/XVTV.hu%3ASD%3A16952.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=XVTV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/XVTV.hu%3ASD%3A16952.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2755,6 +4147,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast007.sdp/playlist.m3u8",
+        "host": "cloudfront44.lexanetwork.com",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=J%C3%A1szs%C3%A1gi%20T%C3%A9rs%C3%A9gi%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast007.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/JaszsagiTersegiTV.hu%3ASD%3A7865.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=J%C3%A1szs%C3%A1gi%20T%C3%A9rs%C3%A9gi%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/JaszsagiTersegiTV.hu%3ASD%3A7865.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://cloudfront41.lexanetwork.com:1344/relay41_1/livestream001.sdp/playlist.m3u8",
         "host": "cloudfront41.lexanetwork.com",
         "features": ", 1280 x 720 48",
@@ -2782,9 +4190,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "http://193.225.32.62:8890/live.m3u8",
         "host": "193.225.32.62",
-        "features": ", 1024 x 576 48",
-        "playerUrl": "http://onlinestream.live/liceum-tv/videoplayer/5026-1",
-        "onlineUrl": "https://onlinestream.live/liceum-tv/online/5026-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=L%C3%ADceum%20TV",
+        "onlineUrl": "http://193.225.32.62:8890/live.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/LiceumTV.hu%3ASD%3A8612.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=L%C3%ADceum%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/LiceumTV.hu%3ASD%3A8612.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2827,7 +4243,24 @@ const ALL_CHANNELS = [
     "releaseInfo": "ÉLŐ • HD",
     "description": "Hódmezővásárhely és a Dél-Alföld hírei, mezőgazdasági és kulturális programjai.",
     "mtvaKey": null,
-    "streams": [],
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://stream.vasarhelyitelevizio.hu/stream/stream.m3u8",
+        "host": "stream.vasarhelyitelevizio.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=V%C3%A1s%C3%A1rhelyi%20TV",
+        "onlineUrl": "https://stream.vasarhelyitelevizio.hu/stream/stream.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/VasarhelyiTelevizio.hu%3ASD%3A16312.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=V%C3%A1s%C3%A1rhelyi%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/VasarhelyiTelevizio.hu%3ASD%3A16312.m3u8"
+      }
+    ],
     "behaviorHints": {
       "defaultVideoId": "onlinestream-live-5656",
       "isLive": true
@@ -2848,9 +4281,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront44.lexanetwork.com:1344/relay02/livestream004.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
-        "features": ", 704 x 394 48",
-        "playerUrl": "https://onlinestream.live/telepaks/videoplayer/5838-1",
-        "onlineUrl": "https://onlinestream.live/telepaks/online/5838-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TelePaks",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/relay02/livestream004.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TelePaks.hu%3ASD%3A14492.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TelePaks",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TelePaks.hu%3ASD%3A14492.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2871,6 +4312,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://stream.iptvservice.eu/hls/balatontv.m3u8",
+        "host": "stream.iptvservice.eu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Balaton%20TV",
+        "onlineUrl": "https://stream.iptvservice.eu/hls/balatontv.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/BalatonTV.hu%3ASD%3A3351.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Balaton%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/BalatonTV.hu%3ASD%3A3351.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://stream.iptvservice.eu:443/hls/balatontv.m3u8",
         "host": "stream.iptvservice.eu",
         "features": "2",
@@ -2878,7 +4335,7 @@ const ALL_CHANNELS = [
         "onlineUrl": "https://onlinestream.live/balaton-tv/online/5913-1"
       },
       {
-        "sub_idx": 2,
+        "sub_idx": 4,
         "url": "http://stream.iptvservice.eu:80/hls/balatontv.m3u8",
         "host": "stream.iptvservice.eu",
         "features": "2",
@@ -2904,11 +4361,35 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE032.sdp/playlist.m3u8",
+        "host": "cloudfront44.lexanetwork.com",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ESTV%20(V%C3%A1c)",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE032.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/ESTV.hu%3ASD%3A6191.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ESTV%20(V%C3%A1c)",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ESTV.hu%3ASD%3A6191.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE040.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
-        "features": ", 640 x 360 44.1",
-        "playerUrl": "https://onlinestream.live/estv/videoplayer/6144-1",
-        "onlineUrl": "https://onlinestream.live/estv/online/6144-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ESTV%20(V%C3%A1c)",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE040.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/ESTV.hu%3ASD%3A6192.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ESTV%20(V%C3%A1c)",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ESTV.hu%3ASD%3A6192.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2931,9 +4412,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront41.lexanetwork.com:1344/relay01/livestream006.sdp/playlist.m3u8",
         "host": "cloudfront41.lexanetwork.com",
-        "features": ", 1920 x 1080 44.1",
-        "playerUrl": "https://onlinestream.live/alfold-tv/videoplayer/6491-1",
-        "onlineUrl": "https://onlinestream.live/alfold-tv/online/6491-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Alf%C3%B6ld%20TV",
+        "onlineUrl": "https://cloudfront41.lexanetwork.com:1344/relay01/livestream006.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/AlfoldTV.hu%3ASD%3A2525.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Alf%C3%B6ld%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/AlfoldTV.hu%3ASD%3A2525.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2956,9 +4445,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast002.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
-        "features": ", 1280 x 720 48",
-        "playerUrl": "https://onlinestream.live/oroszlanyi-varosi-televizio/videoplayer/6638-1",
-        "onlineUrl": "https://onlinestream.live/oroszlanyi-varosi-televizio/online/6638-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Oroszl%C3%A1nyi%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast002.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/OroszlanyiVarosiTelevizio.hu%3ASD%3A10651.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Oroszl%C3%A1nyi%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/OroszlanyiVarosiTelevizio.hu%3ASD%3A10651.m3u8"
       }
     ],
     "behaviorHints": {
@@ -2979,6 +4476,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://stream.moranettv.hu/live/index.m3u8",
+        "host": "stream.moranettv.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=M%C3%B3ra-Net%20TV",
+        "onlineUrl": "https://stream.moranettv.hu/live/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/MoraNetTV.hu%3ASD%3A9360.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=M%C3%B3ra-Net%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/MoraNetTV.hu%3ASD%3A9360.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://stream.moranettv.hu:443/live/index.m3u8",
         "host": "stream.moranettv.hu",
         "features": ", 1024 x 576 48",
@@ -3031,9 +4544,17 @@ const ALL_CHANNELS = [
         "sub_idx": 1,
         "url": "https://cloudfront44.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
-        "features": ", 1920 x 1080 48",
-        "playerUrl": "https://onlinestream.live/hevizi-tv/videoplayer/7374-1",
-        "onlineUrl": "https://onlinestream.live/hevizi-tv/online/7374-1"
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=H%C3%A9v%C3%ADzi%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/HeviziTV.hu%3ASD%3A7262.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=H%C3%A9v%C3%ADzi%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/HeviziTV.hu%3ASD%3A7262.m3u8"
       }
     ],
     "behaviorHints": {
@@ -3054,6 +4575,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE038.sdp/playlist.m3u8",
+        "host": "cloudfront44.lexanetwork.com",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sixo%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE038.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/SIXOTV.hu%3ASD%3A13439.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Sixo%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/SIXOTV.hu%3ASD%3A13439.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE038.sdp/playlist.m3u8",
         "host": "cloudfront44.lexanetwork.com",
         "features": ", 640 x 360 44.1",
@@ -3079,6 +4616,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://stream.medialive.hu/gran/grantvlive/playlist.m3u8",
+        "host": "stream.medialive.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Gran%20TV%20(Esztergom)",
+        "onlineUrl": "https://stream.medialive.hu/gran/grantvlive/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/GranTV.hu%3ASD%3A7053.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Gran%20TV%20(Esztergom)",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/GranTV.hu%3ASD%3A7053.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://grantv.medialivecdn.hu:443/gran/51328567842cc1ba78b4b851ee9c46b4.sdp/playlist.m3u8",
         "host": "grantv.medialivecdn.hu",
         "features": ", 1280 x 720 48",
@@ -3129,6 +4682,22 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://citytv.hu/playlist.m3u8",
+        "host": "citytv.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=City%20TV",
+        "onlineUrl": "https://citytv.hu/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/CityTV.hu%3ASD%3A5001.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=City%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/CityTV.hu%3ASD%3A5001.m3u8"
+      },
+      {
+        "sub_idx": 3,
         "url": "https://citytv.hu:443/playlist.m3u8",
         "host": "citytv.hu",
         "features": ", 720 x 576 48",
@@ -3138,6 +4707,1914 @@ const ALL_CHANNELS = [
     ],
     "behaviorHints": {
       "defaultVideoId": "onlinestream-live-1802",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9800",
+    "channelId": "9800",
+    "name": "16tv Budapest",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "16tv Budapest helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/16tv.sdp/playlist.m3u8",
+        "host": "cloudfront44.lexanetwork.com",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=16tv%20Budapest",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/16tv.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/16tvBudapest.hu%3ASD%3A2085.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=16tv%20Budapest",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/16tvBudapest.hu%3ASD%3A2085.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9800",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9801",
+    "channelId": "9801",
+    "name": "ATV Spirit",
+    "category": "hu-live-orszagos",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Az ATV testvércsatornája: könnyedebb közélet, magazinműsorok és talk-show-k.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://streamservers.atv.hu/atvliveedge/_definst_/atvstream_2_aac/playlist.m3u8",
+        "host": "streamservers.atv.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ATV%20Spirit",
+        "onlineUrl": "https://streamservers.atv.hu/atvliveedge/_definst_/atvstream_2_aac/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/ATVSpirit.hu%3ASD%3A3164.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ATV%20Spirit",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ATVSpirit.hu%3ASD%3A3164.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://88.212.7.14/live/test_atv_spirit/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ATV%20Spirit",
+        "onlineUrl": "http://88.212.7.14/live/test_atv_spirit/playlist.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/ATVSpirit.hu%3ASD%3Ah8675f09aedd818eb8b91421296733a4f.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=ATV%20Spirit",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ATVSpirit.hu%3ASD%3Ah8675f09aedd818eb8b91421296733a4f.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9801",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9802",
+    "channelId": "9802",
+    "name": "AXN Spin",
+    "category": "hu-live-film",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Fiataloknak szóló akció, fantasy és anime sorozatok.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://polska.hach.workers.dev/14847.m3u8",
+        "host": "polska.hach.workers.dev",
+        "features": "Poland",
+        "playerUrl": "https://gradetv.net/?q=AXN%20Spin",
+        "onlineUrl": "https://polska.hach.workers.dev/14847.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/AXNSpin.hu%3APoland%3A3257.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "Poland",
+        "playerUrl": "https://gradetv.net/?q=AXN%20Spin",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/AXNSpin.hu%3APoland%3A3257.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "https://cronos.mangora1.cfd/spyn/usergencs85ja0j1rrnd.m3u8",
+        "host": "cronos.mangora1.cfd",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=AXN%20Spin",
+        "onlineUrl": "https://cronos.mangora1.cfd/spyn/usergencs85ja0j1rrnd.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/AXNSpin.hu%3ASD%3A3258.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=AXN%20Spin",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/AXNSpin.hu%3ASD%3A3258.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9802",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9803",
+    "channelId": "9803",
+    "name": "Animal Planet",
+    "category": "hu-live-doksi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Vadállatok, természet és állatvilág testközelből.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://88.212.7.14/live/animal_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Animal%20Planet",
+        "onlineUrl": "http://88.212.7.14/live/animal_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/AnimalPlanet.hu%3ASD%3Ahe6a49505498c493eb4a4b186ec1bd1a7.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Animal%20Planet",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/AnimalPlanet.hu%3ASD%3Ahe6a49505498c493eb4a4b186ec1bd1a7.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9803",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9804",
+    "channelId": "9804",
+    "name": "BTV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "BTV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/babolnatv.sdp/playlist.m3u8",
+        "host": "cloudfront44.lexanetwork.com",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=BTV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/babolnatv.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/BTV.hu%3ASD%3A4015.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=BTV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/BTV.hu%3ASD%3A4015.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9804",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9805",
+    "channelId": "9805",
+    "name": "Berente TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Berente TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://stream.streaming4u.hu/BerenteTV/index.m3u8",
+        "host": "stream.streaming4u.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Berente%20TV",
+        "onlineUrl": "https://stream.streaming4u.hu/BerenteTV/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/BerenteTV.hu%3ASD%3A3685.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Berente%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/BerenteTV.hu%3ASD%3A3685.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9805",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9806",
+    "channelId": "9806",
+    "name": "Csurgo TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Csurgo TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://cstv.medialivecdn.hu/csurgotv/27725804dc13aa23b3970414524d2dbf.sdp/playlist.m3u8",
+        "host": "cstv.medialivecdn.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Csurgo%20TV",
+        "onlineUrl": "https://cstv.medialivecdn.hu/csurgotv/27725804dc13aa23b3970414524d2dbf.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/CsurgoTV.hu%3ASD%3A5286.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Csurgo%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/CsurgoTV.hu%3ASD%3A5286.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://79.120.178.90:1935/csurgotv/csurgolive/playlist.m3u8",
+        "host": "79.120.178.90",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Csurgo%20TV",
+        "onlineUrl": "http://79.120.178.90:1935/csurgotv/csurgolive/playlist.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/CsurgoTV.hu%3ASD%3A5287.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Csurgo%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/CsurgoTV.hu%3ASD%3A5287.m3u8"
+      },
+      {
+        "sub_idx": 5,
+        "url": "https://5cd03f21c7193.streamlock.net/csurgotv/csurgolive/playlist.m3u8",
+        "host": "5cd03f21c7193.streamlock.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Csurgo%20TV",
+        "onlineUrl": "https://5cd03f21c7193.streamlock.net/csurgotv/csurgolive/playlist.m3u8"
+      },
+      {
+        "sub_idx": 6,
+        "url": "https://m3m8.gradetv.net/api/s/CsurgoTV.hu%3ASD%3A5288.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Csurgo%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/CsurgoTV.hu%3ASD%3A5288.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9806",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9807",
+    "channelId": "9807",
+    "name": "DSTV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "DSTV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://79.120.178.90:1935/dstv/dstvlive/playlist.m3u8",
+        "host": "79.120.178.90",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=DSTV",
+        "onlineUrl": "http://79.120.178.90:1935/dstv/dstvlive/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/DSTV.hu%3ASD%3A5839.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=DSTV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/DSTV.hu%3ASD%3A5839.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9807",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9808",
+    "channelId": "9808",
+    "name": "DTV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "DTV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://cloudfront44.lexanetwork.com:1732/hlsrelay003/hls/livestream.sdp.m3u8",
+        "host": "cloudfront44.lexanetwork.com",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=DTV",
+        "onlineUrl": "http://cloudfront44.lexanetwork.com:1732/hlsrelay003/hls/livestream.sdp.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/DTV.hu%3ASD%3A5841.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=DTV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/DTV.hu%3ASD%3A5841.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9808",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9809",
+    "channelId": "9809",
+    "name": "Daru TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Daru TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://5cd03f21c7193.streamlock.net/darutv/darutvlive/playlist.m3u8",
+        "host": "5cd03f21c7193.streamlock.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Daru%20TV",
+        "onlineUrl": "https://5cd03f21c7193.streamlock.net/darutv/darutvlive/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/DaruTV.hu%3ASD%3A5408.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Daru%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/DaruTV.hu%3ASD%3A5408.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9809",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9810",
+    "channelId": "9810",
+    "name": "Dikh TV",
+    "category": "hu-live-orszagos",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "A roma kultúra, zene és szórakoztató műsorok országos csatornája.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://88.212.7.14/live/dikh/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Dikh%20TV",
+        "onlineUrl": "http://88.212.7.14/live/dikh/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/DikhTV.hu%3ASD%3Ah42c38bf4cd3312eecda6ca1252dcb9df.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Dikh%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/DikhTV.hu%3ASD%3Ah42c38bf4cd3312eecda6ca1252dcb9df.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9810",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9811",
+    "channelId": "9811",
+    "name": "Discovery Channel",
+    "category": "hu-live-doksi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "A világ legnépszerűbb tudományos és felfedező csatornája.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://88.212.7.14/live/discovery_hungary/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Discovery%20Channel",
+        "onlineUrl": "http://88.212.7.14/live/discovery_hungary/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/DiscoveryChannel.hu%3ASD%3Ahcb466bb867301bd6546a396b2133e133.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Discovery%20Channel",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/DiscoveryChannel.hu%3ASD%3Ahcb466bb867301bd6546a396b2133e133.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9811",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9812",
+    "channelId": "9812",
+    "name": "Disney Channel",
+    "category": "hu-live-gyerek",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "A Disney animációs és ifjúsági sikersorozatai gyerekeknek és családoknak.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://193.33.39.108:9019/play/a00n",
+        "host": "193.33.39.108",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Disney%20Channel",
+        "onlineUrl": "http://193.33.39.108:9019/play/a00n"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/DisneyChannel.hu%3ASD%3Ahe17cdd0d579805c208ab84ae0663738c.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Disney%20Channel",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/DisneyChannel.hu%3ASD%3Ahe17cdd0d579805c208ab84ae0663738c.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://88.212.7.14/live/disney_channel_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Disney%20Channel",
+        "onlineUrl": "http://88.212.7.14/live/disney_channel_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/DisneyChannel.hu%3ASD%3Ahe678b067b6f5e5fccb9a70f2692cb1bd.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Disney%20Channel",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/DisneyChannel.hu%3ASD%3Ahe678b067b6f5e5fccb9a70f2692cb1bd.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9812",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9813",
+    "channelId": "9813",
+    "name": "EWTN/Bonum TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "EWTN/Bonum TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://dash2.antik.sk/live/ewtn_bonum/index.m3u8",
+        "host": "dash2.antik.sk",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=EWTN%2FBonum%20TV",
+        "onlineUrl": "https://dash2.antik.sk/live/ewtn_bonum/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/EWTNBonumTV.hu%3ASD%3A6316.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=EWTN%2FBonum%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/EWTNBonumTV.hu%3ASD%3A6316.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9813",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9814",
+    "channelId": "9814",
+    "name": "Egyker TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Egyker TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://iptv01.eurocable.co.hu/EC-EGYKERTVHD/index.m3u8",
+        "host": "iptv01.eurocable.co.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Egyker%20TV",
+        "onlineUrl": "https://iptv01.eurocable.co.hu/EC-EGYKERTVHD/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/EgykerTV.hu%3ASD%3A5974.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Egyker%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/EgykerTV.hu%3ASD%3A5974.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9814",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9815",
+    "channelId": "9815",
+    "name": "EuroSport1",
+    "category": "hu-live-sport",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Élő nemzetközi élsport: tenisz Grand Slamek, kerékpár körversenyek, téli sportok.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://141.94.193.53:80/Eurosport_1_HD/index.m3u8",
+        "host": "141.94.193.53",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=EuroSport1",
+        "onlineUrl": "http://141.94.193.53:80/Eurosport_1_HD/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Eurosport1.hu%3Afree-tv%3Ahad6db7a7690bf1ac6b9ff88215f7518e.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=EuroSport1",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Eurosport1.hu%3Afree-tv%3Ahad6db7a7690bf1ac6b9ff88215f7518e.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9815",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9816",
+    "channelId": "9816",
+    "name": "FIX TV",
+    "category": "hu-live-orszagos",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Technológiai hírek, informatika és kulturális magazinok.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://fixhd.tv:8082/fix/1080i/playlist.m3u8",
+        "host": "fixhd.tv",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=FIX%20TV",
+        "onlineUrl": "https://fixhd.tv:8082/fix/1080i/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/FIXTV.hu%3ASD%3A6561.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=FIX%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/FIXTV.hu%3ASD%3A6561.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9816",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9817",
+    "channelId": "9817",
+    "name": "Film Mania",
+    "category": "hu-live-film",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Örökzöld hollywoodi klasszikusok és legendás mozifilmek.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://205.237.104.26:8080/stream/340/index.m3u8",
+        "host": "205.237.104.26",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Film%20Mania",
+        "onlineUrl": "http://205.237.104.26:8080/stream/340/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/FilmMania.hu%3ASD%3Ah7ae0df6fa220ceba59c0965792b3bfbd.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Film%20Mania",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/FilmMania.hu%3ASD%3Ah7ae0df6fa220ceba59c0965792b3bfbd.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9817",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9818",
+    "channelId": "9818",
+    "name": "Food Network",
+    "category": "hu-live-doksi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Gasztronómia, világhírű séfek és kulináris élmények.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://88.212.7.14/live/fn_hungary/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Food%20Network",
+        "onlineUrl": "http://88.212.7.14/live/fn_hungary/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/FoodNetwork.hu%3ASD%3Ah3e5d3b4360fba079948c3626841e35ba.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Food%20Network",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/FoodNetwork.hu%3ASD%3Ah3e5d3b4360fba079948c3626841e35ba.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9818",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9819",
+    "channelId": "9819",
+    "name": "Globo TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Globo TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://stream.streaming4u.hu/GloboTV/index.m3u8",
+        "host": "stream.streaming4u.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Globo%20TV",
+        "onlineUrl": "https://stream.streaming4u.hu/GloboTV/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/GloboTV.hu%3ASD%3A6950.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Globo%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/GloboTV.hu%3ASD%3A6950.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9819",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9820",
+    "channelId": "9820",
+    "name": "Golya TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Golya TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://stream.streaming4u.hu/GolyaTV/index.m3u8",
+        "host": "stream.streaming4u.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Golya%20TV",
+        "onlineUrl": "https://stream.streaming4u.hu/GolyaTV/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/GolyaTV.hu%3ASD%3A7015.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Golya%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/GolyaTV.hu%3ASD%3A7015.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9820",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9821",
+    "channelId": "9821",
+    "name": "HGTV",
+    "category": "hu-live-doksi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Otthonteremtés, lakberendezés és házfelújítás.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://88.212.7.14/live/hgtv_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=HGTV",
+        "onlineUrl": "http://88.212.7.14/live/hgtv_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/HGTV.hu%3ASD%3Ahbfb42720c447580dbea923563adb760c.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=HGTV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/HGTV.hu%3ASD%3Ahbfb42720c447580dbea923563adb760c.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9821",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9822",
+    "channelId": "9822",
+    "name": "Hangulat TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Hangulat TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://iptv01.eurocable.co.hu/EC-HANGULATTV/index.m3u8",
+        "host": "iptv01.eurocable.co.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Hangulat%20TV",
+        "onlineUrl": "https://iptv01.eurocable.co.hu/EC-HANGULATTV/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/HangulatTV.hu%3ASD%3A7179.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Hangulat%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/HangulatTV.hu%3ASD%3A7179.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9822",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9823",
+    "channelId": "9823",
+    "name": "Hegyvidek TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Hegyvidek TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://iptv02.eurocable.co.hu:15400/EC-HEGYVIDEKTV-FTA/index.m3u8",
+        "host": "iptv02.eurocable.co.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Hegyvidek%20TV",
+        "onlineUrl": "https://iptv02.eurocable.co.hu:15400/EC-HEGYVIDEKTV-FTA/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/HegyvidekTV.hu%3ASD%3A7236.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Hegyvidek%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/HegyvidekTV.hu%3ASD%3A7236.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "https://tv.hegyvidek.hu/stream_mpeg.flv",
+        "host": "tv.hegyvidek.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Hegyvidek%20TV",
+        "onlineUrl": "https://tv.hegyvidek.hu/stream_mpeg.flv"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/HegyvidekTV.hu%3ASD%3A7237.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Hegyvidek%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/HegyvidekTV.hu%3ASD%3A7237.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9823",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9824",
+    "channelId": "9824",
+    "name": "Investigation Discovery",
+    "category": "hu-live-doksi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Valódi bűnügyi történetek és nyomozások.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://88.212.7.14/live/id_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Investigation%20Discovery",
+        "onlineUrl": "http://88.212.7.14/live/id_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/InvestigationDiscovery.hu%3ASD%3Ahf8ff88717816b388afe55c6542f785e8.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Investigation%20Discovery",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/InvestigationDiscovery.hu%3ASD%3Ahf8ff88717816b388afe55c6542f785e8.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9824",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9825",
+    "channelId": "9825",
+    "name": "Kiskoros TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Kiskoros TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://5cd03f21c7193.streamlock.net/kiskorostv/korostvlive/playlist.m3u8",
+        "host": "5cd03f21c7193.streamlock.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Kiskoros%20TV",
+        "onlineUrl": "https://5cd03f21c7193.streamlock.net/kiskorostv/korostvlive/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/KiskorosTV.hu%3ASD%3A8278.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Kiskoros%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/KiskorosTV.hu%3ASD%3A8278.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9825",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9826",
+    "channelId": "9826",
+    "name": "Komlos TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Komlos TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://stream.streaming4u.hu/KomlosTV/tracks-v1a1/mono.m3u8",
+        "host": "stream.streaming4u.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Komlos%20TV",
+        "onlineUrl": "https://stream.streaming4u.hu/KomlosTV/tracks-v1a1/mono.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/KomlosTV.hu%3ASD%3A8329.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Komlos%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/KomlosTV.hu%3ASD%3A8329.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9826",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9827",
+    "channelId": "9827",
+    "name": "Makoi Varosi Televizio",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Makoi Varosi Televizio helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://makomedia.mikrohalo.hu/hls/makotv.m3u8",
+        "host": "makomedia.mikrohalo.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Makoi%20Varosi%20Televizio",
+        "onlineUrl": "http://makomedia.mikrohalo.hu/hls/makotv.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/MakoiVarosiTelevizio.hu%3ASD%3A8858.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Makoi%20Varosi%20Televizio",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/MakoiVarosiTelevizio.hu%3ASD%3A8858.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9827",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9828",
+    "channelId": "9828",
+    "name": "Mezokovesdi Televizio",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Mezokovesdi Televizio helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/mezokovesdvtv.sdp/playlist.m3u8",
+        "host": "cloudfront44.lexanetwork.com",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Mezokovesdi%20Televizio",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/mezokovesdvtv.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/MezokovesdiTelevizio.hu%3ASD%3A9152.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Mezokovesdi%20Televizio",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/MezokovesdiTelevizio.hu%3ASD%3A9152.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9828",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9829",
+    "channelId": "9829",
+    "name": "Oxygen Music",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Oxygen Music helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://oxygenmusic.hu:2443/hls/oxygenmusic.m3u8",
+        "host": "oxygenmusic.hu",
+        "features": "HD",
+        "playerUrl": "https://gradetv.net/?q=Oxygen%20Music",
+        "onlineUrl": "https://oxygenmusic.hu:2443/hls/oxygenmusic.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/OxygenMusic.hu%3AHD%3A10709.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "HD",
+        "playerUrl": "https://gradetv.net/?q=Oxygen%20Music",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/OxygenMusic.hu%3AHD%3A10709.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9829",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9830",
+    "channelId": "9830",
+    "name": "PVTV",
+    "category": "hu-live-sport",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Horgász és vadász közvetítések a természet szerelmeseinek.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://78.47.126.198:5080/LiveApp/streams/902003217052313577741820.m3u8?token=null",
+        "host": "78.47.126.198",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=PVTV",
+        "onlineUrl": "http://78.47.126.198:5080/LiveApp/streams/902003217052313577741820.m3u8?token=null"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/PVTV.hu%3ASD%3A11710.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=PVTV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/PVTV.hu%3ASD%3A11710.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://91.147.248.75:5080/LiveApp/streams/nvUds5LHykQyOVXZ1706907141950.m3u8",
+        "host": "91.147.248.75",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=PVTV",
+        "onlineUrl": "http://91.147.248.75:5080/LiveApp/streams/nvUds5LHykQyOVXZ1706907141950.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/PVTV.hu%3Afree-tv%3A215.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=PVTV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/PVTV.hu%3Afree-tv%3A215.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9830",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9831",
+    "channelId": "9831",
+    "name": "PilisTV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "PilisTV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://stream.streaming4u.hu/PilisTV/index.m3u8",
+        "host": "stream.streaming4u.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=PilisTV",
+        "onlineUrl": "https://stream.streaming4u.hu/PilisTV/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/PilisTV.hu%3ASD%3A10955.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=PilisTV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/PilisTV.hu%3ASD%3A10955.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9831",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9832",
+    "channelId": "9832",
+    "name": "RTL Klub",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "RTL Klub helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://141.94.193.53:80/RTL_HD/index.m3u8",
+        "host": "141.94.193.53",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=RTL%20Klub",
+        "onlineUrl": "http://141.94.193.53:80/RTL_HD/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/RTLKlub.hu%3Afree-tv%3Ahb6282b6588e8583806e959bb0a3682f9.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=RTL%20Klub",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/RTLKlub.hu%3Afree-tv%3Ahb6282b6588e8583806e959bb0a3682f9.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9832",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9833",
+    "channelId": "9833",
+    "name": "Rakosmente TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Rakosmente TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://rakosmentetv.hu:8080/hls/rmtv.m3u8",
+        "host": "rakosmentetv.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Rakosmente%20TV",
+        "onlineUrl": "http://rakosmentetv.hu:8080/hls/rmtv.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/RakosmenteTV.hu%3ASD%3A12009.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Rakosmente%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/RakosmenteTV.hu%3ASD%3A12009.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9833",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9834",
+    "channelId": "9834",
+    "name": "RegioPlusz TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "RegioPlusz TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://stream.streaming4u.hu/RegioPluszTV/index.m3u8",
+        "host": "stream.streaming4u.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=RegioPlusz%20TV",
+        "onlineUrl": "https://stream.streaming4u.hu/RegioPluszTV/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/RegioPluszTV.hu%3ASD%3A12254.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=RegioPlusz%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/RegioPluszTV.hu%3ASD%3A12254.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9834",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9835",
+    "channelId": "9835",
+    "name": "Soltvadkerti Televizio",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Soltvadkerti Televizio helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://79.120.178.90:1935/soltvadkerttv/soltvlive/playlist.m3u8",
+        "host": "79.120.178.90",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Soltvadkerti%20Televizio",
+        "onlineUrl": "http://79.120.178.90:1935/soltvadkerttv/soltvlive/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/SoltvadkertiTelevizio.hu%3ASD%3A13552.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Soltvadkerti%20Televizio",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/SoltvadkertiTelevizio.hu%3ASD%3A13552.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9835",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9836",
+    "channelId": "9836",
+    "name": "Story4",
+    "category": "hu-live-film",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Klasszikus és modern európai és amerikai drámák, krimik és romantikus sorozatok.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://88.212.7.14/live/story_4_cze_atk/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "Czechia",
+        "playerUrl": "https://gradetv.net/?q=Story4",
+        "onlineUrl": "http://88.212.7.14/live/story_4_cze_atk/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/Story4.hu%3ACzechia%3Ah11b2c24005345581f5f21cc67734bce6.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "Czechia",
+        "playerUrl": "https://gradetv.net/?q=Story4",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Story4.hu%3ACzechia%3Ah11b2c24005345581f5f21cc67734bce6.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://88.212.7.14/live/test_story_4_atk_1200/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Story4",
+        "onlineUrl": "http://88.212.7.14/live/test_story_4_atk_1200/playlist.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/Story4.hu%3ASD%3Ahe8fbdc324bc3a1ce3730a6ea7e9cd022.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Story4",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Story4.hu%3ASD%3Ahe8fbdc324bc3a1ce3730a6ea7e9cd022.m3u8"
+      },
+      {
+        "sub_idx": 5,
+        "url": "http://141.94.193.53:80/Story4_HD/index.m3u8",
+        "host": "141.94.193.53",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Story4",
+        "onlineUrl": "http://141.94.193.53:80/Story4_HD/index.m3u8"
+      },
+      {
+        "sub_idx": 6,
+        "url": "https://m3m8.gradetv.net/api/s/Story4.hu%3Afree-tv%3Ah8f73517d5b38f14e758ac74d32ce23c4.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Story4",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/Story4.hu%3Afree-tv%3Ah8f73517d5b38f14e758ac74d32ce23c4.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9836",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9837",
+    "channelId": "9837",
+    "name": "Szecseny TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Szecseny TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://iptv.eurocable.co.hu/EC-SZECSENYTVHD/index.m3u8",
+        "host": "iptv.eurocable.co.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Szecseny%20TV",
+        "onlineUrl": "http://iptv.eurocable.co.hu/EC-SZECSENYTVHD/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/SzecsenyTV.hu%3ASD%3A14188.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Szecseny%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/SzecsenyTV.hu%3ASD%3A14188.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9837",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9838",
+    "channelId": "9838",
+    "name": "TV Budakalasz",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "TV Budakalasz helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://stream.streaming4u.hu/TVBudakalasz/tracks-v1a1/mono.m3u8",
+        "host": "stream.streaming4u.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV%20Budakalasz",
+        "onlineUrl": "https://stream.streaming4u.hu/TVBudakalasz/tracks-v1a1/mono.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TVBudakalasz.hu%3ASD%3A15448.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV%20Budakalasz",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TVBudakalasz.hu%3ASD%3A15448.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9838",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9839",
+    "channelId": "9839",
+    "name": "TV Szentendre",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "TV Szentendre helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://stream.streaming4u.hu/TVSzentendre/index.m3u8",
+        "host": "stream.streaming4u.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV%20Szentendre",
+        "onlineUrl": "https://stream.streaming4u.hu/TVSzentendre/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TVSzentendre.hu%3ASD%3A16023.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=TV%20Szentendre",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TVSzentendre.hu%3ASD%3A16023.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9839",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9840",
+    "channelId": "9840",
+    "name": "Tatai TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Tatai TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast006.sdp/playlist.m3u8",
+        "host": "cloudfront44.lexanetwork.com",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Tatai%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast006.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TataiTV.hu%3ASD%3A14257.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Tatai%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TataiTV.hu%3ASD%3A14257.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9840",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9841",
+    "channelId": "9841",
+    "name": "The Fishing & Hunting Channel",
+    "category": "hu-live-sport",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Horgászat, vadászat és természetjárás Európa vizein.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://88.212.7.14/live/fishing_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "HD",
+        "playerUrl": "https://gradetv.net/?q=The%20Fishing%20%26%20Hunting%20Channel",
+        "onlineUrl": "http://88.212.7.14/live/fishing_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TheFishingHuntingChannel.hu%3AHD%3Ahf84ad0a896e80f58a358b00022008225.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "HD",
+        "playerUrl": "https://gradetv.net/?q=The%20Fishing%20%26%20Hunting%20Channel",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TheFishingHuntingChannel.hu%3AHD%3Ahf84ad0a896e80f58a358b00022008225.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://88.212.7.14/live/test_fishing_hunting/playlist.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=The%20Fishing%20%26%20Hunting%20Channel",
+        "onlineUrl": "http://88.212.7.14/live/test_fishing_hunting/playlist.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/TheFishingHuntingChannel.hu%3ASD%3Ah4efffedb7dc6a3233017e19ba48e883e.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=The%20Fishing%20%26%20Hunting%20Channel",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TheFishingHuntingChannel.hu%3ASD%3Ah4efffedb7dc6a3233017e19ba48e883e.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9841",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9842",
+    "channelId": "9842",
+    "name": "Tisza TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Tisza TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://www.tiszatv.hu/onlinetv/tiszatv_1.m3u8",
+        "host": "www.tiszatv.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Tisza%20TV",
+        "onlineUrl": "https://www.tiszatv.hu/onlinetv/tiszatv_1.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TiszaTV.hu%3ASD%3A14897.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Tisza%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TiszaTV.hu%3ASD%3A14897.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9842",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9843",
+    "channelId": "9843",
+    "name": "Travel Channel",
+    "category": "hu-live-doksi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Utazások, egzotikus kultúrák és rejtett úti célok.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://88.212.7.14/live/travel_hun/index.m3u8",
+        "host": "88.212.7.14",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Travel%20Channel",
+        "onlineUrl": "http://88.212.7.14/live/travel_hun/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TravelChannel.hu%3ASD%3Ah858076ba5e3fbe4a0ba82d1ae0d8ca35.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Travel%20Channel",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TravelChannel.hu%3ASD%3Ah858076ba5e3fbe4a0ba82d1ae0d8ca35.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9843",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9844",
+    "channelId": "9844",
+    "name": "Trimedio TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Trimedio TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://stream.streaming4u.hu/TriMedioTV/index.m3u8",
+        "host": "stream.streaming4u.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Trimedio%20TV",
+        "onlineUrl": "https://stream.streaming4u.hu/TriMedioTV/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/TrimedioTV.hu%3ASD%3A15142.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Trimedio%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/TrimedioTV.hu%3ASD%3A15142.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9844",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9845",
+    "channelId": "9845",
+    "name": "VTV Fuzesabony",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "VTV Fuzesabony helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://stream.nmih.hu:7962/live.m3u8",
+        "host": "stream.nmih.hu",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=VTV%20Fuzesabony",
+        "onlineUrl": "https://stream.nmih.hu:7962/live.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/VTVFuzesabony.hu%3ASD%3A16648.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=VTV%20Fuzesabony",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/VTVFuzesabony.hu%3ASD%3A16648.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9845",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9846",
+    "channelId": "9846",
+    "name": "Viasat Explore",
+    "category": "hu-live-doksi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Extrém kalandok, felfedezések és emberi teljesítmények.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://205.237.104.26:8080/stream/345/index.m3u8",
+        "host": "205.237.104.26",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%20Explore",
+        "onlineUrl": "http://205.237.104.26:8080/stream/345/index.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/ViasatExplore.hu%3ASD%3Ahb888983c2129932b708a8fbd15cd1278.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%20Explore",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ViasatExplore.hu%3ASD%3Ahb888983c2129932b708a8fbd15cd1278.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://141.94.193.53:80/Viasat_Explore_HD/index.m3u8",
+        "host": "141.94.193.53",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%20Explore",
+        "onlineUrl": "http://141.94.193.53:80/Viasat_Explore_HD/index.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/ViasatExplore.hu%3Afree-tv%3Aha2ebb27881b523295e80e10c206c2c24.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%20Explore",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ViasatExplore.hu%3Afree-tv%3Aha2ebb27881b523295e80e10c206c2c24.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9846",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9847",
+    "channelId": "9847",
+    "name": "Viasat History",
+    "category": "hu-live-doksi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Történelmi dokumentumfilmek az ókortól a modern korig.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://193.33.39.108:9007/play/a00p",
+        "host": "193.33.39.108",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%20History",
+        "onlineUrl": "http://193.33.39.108:9007/play/a00p"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/ViasatHistory.hu%3ASD%3Ahcb8b709dc9485e99b0e663a785933661.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%20History",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ViasatHistory.hu%3ASD%3Ahcb8b709dc9485e99b0e663a785933661.m3u8"
+      },
+      {
+        "sub_idx": 3,
+        "url": "http://141.94.193.53:80/Viasat_History_HD/index.m3u8",
+        "host": "141.94.193.53",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%20History",
+        "onlineUrl": "http://141.94.193.53:80/Viasat_History_HD/index.m3u8"
+      },
+      {
+        "sub_idx": 4,
+        "url": "https://m3m8.gradetv.net/api/s/ViasatHistory.hu%3Afree-tv%3Aha5b2629c4198a79a810eac053d5c0f7b.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1080p FHD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%20History",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ViasatHistory.hu%3Afree-tv%3Aha5b2629c4198a79a810eac053d5c0f7b.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9847",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9848",
+    "channelId": "9848",
+    "name": "Viasat Nature",
+    "category": "hu-live-doksi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Lenyűgöző természetfilmek és a Föld élővilága.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://193.33.39.108:9000/play/a05r",
+        "host": "193.33.39.108",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%20Nature",
+        "onlineUrl": "http://193.33.39.108:9000/play/a05r"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/ViasatNature.hu%3ASD%3Ahbaff39d0f346d4c61159a058174a6016.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Viasat%20Nature",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ViasatNature.hu%3ASD%3Ahbaff39d0f346d4c61159a058174a6016.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9848",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9849",
+    "channelId": "9849",
+    "name": "Volgyhid TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Volgyhid TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://5cd03f21c7193.streamlock.net/volgyhidtv/mediakft/playlist.m3u8",
+        "host": "5cd03f21c7193.streamlock.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Volgyhid%20TV",
+        "onlineUrl": "https://5cd03f21c7193.streamlock.net/volgyhidtv/mediakft/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/VolgyhidTV.hu%3ASD%3A16549.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Volgyhid%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/VolgyhidTV.hu%3ASD%3A16549.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9849",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9850",
+    "channelId": "9850",
+    "name": "Williams TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Williams TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "http://79.120.178.90:1935/williams/williamstv/playlist.m3u8",
+        "host": "79.120.178.90",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Williams%20TV",
+        "onlineUrl": "http://79.120.178.90:1935/williams/williamstv/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/WilliamsTV.hu%3ASD%3A16777.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Williams%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/WilliamsTV.hu%3ASD%3A16777.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9850",
+      "isLive": true
+    }
+  },
+  {
+    "id": "onlinestream-live-9851",
+    "channelId": "9851",
+    "name": "Zuglo TV",
+    "category": "hu-live-helyi",
+    "type": "movie",
+    "year": "ÉLŐ • HD",
+    "releaseInfo": "ÉLŐ • HD",
+    "description": "Zuglo TV helyi és körzeti televízió élő adása.",
+    "mtvaKey": null,
+    "streams": [
+      {
+        "sub_idx": 1,
+        "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/zuglotv.sdp/playlist.m3u8",
+        "host": "cloudfront44.lexanetwork.com",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Zuglo%20TV",
+        "onlineUrl": "https://cloudfront44.lexanetwork.com:1344/freerelay/zuglotv.sdp/playlist.m3u8"
+      },
+      {
+        "sub_idx": 2,
+        "url": "https://m3m8.gradetv.net/api/s/ZugloTV.hu%3ASD%3A17198.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "SD",
+        "playerUrl": "https://gradetv.net/?q=Zuglo%20TV",
+        "onlineUrl": "https://m3m8.gradetv.net/api/s/ZugloTV.hu%3ASD%3A17198.m3u8"
+      }
+    ],
+    "behaviorHints": {
+      "defaultVideoId": "onlinestream-live-9851",
       "isLive": true
     }
   }
@@ -3407,21 +6884,32 @@ function isDirectPreferredStream(url, channelId) {
 }
 
 /**
- * Prioritizes fast CDN hosts (40-75 Mbps) and demotes overloaded single-node hosts (1 Mbps)
+ * Prioritizes fast Direct EU CDN hosts (88.212.7.14 Antik Telecom, Lexanetwork - 7-10 MB/s, unmetered)
+ * above GradeTV playlist server (subject to 120m daily allowance limit) and demotes slow fallback hosts.
  */
 function getStreamHostPriority(s) {
   if (!s) return 0;
   const host = ((s.host || '') + ' ' + (s.url || '')).toLowerCase();
-  // 1. High-speed CDNs with 40-75 Mbps throughput (gradetv, antik, videa, MTVA)
-  if (host.includes('gradetv') || host.includes('88.212.7.14')) return 100;
-  if (host.includes('budapest-cache') || host.includes('antik.sk')) return 95;
-  if (host.includes('videa')) return 90;
-  if (host.includes('mediaklikk') || host.includes('connectmedia')) return 85;
+  
+  // 1. High-speed Direct EU CDNs (88.212.7.14 Antik Telecom, Lexanetwork, Videa, ATV, Streaming4u)
+  // Direct channel links are 100% UNMETERED and exempt from the GradeTV 120-minute daily allowance limit!
+  if (host.includes('88.212.7.14') || host.includes('antik.sk')) return 100;
+  if (host.includes('budapest-cache')) return 98;
+  if (host.includes('lexanetwork')) return 96;
+  if (host.includes('streamservers.atv.hu') || host.includes('stream.atv.hu')) return 95;
+  if (host.includes('streaming4u')) return 94;
+  if (host.includes('videa')) return 92;
 
-  // 2. Local / municipal TV streams that are reliable
+  // 2. GradeTV Playlist Server (m3m8.gradetv.net - HTTPS backup, subject to 120m free daily allowance)
+  if (host.includes('m3m8.gradetv.net') || host.includes('gradetv.net')) return 85;
+
+  // 3. Official MTVA / ConnectMedia relays
+  if (host.includes('mediaklikk') || host.includes('connectmedia')) return 80;
+
+  // 4. Local / municipal TV direct streams that are reliable
   if (!host.includes('141.94.193.53')) return 50;
 
-  // 3. Overloaded OVH single-node VPS (choked to ~1 Mbps in peak evening hours) -> Fallback only!
+  // 5. Overloaded OVH single-node VPS (choked to ~1 Mbps in peak evening hours) -> Fallback only!
   return 10;
 }
 
