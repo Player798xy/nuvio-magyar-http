@@ -523,151 +523,7 @@ async function searchAndScrapeNetMozi(cleanTitle, targetYear, isSeries, season, 
       targetPageUrl += `/s${s}/e${e}`;
     }
 
-    const detailPageRes = await netmoziFetchWithRedirects(targetPageUrl, { referer: 'https://netmozi.com/', clientIp }, cookieJar);
-    if (!detailPageRes.body) return streams;
-
-    // Step 4: Extract data-movie-id, data-token, data-csrf
-    const attrs = {};
-    for (const mMatch of detailPageRes.body.matchAll(/(data-movie-id|data-token|data-csrf)="([^"]+)"/g)) {
-      attrs[mMatch[1]] = mMatch[2];
-    }
-
-    if (!attrs['data-movie-id'] || !attrs['data-token'] || !attrs['data-csrf']) {
-      return streams;
-    }
-
-    // Step 5: Load Links via AJAX
-    const loadLinksUrl = `https://netmozi.com/details/loadLinks/${attrs['data-movie-id']}${attrs['data-csrf']}`;
-    const loadLinksRes = await netmoziTlsRequest(loadLinksUrl, {
-      method: 'POST',
-      body: 'token=' + encodeURIComponent(attrs['data-token']),
-      referer: targetPageUrl,
-      clientIp,
-      headers: {
-        'Accept': 'application/json, text/javascript, */*; q=0.01',
-        'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      }
-    }, cookieJar);
-
-    let linksData;
-    try {
-      linksData = JSON.parse(loadLinksRes.body);
-    } catch (e) {
-      return streams;
-    }
-
-    if (!linksData.success || !linksData.linkPayload) {
-      return streams;
-    }
-
-    const redirectPages = unpack(linksData.linkPayload.value, attrs['data-token']);
-    if (!Array.isArray(redirectPages) || redirectPages.length === 0) return streams;
-
-    // Step 6: Fetch Mindjart redirect page
-    const mindjartUrl = redirectPages[0];
-    const mindjartRes = await netmoziFetchWithRedirects(mindjartUrl, { referer: 'https://netmozi.com/', clientIp }, cookieJar);
-
-    const mPayload = mindjartRes.body.match(/<script[^>]*data-link-payload[^>]*data-link-context="([^"]+)"[^>]*>(.*?)<\/script>/s);
-    if (!mPayload) return streams;
-
-    let routes = [];
-    try {
-      routes = unpack(JSON.parse(mPayload[2]).value, mPayload[1]);
-    } catch (e) {
-      return streams;
-    }
-
-    if (!Array.isArray(routes) || routes.length === 0) return streams;
-
-    // Step 7: Resolve Host Routes
-    const seenUrls = new Set();
-    const streamingRoutes = routes.filter(r => !r.startsWith('////diablo') && !r.startsWith('////torrent'));
-    const routesToResolve = streamingRoutes.slice(0, 12);
-
-    await Promise.all(routesToResolve.map(async (route) => {
-      const fullRouteUrl = route.startsWith('http') ? route : ('https://mindjart.megnezed.com' + route);
-      try {
-        const routeRes = await netmoziTlsRequest(fullRouteUrl, { referer: mindjartUrl, clientIp }, cookieJar);
-        const loc = routeRes.headers['location'];
-        if (!loc || seenUrls.has(loc)) return;
-        seenUrls.add(loc);
-
-        const locLower = loc.toLowerCase();
-
-        // 1. Direct Videa stream extraction
-        if (locLower.includes('videa')) {
-          const vcodeMatch = loc.match(/(?:v=|[-_])([a-zA-Z0-9]{16})(?:[?&#/]|$)/);
-          if (vcodeMatch) {
-            const vData = await extractVideaStreams(vcodeMatch[1]);
-            const vSources = vData?.sources || [];
-            if (vSources.length > 0) {
-              for (const vs of vSources) {
-                const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
-                streams.push({
-                  name: `[HU] NetMozi ${qualLabel}`,
-                  title: `${cleanTitle}\n🇭🇺 NetMozi (Videa) • ${qualLabel} • Szinkron`,
-                  url: vs.url,
-                  playerUrl: vs.url,
-                  quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
-                  height: vs.height,
-                  source: 'netmozi',
-                  behaviorHints: { bingeGroup: `hu-netmozi-videa-${qualLabel}` }
-                });
-              }
-              return;
-            }
-          }
-          return;
-        }
-
-        // 2. Direct Indavideo stream extraction
-        if (locLower.includes('indavideo.hu')) {
-          const hashMatch = loc.match(/(?:video\/|v\/)([a-zA-Z0-9]+)/);
-          if (hashMatch) {
-            const iData = await extractIndavideoStreams(hashMatch[1]);
-            const iSources = iData?.streams || iData?.sources || [];
-            if (iSources.length > 0) {
-              for (const is of iSources) {
-                const qualLabel = is.height >= 1080 ? '1080p FHD' : is.height >= 720 ? '720p HD' : `${is.height}p`;
-                streams.push({
-                  name: `[HU] NetMozi ${qualLabel}`,
-                  title: `${cleanTitle}\n🇭🇺 NetMozi (Indavideo) • ${qualLabel} • Szinkron`,
-                  url: is.url,
-                  playerUrl: is.url,
-                  quality: is.height >= 1080 ? '1080p' : is.height >= 720 ? '720p' : '480p',
-                  height: is.height,
-                  source: 'netmozi',
-                  behaviorHints: { bingeGroup: `hu-netmozi-indavideo-${qualLabel}` }
-                });
-              }
-              return;
-            }
-          }
-          return;
-        }
-
-        // 3. OK.ru stream extraction
-        if (locLower.includes('ok.ru')) {
-          const okStreams = await extractOkRuStreams(loc, 'NetMozi');
-          if (okStreams.length > 0) {
-            streams.push(...okStreams);
-            return;
-          }
-        }
-        if (locLower.includes('voe.sx') || locLower.includes('voe.')) {
-          const voeStreams = await extractVoeDirectStreams(loc, 'NetMozi', cleanTitle, 'netmozi');
-          if (voeStreams.length > 0) {
-            streams.push(...voeStreams);
-            return;
-          }
-        }
-      } catch (err) {
-        // Individual route failed
-      }
-    }));
-
-    // query log removed for privacy
+    return await scrapeNetMoziDetailPage(targetPageUrl, cleanTitle, clientIp, cookieJar, season, episode);
   } catch (err) {
     console.warn('[NetMozi] Scraping error:', err.message);
   }
@@ -764,7 +620,7 @@ async function scrapeNetMozi(metaOrTitle, year = null, season = null, episode = 
         : `https://netmozi.com/adatlap/${mid}/${finalSlug}`;
       
       const cookieJar = new Map();
-      const directStreams = await scrapeNetMoziDetailPage(pageUrl, cleanTitle || finalSlug.replace(/-/g, ' '), clientIp, cookieJar);
+      const directStreams = await scrapeNetMoziDetailPage(pageUrl, cleanTitle || finalSlug.replace(/-/g, ' '), clientIp, cookieJar, s, e);
       return directStreams;
     }
   }
@@ -795,25 +651,37 @@ async function scrapeNetMozi(metaOrTitle, year = null, season = null, episode = 
 /**
  * Scrapes a specific NetMozi detail page URL (e.g. /sorozatok/42579/.../s1/e1 or /adatlap/1234/...)
  */
-async function scrapeNetMoziDetailPage(targetPageUrl, cleanTitle, clientIp = null, cookieJar = new Map()) {
+async function scrapeNetMoziDetailPage(targetPageUrl, cleanTitle, clientIp = null, cookieJar = new Map(), targetSeason = null, targetEpisode = null) {
   const streams = [];
   try {
     const detailPageRes = await netmoziFetchWithRedirects(targetPageUrl, { referer: 'https://netmozi.com/', clientIp }, cookieJar);
     if (!detailPageRes.body) return streams;
 
     const attrs = {};
-    for (const mMatch of detailPageRes.body.matchAll(/(data-movie-id|data-token|data-csrf)="([^"]+)"/g)) {
+    for (const mMatch of detailPageRes.body.matchAll(/(data-movie-id|data-token|data-csrf|data-season|data-episode)="([^"]*)"/g)) {
       attrs[mMatch[1]] = mMatch[2];
     }
 
-    if (!attrs['data-movie-id'] || !attrs['data-token'] || !attrs['data-csrf']) {
+    const movieId = attrs['data-movie-id'];
+    const csrf = attrs['data-csrf'];
+    const token = attrs['data-token'] || '';
+
+    if (!movieId || !csrf) {
       return streams;
     }
 
-    const loadLinksUrl = `https://netmozi.com/details/loadLinks/${attrs['data-movie-id']}${attrs['data-csrf']}`;
+    const s = targetSeason || attrs['data-season'];
+    const e = targetEpisode || attrs['data-episode'];
+    const isSeries = Boolean(s && e);
+
+    const postBody = isSeries
+      ? `token=${encodeURIComponent(token)}&season=${s}&episode=${e}`
+      : `token=${encodeURIComponent(token)}`;
+
+    const loadLinksUrl = `https://netmozi.com/details/loadLinks/${movieId}${csrf}`;
     const loadLinksRes = await netmoziTlsRequest(loadLinksUrl, {
       method: 'POST',
-      body: 'token=' + encodeURIComponent(attrs['data-token']),
+      body: postBody,
       referer: targetPageUrl,
       clientIp,
       headers: {
@@ -830,113 +698,79 @@ async function scrapeNetMoziDetailPage(targetPageUrl, cleanTitle, clientIp = nul
       return streams;
     }
 
-    if (!linksData.success || !linksData.linkPayload) {
+    if (!linksData || !linksData.success) {
       return streams;
     }
 
-    const redirectPages = unpack(linksData.linkPayload.value, attrs['data-token']);
-    if (!Array.isArray(redirectPages) || redirectPages.length === 0) return streams;
+    let mindjartUrl = null;
+    if (linksData.html) {
+      const match = linksData.html.match(/href="([^"]+)"/);
+      if (match) {
+        mindjartUrl = match[1].replace(/\\/g, '');
+      }
+    }
 
-    const mindjartUrl = redirectPages[0];
+    if (!mindjartUrl && linksData.linkPayload?.value) {
+      const redirectPages = unpack(linksData.linkPayload.value, token);
+      if (Array.isArray(redirectPages) && redirectPages.length > 0) {
+        mindjartUrl = redirectPages[0];
+      }
+    }
+
+    if (!mindjartUrl) return streams;
+
     const mindjartRes = await netmoziFetchWithRedirects(mindjartUrl, { referer: 'https://netmozi.com/', clientIp }, cookieJar);
+    if (!mindjartRes.body) return streams;
 
-    const mPayload = mindjartRes.body.match(/<script[^>]*data-link-payload[^>]*data-link-context="([^"]+)"[^>]*>(.*?)<\/script>/s);
-    if (!mPayload) return streams;
-
-    let routes = [];
-    try {
-      routes = unpack(JSON.parse(mPayload[2]).value, mPayload[1]);
-    } catch (e) {
-      return streams;
+    const routesToResolve = [];
+    const rows = mindjartRes.body.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || [];
+    for (const r of rows) {
+      if (r.includes('Letöltő link') || r.includes('diablo-lang')) continue;
+      const lMatch = r.match(/href="(\/links\/open\/\d+)"/);
+      if (lMatch && !routesToResolve.includes(lMatch[1])) {
+        routesToResolve.push(lMatch[1]);
+      }
     }
 
-    if (!Array.isArray(routes) || routes.length === 0) return streams;
+    if (routesToResolve.length === 0) {
+      const mPayload = mindjartRes.body.match(/<script[^>]*data-link-payload[^>]*data-link-context="([^"]+)"[^>]*>(.*?)<\/script>/s);
+      if (mPayload) {
+        try {
+          const routes = unpack(JSON.parse(mPayload[2]).value, mPayload[1]);
+          if (Array.isArray(routes)) {
+            routesToResolve.push(...routes.filter(r => !r.startsWith('////diablo') && !r.startsWith('////torrent')));
+          }
+        } catch (err) {}
+      }
+    }
+
+    if (routesToResolve.length === 0) return streams;
 
     const seenUrls = new Set();
-    const streamingRoutes = routes.filter(r => !r.startsWith('////diablo') && !r.startsWith('////torrent'));
-    const routesToResolve = streamingRoutes.slice(0, 12);
+    const resolvedTargets = [];
 
-    await Promise.all(routesToResolve.map(async (route) => {
+    await Promise.all(routesToResolve.slice(0, 10).map(async (route) => {
       const fullRouteUrl = route.startsWith('http') ? route : ('https://mindjart.megnezed.com' + route);
       try {
         const routeRes = await netmoziTlsRequest(fullRouteUrl, { referer: mindjartUrl, clientIp }, cookieJar);
         const loc = routeRes.headers['location'];
-        if (!loc || seenUrls.has(loc)) return;
-        seenUrls.add(loc);
-
-        const locLower = loc.toLowerCase();
-
-        if (locLower.includes('videa')) {
-          const vcodeMatch = loc.match(/(?:v=|[-_])([a-zA-Z0-9]{16})(?:[?&#/]|$)/);
-          if (vcodeMatch) {
-            const vData = await extractVideaStreams(vcodeMatch[1]);
-            const vSources = vData?.sources || [];
-            if (vSources.length > 0) {
-              for (const vs of vSources) {
-                const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
-                streams.push({
-                  name: `[HU] NetMozi ${qualLabel}`,
-                  title: `${cleanTitle}\n🇭🇺 NetMozi (Videa) • ${qualLabel} • Szinkron`,
-                  url: vs.url,
-                  playerUrl: vs.url,
-                  quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
-                  height: vs.height,
-                  source: 'netmozi',
-                  behaviorHints: { bingeGroup: `hu-netmozi-videa-${qualLabel}` }
-                });
-              }
-              return;
-            }
-          }
-          return;
-        }
-
-        if (locLower.includes('indavideo.hu')) {
-          const hashMatch = loc.match(/(?:video\/|v\/)([a-zA-Z0-9]+)/);
-          if (hashMatch) {
-            const iData = await extractIndavideoStreams(hashMatch[1]);
-            const iSources = iData?.sources || [];
-            if (iSources.length > 0) {
-              for (const is of iSources) {
-                const qualLabel = is.height >= 1080 ? '1080p FHD' : is.height >= 720 ? '720p HD' : `${is.height}p`;
-                streams.push({
-                  name: `[HU] NetMozi ${qualLabel}`,
-                  title: `${cleanTitle}\n🇭🇺 NetMozi (Indavideo) • ${qualLabel} • Szinkron`,
-                  url: is.url,
-                  playerUrl: is.url,
-                  quality: is.height >= 1080 ? '1080p' : is.height >= 720 ? '720p' : '480p',
-                  height: is.height,
-                  source: 'netmozi',
-                  behaviorHints: { bingeGroup: `hu-netmozi-indavideo-${qualLabel}` }
-                });
-              }
-              return;
-            }
-          }
-          return;
-        }
-
-        if (locLower.includes('ok.ru')) {
-          const okStreams = await extractOkRuStreams(loc, 'NetMozi');
-          if (okStreams.length > 0) {
-            streams.push(...okStreams);
-            return;
-          }
-        }
-        if (locLower.includes('voe.sx') || locLower.includes('voe.')) {
-          const voeStreams = await extractVoeDirectStreams(loc, 'NetMozi', cleanTitle, 'netmozi');
-          if (voeStreams.length > 0) {
-            streams.push(...voeStreams);
-            return;
-          }
-        }
-
-        const hosterStream = formatNetMoziStream(loc, cleanTitle);
-        if (hosterStream) {
-          streams.push(hosterStream);
+        if (loc && !seenUrls.has(loc)) {
+          seenUrls.add(loc);
+          resolvedTargets.push(loc);
         }
       } catch (err) {}
     }));
+
+    const { resolveAnyEmbed } = require('../utils/hosters');
+    await Promise.all(resolvedTargets.map(async (loc) => {
+      try {
+        const embeddedStreams = await resolveAnyEmbed(loc, 'NetMozi', cleanTitle);
+        if (Array.isArray(embeddedStreams) && embeddedStreams.length > 0) {
+          streams.push(...embeddedStreams);
+        }
+      } catch (err) {}
+    }));
+
   } catch (err) {
     console.warn('[NetMozi] scrapeNetMoziDetailPage error:', err.message);
   }

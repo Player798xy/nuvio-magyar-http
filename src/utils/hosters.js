@@ -8,6 +8,43 @@ const { extractVideaStreams, extractIndavideoStreams } = require('./videa_indavi
  * into direct `.m3u8` / `.mp4` streams with required Referer/Origin headers.
  */
 
+async function extractVidmoly(embedUrl, sourceLabel = 'Vidmoly', customTitle = '') {
+  const streams = [];
+  try {
+    let url = embedUrl;
+    const wMatch = url.match(/\/w\/([a-zA-Z0-9]+)/);
+    if (wMatch) {
+      url = url.replace(/\/w\/([a-zA-Z0-9]+)/, '/embed-$1.html');
+    }
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        Referer: 'https://vidmoly.me/'
+      },
+      signal: AbortSignal.timeout(6000)
+    });
+    if (!res.ok) return streams;
+    const html = await res.text();
+
+    const m3u8 = html.match(/(https?:\/\/[^\s"'<>]+\.m3u8[^\s"'<>]*)/i);
+    if (m3u8) {
+      streams.push({
+        name: `🇭🇺 ${sourceLabel}\nHD HLS`,
+        title: `🎬 ${customTitle || sourceLabel}\n📺 HD HLS (m3u8) • 🔊 Magyar • 🌐 Vidmoly Direct`,
+        url: m3u8[1],
+        quality: 1080,
+        isHls: true,
+        headers: {
+          Referer: 'https://vidmoly.me/',
+          Origin: 'https://vidmoly.me',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+      });
+    }
+  } catch (e) {}
+  return streams;
+}
+
 async function extractVoe(embedUrl, sourceLabel = 'VOE', customTitle = '') {
   const streams = [];
   try {
@@ -224,6 +261,10 @@ async function resolveAnyEmbed(rawUrl, sourceLabel = 'Magyar', customTitle = '')
   }
   if (lower.includes('ok.ru') || lower.includes('odnoklassniki.ru')) {
     return extractOkRu(url, sourceLabel, customTitle);
+  }
+  if (lower.includes('vidmoly')) {
+    const vidmolyStreams = await extractVidmoly(url, sourceLabel, customTitle);
+    if (vidmolyStreams.length > 0) return vidmolyStreams;
   }
   if (
     lower.includes('filemoon') ||
