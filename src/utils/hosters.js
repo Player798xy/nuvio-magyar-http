@@ -1,4 +1,4 @@
-const { UA } = require('./meta');
+const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 const { unpackPacker, decodeVoePayload, resolveRpmStream } = require('./crypto_decoders');
 const { extractVideaStreams, extractIndavideoStreams } = require('./videa_indavideo');
 
@@ -8,7 +8,7 @@ const { extractVideaStreams, extractIndavideoStreams } = require('./videa_indavi
  * into direct `.m3u8` / `.mp4` streams with required Referer/Origin headers.
  */
 
-async function extractVidmoly(embedUrl, sourceLabel = 'Vidmoly', customTitle = '') {
+async function extractVidmoly(embedUrl, sourceLabel = 'Vidmoly', customTitle = '', clientIp = null) {
   const streams = [];
   try {
     let url = embedUrl;
@@ -18,10 +18,14 @@ async function extractVidmoly(embedUrl, sourceLabel = 'Vidmoly', customTitle = '
     } else if (url.includes('/embed-')) {
       url = url.replace(/https?:\/\/[^/]+/, 'https://vidmoly.biz');
     }
+    const huIp = clientIp || '185.112.156.1';
     const res = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-        Referer: 'https://vidmoly.biz/'
+        'User-Agent': UA,
+        Referer: 'https://vidmoly.biz/',
+        'X-Forwarded-For': huIp,
+        'Client-IP': huIp,
+        'X-Real-IP': huIp
       },
       signal: AbortSignal.timeout(6000)
     });
@@ -39,7 +43,7 @@ async function extractVidmoly(embedUrl, sourceLabel = 'Vidmoly', customTitle = '
         headers: {
           Referer: 'https://vidmoly.biz/',
           Origin: 'https://vidmoly.biz',
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+          'User-Agent': UA
         }
       });
     }
@@ -47,12 +51,19 @@ async function extractVidmoly(embedUrl, sourceLabel = 'Vidmoly', customTitle = '
   return streams;
 }
 
-async function extractVoe(embedUrl, sourceLabel = 'VOE', customTitle = '') {
+async function extractVoe(embedUrl, sourceLabel = 'VOE', customTitle = '', clientIp = null) {
   const streams = [];
   try {
+    const huIp = clientIp || '185.112.156.1';
     let currentUrl = embedUrl;
     let html = await fetch(currentUrl, {
-      headers: { 'User-Agent': UA, Referer: 'https://voe.sx/' },
+      headers: {
+        'User-Agent': UA,
+        Referer: 'https://voe.sx/',
+        'X-Forwarded-For': huIp,
+        'Client-IP': huIp,
+        'X-Real-IP': huIp
+      },
       signal: AbortSignal.timeout(6000)
     }).then((r) => r.text());
 
@@ -61,7 +72,13 @@ async function extractVoe(embedUrl, sourceLabel = 'VOE', customTitle = '') {
     if (jsRedirect) {
       currentUrl = jsRedirect[1];
       html = await fetch(currentUrl, {
-        headers: { 'User-Agent': UA, Referer: embedUrl },
+        headers: {
+          'User-Agent': UA,
+          Referer: embedUrl,
+          'X-Forwarded-For': huIp,
+          'Client-IP': huIp,
+          'X-Real-IP': huIp
+        },
         signal: AbortSignal.timeout(6000)
       }).then((r) => r.text());
     }
@@ -222,7 +239,7 @@ async function extractOkRu(embedUrl, sourceLabel = 'OK.ru', customTitle = '') {
  * Main dispatcher: Given any embed URL found on a Hungarian streaming site,
  * attempts to resolve direct HTTP streams (`.m3u8` / `.mp4`).
  */
-async function resolveAnyEmbed(rawUrl, sourceLabel = 'Magyar', customTitle = '') {
+async function resolveAnyEmbed(rawUrl, sourceLabel = 'Magyar', customTitle = '', clientIp = null) {
   if (!rawUrl || typeof rawUrl !== 'string') return [];
   let url = rawUrl.trim();
   if (url.startsWith('//')) url = 'https:' + url;
@@ -250,22 +267,43 @@ async function resolveAnyEmbed(rawUrl, sourceLabel = 'Magyar', customTitle = '')
     }
     return [];
   }
-  if (
+  const isVoeCandidate = (
     lower.includes('voe.sx') ||
     lower.includes('voe.') ||
+    lower.includes('voe-') ||
     lower.includes('shanelocaldog') ||
     lower.includes('walterprettytheir') ||
     lower.includes('yodelswart') ||
     lower.includes('launchreliant') ||
-    lower.includes('diananatureforeign')
-  ) {
-    return extractVoe(url, sourceLabel, customTitle);
+    lower.includes('diananatureforeign') ||
+    lower.includes('susanexpectcare') ||
+    lower.includes('jilliandeborah') ||
+    lower.includes('reputationsicklyheavily') ||
+    lower.includes('tupacpreston') ||
+    lower.includes('cloudwindow') ||
+    lower.includes('ugc-cdn') ||
+    lower.includes('eunice') ||
+    lower.includes('generousdiscipline') ||
+    lower.includes('audaciouscarpenter') ||
+    lower.includes('fractional') ||
+    lower.includes('timely') ||
+    lower.includes('fidget') ||
+    lower.includes('wolf') ||
+    lower.includes('leona') ||
+    lower.includes('stephanie') ||
+    lower.includes('donald') ||
+    lower.includes('mikayla') ||
+    lower.includes('greys')
+  );
+  if (isVoeCandidate) {
+    const voeStreams = await extractVoe(url, sourceLabel, customTitle, clientIp);
+    if (voeStreams && voeStreams.length > 0) return voeStreams;
   }
   if (lower.includes('ok.ru') || lower.includes('odnoklassniki.ru')) {
     return extractOkRu(url, sourceLabel, customTitle);
   }
   if (lower.includes('vidmoly')) {
-    const vidmolyStreams = await extractVidmoly(url, sourceLabel, customTitle);
+    const vidmolyStreams = await extractVidmoly(url, sourceLabel, customTitle, clientIp);
     if (vidmolyStreams.length > 0) return vidmolyStreams;
   }
   if (
@@ -273,7 +311,6 @@ async function resolveAnyEmbed(rawUrl, sourceLabel = 'Magyar', customTitle = '')
     lower.includes('kerapoxy') ||
     lower.includes('streamwish') ||
     lower.includes('wishembed') ||
-    lower.includes('vidmoly') ||
     lower.includes('vidoza') ||
     lower.includes('speedfiles') ||
     lower.includes('luluvdo') ||
@@ -307,10 +344,19 @@ async function resolveAnyEmbed(rawUrl, sourceLabel = 'Magyar', customTitle = '')
     }];
   }
 
+  // Smart fallback: check if unknown URL might be an unlisted VOE mirror
+  if (/^https?:\/\/[^/]+\/(?:[a-zA-Z0-9]{8,20}|e\/[a-zA-Z0-9]+|d\/[a-zA-Z0-9]+)\/?$/.test(url)) {
+    try {
+      const voeFallback = await extractVoe(url, sourceLabel, customTitle, clientIp);
+      if (voeFallback && voeFallback.length > 0) return voeFallback;
+    } catch (e) {}
+  }
+
   return [];
 }
 
 module.exports = {
+  extractVidmoly,
   extractVoe,
   extractPackerHoster,
   extractOkRu,

@@ -735,7 +735,7 @@ async function scrapeMindjartDirect(movieId, isSeries = false, season = null, ep
     const { resolveAnyEmbed } = require('../utils/hosters');
     await Promise.all(validEmbeds.map(async (embedLoc) => {
       try {
-        const s = await resolveAnyEmbed(embedLoc, 'NetMozi', cleanTitle);
+        const s = await resolveAnyEmbed(embedLoc, 'NetMozi', cleanTitle, clientIp);
         if (Array.isArray(s) && s.length > 0) {
           streams.push(...s);
         }
@@ -877,7 +877,7 @@ async function scrapeNetMoziDetailPage(targetPageUrl, cleanTitle, clientIp = nul
     const { resolveAnyEmbed } = require('../utils/hosters');
     await Promise.all(resolvedTargets.map(async (loc) => {
       try {
-        const embeddedStreams = await resolveAnyEmbed(loc, 'NetMozi', cleanTitle);
+        const embeddedStreams = await resolveAnyEmbed(loc, 'NetMozi', cleanTitle, clientIp);
         if (Array.isArray(embeddedStreams) && embeddedStreams.length > 0) {
           streams.push(...embeddedStreams);
         }
