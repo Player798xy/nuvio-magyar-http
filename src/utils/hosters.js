@@ -56,31 +56,68 @@ async function extractVoe(embedUrl, sourceLabel = 'VOE', customTitle = '', clien
   try {
     const huIp = clientIp || '185.112.156.1';
     let currentUrl = embedUrl;
-    let html = await fetch(currentUrl, {
-      headers: {
-        'User-Agent': UA,
-        Referer: 'https://voe.sx/',
-        'X-Forwarded-For': huIp,
-        'Client-IP': huIp,
-        'X-Real-IP': huIp
-      },
-      signal: AbortSignal.timeout(6000)
-    }).then((r) => r.text());
 
-    // Follow JS window.location.href redirect used by VOE mirror domains
-    const jsRedirect = html.match(/window\.location\.href\s*=\s*['"](https?:\/\/[^'"]+)['"]/i);
-    if (jsRedirect) {
-      currentUrl = jsRedirect[1];
-      html = await fetch(currentUrl, {
+    const slugMatch = currentUrl.match(/(?:voe\.[a-z]+|susanexpectcare\.com)\/(?:e\/|d\/)?([a-zA-Z0-9]+)/i);
+    const slug = slugMatch ? slugMatch[1] : null;
+
+    let html = '';
+    try {
+      const res = await fetch(currentUrl, {
         headers: {
           'User-Agent': UA,
-          Referer: embedUrl,
+          Referer: 'https://voe.sx/',
           'X-Forwarded-For': huIp,
           'Client-IP': huIp,
           'X-Real-IP': huIp
         },
-        signal: AbortSignal.timeout(6000)
-      }).then((r) => r.text());
+        signal: AbortSignal.timeout(5000)
+      });
+      if (res.ok) {
+        html = await res.text();
+      }
+    } catch (e) {}
+
+    // If voe.sx is blocked by DDoS-Guard / Cloudflare challenge on datacenter IPs,
+    // directly query the active mirror domain (susanexpectcare.com) which has no challenge
+    if ((!html || html.includes('DDoS-Guard') || html.includes('ddos-guard') || html.length < 2000) && slug) {
+      try {
+        const mirrorUrl = `https://susanexpectcare.com/${slug}`;
+        const mirrorRes = await fetch(mirrorUrl, {
+          headers: {
+            'User-Agent': UA,
+            Referer: 'https://voe.sx/',
+            'X-Forwarded-For': huIp,
+            'Client-IP': huIp,
+            'X-Real-IP': huIp
+          },
+          signal: AbortSignal.timeout(5000)
+        });
+        if (mirrorRes.ok) {
+          const mirrorHtml = await mirrorRes.text();
+          if (mirrorHtml.includes('<script type="application/json">') || mirrorHtml.includes('hls')) {
+            currentUrl = mirrorUrl;
+            html = mirrorHtml;
+          }
+        }
+      } catch (e) {}
+    }
+
+    // Follow JS window.location.href redirect used by VOE mirror domains
+    const jsRedirect = html.match(/window\.location\.href\s*=\s*['"](https?:\/\/[^'"]+)['"]/i);
+    if (jsRedirect && !html.includes('<script type="application/json">')) {
+      currentUrl = jsRedirect[1];
+      try {
+        html = await fetch(currentUrl, {
+          headers: {
+            'User-Agent': UA,
+            Referer: embedUrl,
+            'X-Forwarded-For': huIp,
+            'Client-IP': huIp,
+            'X-Real-IP': huIp
+          },
+          signal: AbortSignal.timeout(5000)
+        }).then((r) => r.text());
+      } catch (e) {}
     }
 
     const origin = new URL(currentUrl).origin;
