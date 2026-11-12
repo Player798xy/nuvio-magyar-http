@@ -846,6 +846,54 @@ app.get('/api/provider-test', async (req, res) => {
   }
 });
 
+// NetMozi Debug Endpoint
+app.get('/api/netmozi-debug', async (req, res) => {
+  const { netmoziTlsRequest, netmoziFetchWithRedirects } = require('./src/scrapers/netmozi.js');
+  const results = {};
+  try {
+    const r1 = await netmoziTlsRequest('https://netmozi.com/?search=Macskafog%C3%B3');
+    results.tlsRequest = {
+      statusCode: r1.statusCode,
+      headers: r1.headers,
+      bodyLen: r1.body?.length,
+      bodySnippet: r1.body?.slice(0, 300)
+    };
+  } catch (err) {
+    results.tlsRequest = { error: err.message };
+  }
+
+  try {
+    const fRes = await fetch('https://netmozi.com/?search=Macskafog%C3%B3', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
+      }
+    });
+    const fText = await fRes.text();
+    results.nativeFetch = {
+      status: fRes.status,
+      headers: Object.fromEntries(fRes.headers.entries()),
+      bodyLen: fText.length,
+      bodySnippet: fText.slice(0, 300)
+    };
+  } catch (err) {
+    results.nativeFetch = { error: err.message };
+  }
+
+  try {
+    const mRes = await fetch('https://mindjart.megnezed.com/links/vv/NDI1Nzk=/2/16');
+    const mText = await mRes.text();
+    results.mindjartFetch = {
+      status: mRes.status,
+      bodyLen: mText.length,
+      bodySnippet: mText.slice(0, 300)
+    };
+  } catch (err) {
+    results.mindjartFetch = { error: err.message };
+  }
+
+  res.json(results);
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
