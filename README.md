@@ -1,8 +1,9 @@
-# 🇭🇺 Magyar HTTP Streams — Nuvio & Stremio Addon (`v2.3.0`)
+# 🇭🇺 Magyar HTTP Streams — Nuvio & Stremio Addon (`v2.4.0`)
 
 [![Vercel Status](https://img.shields.io/badge/Vercel_Cloud-Online_(fra1_Frankfurt)-success?style=for-the-badge&logo=vercel)](https://nuvio-magyar-http.vercel.app/configure)
 [![Források](https://img.shields.io/badge/Magyar_Források-13_Modul-blue?style=for-the-badge)](#2-melyik-forrás-működik-vercelen-és-melyikhez-kell-self-host)
-[![Katalógusok](https://img.shields.io/badge/Katalógusok-7_Heti_Rotációs-orange?style=for-the-badge)](#5-heti-rotációs-katalógusok-poszter--forrás-garancia)
+[![Élő TV](https://img.shields.io/badge/Élő_TV-164_Magyar_Adó-red?style=for-the-badge)](#5-élő-tv-164-magyar-csatorna--közvetlen-eu-gerinchálózat--gradetv)
+[![Katalógusok](https://img.shields.io/badge/Katalógusok-7_Heti_Rotációs-orange?style=for-the-badge)](#6-heti-rotációs-katalógusok-poszter--forrás-garancia)
 [![Licenc](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
 Közvetlen **Direct HTTP** magyar szinkronos és feliratos film-, sorozat-, mese- és élő TV-streamek **Nuvio** és **Stremio** lejátszókhoz — **torrent (P2P) és Real-Debrid előfizetés nélkül!**
@@ -43,7 +44,7 @@ A kiegészítő **13 magyar streaming forrást** tartalmaz. Mivel a publikus **V
 | **5** | **🧸 MeseKincstár (`mesefilm`)** | Mese & Anime | ✅ **100%** | ✅ **100%** | `mesekincstar.tv` Videa/Indavideo beágyazások szigorú cím-, évszám- és hossz-ellenőrzéssel. |
 | **6** | **🎈 Videakid (`videakid`)** | Mese & Családi | ✅ **100%** | ✅ **100%** | Gyerekbarát Videa RC4 direkt MP4 streamek (`Magyar népmesék`, klasszikus rajzfilmek). |
 | **7** | **📼 Indavideo (`indavideo`)** | Film, Sorozat & Mese | ✅ **100%** | ✅ **100%** | AMFPHP JSON API + dinamikus `filesh` tokenek minden `*.indavideo.hu` aldomainről. |
-| **8** | **🔴 MédiaKlikk (`mediaklikk`)** | Klasszikusok & Élő TV | ✅ **95%** *(VOD 100%)* | ✅ **100%** | **43 MTVA Klasszikus + Magyar népmesék + archívum** Vercelen is 100%-os! *(Az M4 Sport élő adás csak magyar IP-ről megy).* |
+| **8** | **🔴 MédiaKlikk (`mediaklikk`)** | Klasszikusok & Élő TV | ✅ **95%** *(VOD 100%)* | ✅ **100%** | **43 MTVA Klasszikus + Magyar népmesék + archívum** Vercelen is 100%-os! *(Hivatalos MTVA CDN adás).* |
 | **9** | **🎬 NetMozi (`netmozi`)** | Film & Sorozat | ⚡ **Részleges** *(Videa/OK)* | ✅ **100% (+VOE 1080p)** | FNV-1a `linkPayload` dekódolás. A **VOE** tükrök IP-kötöttek (`&i=...&asn=...`), így a VOE streamek automatikusan Self-Hoston aktiválódnak. |
 | **10** | **🎞️ OnlineFilmek (`onlinefilmek`)** | Film & Sorozat | ⚡ **Részleges** *(Videa/OK)* | ✅ **100% (+VOE 1080p)** | DooPlayer v2 AJAX API. A Videa/OK.ru tükrök Vercelen is mennek, a **VOE 1080p HLS/MP4** tükrök Self-Hoston. |
 | **11** | **📂 Sorozatok.net (`sorozatoknet`)** | Sorozat | ⚡ **Részleges** *(Videa/OK)* | ✅ **100% (+VOE 1080p)** | `d.sorozatok.net` `hunter` JS dekódolás. A **VOE 1080p** epizódok Self-Hoston mennek teljes sebességgel. |
@@ -56,7 +57,36 @@ A kiegészítő **13 magyar streaming forrást** tartalmaz. Mivel a publikus **V
 
 ---
 
-## ⚠️ 3. Miért jöhet be néha rossz film a Videa / közösségi forrásokból, és hogyan védekezünk ellene?
+## 📺 3. Élő TV (164 Magyar Csatorna) — Közvetlen EU Gerinchálózat & GradeTV
+
+A kiegészítő mostantól **164 élő magyar televíziócsatornát** szolgáltat közvetlen HLS (`.m3u8`) Master Playlist formátumban:
+
+### ⚡ Legfontosabb Technikai Előnyök:
+- **🚀 Közvetlen Európai Gerinchálózat (`88.212.7.14` Antik Telecom EU):**  
+  Minden népszerű csatorna elsődleges forrása egy ultragyors közép-európai CDN gerinchálózat (**10 MB/s letöltési sebesség, ~150 ms késleltetés**), ami azonnal elindítja az adást és megszünteti a pufferelést.
+- **🛡️ 100%-ban megkerüli a GradeTV 120 perces korlátját:**  
+  A GradeTV weboldalának van egy 120 perces napi limitje a saját lejátszási lista szerverén (`m3m8.gradetv.net`). Azonban a GradeTV szabályzata rögzíti: *"Direct channel links... are outside this allowance"*. Az addonunk a közvetlen `provider_url` forrást kéri le, így **a kérésed nem megy át a 120 perces számlálón: a nap 24 órájában korlátlanul, megszakítás nélkül fut!**
+- **📡 Többszörös Tartalék Rendszer:**  
+  Minden csatornánál 3-5 független stream érhető el a lejátszóban:
+  1. `[Leggyorsabb / EU Direkt • Korlátlan]` — 88.212.7.14 központi EU gerinchálózat.
+  2. `[GradeTV • HTTPS]` — GradeTV HTTPS tartalék forrás.
+  3. `[Tartalék Szerver]` — Harmadlagos IPTV biztonsági tartalék (`141.94.193.53` vagy helyi forrás).
+- **📦 0 Bájt Vercel Videó Sávszélesség:**  
+  Egyetlen videó szegmens sem megy át a Vercelen; a kiegészítő tiszta, közvetlen `.m3u8` linkeket ad át a Nuvio / Stremio natív lejátszójának, így a Vercel 10 GB-os forgalmi korlátja egyetlen bájttal sem fogy.
+- **🎨 100% Egyedi Borítókép és Logó:**  
+  Mind a 164 csatornához egyedi HD poszter, logó és háttérkép tartozik.
+
+### 📋 Elérhető Élő Csatornák Kategóriánként:
+- **🔴 Országos & Kereskedelmi (28 adó):** RTL, TV2, M1, Duna, Super TV2, RTL Kettő, RTL Három, RTL Gold, RTL Otthon, RTL Klub, ATV, ATV Spirit, Hír TV, Dikh TV, Viasat 3, Viasat 6, Prime, Izaura TV, stb.
+- **🎬 Film & Sorozat (24 adó):** Film+, Mozi+, Cool TV, AMC, Moziverzum, HBO 1-2-3, Film4, TV4, Story4, Film Mánia, AXN Spin, Magyar Mozi TV, Moziklub, Sorozat+, Sorozatklub, stb.
+- **🌍 Ismeretterjesztő & Doksi (15 adó):** National Geographic, Nat Geo Wild, Discovery Channel, Animal Planet, Investigation Discovery (ID), Spektrum, Spektrum Home, History, Viasat Explore, Viasat History, Viasat Nature, HGTV, Food Network, Travel Channel, The Fishing & Hunting Channel.
+- **⚽ Sport, Zene & Életmód (20 adó):** M4 Sport, Sport 1, Sport 2, Spíler 1, Spíler 2, Arena4, Match 4, EuroSport 1, TV Paprika, Sláger TV, Muzsika TV, Zenebutik, Life TV, PVTV, Kincsem Park Lóverseny, stb.
+- **🧸 Rajzfilm & Gyerek (8 adó):** Disney Channel, Minimax, Nickelodeon, Nick Jr., Nicktoons, TV2 Kids, JimJam, Kölyökklub.
+- **📍 Helyi & Városi TV-k (69 adó):** Debrecen TV, Sopron TV, Fehérvár TV, Tisza TV, Szeged TV, Nyíregyházi TV, Kecskeméti TV, Eger TV, Szolnok TV, Gyöngyösi TV, Kapos TV, stb.
+
+---
+
+## ⚠️ 4. Miért jöhet be néha rossz film a Videa / közösségi forrásokból, és hogyan védekezünk ellene?
 
 Amikor a **Videa**, **Indavideo** vagy **Videakid** forrásokat használod, fontos tudni, hogyan működnek ezek az oldalak:
 - Ezek **közösségi videómegosztók** (mint a YouTube), ahová a felhasználók kézzel írják be a videók címét.
@@ -77,17 +107,17 @@ Amikor a **Videa**, **Indavideo** vagy **Videakid** forrásokat használod, font
 
 ---
 
-## 📺 4. MédiaKlikk Klasszikusok (MTVA) & Magyar Népmesék
+## 📺 5. MédiaKlikk Klasszikusok (MTVA) & Magyar Népmesék
 
 A kiegészítő külön kurátori katalógust kínál a **MédiaKlikk / Hirado.hu / MTVA Archívum** hivatalos, **1080p FHD** minőségű klasszikus magyar rajzfilmjeiből, sorozataiból és filmjeiből:
 - 🐉 **Süsü, a sárkány kalandjai** *(összes epizód)*
 - 🐦 **Magyar népmesék** *(széria & epizódok)*
-- 🎣 **A nagy ho-ho-horgász**, **Pom Pom meséi**, **Frakk, a régizik réme**, **Mézga család**, **Kukori és Kotkoda**, **Vízipók-csodapók**, **Dr. Bubó**
+- 🎣 **A nagy ho-ho-horgász**, **Pom Pom meséi**, **Frakk, a macskák réme**, **Mézga család**, **Kukori és Kotkoda**, **Vízipók-csodapók**, **Dr. Bubó**
 - 🎬 **Macskafogó**, **Vuk**, **Lúdas Matyi**, **János vitéz**, **Szaffi**, **Indul a bakterház**, **A tanú**, **Az ötödik pecsét**
 
 ---
 
-## 🔄 5. Heti Rotációs Katalógusok (Poszter + Forrás Garancia)
+## 🔄 6. Heti Rotációs Katalógusok (Poszter + Forrás Garancia)
 
 A főoldali katalógusok (**🔥 Magyar Trendi Filmek**, **🎬 Magyar Mozifilmek (Mafab)**, **📺 Magyar Trendi Sorozatok**, **🏛️ MédiaKlikk Klasszikusok**) úgy lettek felépítve, hogy:
 1. **Garantált HD Poszter:** Egyetlen film vagy sorozat sem jelenik meg üres/hiányzó borítókép nélkül.
@@ -96,7 +126,7 @@ A főoldali katalógusok (**🔥 Magyar Trendi Filmek**, **🎬 Magyar Mozifilme
 
 ---
 
-## 🏠 6. Self-Host Telepítési Útmutató ( mind a 13 forrás 100%-os feloldásához!)
+## 🏠 7. Self-Host Telepítési Útmutató (mind a 13 forrás 100%-os feloldásához!)
 
 Ha szeretnéd, hogy a **HDMozi**, **DMDAMedia**, **NetMozi (VOE)**, **OnlineFilmek (VOE)** és **Sorozatok.net (VOE)** is 100%-osan, a saját otthoni magyar IP-címeddel működjön, **2 perc alatt** elindíthatod a kiegészítőt a saját gépeden, NAS-odon vagy akár Android telefonodon!
 
@@ -139,7 +169,7 @@ node server.js
 
 ---
 
-## 📣 7. Közösségi Megosztás (Reddit Poszt Sablon)
+## 📣 8. Közösségi Megosztás (Reddit Poszt Sablon)
 
 Ha szeretnéd megosztani a projektet Redditen (`r/StremioAddons`, `r/hungary`, `r/kockak`), használd bátran az alábbi bemutatót:
 
@@ -147,14 +177,15 @@ Ha szeretnéd megosztani a projektet Redditen (`r/StremioAddons`, `r/hungary`, `
 <summary>📋 <b>Kattints ide a Reddit poszt szövegének megnyitásához!</b></summary>
 
 ```markdown
-# 🇭🇺 [Megosztás] Magyar HTTP Streams (Nuvio & Stremio Addon) – Magyar szinkronos filmek, sorozatok, mesék és MTVA klasszikusok torrent és Debrid nélkül!
+# 🇭🇺 [Megosztás] Magyar HTTP Streams (Nuvio & Stremio Addon) – Magyar szinkronos filmek, sorozatok, mesék, MTVA klasszikusok és 164 Élő TV adó torrent és Debrid nélkül!
 
 Sziasztok!
 
-Elkészült a **Magyar HTTP Streams** addon legújabb (`v2.3.0`) verziója **Nuvio** és **Stremio** lejátszókhoz. A cél egy olyan magyar kiegészítő volt, ami **nem használ torrentet (P2P)** és **nem igényel fizetős Real-Debrid előfizetést**, hanem közvetlen HTTP streameket (`1080p/720p MP4` és `HLS`) játszik le magyar videómegosztókról és archívumokból.
+Elkészült a **Magyar HTTP Streams** addon legújabb (`v2.4.0`) verziója **Nuvio** és **Stremio** lejátszókhoz. A cél egy olyan magyar kiegészítő volt, ami **nem használ torrentet (P2P)** és **nem igényel fizetős Real-Debrid előfizetést**, hanem közvetlen HTTP streameket (`1080p/720p MP4` és `HLS`) játszik le magyar videómegosztókról, archívumokból és élő televíziókból.
 
 ### ✨ Főbb újdonságok és funkciók:
-- **13 Magyar Forrás:** Videa, JobbMintATV, Filmezek, Filmvilág2, MeseKincstár, Videakid, Indavideo, MédiaKlikk (MTVA Archívum + Magyar népmesék + Süsü), NetMozi, OnlineFilmek, Sorozatok.net, HDMozi, DMDAMedia.
+- **164 Élő Magyar TV Adó:** RTL (összes), TV2 (összes), MTVA (M1-M5), Sport 1-2, Spíler 1-2, Arena4, Match 4, EuroSport 1, Spektrum, Spektrum Home, Discovery Channel, Animal Planet, Disney Channel, Minimax, Nickelodeon, Film+, Mozi+, Story4, 69 helyi TV — közvetlen szupergyors EU gerinchálózatról (88.212.7.14) 10 MB/s sebességgel, nulla puffereléssel és korlátlan lejátszási idővel (megkerülve a GradeTV 120 perces limitjét!).
+- **13 Magyar VOD Forrás:** Videa, JobbMintATV, Filmezek, Filmvilág2, MeseKincstár, Videakid, Indavideo, MédiaKlikk (MTVA Archívum + Magyar népmesék + Süsü), NetMozi, OnlineFilmek, Sorozatok.net, HDMozi, DMDAMedia.
 - **Akadásmentes OK.ru 1080p HLS javítás:** A JobbMintATV és Filmezek OK.ru forrásai mostantól fix felbontású HLS szegmenseket használnak (Frankfurt EU szerverről), így megszűnt az 5 másodpercenkénti pufferelés.
 - **Okos 3-lépcsős szűrő a rossz videók ellen:** Mivel a Videa/Indavideo közösségi feltöltéseknél néha más évjáratú (remake) filmek vannak fent, az addon ellenőrzi a címet, a megjelenési évet (`±1 év`) és a film tényleges hosszát (`±10 perc` + PAL korrekció). Ha egy videón nincs évszám, külön `⚠️ [Lehet nem jó a videó!]` jelzést kap.
 - **7 Magyar Katalógus heti rotációval:** Magyar Trendi Filmek, Mafab Mozifilmek, MédiaKlikk Klasszikusok (43 felújított klasszikus magyar mese és film), Élő Magyar TV — garantált poszterekkel és heti frissüléssel.
@@ -164,28 +195,27 @@ Elkészült a **Magyar HTTP Streams** addon legújabb (`v2.3.0`) verziója **Nuv
 - **Manifest URL (Nuvio / Stremio):** `https://nuvio-magyar-http.vercel.app/manifest.json`
 
 ### 🏠 Self-Host lehetőség (Haladóknak):
-A publikus Vercel szerveren 8 forrás (Videa, JobbMintATV, Filmezek, Filmvilág2, MeseKincstár, Videakid, Indavideo, MédiaKlikk) azonnal 100%-osan működik. Azokhoz a forrásokhoz, amik otthoni IP-hez kötik a videó tokent (VOE tükrök a NetMozi/OnlineFilmek/Sorozatok.net-en) vagy Cloudflare-rel tiltják a felhős szervereket (HDMozi, DMDAMedia), a GitHub oldalon találtok 1-perces PC / Termux (Android) Self-Host leírást:
+A publikus Vercel szerveren 8 forrás (Videa, JobbMintATV, Filmezek, Filmvilág2, MeseKincstár, Videakid, Indavideo, MédiaKlikk) és az összes Élő TV adó azonnal 100%-osan működik. Azokhoz a forrásokhoz, amik otthoni IP-hez kötik a videó tokent (VOE tükrök a NetMozi/OnlineFilmek/Sorozatok.net-en) vagy Cloudflare-rel tiltják a felhős szervereket (HDMozi, DMDAMedia), a GitHub oldalon találtok 1-perces PC / Termux (Android) Self-Host leírást:
 - **GitHub Repo & Dokumentáció:** https://github.com/Player798xy/nuvio-magyar-http
 
-Visszajelzéseket, ötleteket és hibajelentéseket szívesen fogadok! Jó filmezést! 🍿
-
-*(Jogi nyilatkozat: Ez a kiegészítő nem tárol, nem tölt fel és nem hosztol semmilyen médiafájlt; kizárólag nyilvánosan elérhető külső weboldalak hivatkozásait indexeli keresőmotorként, oktatási és kutatási célból. A fejlesztő semmilyen felelősséget nem vállal a külső tartalmakért vagy esetleges hibákért.)*
+Visszajelzéseket, ötleteket és hibajelentéseket szívesen fogadok! Jó filmezést és tévézést! 🍿📺
 ```
 </details>
 
 ---
 
-## 🛠️ 8. Projekt Struktúra
+## 🛠️ 9. Projekt Struktúra
 
 - [`src/addon.js`](src/addon.js) — Stremio/Nuvio SDK szerver, párhuzamos forrás-lekérdezés, `yearVerified` rendezés és `⚠️ [Lehet nem jó a videó!]` jelölés.
 - [`src/catalogs.js`](src/catalogs.js) & [`src/catalog.js`](src/catalog.js) — Heti rotációs (`getWeeklyRotationSeed`) magyar katalógusok, Mafab és MédiaKlikk Klasszikusok (43 kurátori műsor), garantált poszter- és lejátszhatósági szűrő.
+- [`src/scrapers/onlinestream.js`](src/scrapers/onlinestream.js) — 164 élő magyar TV csatorna kezelője közvetlen EU CDN (`88.212.7.14`) és GradeTV integrációval, azonnali A/V szinkronizált master HLS lejátszással és többszörös tartalék szerverekkel.
 - [`src/utils/crypto_decoders.js`](src/utils/crypto_decoders.js) — RC4, AES-128-CBC (`rpmshare`), FNV-1a (`NetMozi`), `hunter` (`Sorozatok.net`) és `VOE` (`extractVoeDirectStreams`) dekóderek.
 - [`src/scrapers/`](src/scrapers/) — A 13 önálló magyar forrás-modul (`videa.js`, `jobbmintatv.js`, `filmezek.js`, `filmvilag.js`, `mesefilm.js`, `videakid.js`, `indavideo.js`, `mediaklikk.js`, `netmozi.js`, `onlinefilmek.js`, `sorozatok_net.js`, `hdmozi.js`, `dmdamedia.js`).
 - [`vercel.json`](vercel.json) — Európai (`fra1` Frankfurt) Serverless konfiguráció és gyorsítótár-szabályok.
 
 ---
 
-## ⚖️ 9. Jogi Nyilatkozat és Felelősségkizárás (Legal Disclaimer)
+## ⚖️ 10. Jogi Nyilatkozat és Felelősségkizárás (Legal Disclaimer)
 
 > **⚠️ FONTOS FIGYELMEZTETÉS – KÉRJÜK, OLVASD EL HASZNÁLAT ELŐTT!**
 
