@@ -878,11 +878,26 @@ app.get('/api/netmozi-debug', async (req, res) => {
   // Also test direct detail page if ID given
   if (req.query.detailUrl) {
     try {
-      const { scrapeNetMoziDetailPage } = require('./src/scrapers/netmozi.js');
+      const { scrapeNetMoziDetailPage, netmoziFetchWithRedirects } = require('./src/scrapers/netmozi.js');
+      const cJar = new Map();
+      const pageRes = await netmoziFetchWithRedirects(req.query.detailUrl, { referer: 'https://netmozi.com/' }, cJar);
+      const attrs = {};
+      if (pageRes.body) {
+        for (const mMatch of pageRes.body.matchAll(/(data-movie-id|data-token|data-csrf|data-season|data-episode)="([^"]*)"/g)) {
+          attrs[mMatch[1]] = mMatch[2];
+        }
+      }
+      results.pageInspect = {
+        statusCode: pageRes.statusCode,
+        headers: pageRes.headers,
+        bodyLen: pageRes.body ? pageRes.body.length : 0,
+        attrs,
+        bodySnippet: pageRes.body ? pageRes.body.slice(0, 400) : ''
+      };
       const dStreams = await scrapeNetMoziDetailPage(req.query.detailUrl, testTitle, getClientIp(req), new Map(), testSeason, testEpisode);
       results.directDetail = { count: dStreams.length, streams: dStreams };
     } catch (err) {
-      results.directDetail = { error: err.message };
+      results.directDetail = { error: err.message, stack: err.stack };
     }
   }
 
