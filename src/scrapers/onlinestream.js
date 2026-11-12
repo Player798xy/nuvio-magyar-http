@@ -1566,6 +1566,14 @@ const ALL_CHANNELS = [
     "streams": [
       {
         "sub_idx": 1,
+        "url": "https://m3m8.gradetv.net/api/s/SpektrumHome.hu%3ASD%3Ahc1c89881df5704828d83d3252fd5f6e3.m3u8",
+        "host": "m3m8.gradetv.net",
+        "features": "1",
+        "playerUrl": "https://gradetv.net/?q=Spektrum%20Home",
+        "onlineUrl": "https://gradetv.net/?q=Spektrum%20Home"
+      },
+      {
+        "sub_idx": 2,
         "url": "http://141.94.193.53:80/Spektrum_Home_HD/index.m3u8",
         "host": "141.94.193.53",
         "features": "2",
