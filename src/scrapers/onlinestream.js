@@ -3490,31 +3490,12 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
       const isDirectBetter = isDirectPreferredStream(topUrl, ch.channelId);
 
       const serverDirectStreams = [];
-      const serverProxyStreams = [];
-
-      const proxyTag = isSlowServer
-        ? ' [Tartalék Szerver]'
-        : (isDirectBetter ? ' [Pufferelt]' : ' [Ajánlott - Nagy Sebesség]');
 
       const directTag = isSlowServer
         ? ' [Tartalék Szerver]'
         : (isDirectBetter ? ' [Leggyorsabb]' : '');
 
       if (topUrl) {
-        serverProxyStreams.push({
-          name: `⚡ [HU] ${ch.name} — ${quality} (HLS Proxy)${proxyTag}`,
-          title: isSlowServer
-            ? `⚠️ ${ch.name} • Tartalék Szerver (Lassabb sávszélesség)\n${quality} • ${serverHost} Forrás`
-            : (isDirectBetter
-              ? `🚀 ${ch.name} • Pufferelt HLS Proxy\n${quality} • Tartalék akadozásmentes indulás\n${serverHost} Forrás`
-              : `🚀 ${ch.name} • Akadozásmentes Nagy Sebességű CDN Proxy\n${quality} • Azonnali Nuvio / ExoPlayer Indulás\n${serverHost} Forrás`),
-          url: `${cleanHost}/proxy/hls.m3u8?url=${encodeURIComponent(topUrl)}`,
-          behaviorHints: {
-            notWebReady: false,
-            isLive: true
-          }
-        });
-
         serverDirectStreams.push({
           name: `🔴 [HU] ${ch.name} — ${quality} (.m3u8)${directTag}`,
           title: isSlowServer
@@ -3532,16 +3513,6 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
 
       // Adaptív Master Playlist ha eltér a topVariant-tól
       if (masterUrl && masterUrl !== topUrl) {
-        serverProxyStreams.push({
-          name: `⚡ [HU] ${ch.name} — Auto (HLS Proxy)${isSlowServer ? ' [Tartalék]' : ''}`,
-          title: `🚀 ${ch.name} • Akadozásmentes Auto Proxy\nAdaptív felbontás • ${serverHost} Forrás`,
-          url: `${cleanHost}/proxy/hls.m3u8?url=${encodeURIComponent(masterUrl)}`,
-          behaviorHints: {
-            notWebReady: false,
-            isLive: true
-          }
-        });
-
         serverDirectStreams.push({
           name: `🔴 [HU] ${ch.name} — Auto (.m3u8)${isSlowServer ? ' [Tartalék]' : ''}`,
           title: `📡 ${ch.name} • ${serverHost}\nAdaptív HLS Master Playlist (.m3u8)\nKözvetlen Forrás`,
@@ -3553,9 +3524,8 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
         });
       }
 
-      // Közvetlen streamek mindig legelöl (Zero Vercel sávszélesség-fogyasztás, közvetlen CDN kapcsolat)
+      // Csak 100% közvetlen streamek (Zero Vercel proxy, tiszta direct HLS Nuvio és Stremio számára)
       for (const str of serverDirectStreams) addStream(str);
-      for (const str of serverProxyStreams) addStream(str);
 
       activeIndex++;
     }

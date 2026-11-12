@@ -1004,15 +1004,6 @@ async function getLiveChannelStreams(channelIdOrKey, clientIp = null, hostUrl = 
         notWebReady: false,
         isLive: true
       }
-    },
-    {
-      name: `⚡ ${channel.name} — 1080p FHD (HLS Proxy)`,
-      title: `🚀 ${channel.name} • Akadozásmentes HLS Proxy\n1080p Full HD • Azonnali Nuvio / ExoPlayer Indulás\nHivatalos MTVA Forrás`,
-      url: `${hostUrl}/proxy/hls.m3u8?url=${encodeURIComponent(hlsUrl)}`,
-      behaviorHints: {
-        notWebReady: false,
-        isLive: true
-      }
     }
   ];
 }

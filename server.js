@@ -324,179 +324,18 @@ app.get(configuredStreamRoutes, handleStream);
 
 // 7. Live TV HLS Master Playlist Rewriter (Orders 1080p Full HD first so Nuvio starts in 1080p)
 
-// 7b. Universal High-Performance HLS Streaming Proxy
-app.get(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
+// 7b. Legacy redirect for any cached proxy links -> 302 directly to source (Zero Vercel video transfer)
+app.get(['/proxy/hls.m3u8', '/proxy/hls'], (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', '*');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
 
   const targetUrl = (req.query.url || '').trim();
   if (!targetUrl) {
     return res.status(400).send('#EXTM3U\n#EXT-X-ERROR: Missing url param\n');
   }
-
-  let parsed;
-  try {
-    parsed = new URL(targetUrl);
-  } catch (e) {
-    return res.status(400).send('#EXTM3U\n#EXT-X-ERROR: Invalid target URL\n');
-  }
-
-  const host = parsed.hostname.toLowerCase();
-  const upstreamHeaders = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    'Accept': '*/*'
-  };
-
-  if (host.includes('onlinestream') || host.includes('gradetv') || host.includes('antik') || host.includes('141.94.193.53') || host.includes('lexanetwork')) {
-    upstreamHeaders['Referer'] = 'https://onlinestream.live/';
-    upstreamHeaders['Origin'] = 'https://onlinestream.live';
-  } else if (host.includes('mediaklikk') || host.includes('connectmedia')) {
-    upstreamHeaders['Referer'] = 'https://mediaklikk.hu/';
-    upstreamHeaders['Origin'] = 'https://mediaklikk.hu';
-  } else if (host.includes('videa')) {
-    upstreamHeaders['Referer'] = 'https://videa.hu/';
-    upstreamHeaders['Origin'] = 'https://videa.hu';
-  } else {
-    upstreamHeaders['Referer'] = `${parsed.protocol}//${parsed.host}/`;
-  }
-
-  const controller = new AbortController();
-  req.on('close', () => controller.abort());
-
-  try {
-    if (req.headers['range']) {
-      upstreamHeaders['Range'] = req.headers['range'];
-    }
-
-    const upstreamRes = await fetch(targetUrl, {
-      headers: upstreamHeaders,
-      signal: controller.signal
-    });
-
-    if (!upstreamRes.ok) {
-      return res.status(upstreamRes.status).send(`#EXTM3U\n#EXT-X-ERROR: Upstream returned ${upstreamRes.status}\n`);
-    }
-
-    const contentType = (upstreamRes.headers.get('content-type') || '').toLowerCase();
-    const hostUrl = getHostUrl(req);
-    const isPlaylist = targetUrl.includes('.m3u8') ||
-                       targetUrl.includes('api/s/') ||
-                       contentType.includes('mpegurl') ||
-                       contentType.includes('application/x-mpegurl');
-
-    if (isPlaylist) {
-      const text = await upstreamRes.text();
-      res.setHeader('Content-Type', 'application/vnd.apple.mpegurl; charset=utf-8');
-      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-
-      const isMediaPlaylist = text.includes('#EXTINF:');
-
-      if (isMediaPlaylist) {
-        // Live Media Playlist: Szigorú valós idejű szinkronizáció
-        // Pontosan megőrizzük az upstream #EXT-X-MEDIA-SEQUENCE, #EXTINF és #EXT-X-DISCONTINUITY tageket,
-        // így elkerüljük az ismétlődő részeket, visszaugrásokat és puffer-hurkokat!
-        const lines = text.split(/\r?\n/);
-        const outLines = [];
-
-        for (let i = 0; i < lines.length; i++) {
-          const l = lines[i].trim();
-          if (!l) continue;
-
-          if (l.startsWith('#')) {
-            // URI="..." attribútumok átírása (pl. feliratok, hangok, kulcsok)
-            const rewritten = l.replace(/URI=["']([^"']+)["']/g, (match, uri) => {
-              try {
-                const absUri = new URL(uri, targetUrl).toString();
-                const isSubPl = absUri.includes('.m3u8') || absUri.includes('api/s/') || absUri.includes('faixa=');
-                const ep = isSubPl ? '/proxy/hls.m3u8' : '/proxy/hls';
-                return `URI="${hostUrl}${ep}?url=${encodeURIComponent(absUri)}"`;
-              } catch (e) {
-                return match;
-              }
-            });
-            outLines.push(rewritten);
-          } else {
-            // Szegmens URL átírása proxy végpontra (megfelelő Referer és Origin fejlécekkel, HTTPS-en)
-            try {
-              const absUrl = new URL(l, targetUrl).toString();
-              outLines.push(`${hostUrl}/proxy/hls?url=${encodeURIComponent(absUrl)}`);
-            } catch (e) {
-              outLines.push(l);
-            }
-          }
-        }
-
-        return res.send(outLines.join('\n'));
-      }
-
-      // Master Playlist: Rewrite sub-variant URLs
-      const lines = text.split(/\r?\n/);
-      const rewritten = lines.map(line => {
-        const trimmed = line.trim();
-        if (!trimmed) return line;
-
-        if (trimmed.startsWith('#')) {
-          return trimmed.replace(/URI=["']([^"']+)["']/g, (match, uri) => {
-            try {
-              const absUri = new URL(uri, targetUrl).toString();
-              const isSubPl = absUri.includes('.m3u8') || absUri.includes('api/s/') || absUri.includes('faixa=');
-              const ep = isSubPl ? '/proxy/hls.m3u8' : '/proxy/hls';
-              return `URI="${hostUrl}${ep}?url=${encodeURIComponent(absUri)}"`;
-            } catch (e) {
-              return match;
-            }
-          });
-        }
-
-        try {
-          const absUrl = new URL(trimmed, targetUrl).toString();
-          const isSubPlaylist = absUrl.includes('.m3u8') || absUrl.includes('faixa=') || absUrl.includes('api/s/');
-          const proxyEndpoint = isSubPlaylist ? '/proxy/hls.m3u8' : '/proxy/hls';
-          return `${hostUrl}${proxyEndpoint}?url=${encodeURIComponent(absUrl)}`;
-        } catch (e) {
-          return line;
-        }
-      });
-
-      return res.send(rewritten.join('\n'));
-    }
-
-    // Binary media segment (.ts, .m4s, .aac, .mp4)
-    if (upstreamRes.status === 206) {
-      res.status(206);
-      const contentRange = upstreamRes.headers.get('content-range');
-      if (contentRange) res.setHeader('Content-Range', contentRange);
-    } else {
-      res.status(200);
-    }
-
-    const contentLength = upstreamRes.headers.get('content-length');
-    if (contentLength) res.setHeader('Content-Length', contentLength);
-    res.setHeader('Content-Type', contentType || 'video/mp2t');
-    res.setHeader('Cache-Control', 'public, max-age=86400, immutable');
-    res.setHeader('Accept-Ranges', 'bytes');
-
-    if (upstreamRes.body) {
-      const nodeStream = Readable.fromWeb(upstreamRes.body);
-      return pipeline(nodeStream, res, (err) => {
-        if (err && !res.headersSent) {
-          try { res.status(502).end(); } catch (e) {}
-        }
-      });
-    } else {
-      return res.end();
-    }
-  } catch (err) {
-    if (controller.signal.aborted) return;
-    if (!res.headersSent) {
-      res.status(502).send(`#EXTM3U\n#EXT-X-ERROR: Proxy error: ${err.message}\n`);
-    }
-  }
+  return res.redirect(302, targetUrl);
 });
 
 // 7b2. XSPF Playlist Endpoint for VLC Media Player and Kodi
