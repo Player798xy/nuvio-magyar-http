@@ -1244,6 +1244,12 @@ async function scrapeMediaKlikk(meta) {
         let isMatch = false;
 
         if (isSeries) {
+          // Check that the MédiaKlikk item title actually relates to the queried series title
+          const titleMatches = normItemTitle.includes(normTarget) ||
+                               normTarget.includes(normItemTitle) ||
+                               normTarget.split(/\s+/).some(w => w.length > 3 && normItemTitle.includes(w));
+          if (!titleMatches) continue;
+
           const parsed = parseSeasonEpisode(rawTitle);
 
           // 1. Direct Season & Episode match
