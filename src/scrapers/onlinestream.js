@@ -3495,15 +3495,17 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
         ? ' [Tartalék Szerver]'
         : (isDirectBetter ? ' [Leggyorsabb]' : '');
 
-      if (topUrl) {
+      // A Master Playlist (masterUrl) MINDIG az 1. helyre kerül, mert az tartalmazza a hangot (audio) ÉS a képet (video) szinkronban!
+      // Ha a sub-variant (pl. faixa=video) külön kerülne be, a lejátszó hang nélkül maradna és 10 másodpercenként elakadna/pufferelne!
+      if (masterUrl) {
         serverDirectStreams.push({
           name: `🔴 [HU] ${ch.name} — ${quality} (.m3u8)${directTag}`,
           title: isSlowServer
             ? `⚠️ ${ch.name} • Tartalék Közvetlen Stream\n${quality} • ${serverHost} Forrás`
             : (isDirectBetter
-              ? `📡 ${ch.name} • ${serverHost} (Közvetlen / Leggyorsabb)\n${quality} Nagy sebességű közvetlen HLS adás • Nagy natív buffer, nulla proxy késleltetés\nKözvetlen Forrás`
-              : `📡 ${ch.name} • ${serverHost}\n${quality} Közvetlen HLS Adás (.m3u8)\nKözvetlen Forrás`),
-          url: topUrl,
+              ? `📡 ${ch.name} • ${serverHost} (Közvetlen / Leggyorsabb)\n${quality} Teljes HLS Master Stream (Kép + Hang szinkronban) • Nulla késleltetés\nKözvetlen Forrás`
+              : `📡 ${ch.name} • ${serverHost}\n${quality} Közvetlen HLS Adás (Kép + Hang) (.m3u8)\nKözvetlen Forrás`),
+          url: masterUrl,
           behaviorHints: {
             notWebReady: false,
             isLive: true
@@ -3511,12 +3513,12 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
         });
       }
 
-      // Adaptív Master Playlist ha eltér a topVariant-tól
-      if (masterUrl && masterUrl !== topUrl) {
+      // Csak akkor adunk hozzá külön topVariant-ot ha NEM demuxed (nincs faixa=) és eltér a master-től
+      if (topUrl && topUrl !== masterUrl && !topUrl.includes('faixa=')) {
         serverDirectStreams.push({
-          name: `🔴 [HU] ${ch.name} — Auto (.m3u8)${isSlowServer ? ' [Tartalék]' : ''}`,
-          title: `📡 ${ch.name} • ${serverHost}\nAdaptív HLS Master Playlist (.m3u8)\nKözvetlen Forrás`,
-          url: masterUrl,
+          name: `🔴 [HU] ${ch.name} — ${quality} FHD Direkt (.m3u8)${isSlowServer ? ' [Tartalék]' : ''}`,
+          title: `📡 ${ch.name} • ${serverHost}\nKözvetlen Stream Variáns (.m3u8)\nKözvetlen Forrás`,
+          url: topUrl,
           behaviorHints: {
             notWebReady: false,
             isLive: true
