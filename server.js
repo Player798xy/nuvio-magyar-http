@@ -850,10 +850,28 @@ app.get('/api/provider-test', async (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
-    version: pkg.version || '2.5.0',
+    version: pkg.version || '2.6.5',
     uptime: process.uptime(),
     timestamp: new Date().toISOString()
   });
+});
+
+app.get('/api/debug-hosters', async (req, res) => {
+  const { extractVoe, extractVidmoly, resolveAnyEmbed } = require('./src/utils/hosters');
+  const clientIp = getClientIp(req);
+  const results = {};
+  try {
+    results.clientIp = clientIp;
+    results.voe = await extractVoe('https://voe.sx/0pzy2oqywvu7', 'NetMozi', 'test', clientIp);
+  } catch (e) {
+    results.voeError = e.message;
+  }
+  try {
+    results.vidmoly = await extractVidmoly('https://vidmoly.me/w/42jj5q0kxuri', 'NetMozi', 'test', clientIp);
+  } catch (e) {
+    results.vidmolyError = e.message;
+  }
+  res.json(results);
 });
 
 // Configure Route & Index Page (supports ?old=1 or /old for legacy UI)
