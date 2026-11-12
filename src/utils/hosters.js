@@ -14,12 +14,14 @@ async function extractVidmoly(embedUrl, sourceLabel = 'Vidmoly', customTitle = '
     let url = embedUrl;
     const wMatch = url.match(/\/w\/([a-zA-Z0-9]+)/);
     if (wMatch) {
-      url = url.replace(/\/w\/([a-zA-Z0-9]+)/, '/embed-$1.html');
+      url = `https://vidmoly.biz/embed-${wMatch[1]}.html`;
+    } else if (url.includes('/embed-')) {
+      url = url.replace(/https?:\/\/[^/]+/, 'https://vidmoly.biz');
     }
     const res = await fetch(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-        Referer: 'https://vidmoly.me/'
+        Referer: 'https://vidmoly.biz/'
       },
       signal: AbortSignal.timeout(6000)
     });
@@ -35,8 +37,8 @@ async function extractVidmoly(embedUrl, sourceLabel = 'Vidmoly', customTitle = '
         quality: 1080,
         isHls: true,
         headers: {
-          Referer: 'https://vidmoly.me/',
-          Origin: 'https://vidmoly.me',
+          Referer: 'https://vidmoly.biz/',
+          Origin: 'https://vidmoly.biz',
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
         }
       });

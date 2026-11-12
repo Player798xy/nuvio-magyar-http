@@ -513,7 +513,16 @@ async function searchAndScrapeNetMozi(cleanTitle, targetYear, isSeries, season, 
 
     candidates.sort((a, b) => b.score - a.score);
     const best = candidates[0];
-    // query log removed for privacy
+
+    // Fast-path: Directly resolve via unmetered Mindjart bypass if mid is known
+    if (best && best.mid) {
+      const s = season || 1;
+      const e = episode || 1;
+      const directStreams = await scrapeMindjartDirect(best.mid, best.isSeries, s, e, cleanTitle, clientIp);
+      if (directStreams && directStreams.length > 0) {
+        return directStreams;
+      }
+    }
 
     // Step 3: Fetch details/episode page with automatic 301/302 redirect following
     let targetPageUrl = best.link.startsWith('http') ? best.link : (`https://netmozi.com${best.link}`);
@@ -600,6 +609,12 @@ async function scrapeNetMozi(metaOrTitle, year = null, season = null, episode = 
     }
 
     if (mid) {
+      const isSer = itemType === 'series' || Boolean(s && e);
+      const directStreams = await scrapeMindjartDirect(mid, isSer, s, e, cleanTitle || 'NetMozi Média', clientIp);
+      if (directStreams && directStreams.length > 0) {
+        return directStreams;
+      }
+
       if (!slug || slug === 'film' || slug === 'sorozat') {
         try {
           const redirectCheck = await netmoziTlsRequest(`https://netmozi.com/${itemType === 'series' ? 'sorozatok' : 'adatlap'}/${mid}`);
@@ -620,8 +635,8 @@ async function scrapeNetMozi(metaOrTitle, year = null, season = null, episode = 
         : `https://netmozi.com/adatlap/${mid}/${finalSlug}`;
       
       const cookieJar = new Map();
-      const directStreams = await scrapeNetMoziDetailPage(pageUrl, cleanTitle || finalSlug.replace(/-/g, ' '), clientIp, cookieJar, s, e);
-      return directStreams;
+      const fallbackStreams = await scrapeNetMoziDetailPage(pageUrl, cleanTitle || finalSlug.replace(/-/g, ' '), clientIp, cookieJar, s, e);
+      return fallbackStreams;
     }
   }
 
@@ -649,11 +664,109 @@ async function scrapeNetMozi(metaOrTitle, year = null, season = null, episode = 
 }
 
 /**
+ * Directly queries Mindjart link listing by base64-encoded movie ID.
+ * Bypasses NetMozi Cloudflare protections and CSRF dependencies completely.
+ * E.g. https://mindjart.megnezed.com/links/vv/NDI1Nzk=/2/16 or /links/vv/MzAyOA==
+ */
+async function scrapeMindjartDirect(movieId, isSeries = false, season = null, episode = null, cleanTitle = 'NetMozi', clientIp = null) {
+  const streams = [];
+  try {
+    if (!movieId) return streams;
+    const b64 = Buffer.from(String(movieId)).toString('base64');
+    const s = season || 1;
+    const e = episode || 1;
+    const mindjartUrl = (isSeries && season && episode)
+      ? `https://mindjart.megnezed.com/links/vv/${b64}/${s}/${e}`
+      : `https://mindjart.megnezed.com/links/vv/${b64}`;
+
+    const pageRes = await fetch(mindjartUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Referer': 'https://netmozi.com/'
+      },
+      signal: AbortSignal.timeout(5000)
+    });
+    if (!pageRes.ok) return streams;
+    const html = await pageRes.text();
+
+    const openRoutes = [];
+    for (const m of html.matchAll(/href=["'](\/links\/open\/\d+)["']/g)) {
+      if (!openRoutes.includes(m[1])) openRoutes.push(m[1]);
+    }
+
+    if (openRoutes.length === 0) {
+      const mPayload = html.match(/<script[^>]*data-link-payload[^>]*data-link-context="([^"]+)"[^>]*>(.*?)<\/script>/s);
+      if (mPayload) {
+        try {
+          const routes = unpack(JSON.parse(mPayload[2]).value, mPayload[1]);
+          if (Array.isArray(routes)) {
+            openRoutes.push(...routes.filter(r => !r.startsWith('////diablo') && !r.startsWith('////torrent')));
+          }
+        } catch (err) {}
+      }
+    }
+
+    if (openRoutes.length === 0) return streams;
+
+    const seenEmbeds = new Set();
+    const embedUrls = await Promise.all(openRoutes.slice(0, 10).map(async (route) => {
+      try {
+        const fullUrl = route.startsWith('http') ? route : ('https://mindjart.megnezed.com' + route);
+        const r = await fetch(fullUrl, {
+          redirect: 'manual',
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Referer': mindjartUrl
+          },
+          signal: AbortSignal.timeout(4000)
+        });
+        const loc = r.headers.get('location');
+        if (loc && !seenEmbeds.has(loc)) {
+          seenEmbeds.add(loc);
+          return loc;
+        }
+      } catch (e) {}
+      return null;
+    }));
+
+    const validEmbeds = embedUrls.filter(Boolean);
+    if (validEmbeds.length === 0) return streams;
+
+    const { resolveAnyEmbed } = require('../utils/hosters');
+    await Promise.all(validEmbeds.map(async (embedLoc) => {
+      try {
+        const s = await resolveAnyEmbed(embedLoc, 'NetMozi', cleanTitle);
+        if (Array.isArray(s) && s.length > 0) {
+          streams.push(...s);
+        }
+      } catch (e) {}
+    }));
+  } catch (err) {
+    console.warn('[NetMozi] scrapeMindjartDirect error:', err.message);
+  }
+  return streams;
+}
+
+/**
  * Scrapes a specific NetMozi detail page URL (e.g. /sorozatok/42579/.../s1/e1 or /adatlap/1234/...)
  */
 async function scrapeNetMoziDetailPage(targetPageUrl, cleanTitle, clientIp = null, cookieJar = new Map(), targetSeason = null, targetEpisode = null) {
   const streams = [];
   try {
+    const urlMidMatch = targetPageUrl.match(/\/(?:sorozatok|adatlap|filmek|film)\/(\d+)/i);
+    const urlSMatch = targetPageUrl.match(/\/s(\d+)\/e(\d+)/i);
+    const urlMid = urlMidMatch ? urlMidMatch[1] : null;
+    const urlS = targetSeason || (urlSMatch ? parseInt(urlSMatch[1], 10) : null);
+    const urlE = targetEpisode || (urlSMatch ? parseInt(urlSMatch[2], 10) : null);
+    const urlIsSeries = Boolean(urlS && urlE) || targetPageUrl.includes('/sorozatok/');
+
+    if (urlMid) {
+      const directStreams = await scrapeMindjartDirect(urlMid, urlIsSeries, urlS, urlE, cleanTitle, clientIp);
+      if (directStreams && directStreams.length > 0) {
+        return directStreams;
+      }
+    }
+
     const detailPageRes = await netmoziFetchWithRedirects(targetPageUrl, { referer: 'https://netmozi.com/', clientIp }, cookieJar);
     if (!detailPageRes.body) return streams;
 
@@ -1035,6 +1148,7 @@ async function getNetMoziSeriesEpisodes(netmoziId) {
 
 module.exports = {
   scrapeNetMozi,
+  scrapeMindjartDirect,
   scrapeNetMoziDetailPage,
   searchNetMozi,
   getNetMoziSeriesEpisodes,

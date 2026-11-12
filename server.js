@@ -846,66 +846,6 @@ app.get('/api/provider-test', async (req, res) => {
   }
 });
 
-// NetMozi Debug Endpoint
-app.get('/api/netmozi-debug', async (req, res) => {
-  const { netmoziTlsRequest, netmoziFetchWithRedirects, scrapeNetMozi } = require('./src/scrapers/netmozi.js');
-  const results = {};
-  
-  const testTitle = req.query.title || 'Ingatlanvadászok';
-  const testSeason = req.query.season ? parseInt(req.query.season, 10) : 2;
-  const testEpisode = req.query.episode ? parseInt(req.query.episode, 10) : 16;
-
-  try {
-    const meta = {
-      hungarianTitle: testTitle,
-      englishTitle: testTitle,
-      type: 'series',
-      season: testSeason,
-      episode: testEpisode,
-      clientIp: getClientIp(req)
-    };
-    const t0 = Date.now();
-    const streams = await scrapeNetMozi(meta);
-    results.scrapeNetMozi = {
-      durationMs: Date.now() - t0,
-      streamCount: streams.length,
-      streams: streams
-    };
-  } catch (err) {
-    results.scrapeNetMozi = { error: err.message, stack: err.stack };
-  }
-
-  // Also test direct detail page if ID given
-  if (req.query.detailUrl) {
-    try {
-      const { scrapeNetMoziDetailPage, netmoziFetchWithRedirects } = require('./src/scrapers/netmozi.js');
-      const cJar = new Map();
-      const pageRes = await netmoziFetchWithRedirects(req.query.detailUrl, { referer: 'https://netmozi.com/' }, cJar);
-      const attrs = {};
-      if (pageRes.body) {
-        for (const mMatch of pageRes.body.matchAll(/(data-movie-id|data-token|data-csrf|data-season|data-episode)="([^"]*)"/g)) {
-          attrs[mMatch[1]] = mMatch[2];
-        }
-      }
-      results.pageInspect = {
-        statusCode: pageRes.statusCode,
-        headers: pageRes.headers,
-        bodyLen: pageRes.body ? pageRes.body.length : 0,
-        attrs,
-        csrfMatches: pageRes.body ? pageRes.body.match(/[a-zA-Z0-9_-]*csrf[a-zA-Z0-9_-]*(=["'][^"']*["'])?/gi) : null,
-        tokenMatches: pageRes.body ? pageRes.body.match(/[a-zA-Z0-9_-]*token[a-zA-Z0-9_-]*(=["'][^"']*["'])?/gi) : null,
-        bodySnippet: pageRes.body ? pageRes.body.slice(0, 400) : ''
-      };
-      const dStreams = await scrapeNetMoziDetailPage(req.query.detailUrl, testTitle, getClientIp(req), new Map(), testSeason, testEpisode);
-      results.directDetail = { count: dStreams.length, streams: dStreams };
-    } catch (err) {
-      results.directDetail = { error: err.message, stack: err.stack };
-    }
-  }
-
-  res.json(results);
-});
-
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
