@@ -11,7 +11,7 @@ const {
   getMediaKlikkPrograms,
   getMediaKlikkSeriesEpisodes
 } = require('./scrapers/mediaklikk');
-const { searchNetMozi, getNetMoziSeriesEpisodes } = require('./scrapers/netmozi');
+const { searchNetMozi, getNetMoziMovieMeta, getNetMoziSeriesEpisodes } = require('./scrapers/netmozi');
 const { fetchCatalogItems, rotateWeekly } = require('./catalogs');
 const { getOnlineStreamChannels, getOnlineStreamMeta } = require('./scrapers/onlinestream');
 
@@ -832,6 +832,10 @@ async function getMeta(type, id, hostUrl = null) {
         };
       }
     } else {
+      const movieMeta = await getNetMoziMovieMeta(id);
+      if (movieMeta) {
+        return { meta: movieMeta };
+      }
       return {
         meta: {
           id,

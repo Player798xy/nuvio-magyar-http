@@ -292,19 +292,38 @@ async function getStreams(type, rawId, config = {}) {
   const hasQualityFilter = Array.isArray(activeQualities) && activeQualities.length > 0 && activeQualities.length < 4;
   const qualSet = hasQualityFilter ? new Set(activeQualities.map(q => String(q).toLowerCase())) : null;
 
+  const ALWAYS_REJECT_PATTERNS = [
+    'frdl.io', 'fredl.ru', 'katfile.', 'uploady.', 'rapidgator.', 'turbobit.',
+    'embed.indavideo.hu/player', 'videa.hu/player'
+  ];
+
   const HTML_EMBED_PATTERNS = [
     'filemoon.', 'voe.sx', 'voe.to', 'vidmoly.', 'streamwish.', 'streamruby.', 'rubystream.',
-    'dood.', 'd000d.', 'mixdrop.', 'byse', 'vinovo.', 'vidara.', 'luluvdo.', 'vidoza.',
-    'speedfiles.', 'supervideo.', 'embed.indavideo.hu/player', 'videa.hu/player'
+    'dood.', 'd000d.', 'mixdrop.', 'mxdrop.', 'byse', 'vinovo.', 'vidara.', 'luluvdo.', 'luluvid.',
+    'vidoza.', 'speedfiles.', 'supervideo.'
   ];
 
   for (const s of allStreams) {
     if (!s || !s.url || seenUrls.has(s.url)) continue;
     const urlLower = String(s.url).toLowerCase();
-    // Reject webpage iframe embed URLs that cause infinite buffering in Nuvio's native video player
+    let parsedHost = '';
+    let parsedPath = '';
+    try {
+      const parsed = new URL(s.url);
+      parsedHost = parsed.hostname.toLowerCase();
+      parsedPath = parsed.pathname.toLowerCase();
+    } catch {}
+
+    const isInternalProxy = parsedPath.startsWith('/proxy/hls');
+    const isDirectMediaFile = parsedPath.endsWith('.m3u8') || parsedPath.endsWith('.mp4');
+
+    // Reject webpage iframe embed URLs & download landing pages that cause infinite buffering in Nuvio
     if (
-      HTML_EMBED_PATTERNS.some(pat => urlLower.includes(pat)) ||
-      (!urlLower.includes('.mp4') && !urlLower.includes('.m3u8') && !urlLower.includes('videa.hu/static/video/') && !urlLower.includes('videakid.hu/static/video/') && !urlLower.includes('indavideo.hu/') && !urlLower.includes('okcdn.ru') && !urlLower.includes('vkuser') && (urlLower.includes('/e/') || urlLower.includes('/embed-')))
+      ALWAYS_REJECT_PATTERNS.some(pat => urlLower.includes(pat)) ||
+      (!isInternalProxy && !isDirectMediaFile && (
+        HTML_EMBED_PATTERNS.some(pat => parsedHost.includes(pat)) ||
+        (!urlLower.includes('.mp4') && !urlLower.includes('.m3u8') && !urlLower.includes('videa.hu/static/video/') && !urlLower.includes('videakid.hu/static/video/') && !urlLower.includes('indavideo.hu/') && !urlLower.includes('okcdn.ru') && !urlLower.includes('vkuser') && (parsedPath.includes('/e/') || parsedPath.includes('/embed-')))
+      ))
     ) {
       continue;
     }

@@ -10,6 +10,7 @@ const { generateTvPosterSvg, generateTvBackgroundSvg, generateTvLogoSvg } = requ
 const { searchCatalog, getMeta } = require('./src/catalog');
 const { getMediaMeta, getSeriesEpisodes } = require('./src/utils/meta');
 const { getLiveHlsStream, getRewrittenMasterPlaylist } = require('./src/scrapers/mediaklikk');
+const { isUrlIpLocked } = require('./src/utils/netmozi_hosters');
 
 const app = express();
 const PORT = process.env.PORT || 7000;
@@ -324,18 +325,133 @@ app.get(configuredStreamRoutes, handleStream);
 
 // 7. Live TV HLS Master Playlist Rewriter (Orders 1080p Full HD first so Nuvio starts in 1080p)
 
-// 7b. Legacy redirect for any cached proxy links -> 302 directly to source (Zero Vercel video transfer)
-app.get(['/proxy/hls.m3u8', '/proxy/hls'], (req, res) => {
+// 7b. Universal Stream Proxy:
+// Direct 302 redirect for open streams (zero Vercel transfer for Live TV, Videa, Indavideo, StreamRuby, vTube, MixDrop).
+// Streaming HLS playlist rewriter & Range-aware media proxy for IP/ASN-locked CDNs (VOE, Vidmoly, Filemoon/Byse, Vidara).
+function inferDefaultReferer(targetUrl) {
+  const lower = targetUrl.toLowerCase();
+  if (lower.includes('vmpx.online') || lower.includes('vmnow.online')) return 'https://vidmoly.biz/';
+  if (lower.includes('97bf1.com')) return 'https://vidara.to/';
+  if (lower.includes('r66nv9ed.com') || lower.includes('sprintcdn')) return 'https://filemoon.sx/';
+  return 'https://susanexpectcare.com/';
+}
+
+function rewriteHlsLine(line, baseUrl, hostUrl, ref, isNextVariant = false) {
+  const trimmed = line.trim();
+  if (!trimmed) return line;
+
+  const toProxy = (rawUri, forceM3u8 = false) => {
+    const resolved = new URL(rawUri, baseUrl).toString();
+    const ext = (forceM3u8 || resolved.includes('.m3u8')) ? '.m3u8' : '';
+    return `${hostUrl}/proxy/hls${ext}?url=${encodeURIComponent(resolved)}&ref=${encodeURIComponent(ref)}`;
+  };
+
+  if (trimmed.startsWith('#')) {
+    if (trimmed.includes('URI="')) {
+      return line.replace(/URI="([^"]+)"/g, (_, uri) => `URI="${toProxy(uri, /EXT-X-MEDIA|EXT-X-I-FRAME-STREAM-INF/i.test(trimmed))}"`);
+    }
+    return line;
+  }
+
+  return toProxy(trimmed, isNextVariant);
+}
+
+app.all(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', '*');
+  res.setHeader('Access-Control-Expose-Headers', 'Content-Length, Content-Range, Accept-Ranges, Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
-
-  const targetUrl = (req.query.url || '').trim();
-  if (!targetUrl) {
-    return res.status(400).send('#EXTM3U\n#EXT-X-ERROR: Missing url param\n');
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    return res.status(405).send('Method Not Allowed');
   }
-  return res.redirect(302, targetUrl);
+
+  const targetUrl = String(req.query.url || '').trim();
+  if (!/^https?:\/\//i.test(targetUrl)) {
+    return res.status(400).send('#EXTM3U\n#EXT-X-ERROR: Missing or invalid url param\n');
+  }
+
+  if (!isUrlIpLocked(targetUrl)) {
+    return res.redirect(302, targetUrl);
+  }
+
+  try {
+    const hostUrl = getHostUrl(req);
+    const ref = String(req.query.ref || '').trim() || inferDefaultReferer(targetUrl);
+    let refOrigin = '';
+    try { refOrigin = new URL(ref).origin; } catch {}
+
+    const upstreamHeaders = {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+      'Referer': ref,
+      ...(refOrigin ? { 'Origin': refOrigin } : {}),
+      ...(req.headers.range ? { 'Range': req.headers.range } : {})
+    };
+
+    const upstreamRes = await fetch(targetUrl, {
+      method: req.method === 'HEAD' ? 'HEAD' : 'GET',
+      headers: upstreamHeaders,
+      signal: AbortSignal.timeout(10000)
+    });
+
+    if (!upstreamRes.ok && upstreamRes.status !== 206) {
+      return res.status(upstreamRes.status).send(`Upstream status: ${upstreamRes.status}`);
+    }
+
+    const contentType = upstreamRes.headers.get('content-type') || '';
+    const isPlaylist = contentType.toLowerCase().includes('mpegurl') || targetUrl.toLowerCase().includes('.m3u8');
+
+    if (isPlaylist && req.method === 'GET') {
+      const text = await upstreamRes.text();
+      res.setHeader('Content-Type', 'application/vnd.apple.mpegurl; charset=utf-8');
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+      const lines = text.split(/\r?\n/);
+      let expectVariantPlaylist = false;
+      const rewritten = lines.map(line => {
+        const out = rewriteHlsLine(line, targetUrl, hostUrl, ref, expectVariantPlaylist);
+        const trimmed = line.trim();
+        if (trimmed.startsWith('#EXT-X-STREAM-INF')) {
+          expectVariantPlaylist = true;
+        } else if (trimmed && !trimmed.startsWith('#')) {
+          expectVariantPlaylist = false;
+        }
+        return out;
+      }).join('\n');
+      return res.send(rewritten);
+    }
+
+    res.status(upstreamRes.status);
+    res.setHeader('Content-Type', contentType || (isPlaylist ? 'application/vnd.apple.mpegurl; charset=utf-8' : 'video/mp2t'));
+    res.setHeader('Cache-Control', isPlaylist ? 'no-store' : 'public, max-age=3600');
+    for (const h of ['content-length', 'content-range', 'accept-ranges']) {
+      const val = upstreamRes.headers.get(h);
+      if (val) res.setHeader(h, val);
+    }
+
+    if (req.method === 'HEAD') {
+      return res.end();
+    }
+
+    if (upstreamRes.body && typeof Readable.fromWeb === 'function') {
+      const nodeStream = Readable.fromWeb(upstreamRes.body);
+      req.on('close', () => {
+        if (!res.writableEnded) nodeStream.destroy();
+      });
+      pipeline(nodeStream, res, (err) => {
+        if (err && !res.headersSent) {
+          res.status(502).end();
+        }
+      });
+      return;
+    }
+
+    const buf = Buffer.from(await upstreamRes.arrayBuffer());
+    return res.send(buf);
+  } catch (err) {
+    if (!res.headersSent) {
+      return res.status(502).send('#EXTM3U\n#EXT-X-ERROR: Proxy error\n');
+    }
+  }
 });
 
 // 7b2. XSPF Playlist Endpoint for VLC Media Player and Kodi

@@ -34,18 +34,24 @@ async function extractVidmoly(embedUrl, sourceLabel = 'Vidmoly', customTitle = '
 
     const m3u8 = html.match(/(https?:\/\/[^\s"'<>]+\.m3u8[^\s"'<>]*)/i);
     if (m3u8) {
+      const reqHeaders = {
+        Referer: 'https://vidmoly.biz/',
+        Origin: 'https://vidmoly.biz',
+        'User-Agent': UA
+      };
       streams.push({
-        name: `🇭🇺 ${sourceLabel}\nHD HLS`,
-        title: `🎬 ${customTitle || sourceLabel}\n📺 HD HLS (m3u8) • 🔊 Magyar • 🌐 Vidmoly Direct`,
+        name: `🇭🇺 ${sourceLabel}\n1080p HLS`,
+        title: `🎬 ${customTitle || sourceLabel}\n📺 1080p HLS (m3u8) • 🔊 Magyar • 🌐 Vidmoly Direct`,
         url: m3u8[1],
         playerUrl: url,
-        externalUrl: url,
-        quality: 1080,
+        quality: '1080p',
+        height: 1080,
         isHls: true,
-        headers: {
-          Referer: 'https://vidmoly.biz/',
-          Origin: 'https://vidmoly.biz',
-          'User-Agent': UA
+        hoster: 'Vidmoly',
+        headers: reqHeaders,
+        behaviorHints: {
+          notWebReady: false,
+          proxyHeaders: { request: reqHeaders }
         }
       });
     }
@@ -132,25 +138,36 @@ async function extractVoe(embedUrl, sourceLabel = 'VOE', customTitle = '', clien
       if (data) {
         if (data.source && data.source.startsWith('http')) {
           streams.push({
-            name: `🇭🇺 ${sourceLabel}\nHD HLS`,
-            title: `🎬 ${customTitle || sourceLabel}\n📺 HD HLS (m3u8) • 🔊 Magyar • 🌐 VOE Direct`,
+            name: `🇭🇺 ${sourceLabel}\n1080p HLS`,
+            title: `🎬 ${customTitle || sourceLabel}\n📺 1080p HLS (m3u8) • 🔊 Magyar • 🌐 VOE Direct`,
             url: data.source,
             playerUrl: currentUrl,
-            externalUrl: currentUrl,
-            quality: 1080,
+            quality: '1080p',
+            height: 1080,
             isHls: true,
-            headers
+            hoster: 'VOE',
+            headers,
+            behaviorHints: {
+              notWebReady: false,
+              proxyHeaders: { request: headers }
+            }
           });
         }
         if (data.direct_access_url && data.direct_access_url.startsWith('http')) {
           streams.push({
-            name: `🇭🇺 ${sourceLabel}\nMP4`,
+            name: `🇭🇺 ${sourceLabel}\n720p MP4`,
             title: `🎬 ${customTitle || sourceLabel}\n📺 Direct MP4 • 🔊 Magyar • 🌐 VOE Direct`,
             url: data.direct_access_url,
             playerUrl: currentUrl,
-            externalUrl: currentUrl,
-            quality: 720,
-            headers
+            quality: '720p',
+            height: 720,
+            isHls: false,
+            hoster: 'VOE',
+            headers,
+            behaviorHints: {
+              notWebReady: false,
+              proxyHeaders: { request: headers }
+            }
           });
         }
       }
@@ -376,14 +393,28 @@ async function resolveAnyEmbed(rawUrl, sourceLabel = 'Magyar', customTitle = '',
       headers: { Referer: `${origin}/`, Origin: origin, 'User-Agent': UA }
     }];
   }
+  const { resolveExtraNetMoziHoster } = require('./netmozi_hosters');
+  const extraStreams = await resolveExtraNetMoziHoster(url, sourceLabel, customTitle);
+  if (extraStreams !== null) {
+    return extraStreams;
+  }
+
   if (/\.mp4(\?|$)/i.test(lower)) {
     const origin = new URL(url).origin;
+    const reqHeaders = { Referer: `${origin}/`, Origin: origin, 'User-Agent': UA };
     return [{
-      name: `🇭🇺 ${sourceLabel}\nHD MP4`,
+      name: `🇭🇺 ${sourceLabel}\n720p MP4`,
       title: `🎬 ${customTitle || sourceLabel}\n📺 Direct MP4 • 🔊 Magyar`,
       url,
-      quality: 720,
-      headers: { Referer: `${origin}/`, Origin: origin, 'User-Agent': UA }
+      playerUrl: url,
+      quality: '720p',
+      height: 720,
+      isHls: false,
+      headers: reqHeaders,
+      behaviorHints: {
+        notWebReady: false,
+        proxyHeaders: { request: reqHeaders }
+      }
     }];
   }
 

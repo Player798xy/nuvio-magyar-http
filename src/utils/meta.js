@@ -349,7 +349,7 @@ async function getMediaMeta(type, rawId) {
     // Fallback: Resolve asynchronously from NetMozi if in-memory cache is empty (e.g. cold serverless instance)
     if (!netmoziTitle && mid) {
       try {
-        const { getNetMoziSeriesEpisodes, netmoziFetchWithRedirects, netmoziTitleCache } = require('../scrapers/netmozi');
+        const { getNetMoziMovieMeta, getNetMoziSeriesEpisodes, netmoziTitleCache } = require('../scrapers/netmozi');
         if (itemType === 'series') {
           const seriesData = await getNetMoziSeriesEpisodes(`netmozi:series:${mid}`);
           if (seriesData && seriesData.name) {
@@ -358,16 +358,11 @@ async function getMediaMeta(type, rawId) {
             netmoziTitleCache.set(String(mid), netmoziTitle);
           }
         } else {
-          const res = await netmoziFetchWithRedirects(`https://netmozi.com/filmek/${mid}/_`);
-          if (res && res.body) {
-            const m = res.body.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i);
-            if (m) {
-              try {
-                const data = JSON.parse(m[1]);
-                netmoziTitle = data.name || '';
-                netmoziTitleCache.set(String(mid), netmoziTitle);
-              } catch (e) {}
-            }
+          const movieMeta = await getNetMoziMovieMeta(`netmozi:movie:${mid}`);
+          if (movieMeta && movieMeta.name && movieMeta.name !== 'NetMozi Film') {
+            netmoziTitle = movieMeta.name;
+            netmoziYear = movieMeta.year ? String(movieMeta.year) : '';
+            netmoziTitleCache.set(String(mid), netmoziTitle);
           }
         }
       } catch (e) {}
