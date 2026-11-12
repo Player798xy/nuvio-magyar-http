@@ -45,14 +45,14 @@ A kiegészítő **13 magyar streaming forrást** tartalmaz. Mivel a publikus **V
 | **6** | **🎈 Videakid (`videakid`)** | Mese & Családi | ✅ **100%** | ✅ **100%** | Gyerekbarát Videa RC4 direkt MP4 streamek (`Magyar népmesék`, klasszikus rajzfilmek). |
 | **7** | **📼 Indavideo (`indavideo`)** | Film, Sorozat & Mese | ✅ **100%** | ✅ **100%** | AMFPHP JSON API + dinamikus `filesh` tokenek minden `*.indavideo.hu` aldomainről. |
 | **8** | **🔴 MédiaKlikk (`mediaklikk`)** | Klasszikusok & Élő TV | ✅ **95%** *(VOD 100%)* | ✅ **100%** | **43 MTVA Klasszikus + Magyar népmesék + archívum** Vercelen is 100%-os! *(Hivatalos MTVA CDN adás).* |
-| **9** | **🎬 NetMozi (`netmozi`)** | Film & Sorozat | ⚡ **Részleges** *(Videa/OK)* | ✅ **100% (+VOE 1080p)** | FNV-1a `linkPayload` dekódolás. A **VOE** tükrök IP-kötöttek (`&i=...&asn=...`), így a VOE streamek automatikusan Self-Hoston aktiválódnak. |
+| **9** | **🎬 NetMozi (`netmozi`)** | Film & Sorozat | ✅ **100% (Vidmoly 1080p)** | ✅ **100% (+VOE 1080p)** | Közvetlen Mindjart Base64 bypass (`links/vv/...`) + Vidmoly 1080p FHD HLS Vercelen is, Self-Hoston extra VOE tükrökkel. |
 | **10** | **🎞️ OnlineFilmek (`onlinefilmek`)** | Film & Sorozat | ⚡ **Részleges** *(Videa/OK)* | ✅ **100% (+VOE 1080p)** | DooPlayer v2 AJAX API. A Videa/OK.ru tükrök Vercelen is mennek, a **VOE 1080p HLS/MP4** tükrök Self-Hoston. |
 | **11** | **📂 Sorozatok.net (`sorozatoknet`)** | Sorozat | ⚡ **Részleges** *(Videa/OK)* | ✅ **100% (+VOE 1080p)** | `d.sorozatok.net` `hunter` JS dekódolás. A **VOE 1080p** epizódok Self-Hoston mennek teljes sebességgel. |
 | **12** | **🔥 HDMozi (`hdmozi`)** | Film & Sorozat | ❌ *Cloudflare tiltás* | ✅ **100% (1080p HLS)** | AES-128-CBC `rpmshare` 1080p HLS dekódolás. A Cloudflare blokkolja az AWS/Vercel adatközponti IP-ket, otthoni IP-ről viszont hibátlan. |
 | **13** | **💿 DMDAMedia (`dmdamedia`)** | Film & Sorozat | ❌ *Cloudflare tiltás* | ✅ **100%** | A `dmdamedia.hu` tűzfala tiltja a felhős szervereket; saját gépen (Self-Host) azonnal működik. |
 
 ### 🔍 Miért van különbség bizonyos forrásoknál?
-1. **VOE CDN IP-kötés (`NetMozi`, `OnlineFilmek`, `Sorozatok.net`):** A VOE videómegosztó a generált `.m3u8` / `.mp4` linkbe beleégeti annak a gépnek az IP-címét és szolgáltatóját (`&i=IP_CIM&asn=SZOLGALTATO`), amelyik lekérte az oldalt. Ha a Vercel szerver kéri le, a link a Vercel IP-jéhez lesz kötve, így a te telefonodon/TV-den nem indul el. **Ezért a kiegészítő Vercelen automatikusan kihagyja a VOE linkeket (hogy ne kapj hibás/töltőképernyős forrást), Self-Host módban viszont automatikusan bekapcsolja őket!**
+1. **VOE CDN IP-kötés (`OnlineFilmek`, `Sorozatok.net` és NetMozi extra VOE tükrök):** A VOE videómegosztó a generált `.m3u8` / `.mp4` linkbe beleégeti annak a gépnek az IP-címét és szolgáltatóját (`&i=IP_CIM&asn=SZOLGALTATO`), amelyik lekérte az oldalt. Ha a Vercel szerver kéri le, a link a Vercel IP-jéhez lesz kötve, így a te telefonodon/TV-den nem indul el. A NetMozi a Vercelen közvetlenül a **Vidmoly 1080p FHD HLS**, Videa és OK.ru forrásokat adja (amik nem IP-kötöttek), Self-Host módban pedig az összes extra VOE tükör is automatikusan bekapcsolódik!
 2. **OK.ru 5 másodpercenkénti akadás javítása (`JobbMintATV`, `Filmezek`):** Az OK.ru a sima `.mp4` (`ct=0`) fájlokat 10 másodperc után `~500 KB/s`-ra korlátozza (`&pr=10`), a központi `video.m3u8` pedig 5 másodpercenként felbontást váltogat. A kiegészítő ehelyett a **fix felbontású HLS sáv-lejátszási listákat (`.../fn/track.m3u8` és `.../video/index.m3u8`)** nyeri ki, ahol minden `.ts` szelet külön HTTP kéréssel, **korlátozás nélkül (`5–10 MB/s`)** töltődik le!
 
 ---
@@ -128,7 +128,7 @@ A főoldali katalógusok (**🔥 Magyar Trendi Filmek**, **🎬 Magyar Mozifilme
 
 ## 🏠 7. Self-Host Telepítési Útmutató (mind a 13 forrás 100%-os feloldásához!)
 
-Ha szeretnéd, hogy a **HDMozi**, **DMDAMedia**, **NetMozi (VOE)**, **OnlineFilmek (VOE)** és **Sorozatok.net (VOE)** is 100%-osan, a saját otthoni magyar IP-címeddel működjön, **2 perc alatt** elindíthatod a kiegészítőt a saját gépeden, NAS-odon vagy akár Android telefonodon!
+Ha szeretnéd, hogy a **HDMozi**, **DMDAMedia**, **OnlineFilmek (VOE)**, **Sorozatok.net (VOE)** és **NetMozi (extra VOE tükrök)** is 100%-osan, a saját otthoni magyar IP-címeddel működjön, **2 perc alatt** elindíthatod a kiegészítőt a saját gépeden, NAS-odon vagy akár Android telefonodon!
 
 ### A) Indítás PC-n / Mac-en / Linuxon (Node.js)
 
@@ -195,7 +195,7 @@ Elkészült a **Magyar HTTP Streams** addon legújabb (`v2.4.0`) verziója **Nuv
 - **Manifest URL (Nuvio / Stremio):** `https://nuvio-magyar-http.vercel.app/manifest.json`
 
 ### 🏠 Self-Host lehetőség (Haladóknak):
-A publikus Vercel szerveren 8 forrás (Videa, JobbMintATV, Filmezek, Filmvilág2, MeseKincstár, Videakid, Indavideo, MédiaKlikk) és az összes Élő TV adó azonnal 100%-osan működik. Azokhoz a forrásokhoz, amik otthoni IP-hez kötik a videó tokent (VOE tükrök a NetMozi/OnlineFilmek/Sorozatok.net-en) vagy Cloudflare-rel tiltják a felhős szervereket (HDMozi, DMDAMedia), a GitHub oldalon találtok 1-perces PC / Termux (Android) Self-Host leírást:
+A publikus Vercel szerveren 9 forrás (Videa, JobbMintATV, Filmezek, Filmvilág2, MeseKincstár, Videakid, Indavideo, MédiaKlikk, NetMozi) és az összes Élő TV adó azonnal 100%-osan működik. Azokhoz a forrásokhoz, amik otthoni IP-hez kötik a videó tokent (VOE tükrök az OnlineFilmek/Sorozatok.net-en) vagy Cloudflare-rel tiltják a felhős szervereket (HDMozi, DMDAMedia), a GitHub oldalon találtok 1-perces PC / Termux (Android) Self-Host leírást:
 - **GitHub Repo & Dokumentáció:** https://github.com/Player798xy/nuvio-magyar-http
 
 Visszajelzéseket, ötleteket és hibajelentéseket szívesen fogadok! Jó filmezést és tévézést! 🍿📺
