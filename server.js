@@ -859,17 +859,52 @@ app.get('/api/health', (req, res) => {
 app.get('/api/debug-hosters', async (req, res) => {
   const { extractVoe, extractVidmoly, resolveAnyEmbed } = require('./src/utils/hosters');
   const clientIp = getClientIp(req);
-  const results = {};
+  const results = { clientIp };
   try {
-    results.clientIp = clientIp;
-    results.voe = await extractVoe('https://voe.sx/0pzy2oqywvu7', 'NetMozi', 'test', clientIp);
+    const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+    const huIp = clientIp || '185.112.156.1';
+    let currentUrl = 'https://voe.sx/0pzy2oqywvu7';
+    const r1 = await fetch(currentUrl, {
+      headers: {
+        'User-Agent': UA,
+        Referer: 'https://voe.sx/',
+        'X-Forwarded-For': huIp,
+        'Client-IP': huIp,
+        'X-Real-IP': huIp
+      },
+      signal: AbortSignal.timeout(6000)
+    });
+    const html1 = await r1.text();
+    results.r1Status = r1.status;
+    results.html1Length = html1.length;
+    results.html1Snippet = html1.slice(0, 300);
+
+    const jsRedirect = html1.match(/window\.location\.href\s*=\s*['"](https?:\/\/[^'"]+)['"]/i);
+    results.jsRedirect = jsRedirect ? jsRedirect[1] : null;
+
+    if (jsRedirect) {
+      currentUrl = jsRedirect[1];
+      const r2 = await fetch(currentUrl, {
+        headers: {
+          'User-Agent': UA,
+          Referer: 'https://voe.sx/0pzy2oqywvu7',
+          'X-Forwarded-For': huIp,
+          'Client-IP': huIp,
+          'X-Real-IP': huIp
+        },
+        signal: AbortSignal.timeout(6000)
+      });
+      const html2 = await r2.text();
+      results.r2Status = r2.status;
+      results.html2Length = html2.length;
+      results.jsonScriptMatch = Boolean(html2.match(/<script type="application\/json">\["([^"]+)"\]<\/script>/i));
+      results.hlsMatch = Boolean(html2.match(/['"]hls['"]\s*:\s*['"]([^'"]+)['"]/i));
+      if (!results.jsonScriptMatch && !results.hlsMatch) {
+        results.html2Snippet = html2.slice(0, 500);
+      }
+    }
   } catch (e) {
-    results.voeError = e.message;
-  }
-  try {
-    results.vidmoly = await extractVidmoly('https://vidmoly.me/w/42jj5q0kxuri', 'NetMozi', 'test', clientIp);
-  } catch (e) {
-    results.vidmolyError = e.message;
+    results.error = e.message;
   }
   res.json(results);
 });
