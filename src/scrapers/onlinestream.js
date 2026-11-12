@@ -3553,15 +3553,9 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
         });
       }
 
-      // Dinamikus sorrendezés: Mindkét típus (⚡ HLS Proxy ÉS 🔴 .m3u8) MINDIG bekerül!
-      // A tetejére az kerül, amelyik az adott csatornán / szerveren a mérések szerint jobban teljesít:
-      if (isDirectBetter) {
-        for (const str of serverDirectStreams) addStream(str);
-        for (const str of serverProxyStreams) addStream(str);
-      } else {
-        for (const str of serverProxyStreams) addStream(str);
-        for (const str of serverDirectStreams) addStream(str);
-      }
+      // Közvetlen streamek mindig legelöl (Zero Vercel sávszélesség-fogyasztás, közvetlen CDN kapcsolat)
+      for (const str of serverDirectStreams) addStream(str);
+      for (const str of serverProxyStreams) addStream(str);
 
       activeIndex++;
     }
