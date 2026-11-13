@@ -23,11 +23,22 @@ function isLocalHostUrl(hostUrl) {
   return /^https?:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|192\.168\.|10\.|172\.(?:1[6-9]|2\d|3[01])\.)/i.test(hostUrl);
 }
 
-function shouldProxyNetMoziUrl(mediaUrl, hostUrl) {
-  if (!hostUrl || !isUrlIpLocked(mediaUrl)) return false;
-  if (process.env.VERCEL) return true;
-  if (process.env.PROXY_NETMOZI === '1') return true;
-  return !isLocalHostUrl(hostUrl);
+/**
+ * Zero-proxy mode: this server NEVER proxies video segments/playlists.
+ * External proxying is disabled unless process.env.EXTERNAL_PROXY_URL is explicitly configured.
+ */
+function hasExternalProxy() {
+  return Boolean(process.env.EXTERNAL_PROXY_URL && /^https?:\/\//i.test(process.env.EXTERNAL_PROXY_URL));
+}
+
+function shouldProxyNetMoziUrl(mediaUrl, _hostUrl) {
+  if (!mediaUrl || !isUrlIpLocked(mediaUrl)) return false;
+  return hasExternalProxy();
+}
+
+function isRemoteHostContext(hostUrl) {
+  if (process.env.VERCEL || process.env.NETMOZI_REMOTE === '1') return true;
+  return Boolean(hostUrl && !isLocalHostUrl(hostUrl));
 }
 
 const netmoziTitleCache = new Map();
@@ -733,9 +744,10 @@ function getHosterFamily(host) {
   return h;
 }
 
-function parseMindjartRows(html) {
+function parseMindjartRows(html, opts = {}) {
   const candidates = [];
   if (!html) return candidates;
+  const remoteNoProxy = Boolean(opts.remoteNoProxy);
 
   const rowRe = /<tr\b([^>]*)data-link-row([^>]*)>([\s\S]*?)<\/tr>/gi;
   for (const m of html.matchAll(rowRe)) {
@@ -759,6 +771,11 @@ function parseMindjartRows(html) {
     const tier = getHostPriority(host);
     if (tier < 0) continue;
 
+    const family = getHosterFamily(host);
+    // In zero-proxy remote mode (e.g. Vercel), skip known IP/ASN-locked hosts upfront
+    // so route slots go to open hosters (vTube, StreamRuby, LuluVid, MixDrop, OK.ru, Videa).
+    if (remoteNoProxy && /^(voe|vidmoly|vidara|filemoon)$/.test(family)) continue;
+
     const hasAlert = body.includes('alert_icon.png');
     const colQual = body.match(/col-quality[^>]*>([^<]+)/i)?.[1]?.trim() || '';
 
@@ -778,7 +795,7 @@ function parseMindjartRows(html) {
     candidates.push({
       route: routeMatch[1],
       host,
-      family: getHosterFamily(host),
+      family,
       tier,
       langType,
       langLabel,
@@ -873,11 +890,16 @@ function finalizeNetMoziStream(s, rowMeta, cleanTitle, opts = {}) {
   const referer = reqHeaders.Referer || reqHeaders.referer || s.playerUrl || '';
 
   const isProxied = shouldProxyNetMoziUrl(rawUrl, opts.hostUrl);
+  // Zero-proxy remote guard: never return IP/ASN-locked CDN URLs to remote clients (prevents 403 errors)
+  if (!isProxied && isRemoteHostContext(opts.hostUrl) && isUrlIpLocked(rawUrl)) {
+    return null;
+  }
+
   let finalUrl = rawUrl;
-  if (isProxied && opts.hostUrl) {
-    const base = opts.hostUrl.replace(/\/+$/, '');
+  if (isProxied && hasExternalProxy()) {
+    const extBase = process.env.EXTERNAL_PROXY_URL.replace(/\/+$/, '');
     const ext = (kindLabel === 'HLS' || rawUrl.includes('.m3u8')) ? '.m3u8' : '';
-    finalUrl = `${base}/proxy/hls${ext}?url=${encodeURIComponent(rawUrl)}&ref=${encodeURIComponent(referer)}`;
+    finalUrl = `${extBase}/proxy/hls${ext}?url=${encodeURIComponent(rawUrl)}&ref=${encodeURIComponent(referer)}`;
   }
 
   const normalized = { ...s };
@@ -912,7 +934,8 @@ function finalizeNetMoziStream(s, rowMeta, cleanTitle, opts = {}) {
 }
 
 async function resolveMindjartHtml(html, mindjartUrl, cleanTitle, opts = {}, cookieJar = new Map(), useTlsRedirect = false) {
-  const rowCandidates = parseMindjartRows(html);
+  const remoteNoProxy = isRemoteHostContext(opts.hostUrl) && !hasExternalProxy();
+  const rowCandidates = parseMindjartRows(html, { remoteNoProxy });
   if (rowCandidates.length === 0) return [];
 
   const resolvedTargets = [];

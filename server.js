@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const { Readable, pipeline } = require('stream');
 const pkg = require('./package.json');
 const { getManifest, handleStreamRequest, parseConfig: parseAddonConfig, ALL_SCRAPERS } = require('./src/addon');
 const { getOnlineStreamMeta } = require('./src/scrapers/onlinestream');
@@ -10,7 +9,6 @@ const { generateTvPosterSvg, generateTvBackgroundSvg, generateTvLogoSvg } = requ
 const { searchCatalog, getMeta } = require('./src/catalog');
 const { getMediaMeta, getSeriesEpisodes } = require('./src/utils/meta');
 const { getLiveHlsStream, getRewrittenMasterPlaylist } = require('./src/scrapers/mediaklikk');
-const { isUrlIpLocked } = require('./src/utils/netmozi_hosters');
 
 const app = express();
 const PORT = process.env.PORT || 7000;
@@ -33,11 +31,13 @@ app.options('*', cors());
 
 // Serve static landing & configuration page + logos + channel icons
 app.use(express.static(path.join(__dirname, 'public'), {
-  etag: false,
-  maxAge: 0,
+  etag: true,
+  maxAge: '1h',
   setHeaders: (res, filePath) => {
     if (filePath.endsWith('.html')) {
-      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+      res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
     }
   }
 }));
@@ -45,32 +45,32 @@ app.use(express.static(path.join(__dirname, 'public'), {
 // Explicit static routes for Vercel Serverless compatibility
 app.get('/logo.png', (req, res) => {
   res.setHeader('Content-Type', 'image/png');
-  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
   res.sendFile(path.join(__dirname, 'public', 'logo.png'));
 });
 
 app.get('/icon.png', (req, res) => {
   res.setHeader('Content-Type', 'image/png');
-  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
   res.sendFile(path.join(__dirname, 'public', 'icon.png'));
 });
 
 app.get('/logo.svg', (req, res) => {
   res.setHeader('Content-Type', 'image/svg+xml');
-  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
   res.sendFile(path.join(__dirname, 'public', 'logo.svg'));
 });
 
 app.get('/favicon.ico', (req, res) => {
   res.setHeader('Content-Type', 'image/x-icon');
-  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
   res.sendFile(path.join(__dirname, 'public', 'favicon.ico'));
 });
 
 app.get('/channels/:file', (req, res) => {
   const safeFile = path.basename(req.params.file || '');
   res.setHeader('Content-Type', 'image/png');
-  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
   res.sendFile(path.join(__dirname, 'public', 'channels', safeFile));
 });
 
@@ -109,7 +109,7 @@ app.get('/manifest.json', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
   const config = parseConfig(null, req.query);
   config.hostUrl = getHostUrl(req);
   res.json(getManifest(config));
@@ -120,7 +120,7 @@ app.get('/:config/manifest.json', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
   const config = parseConfig(req.params.config, req.query);
   config.hostUrl = getHostUrl(req);
   res.json(getManifest(config));
@@ -208,7 +208,7 @@ async function handleCatalog(req, res) {
   try {
     const rawMetas = await searchCatalog(type, searchQuery, cleanId, { skip, search: searchQuery, hostUrl: getHostUrl(req) });
     const metas = (rawMetas || []).map(m => sanitizeMetaPreview(m, type)).filter(Boolean);
-    res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=1200');
+    res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
     res.json({ metas });
   } catch (err) {
     console.error('[Server] Catalog error:', err);
@@ -260,8 +260,10 @@ async function handleMeta(req, res) {
           return cleanV;
         });
       }
+      res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800');
       return res.json({ meta: m });
     }
+    res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=300');
     res.json({ meta: null });
   } catch (err) {
     console.error('[Server] Meta error:', err);
@@ -325,42 +327,11 @@ app.get(configuredStreamRoutes, handleStream);
 
 // 7. Live TV HLS Master Playlist Rewriter (Orders 1080p Full HD first so Nuvio starts in 1080p)
 
-// 7b. Universal Stream Proxy:
-// Direct 302 redirect for open streams (zero Vercel transfer for Live TV, Videa, Indavideo, StreamRuby, vTube, MixDrop).
-// Streaming HLS playlist rewriter & Range-aware media proxy for IP/ASN-locked CDNs (VOE, Vidmoly, Filemoon/Byse, Vidara).
-function inferDefaultReferer(targetUrl) {
-  const lower = targetUrl.toLowerCase();
-  if (lower.includes('vmpx.online') || lower.includes('vmnow.online')) return 'https://vidmoly.biz/';
-  if (lower.includes('97bf1.com')) return 'https://vidara.to/';
-  if (lower.includes('r66nv9ed.com') || lower.includes('sprintcdn')) return 'https://filemoon.sx/';
-  return 'https://susanexpectcare.com/';
-}
-
-function rewriteHlsLine(line, baseUrl, hostUrl, ref, isNextVariant = false) {
-  const trimmed = line.trim();
-  if (!trimmed) return line;
-
-  const toProxy = (rawUri, forceM3u8 = false) => {
-    const resolved = new URL(rawUri, baseUrl).toString();
-    const ext = (forceM3u8 || resolved.includes('.m3u8')) ? '.m3u8' : '';
-    return `${hostUrl}/proxy/hls${ext}?url=${encodeURIComponent(resolved)}&ref=${encodeURIComponent(ref)}`;
-  };
-
-  if (trimmed.startsWith('#')) {
-    if (trimmed.includes('URI="')) {
-      return line.replace(/URI="([^"]+)"/g, (_, uri) => `URI="${toProxy(uri, /EXT-X-MEDIA|EXT-X-I-FRAME-STREAM-INF/i.test(trimmed))}"`);
-    }
-    return line;
-  }
-
-  return toProxy(trimmed, isNextVariant);
-}
-
-app.all(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
+// 7b. Zero-Proxy Redirect Endpoint (legacy /proxy/hls URLs redirect directly with 0 server transfer)
+app.all(['/proxy/hls.m3u8', '/proxy/hls'], (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', '*');
-  res.setHeader('Access-Control-Expose-Headers', 'Content-Length, Content-Range, Accept-Ranges, Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     return res.status(405).send('Method Not Allowed');
@@ -371,87 +342,7 @@ app.all(['/proxy/hls.m3u8', '/proxy/hls'], async (req, res) => {
     return res.status(400).send('#EXTM3U\n#EXT-X-ERROR: Missing or invalid url param\n');
   }
 
-  if (!isUrlIpLocked(targetUrl)) {
-    return res.redirect(302, targetUrl);
-  }
-
-  try {
-    const hostUrl = getHostUrl(req);
-    const ref = String(req.query.ref || '').trim() || inferDefaultReferer(targetUrl);
-    let refOrigin = '';
-    try { refOrigin = new URL(ref).origin; } catch {}
-
-    const upstreamHeaders = {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
-      'Referer': ref,
-      ...(refOrigin ? { 'Origin': refOrigin } : {}),
-      ...(req.headers.range ? { 'Range': req.headers.range } : {})
-    };
-
-    const upstreamRes = await fetch(targetUrl, {
-      method: req.method === 'HEAD' ? 'HEAD' : 'GET',
-      headers: upstreamHeaders,
-      signal: AbortSignal.timeout(10000)
-    });
-
-    if (!upstreamRes.ok && upstreamRes.status !== 206) {
-      return res.status(upstreamRes.status).send(`Upstream status: ${upstreamRes.status}`);
-    }
-
-    const contentType = upstreamRes.headers.get('content-type') || '';
-    const isPlaylist = contentType.toLowerCase().includes('mpegurl') || targetUrl.toLowerCase().includes('.m3u8');
-
-    if (isPlaylist && req.method === 'GET') {
-      const text = await upstreamRes.text();
-      res.setHeader('Content-Type', 'application/vnd.apple.mpegurl; charset=utf-8');
-      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-      const lines = text.split(/\r?\n/);
-      let expectVariantPlaylist = false;
-      const rewritten = lines.map(line => {
-        const out = rewriteHlsLine(line, targetUrl, hostUrl, ref, expectVariantPlaylist);
-        const trimmed = line.trim();
-        if (trimmed.startsWith('#EXT-X-STREAM-INF')) {
-          expectVariantPlaylist = true;
-        } else if (trimmed && !trimmed.startsWith('#')) {
-          expectVariantPlaylist = false;
-        }
-        return out;
-      }).join('\n');
-      return res.send(rewritten);
-    }
-
-    res.status(upstreamRes.status);
-    res.setHeader('Content-Type', contentType || (isPlaylist ? 'application/vnd.apple.mpegurl; charset=utf-8' : 'video/mp2t'));
-    res.setHeader('Cache-Control', isPlaylist ? 'no-store' : 'public, max-age=3600');
-    for (const h of ['content-length', 'content-range', 'accept-ranges']) {
-      const val = upstreamRes.headers.get(h);
-      if (val) res.setHeader(h, val);
-    }
-
-    if (req.method === 'HEAD') {
-      return res.end();
-    }
-
-    if (upstreamRes.body && typeof Readable.fromWeb === 'function') {
-      const nodeStream = Readable.fromWeb(upstreamRes.body);
-      req.on('close', () => {
-        if (!res.writableEnded) nodeStream.destroy();
-      });
-      pipeline(nodeStream, res, (err) => {
-        if (err && !res.headersSent) {
-          res.status(502).end();
-        }
-      });
-      return;
-    }
-
-    const buf = Buffer.from(await upstreamRes.arrayBuffer());
-    return res.send(buf);
-  } catch (err) {
-    if (!res.headersSent) {
-      return res.status(502).send('#EXTM3U\n#EXT-X-ERROR: Proxy error\n');
-    }
-  }
+  return res.redirect(302, targetUrl);
 });
 
 // 7b2. XSPF Playlist Endpoint for VLC Media Player and Kodi
@@ -490,13 +381,12 @@ app.get(['/playlist.xspf', '/tv.xspf'], async (req, res) => {
     }
 
     if (targetStream) {
-      const proxyUrl = `${hostUrl}/proxy/hls.m3u8?url=${encodeURIComponent(targetStream)}`;
       const logoUrl = `${hostUrl}/tv-logos/${ch.channelId}.png`;
       tracks.push(`    <track>
       <title>${escapeXml(ch.name)}</title>
       <creator>${escapeXml(catName)}</creator>
       <album>Nuvio Magyar TV</album>
-      <location>${escapeXml(proxyUrl)}</location>
+      <location>${escapeXml(targetStream)}</location>
       <image>${escapeXml(logoUrl)}</image>
       <annotation>${escapeXml(ch.description)}</annotation>
     </track>`);
@@ -539,10 +429,9 @@ app.get(['/playlist.m3u', '/playlist.m3u8', '/tv.m3u', '/tv.m3u8'], async (req, 
     }
 
     if (targetStream) {
-      const proxyUrl = `${hostUrl}/proxy/hls.m3u8?url=${encodeURIComponent(targetStream)}`;
       const logoUrl = `${hostUrl}/tv-logos/${ch.channelId}.png`;
       lines.push(`#EXTINF:-1 tvg-id="${ch.channelId}" tvg-name="${ch.name}" tvg-logo="${logoUrl}" group-title="${catName}",${ch.name}`);
-      lines.push(proxyUrl);
+      lines.push(targetStream);
     }
   }
 
@@ -552,7 +441,7 @@ app.get(['/playlist.m3u', '/playlist.m3u8', '/tv.m3u', '/tv.m3u8'], async (req, 
 // 7c. High-Resolution Dynamic TV Artwork (600x900 PNG Poster, 1280x720 PNG Backdrop, 500x500 PNG Logo)
 app.get(['/tv-poster/:id', '/tv-poster/:id.png', '/tv-poster/:id.svg'], (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+  res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
   const rawId = (req.params.id || '').replace(/\.(svg|png)$/i, '');
   const pngPath = path.join(__dirname, 'public', 'tv-posters', `${rawId}.png`);
   if (fs.existsSync(pngPath)) {
@@ -567,7 +456,7 @@ app.get(['/tv-poster/:id', '/tv-poster/:id.png', '/tv-poster/:id.svg'], (req, re
 
 app.get(['/tv-background/:id', '/tv-background/:id.png', '/tv-background/:id.svg'], (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+  res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
   const rawId = (req.params.id || '').replace(/\.(svg|png)$/i, '');
   const pngPath = path.join(__dirname, 'public', 'tv-backgrounds', `${rawId}.png`);
   if (fs.existsSync(pngPath)) {
@@ -582,7 +471,7 @@ app.get(['/tv-background/:id', '/tv-background/:id.png', '/tv-background/:id.svg
 
 app.get(['/tv-logo/:id', '/tv-logo/:id.png', '/tv-logo/:id.svg'], (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+  res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
   const rawId = (req.params.id || '').replace(/\.(svg|png)$/i, '');
   const pngPath = path.join(__dirname, 'public', 'tv-logos', `${rawId}.png`);
   if (fs.existsSync(pngPath)) {
@@ -978,14 +867,14 @@ app.get('/old', (req, res) => {
 });
 
 app.get(['/configure', '/:config/configure'], (req, res) => {
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
   const file = req.query.old === '1' ? 'index.old.html' : 'index.html';
   res.sendFile(path.join(__dirname, 'public', file));
 });
 
 // Catch-all route to serve index.html for root
 app.get('/', (req, res) => {
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
   const file = req.query.old === '1' ? 'index.old.html' : 'index.html';
   res.sendFile(path.join(__dirname, 'public', file));
 });
