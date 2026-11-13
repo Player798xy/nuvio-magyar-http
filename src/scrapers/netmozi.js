@@ -37,7 +37,7 @@ function shouldProxyNetMoziUrl(mediaUrl, _hostUrl) {
 }
 
 function isRemoteHostContext(hostUrl) {
-  if (process.env.VERCEL || process.env.NETMOZI_REMOTE === '1') return true;
+  if (process.env.VERCEL || process.env.RENDER || process.env.RENDER_EXTERNAL_URL || process.env.NETMOZI_REMOTE === '1') return true;
   return Boolean(hostUrl && !isLocalHostUrl(hostUrl));
 }
 

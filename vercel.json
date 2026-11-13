@@ -6,15 +6,26 @@
       "maxDuration": 30
     }
   },
+  "headers": [
+    {
+      "source": "/(logo\\.png|icon\\.png|logo\\.svg|favicon\\.ico|channels/.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=604800"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ],
   "rewrites": [
-    { "source": "/logo.png", "destination": "/api/index.js" },
-    { "source": "/icon.png", "destination": "/api/index.js" },
-    { "source": "/logo.svg", "destination": "/api/index.js" },
     { "source": "/proxy/:path*", "destination": "/api/index.js" },
     { "source": "/playlist.xspf", "destination": "/api/index.js" },
     { "source": "/playlist.m3u", "destination": "/api/index.js" },
     { "source": "/playlist.m3u8", "destination": "/api/index.js" },
-    { "source": "/channels/:path*", "destination": "/api/index.js" },
     { "source": "/api/live/:path*", "destination": "/api/index.js" },
     { "source": "/hls/live/:path*", "destination": "/api/index.js" },
     { "source": "/api/:path*", "destination": "/api/index.js" },

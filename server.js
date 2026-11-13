@@ -377,7 +377,7 @@ app.get(['/playlist.xspf', '/tv.xspf'], async (req, res) => {
     }
 
     if (!targetStream && ch.mtvaKey) {
-      targetStream = `https://nuvio-magyar-http.vercel.app/api/live/mtv1live.m3u8`;
+      targetStream = `${hostUrl}/api/live/mtv1live.m3u8`;
     }
 
     if (targetStream) {

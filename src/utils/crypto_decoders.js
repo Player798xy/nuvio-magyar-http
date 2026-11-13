@@ -250,7 +250,9 @@ function decodeVoePayload(encoded) {
  * On Vercel, VOE URLs are skipped because Vercel's datacenter IP differs from the viewer's home IP.
  */
 async function extractVoeDirectStreams(voeUrl, providerName, title, sourceId) {
-  if (process.env.VERCEL) return [];
+  if (process.env.VERCEL || process.env.RENDER || process.env.RENDER_EXTERNAL_URL || process.env.NETMOZI_REMOTE === '1') {
+    return [];
+  }
   const streams = [];
   try {
     let currentUrl = String(voeUrl || '').replace(/&amp;/g, '&');
