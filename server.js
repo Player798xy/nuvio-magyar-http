@@ -237,6 +237,8 @@ async function handleMeta(req, res) {
     const metaObj = await getMeta(type, rawId, getHostUrl(req));
     if (metaObj) {
       const m = metaObj.meta ? { ...metaObj.meta } : { ...metaObj };
+      if (!m.id) m.id = rawId;
+      if (!m.type) m.type = type;
       if (m.releaseInfo !== undefined && m.releaseInfo !== null) {
         m.releaseInfo = String(m.releaseInfo);
       }

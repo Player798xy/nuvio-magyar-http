@@ -160,12 +160,12 @@ function getManifest(config = {}) {
 
   return {
     id: 'org.nuvio.magyar.http',
-    version: '2.6.4',
+    version: '2.6.5',
     name,
     description: desc,
-    logo: `${hostUrl}/logo.png?v=2.6.4`,
-    icon: `${hostUrl}/logo.png?v=2.6.4`,
-    background: `${hostUrl}/logo.png?v=2.6.4`,
+    logo: `${hostUrl}/logo.png?v=2.6.5`,
+    icon: `${hostUrl}/logo.png?v=2.6.5`,
+    background: `${hostUrl}/logo.png?v=2.6.5`,
     resources: [
       {
         name: 'stream',
@@ -175,7 +175,7 @@ function getManifest(config = {}) {
       {
         name: 'meta',
         types: ['movie', 'series', 'tv', 'channel'],
-        idPrefixes: ['onlinestream-live-', 'mediaklikk-live-', 'mediaklikk:', 'netmozi:', 'tmdb:']
+        idPrefixes: ['tt', 'onlinestream-live-', 'mediaklikk-live-', 'mediaklikk:', 'netmozi:', 'tmdb:']
       },
       {
         name: 'catalog',

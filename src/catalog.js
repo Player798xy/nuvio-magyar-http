@@ -923,28 +923,82 @@ async function getMeta(type, id, hostUrl = null) {
     }
 
     try {
-      let res = await fetch(`https://v3-cinemeta.strem.io/meta/${type}/${id}.json`, {
-        signal: AbortSignal.timeout(3500)
-      });
-      if (!res.ok) {
-        const altType = type === 'series' ? 'movie' : 'series';
-        res = await fetch(`https://v3-cinemeta.strem.io/meta/${altType}/${id}.json`, {
+      const fetchCinemeta = async (metaType) => {
+        const r = await fetch(`https://v3-cinemeta.strem.io/meta/${metaType}/${id}.json`, {
           signal: AbortSignal.timeout(3500)
         });
-      }
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.meta) {
-          const huMeta = await getMediaMeta(data.meta.type || type, id);
-          if (huMeta && huMeta.hungarianTitle && huMeta.hungarianTitle !== data.meta.name) {
-            data.meta.name = `${huMeta.hungarianTitle} (${data.meta.name})`;
-          }
-          return data;
+        if (!r.ok) return null;
+        const j = await r.json().catch(() => null);
+        return (j && j.meta) ? j : null;
+      };
+
+      const data = await fetchCinemeta(type) || await fetchCinemeta(type === 'series' ? 'movie' : 'series');
+      if (data && data.meta) {
+        data.meta.id = data.meta.id || id;
+        data.meta.type = data.meta.type || type;
+        const huMeta = await getMediaMeta(data.meta.type, id);
+        if (huMeta && huMeta.hungarianTitle && huMeta.hungarianTitle !== data.meta.name) {
+          data.meta.name = `${huMeta.hungarianTitle} (${data.meta.name})`;
         }
+        return data;
       }
     } catch (err) {
-      // Fallback to local series metadata if Cinemeta timed out
+      // Fallback to local/TMDB metadata if Cinemeta timed out or missed the IMDb ID
     }
+
+    // TMDB IMDb fallback so newly added catalog items always return rich meta even if Cinemeta lacks them
+    try {
+      const tmdbKey = process.env.TMDB_API_KEY || 'ffe7ef8916c61835264d2df68276ddc2';
+      const findUrl = `https://api.themoviedb.org/3/find/${encodeURIComponent(id)}?api_key=${tmdbKey}&external_source=imdb_id&language=hu-HU`;
+      const findRes = await fetch(findUrl, { signal: AbortSignal.timeout(3500) });
+      if (findRes.ok) {
+        const found = await findRes.json();
+        const movieMatch = (found.movie_results || [])[0];
+        const tvMatch = (found.tv_results || [])[0];
+        const hit = (type === 'series' ? (tvMatch || movieMatch) : (movieMatch || tvMatch));
+        if (hit) {
+          const hitIsSeries = Boolean(tvMatch && (!movieMatch || type === 'series'));
+          const poster = hit.poster_path ? `https://image.tmdb.org/t/p/w500${hit.poster_path}` : `https://images.metahub.space/poster/medium/${id}/img`;
+          const background = hit.backdrop_path ? `https://image.tmdb.org/t/p/original${hit.backdrop_path}` : poster;
+          const year = (hit.release_date || hit.first_air_date || '').slice(0, 4);
+          const metaObj = {
+            id,
+            imdb_id: id,
+            type: hitIsSeries ? 'series' : 'movie',
+            name: hit.title || hit.name || hit.original_title || hit.original_name || id,
+            poster,
+            background,
+            description: hit.overview || '',
+            releaseInfo: year,
+            imdbRating: hit.vote_average ? String(Math.round(hit.vote_average * 10) / 10) : undefined
+          };
+          if (hitIsSeries && hit.id) {
+            try {
+              const tvDetails = await fetch(`https://api.themoviedb.org/3/tv/${hit.id}?api_key=${tmdbKey}&language=hu-HU`, { signal: AbortSignal.timeout(3000) }).then(r => r.ok ? r.json() : null);
+              if (tvDetails && Array.isArray(tvDetails.seasons)) {
+                const seasons = tvDetails.seasons.filter(s => s.season_number >= 1).slice(0, 8);
+                const vids = [];
+                for (const s of seasons) {
+                  const epTotal = Math.min(30, Number(s.episode_count) || 0);
+                  for (let ep = 1; ep <= epTotal; ep++) {
+                    vids.push({
+                      id: `${id}:${s.season_number}:${ep}`,
+                      title: `${s.season_number}. évad ${ep}. rész`,
+                      season: s.season_number,
+                      episode: ep,
+                      released: new Date(Date.UTC(2020, (s.season_number - 1) % 12, Math.min(28, ep), 12, 0, 0)).toISOString(),
+                      thumbnail: background
+                    });
+                  }
+                }
+                if (vids.length > 0) metaObj.videos = vids;
+              }
+            } catch {}
+          }
+          return { meta: metaObj };
+        }
+      }
+    } catch (e) {}
 
     // Fallback: If Cinemeta failed/timed out, check getSeriesEpisodes
     try {
