@@ -25,12 +25,12 @@
       --line: #202020;
       --line-2: #2a2a2a;
       --line-3: #383838;
-      --mint: #cfffcf;
+      --mint: #ff9c42;
       --white: #e9e9e9;
       --amber: #ffdc96;
       --gold: #ffcc4d;
       --cyan: #7fe3e0;
-      --green: #8ee08f;
+      --green: #ff7b1c;
       --violet: #d58be6;
       --purple-btn: #7c5cdb;
       --purple-hover: #906fe6;
@@ -40,7 +40,7 @@
       --red: #ff6b6b;
       --pink: #ff8a8a;
       --blue: #6fa8ff;
-      --on-green: #06210a;
+      --on-green: #140800;
       --on-amber: #2b1e00;
       --on-blue: #04152e;
       --on-red: #2e0505;
@@ -100,13 +100,13 @@
     }
     @keyframes livePulse {
       0% {
-        box-shadow: 0 0 0 0 rgba(142, 224, 143, 0.75), 0 0 8px var(--green);
+        box-shadow: 0 0 0 0 rgba(255, 123, 28, 0.75), 0 0 8px var(--green);
       }
       70% {
-        box-shadow: 0 0 0 9px rgba(142, 224, 143, 0), 0 0 12px var(--green);
+        box-shadow: 0 0 0 9px rgba(255, 123, 28, 0), 0 0 12px var(--green);
       }
       100% {
-        box-shadow: 0 0 0 0 rgba(142, 224, 143, 0), 0 0 8px var(--green);
+        box-shadow: 0 0 0 0 rgba(255, 123, 28, 0), 0 0 8px var(--green);
       }
     }
     @keyframes cbPop {
@@ -116,7 +116,7 @@
     }
     @keyframes urlFlash {
       0% {
-        background-color: rgba(207, 255, 207, 0.16);
+        background-color: rgba(255, 156, 66, 0.16);
         color: #ffffff;
       }
       100% {
@@ -409,7 +409,7 @@
     .btn-copy:hover {
       background: #ffffff;
       color: #050505;
-      box-shadow: 0 4px 14px rgba(207, 255, 207, 0.25);
+      box-shadow: 0 4px 14px rgba(255, 156, 66, 0.25);
     }
 
     /* SMPTE TV test bar divider */
@@ -464,7 +464,7 @@
       white-space: nowrap;
       flex-shrink: 0;
     }
-    .ch-badge.c-green { color: var(--green); border-color: #254d27; background: #0a190b; }
+    .ch-badge.c-green { color: var(--green); border-color: #6b310a; background: #1f0e03; }
     .ch-badge.c-cyan { color: var(--cyan); border-color: #1f4948; background: #081818; }
     .ch-badge.c-violet { color: var(--violet); border-color: #4c2954; background: #170b1a; }
     .ch-badge.c-amber { color: var(--gold); border-color: #59410d; background: #1c1404; }
@@ -580,7 +580,7 @@
     }
     .res-item[data-res="1080p"]:has(input:checked) {
       border-left-color: var(--green);
-      background: linear-gradient(90deg, rgba(142, 224, 143, 0.08) 0%, var(--band) 80%);
+      background: linear-gradient(90deg, rgba(255, 123, 28, 0.08) 0%, var(--band) 80%);
     }
     .res-item[data-res="720p"]:has(input:checked) {
       border-left-color: var(--cyan);
@@ -665,8 +665,8 @@
       font-size: 17px;
       padding: 2px 9px;
       border-radius: 4px;
-      border: 1px solid #235929;
-      background: #07190a;
+      border: 1px solid #733409;
+      background: #1c0b02;
       color: var(--green);
       line-height: 1.1;
       white-space: nowrap;
@@ -710,7 +710,7 @@
       transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
     }
     .switch-pill input:checked + .switch-slider {
-      background: rgba(142, 224, 143, 0.22);
+      background: rgba(255, 123, 28, 0.22);
       border-color: var(--green);
     }
     .switch-pill input:checked + .switch-slider::before {
@@ -735,7 +735,7 @@
       border-color: rgba(255, 255, 255, 0.2);
     }
     .dropdown-wrap.is-open {
-      border-color: rgba(0, 223, 162, 0.45);
+      border-color: rgba(255, 148, 54, 0.48);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     }
     #liveSourcesDropdownWrap.is-open {
@@ -836,8 +836,8 @@
       white-space: nowrap;
     }
     .badge-sources {
-      background: #0a190b;
-      border: 1px solid #254d27;
+      background: #1f0e03;
+      border: 1px solid #6b310a;
       color: var(--green);
     }
     .badge-live-sources {
@@ -987,7 +987,7 @@
     /* Tasteful subtle row tints and left border accents */
     .list-row[data-tier="verified"]:has(input:checked) {
       border-left-color: var(--green);
-      background: linear-gradient(90deg, rgba(142, 224, 143, 0.05) 0%, var(--band) 60%);
+      background: linear-gradient(90deg, rgba(255, 123, 28, 0.05) 0%, var(--band) 60%);
     }
     .list-row[data-tier="community"]:has(input:checked) {
       border-left-color: var(--gold);
@@ -1007,7 +1007,7 @@
     }
     .list-row[data-cat="top"]:has(input:checked) {
       border-left-color: var(--green);
-      background: linear-gradient(90deg, rgba(142, 224, 143, 0.05) 0%, var(--band) 60%);
+      background: linear-gradient(90deg, rgba(255, 123, 28, 0.05) 0%, var(--band) 60%);
     }
     .list-row[data-cat="stream"]:has(input:checked) {
       border-left-color: var(--violet);
@@ -1062,8 +1062,8 @@
     }
     .tag-ok {
       color: var(--green);
-      border-color: #235929;
-      background: #07190a;
+      border-color: #733409;
+      background: #1c0b02;
     }
     .tag-warn {
       color: var(--amber);
@@ -1279,8 +1279,8 @@
       font-family: var(--f-mono);
       font-size: 12.5px;
       color: var(--green);
-      background: #07190a;
-      border: 1px solid #235929;
+      background: #1c0b02;
+      border: 1px solid #733409;
       border-radius: 5px;
       padding: 8px 12px;
       margin-bottom: 10px;
@@ -1364,7 +1364,7 @@
       border: 1px solid var(--line-3);
       color: var(--dim);
     }
-    .q-tag.q1080 { color: var(--green); border-color: #235929; background: #07190a; }
+    .q-tag.q1080 { color: var(--green); border-color: #733409; background: #1c0b02; }
     .q-tag.q720 { color: var(--cyan); border-color: #1e4b52; background: #07161a; }
     .q-tag.q480 { color: var(--amber); border-color: #634812; background: #1c1404; }
     .q-tag.q360 { color: var(--violet); border-color: #4c2954; background: #170b1a; }
@@ -2470,7 +2470,7 @@
               <a class="btn-action" style="background:linear-gradient(135deg, #e67e22, #d35400);" href="/playlist.xspf" download="nuvio-magyar-tv.xspf" title="VLC és Kodi XSPF Lejátszási Lista">
                 <span class="btn-ico">📻</span> VLC (.xspf)
               </a>
-              <a class="btn-action" style="background:linear-gradient(135deg, #27ae60, #219653);" href="/playlist.m3u" download="nuvio-magyar-tv.m3u" title="IPTV M3U Lejátszási Lista">
+              <a class="btn-action" style="background:linear-gradient(135deg, #ff8c2b, #e66100);" href="/playlist.m3u" download="nuvio-magyar-tv.m3u" title="IPTV M3U Lejátszási Lista">
                 <span class="btn-ico">📺</span> M3U (.m3u)
               </a>
               <a class="btn-action" style="background:linear-gradient(135deg, #1f4e79, #2b5797);" href="/live_stream_speed_benchmark.xlsx" download="live_stream_speed_benchmark.xlsx" title="HLS Proxy vs .m3u8 Sebesség &amp; Buffer Mérés (Excel .xlsx)">

@@ -930,12 +930,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Test UI Preview Route (keeps OG '/' and '/configure' untouched)
-app.get(['/test', '/:config/test'], (req, res) => {
-  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
-  res.sendFile(path.join(__dirname, 'public', 'test.html'));
-});
-
 // Configure & Index Routes
 app.get(['/configure', '/:config/configure'], (req, res) => {
   res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
