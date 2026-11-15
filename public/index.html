@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="hu" data-palette="indigo" data-mode="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <meta name="theme-color" content="#050505" />
+  <meta name="theme-color" content="#0B0D14" id="metaThemeColor" />
   <title>Magyar Streaming Pro — Nuvio & Stremio HTTP Addon</title>
+  <script>
+    (function(){
+      try {
+        var p = localStorage.getItem('msp-palette');
+        var m = localStorage.getItem('msp-mode');
+        if (p === 'indigo' || p === 'ocean' || p === 'crimson') document.documentElement.setAttribute('data-palette', p);
+        if (m === 'dark' || m === 'light') document.documentElement.setAttribute('data-mode', m);
+      } catch(e) {}
+    })();
+  </script>
   <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.7.0" />
   <link rel="alternate icon" type="image/png" href="/logo.png?v=2.7.0" />
   <link rel="shortcut icon" href="/favicon.ico?v=2.7.0" />
@@ -13,42 +23,248 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=VT323&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #050505;
-      --band: #0c0c0c;
-      --band-2: #0e0e0e;
-      --panel: #141414;
-      --panel-hover: #1a1a1a;
-      --ink: #ececec;
-      --dim: #c4c4c4;
-      --dim-2: #a5a5a5;
-      --mute: #787878;
-      --line: #202020;
-      --line-2: #2a2a2a;
-      --line-3: #383838;
-      --mint: #cfffcf;
-      --white: #e9e9e9;
-      --amber: #ffdc96;
-      --gold: #ffcc4d;
-      --cyan: #7fe3e0;
-      --green: #8ee08f;
-      --violet: #d58be6;
-      --purple-btn: #7c5cdb;
-      --purple-hover: #906fe6;
-      --cyan-btn: #0284c7;
-      --cyan-hover: #0369a1;
-      --rose: #ff5277;
-      --red: #ff6b6b;
-      --pink: #ff8a8a;
-      --blue: #6fa8ff;
-      --on-green: #06210a;
-      --on-amber: #2b1e00;
-      --on-blue: #04152e;
-      --on-red: #2e0505;
       --f-head: 'Space Grotesk', system-ui, -apple-system, sans-serif;
       --f-body: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
       --f-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', monospace;
       --f-ch: 'VT323', ui-monospace, monospace;
       color-scheme: dark;
+    }
+
+    /* Palette 1: Indigo & Gold (Default Dark) */
+    :root, [data-palette="indigo"][data-mode="dark"] {
+      color-scheme: dark;
+      --bg: #0B0D14;
+      --band: #111420;
+      --band-2: #151929;
+      --panel: #191E30;
+      --panel-hover: #212840;
+      --ink: #F1F3FA;
+      --dim: #BAC1D8;
+      --dim-2: #949DBB;
+      --mute: #6B7494;
+      --line: #21263B;
+      --line-2: #2C334F;
+      --line-3: #3C4569;
+
+      --accent: #8B5CF6;
+      --accent-hover: #7C3AED;
+      --on-accent: #FFFFFF;
+      --accent-soft: rgba(139, 92, 246, 0.14);
+      --accent-border: rgba(139, 92, 246, 0.42);
+      --accent-glow: rgba(139, 92, 246, 0.28);
+
+      --accent-2: #FBBF24;
+      --accent-2-hover: #F59E0B;
+      --on-accent-2: #1C1200;
+      --accent-2-soft: rgba(245, 158, 11, 0.14);
+      --accent-2-border: rgba(245, 158, 11, 0.38);
+
+      --ok: #2DD4BF;
+      --ok-soft: rgba(45, 212, 191, 0.12);
+      --ok-border: rgba(45, 212, 191, 0.36);
+
+      --live: #FB7185;
+      --live-soft: rgba(244, 63, 94, 0.14);
+      --live-border: rgba(244, 63, 94, 0.38);
+      --head-bg: rgba(11, 13, 20, 0.90);
+      --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.42);
+    }
+
+    [data-palette="indigo"][data-mode="light"] {
+      color-scheme: light;
+      --bg: #F6F5FB;
+      --band: #FFFFFF;
+      --band-2: #EFEDF8;
+      --panel: #E8E4F6;
+      --panel-hover: #DED8F2;
+      --ink: #171526;
+      --dim: #44415E;
+      --dim-2: #605C7D;
+      --mute: #7B7799;
+      --line: #E2DEF0;
+      --line-2: #D2CCE6;
+      --line-3: #B9B1D8;
+
+      --accent: #6D28D9;
+      --accent-hover: #5B21B6;
+      --on-accent: #FFFFFF;
+      --accent-soft: rgba(109, 40, 217, 0.10);
+      --accent-border: rgba(109, 40, 217, 0.34);
+      --accent-glow: rgba(109, 40, 217, 0.18);
+
+      --accent-2: #B45309;
+      --accent-2-hover: #92400E;
+      --on-accent-2: #FFFFFF;
+      --accent-2-soft: rgba(217, 119, 6, 0.11);
+      --accent-2-border: rgba(217, 119, 6, 0.34);
+
+      --ok: #0F766E;
+      --ok-soft: rgba(15, 118, 110, 0.10);
+      --ok-border: rgba(15, 118, 110, 0.30);
+
+      --live: #E11D48;
+      --live-soft: rgba(225, 29, 72, 0.10);
+      --live-border: rgba(225, 29, 72, 0.30);
+      --head-bg: rgba(246, 245, 251, 0.92);
+      --shadow-card: 0 8px 22px rgba(23, 21, 38, 0.08);
+    }
+
+    /* Palette 2: Ocean Slate & Ice Blue + Amber */
+    [data-palette="ocean"][data-mode="dark"] {
+      color-scheme: dark;
+      --bg: #080E1A;
+      --band: #0F172A;
+      --band-2: #131E36;
+      --panel: #182542;
+      --panel-hover: #203156;
+      --ink: #EDF4FF;
+      --dim: #B3C5E3;
+      --dim-2: #8EA5CC;
+      --mute: #6178A1;
+      --line: #1C2944;
+      --line-2: #263759;
+      --line-3: #364C78;
+
+      --accent: #38BDF8;
+      --accent-hover: #0EA5E9;
+      --on-accent: #061829;
+      --accent-soft: rgba(56, 189, 248, 0.14);
+      --accent-border: rgba(56, 189, 248, 0.42);
+      --accent-glow: rgba(56, 189, 248, 0.25);
+
+      --accent-2: #FBBF24;
+      --accent-2-hover: #F59E0B;
+      --on-accent-2: #1C1200;
+      --accent-2-soft: rgba(245, 158, 11, 0.14);
+      --accent-2-border: rgba(245, 158, 11, 0.38);
+
+      --ok: #60A5FA;
+      --ok-soft: rgba(96, 165, 250, 0.14);
+      --ok-border: rgba(96, 165, 250, 0.38);
+
+      --live: #FB7185;
+      --live-soft: rgba(244, 63, 94, 0.14);
+      --live-border: rgba(244, 63, 94, 0.38);
+      --head-bg: rgba(8, 14, 26, 0.90);
+      --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    [data-palette="ocean"][data-mode="light"] {
+      color-scheme: light;
+      --bg: #F3F8FD;
+      --band: #FFFFFF;
+      --band-2: #EAF2FA;
+      --panel: #DFECF8;
+      --panel-hover: #D0E3F5;
+      --ink: #0E1729;
+      --dim: #3D506E;
+      --dim-2: #586C8A;
+      --mute: #7A8CA8;
+      --line: #DCE6F2;
+      --line-2: #C9D8E8;
+      --line-3: #AEC3DC;
+
+      --accent: #0284C7;
+      --accent-hover: #0369A1;
+      --on-accent: #FFFFFF;
+      --accent-soft: rgba(2, 132, 199, 0.10);
+      --accent-border: rgba(2, 132, 199, 0.34);
+      --accent-glow: rgba(2, 132, 199, 0.18);
+
+      --accent-2: #B45309;
+      --accent-2-hover: #92400E;
+      --on-accent-2: #FFFFFF;
+      --accent-2-soft: rgba(217, 119, 6, 0.11);
+      --accent-2-border: rgba(217, 119, 6, 0.34);
+
+      --ok: #2563EB;
+      --ok-soft: rgba(37, 99, 235, 0.10);
+      --ok-border: rgba(37, 99, 235, 0.30);
+
+      --live: #E11D48;
+      --live-soft: rgba(225, 29, 72, 0.10);
+      --live-border: rgba(225, 29, 72, 0.30);
+      --head-bg: rgba(243, 248, 253, 0.92);
+      --shadow-card: 0 8px 22px rgba(14, 23, 41, 0.08);
+    }
+
+    /* Palette 3: Carbon Charcoal & Cinema Crimson + Gold */
+    [data-palette="crimson"][data-mode="dark"] {
+      color-scheme: dark;
+      --bg: #0E0E13;
+      --band: #15151C;
+      --band-2: #1A1A23;
+      --panel: #20202B;
+      --panel-hover: #292938;
+      --ink: #F5F3F7;
+      --dim: #C7C3CE;
+      --dim-2: #9F9AA8;
+      --mute: #74707F;
+      --line: #242430;
+      --line-2: #313141;
+      --line-3: #434357;
+
+      --accent: #F43F5E;
+      --accent-hover: #E11D48;
+      --on-accent: #FFFFFF;
+      --accent-soft: rgba(244, 63, 94, 0.15);
+      --accent-border: rgba(244, 63, 94, 0.44);
+      --accent-glow: rgba(244, 63, 94, 0.28);
+
+      --accent-2: #FBBF24;
+      --accent-2-hover: #F59E0B;
+      --on-accent-2: #1C1200;
+      --accent-2-soft: rgba(251, 191, 36, 0.14);
+      --accent-2-border: rgba(251, 191, 36, 0.38);
+
+      --ok: #A78BFA;
+      --ok-soft: rgba(167, 139, 250, 0.14);
+      --ok-border: rgba(167, 139, 250, 0.36);
+
+      --live: #FB7185;
+      --live-soft: rgba(244, 63, 94, 0.16);
+      --live-border: rgba(244, 63, 94, 0.42);
+      --head-bg: rgba(14, 14, 19, 0.90);
+      --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    [data-palette="crimson"][data-mode="light"] {
+      color-scheme: light;
+      --bg: #FAF6F7;
+      --band: #FFFFFF;
+      --band-2: #F5EEF0;
+      --panel: #EFE5E8;
+      --panel-hover: #E5D7DC;
+      --ink: #191316;
+      --dim: #4F4449;
+      --dim-2: #6B5E64;
+      --mute: #8A7C82;
+      --line: #E9DEE2;
+      --line-2: #DDCCD2;
+      --line-3: #C8B2BA;
+
+      --accent: #E11D48;
+      --accent-hover: #BE123C;
+      --on-accent: #FFFFFF;
+      --accent-soft: rgba(225, 29, 72, 0.10);
+      --accent-border: rgba(225, 29, 72, 0.34);
+      --accent-glow: rgba(225, 29, 72, 0.18);
+
+      --accent-2: #B45309;
+      --accent-2-hover: #92400E;
+      --on-accent-2: #FFFFFF;
+      --accent-2-soft: rgba(217, 119, 6, 0.11);
+      --accent-2-border: rgba(217, 119, 6, 0.34);
+
+      --ok: #7C3AED;
+      --ok-soft: rgba(124, 58, 237, 0.10);
+      --ok-border: rgba(124, 58, 237, 0.30);
+
+      --live: #E11D48;
+      --live-soft: rgba(225, 29, 72, 0.10);
+      --live-border: rgba(225, 29, 72, 0.30);
+      --head-bg: rgba(250, 246, 247, 0.92);
+      --shadow-card: 0 8px 22px rgba(25, 19, 22, 0.08);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -62,13 +278,14 @@
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
       width: 100%;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    a { color: var(--mint); text-underline-offset: 3px; }
-    a:hover { color: #ffffff; }
+    a { color: var(--accent); text-underline-offset: 3px; }
+    a:hover { color: var(--ink); }
 
     a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
-      outline: 2px solid var(--amber);
+      outline: 2px solid var(--accent-2);
       outline-offset: 2px;
     }
 
@@ -78,14 +295,15 @@
       padding: 0 20px;
     }
 
-    /* Site Header (cleanyour.tv style) */
+    /* Site Header */
     .site-head {
-      background: var(--bg);
+      background: var(--head-bg);
       border-bottom: 1px solid var(--line);
       position: sticky;
       top: 0;
       z-index: 40;
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     /* Animations & Keyframes */
     @keyframes fadeSlideUp {
@@ -100,13 +318,13 @@
     }
     @keyframes livePulse {
       0% {
-        box-shadow: 0 0 0 0 rgba(142, 224, 143, 0.75), 0 0 8px var(--green);
+        box-shadow: 0 0 0 0 var(--accent-glow), 0 0 8px var(--live);
       }
       70% {
-        box-shadow: 0 0 0 9px rgba(142, 224, 143, 0), 0 0 12px var(--green);
+        box-shadow: 0 0 0 9px transparent, 0 0 12px var(--live);
       }
       100% {
-        box-shadow: 0 0 0 0 rgba(142, 224, 143, 0), 0 0 8px var(--green);
+        box-shadow: 0 0 0 0 transparent, 0 0 8px var(--live);
       }
     }
     @keyframes cbPop {
@@ -116,12 +334,12 @@
     }
     @keyframes urlFlash {
       0% {
-        background-color: rgba(207, 255, 207, 0.16);
-        color: #ffffff;
+        background-color: var(--accent-soft);
+        color: var(--ink);
       }
       100% {
         background-color: transparent;
-        color: var(--mint);
+        color: var(--accent);
       }
     }
 
@@ -146,7 +364,7 @@
       letter-spacing: -0.02em;
       min-width: 0;
     }
-    .logo:hover { color: #ffffff; }
+    .logo:hover { color: var(--ink); }
     .logo-mark {
       width: 44px;
       height: 44px;
@@ -156,17 +374,17 @@
       transition: box-shadow 0.2s ease;
     }
     .logo:hover .logo-mark {
-      box-shadow: 0 0 12px rgba(220, 38, 38, 0.45);
+      box-shadow: 0 0 12px var(--accent-glow);
     }
     .logo-word span {
-      color: var(--mint);
+      color: var(--accent);
     }
     .logo-ver {
       font-family: var(--f-ch);
       font-size: 17px;
-      color: var(--amber);
-      background: #231a05;
-      border: 1px solid #59410d;
+      color: var(--accent-2);
+      background: var(--accent-2-soft);
+      border: 1px solid var(--accent-2-border);
       padding: 0 6px;
       border-radius: 4px;
       font-weight: 400;
@@ -193,7 +411,7 @@
     }
     .navlinks a .ch-tag {
       font-family: var(--f-ch);
-      color: var(--mint);
+      color: var(--accent);
       font-size: 16px;
       margin-right: 3px;
     }
@@ -214,26 +432,28 @@
       font-size: 13px;
       font-weight: 700;
       text-decoration: none;
-      transition: background-color 0.15s, color 0.15s, filter 0.15s, transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease;
+      transition: background-color 0.15s, color 0.15s, filter 0.15s, border-color 0.15s, transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease;
     }
     .pill-gh {
-      background: var(--ink);
-      color: var(--bg);
+      background: var(--panel);
+      color: var(--ink);
+      border: 1px solid var(--line-3);
     }
     .pill-gh:hover {
-      background: #ffffff;
-      color: var(--bg);
+      background: var(--accent-soft);
+      color: var(--ink);
+      border-color: var(--accent-border);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 12px var(--accent-glow);
     }
     .pill-amber {
-      border: 1.5px solid var(--amber);
-      color: var(--amber);
-      background: transparent;
+      border: 1.5px solid var(--accent-2-border);
+      color: var(--accent-2);
+      background: var(--accent-2-soft);
     }
     .pill-amber:hover {
-      background: var(--amber);
-      color: var(--on-amber);
+      background: var(--accent-2);
+      color: var(--on-accent-2);
     }
 
     /* Hero & Manifest Box */
@@ -242,26 +462,110 @@
       border-bottom: 1px solid var(--line);
       animation: fadeSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
+    .hero-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
     .kicker {
       font-family: var(--f-ch);
       font-size: 20px;
       line-height: 1.1;
-      color: var(--mint);
+      color: var(--accent-2);
       letter-spacing: 0.02em;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 6px;
+      margin-bottom: 0;
     }
     .live-dot {
       width: 9px;
       height: 9px;
       border-radius: 999px;
-      background: var(--green);
+      background: var(--live);
       display: inline-block;
-      box-shadow: 0 0 8px var(--green);
+      box-shadow: 0 0 8px var(--live);
       animation: livePulse 2s infinite;
     }
+
+    /* Built-in Color Palette + Dark/Light Mode Switcher */
+    .theme-toolbar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .palette-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px;
+      background: var(--band);
+      border: 1px solid var(--line-3);
+      border-radius: 7px;
+    }
+    .palette-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      min-height: 30px;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--dim);
+      font-family: var(--f-head);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .palette-btn:hover {
+      color: var(--ink);
+      background: var(--panel);
+    }
+    .palette-btn.is-active {
+      background: var(--accent-soft);
+      border-color: var(--accent-border);
+      color: var(--ink);
+    }
+    .swatch-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+    .sw-indigo { background: linear-gradient(135deg, #8B5CF6, #FBBF24); }
+    .sw-ocean  { background: linear-gradient(135deg, #38BDF8, #FBBF24); }
+    .sw-crimson{ background: linear-gradient(135deg, #F43F5E, #FBBF24); }
+
+    .mode-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 11px;
+      min-height: 36px;
+      border-radius: 7px;
+      border: 1px solid var(--line-3);
+      background: var(--band);
+      color: var(--ink);
+      font-family: var(--f-head);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.15s, border-color 0.15s;
+    }
+    .mode-btn:hover {
+      background: var(--panel);
+      border-color: var(--accent-border);
+    }
+
     .hero-title-row {
       display: flex;
       align-items: center;
@@ -277,7 +581,7 @@
       transition: box-shadow 0.2s ease;
     }
     .hero-logo:hover {
-      box-shadow: 0 0 16px rgba(220, 38, 38, 0.45);
+      box-shadow: 0 0 16px var(--accent-glow);
     }
     h1 {
       font-family: var(--f-head);
@@ -289,7 +593,7 @@
       margin-bottom: 0;
     }
     h1 span {
-      color: var(--mint);
+      color: var(--accent);
     }
     .lede {
       color: var(--dim);
@@ -302,18 +606,19 @@
       font-weight: 600;
     }
 
-    /* Terminal-style Manifest Bar (.check / .term from cleanyour.tv) */
+    /* Terminal-style Manifest Bar */
     .manifest-box {
-      border: 2px solid var(--ink);
+      border: 1.5px solid var(--accent-border);
       border-radius: 6px;
       overflow: hidden;
       background: var(--band);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      box-shadow: var(--shadow-card);
     }
     .manifest-head {
-      background: var(--ink);
-      color: var(--bg);
-      padding: 6px 14px;
+      background: var(--panel);
+      color: var(--ink);
+      border-bottom: 1px solid var(--line-3);
+      padding: 8px 14px;
       font-family: var(--f-ch);
       font-size: 18px;
       letter-spacing: 0.02em;
@@ -326,7 +631,7 @@
       font-family: var(--f-mono);
       font-size: 11.5px;
       font-weight: 600;
-      opacity: 0.9;
+      color: var(--accent-2);
     }
     .manifest-row {
       display: flex;
@@ -340,7 +645,7 @@
       padding: 12px 14px;
       font-family: var(--f-mono);
       font-size: 13px;
-      color: var(--mint);
+      color: var(--ink);
       word-break: break-all;
       display: flex;
       align-items: center;
@@ -353,7 +658,7 @@
     .manifest-actions {
       display: flex;
       align-items: stretch;
-      border-left: 2px solid var(--ink);
+      border-left: 1px solid var(--line-3);
     }
     .btn-action {
       border: 0;
@@ -368,7 +673,7 @@
       justify-content: center;
       gap: 7px;
       text-decoration: none;
-      transition: background-color 0.15s, color 0.15s, filter 0.15s, transform 0.12s, box-shadow 0.15s;
+      transition: background-color 0.15s, color 0.15s, border-color 0.15s, filter 0.15s, transform 0.12s, box-shadow 0.15s;
       white-space: nowrap;
       position: relative;
     }
@@ -383,51 +688,44 @@
       line-height: 1;
     }
     .btn-stremio {
-      background: var(--purple-btn);
-      color: #ffffff;
-      border-right: 1px solid rgba(255, 255, 255, 0.12);
+      background: var(--accent);
+      color: var(--on-accent);
+      border-right: 1px solid var(--line-3);
     }
     .btn-stremio:hover {
-      background: var(--purple-hover);
-      color: #ffffff;
-      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+      background: var(--accent-hover);
+      color: var(--on-accent);
+      box-shadow: 0 4px 16px var(--accent-glow);
     }
     .btn-nuvio {
-      background: var(--cyan-btn);
-      color: #ffffff;
-      border-right: 1px solid rgba(255, 255, 255, 0.12);
+      background: var(--accent-2-soft);
+      color: var(--accent-2);
+      border-right: 1px solid var(--line-3);
     }
     .btn-nuvio:hover {
-      background: var(--cyan-hover);
-      color: #ffffff;
-      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
+      background: var(--accent-2);
+      color: var(--on-accent-2);
     }
     .btn-copy {
-      background: var(--mint);
-      color: #050505;
+      background: var(--panel);
+      color: var(--ink);
     }
     .btn-copy:hover {
-      background: #ffffff;
-      color: #050505;
-      box-shadow: 0 4px 14px rgba(207, 255, 207, 0.25);
+      background: var(--accent-soft);
+      color: var(--ink);
     }
 
-    /* SMPTE TV test bar divider */
+    /* Cohesive Accent Bar Divider */
     .stripe-thin {
       background: linear-gradient(
         90deg,
-        var(--white) 0%,
-        var(--amber) 14%,
-        var(--cyan) 28%,
-        var(--green) 42%,
-        var(--violet) 57%,
-        var(--red) 71%,
-        var(--blue) 85%,
-        var(--white) 100%
+        var(--accent) 0%,
+        var(--accent-2) 55%,
+        var(--ok) 100%
       );
       height: 3px;
       border-radius: 2px;
-      opacity: 0.85;
+      opacity: 0.78;
     }
 
     /* Sections */
@@ -460,15 +758,27 @@
       border-radius: 4px;
       background: var(--panel);
       border: 1px solid var(--line-3);
-      color: var(--amber);
+      color: var(--accent);
       white-space: nowrap;
       flex-shrink: 0;
     }
-    .ch-badge.c-green { color: var(--green); border-color: #254d27; background: #0a190b; }
-    .ch-badge.c-cyan { color: var(--cyan); border-color: #1f4948; background: #081818; }
-    .ch-badge.c-violet { color: var(--violet); border-color: #4c2954; background: #170b1a; }
-    .ch-badge.c-amber { color: var(--gold); border-color: #59410d; background: #1c1404; }
-    .ch-badge.c-rose { color: var(--rose); border-color: #5c1827; background: #1a080d; }
+    .ch-badge.c-green,
+    .ch-badge.c-cyan,
+    .ch-badge.c-violet {
+      color: var(--accent);
+      border-color: var(--accent-border);
+      background: var(--accent-soft);
+    }
+    .ch-badge.c-amber {
+      color: var(--accent-2);
+      border-color: var(--accent-2-border);
+      background: var(--accent-2-soft);
+    }
+    .ch-badge.c-rose {
+      color: var(--live);
+      border-color: var(--live-border);
+      background: var(--live-soft);
+    }
 
     .sec-head h2 {
       font-family: var(--f-head);
@@ -496,17 +806,17 @@
     }
     .btn-chip:hover {
       background: var(--panel);
-      color: #ffffff;
-      border-color: var(--ink);
+      color: var(--ink);
+      border-color: var(--accent-border);
       transform: translateY(-1px);
     }
     .btn-chip:active {
       transform: scale(0.96);
     }
     .btn-chip.active {
-      background: var(--mint);
-      color: var(--bg);
-      border-color: var(--mint);
+      background: var(--accent);
+      color: var(--on-accent);
+      border-color: var(--accent);
       font-weight: 700;
     }
 
@@ -526,20 +836,20 @@
       transition: background-color 0.12s ease, border-color 0.12s ease, transform 0.1s ease;
     }
     input.clean-cb:hover {
-      border-color: var(--mint);
+      border-color: var(--accent);
     }
     input.clean-cb::before {
       content: "";
       width: 10px;
       height: 6px;
-      border-left: 2.2px solid var(--on-green);
-      border-bottom: 2.2px solid var(--on-green);
+      border-left: 2.2px solid var(--on-accent);
+      border-bottom: 2.2px solid var(--on-accent);
       transform: rotate(-45deg) translate(1px, -1px) scale(0);
       transition: transform 0.12s ease-in-out;
     }
     input.clean-cb:checked {
-      background: var(--green);
-      border-color: var(--green);
+      background: var(--accent);
+      border-color: var(--accent);
       animation: cbPop 0.24s cubic-bezier(0.16, 1, 0.3, 1);
     }
     input.clean-cb:checked::before {
@@ -570,7 +880,7 @@
     .res-item:hover {
       background: var(--panel);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
     }
     .res-item:active {
       transform: scale(0.98);
@@ -579,20 +889,20 @@
       opacity: 0.45;
     }
     .res-item[data-res="1080p"]:has(input:checked) {
-      border-left-color: var(--green);
-      background: linear-gradient(90deg, rgba(142, 224, 143, 0.08) 0%, var(--band) 80%);
+      border-left-color: var(--accent-2);
+      background: linear-gradient(90deg, var(--accent-2-soft) 0%, var(--band) 80%);
     }
     .res-item[data-res="720p"]:has(input:checked) {
-      border-left-color: var(--cyan);
-      background: linear-gradient(90deg, rgba(127, 227, 224, 0.08) 0%, var(--band) 80%);
+      border-left-color: var(--accent);
+      background: linear-gradient(90deg, var(--accent-soft) 0%, var(--band) 80%);
     }
     .res-item[data-res="480p"]:has(input:checked) {
-      border-left-color: var(--gold);
-      background: linear-gradient(90deg, rgba(255, 204, 77, 0.08) 0%, var(--band) 80%);
+      border-left-color: var(--ok);
+      background: linear-gradient(90deg, var(--ok-soft) 0%, var(--band) 80%);
     }
     .res-item[data-res="360p"]:has(input:checked) {
-      border-left-color: var(--violet);
-      background: linear-gradient(90deg, rgba(213, 139, 230, 0.08) 0%, var(--band) 80%);
+      border-left-color: var(--mute);
+      background: var(--band-2);
     }
     .res-label {
       font-family: var(--f-head);
@@ -604,7 +914,7 @@
       margin-left: auto;
       font-family: var(--f-ch);
       font-size: 17px;
-      color: var(--mint);
+      color: var(--accent);
     }
 
     /* Magyar Felirat (Subtitles) Toggle Card */
@@ -617,7 +927,7 @@
       padding: 13px 16px;
       background: var(--band);
       border: 1.5px solid var(--line-3);
-      border-left: 3px solid var(--green);
+      border-left: 3px solid var(--accent-2);
       border-radius: 6px;
       cursor: pointer;
       user-select: none;
@@ -628,7 +938,7 @@
     }
     .subtitle-toggle-card.is-off {
       border-left-color: var(--line-3);
-      opacity: 0.78;
+      opacity: 0.72;
     }
     .subtitle-toggle-info {
       display: flex;
@@ -665,9 +975,9 @@
       font-size: 17px;
       padding: 2px 9px;
       border-radius: 4px;
-      border: 1px solid #235929;
-      background: #07190a;
-      color: var(--green);
+      border: 1px solid var(--accent-2-border);
+      background: var(--accent-2-soft);
+      color: var(--accent-2);
       line-height: 1.1;
       white-space: nowrap;
     }
@@ -692,7 +1002,7 @@
     .switch-slider {
       position: absolute;
       inset: 0;
-      background: #232323;
+      background: var(--panel);
       border: 1.5px solid var(--line-3);
       border-radius: 999px;
       transition: background-color 0.2s ease, border-color 0.2s ease;
@@ -710,19 +1020,19 @@
       transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
     }
     .switch-pill input:checked + .switch-slider {
-      background: rgba(142, 224, 143, 0.22);
-      border-color: var(--green);
+      background: var(--accent-soft);
+      border-color: var(--accent);
     }
     .switch-pill input:checked + .switch-slider::before {
       transform: translate(20px, -50%);
-      background: var(--green);
+      background: var(--accent);
     }
     .switch-pill input:focus-visible + .switch-slider {
-      outline: 2px solid var(--amber);
+      outline: 2px solid var(--accent-2);
       outline-offset: 2px;
     }
 
-    /* CH 02 & CH 03: 4 Modern Interactive Dropdown Menus */
+    /* CH 02 & CH 03: Interactive Dropdown Menus */
     .dropdown-wrap {
       border: 1.5px solid var(--line-3);
       border-radius: 6px;
@@ -732,24 +1042,18 @@
       margin-bottom: 12px;
     }
     .dropdown-wrap:hover {
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: var(--accent-border);
     }
     .dropdown-wrap.is-open {
-      border-color: rgba(0, 223, 162, 0.45);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      border-color: var(--accent-border);
+      box-shadow: var(--shadow-card);
     }
-    #liveSourcesDropdownWrap.is-open {
-      border-color: rgba(127, 227, 224, 0.45);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    }
-    #vodCatalogsDropdownWrap.is-open,
-    #catalogsDropdownWrap.is-open {
-      border-color: rgba(167, 139, 250, 0.45);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    }
+    #liveSourcesDropdownWrap.is-open,
     #liveCatalogsDropdownWrap.is-open {
-      border-color: rgba(255, 82, 119, 0.45);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      border-color: var(--live-border);
+    }
+    #tvToolsDropdownWrap.is-open {
+      border-color: var(--accent-2-border);
     }
     .dropdown-trigger {
       display: flex;
@@ -779,7 +1083,7 @@
       cursor: pointer;
     }
     .dropdown-toggle-btn:focus-visible {
-      outline: 2px solid var(--mint);
+      outline: 2px solid var(--accent);
       outline-offset: -2px;
       border-radius: 5px;
     }
@@ -805,20 +1109,21 @@
       width: 28px;
       height: 28px;
       border-radius: 6px;
-      background: var(--panel);
-      border: 1px solid var(--line-3);
-      color: var(--green);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
       flex-shrink: 0;
     }
-    #liveSourcesDropdownWrap .dropdown-icon {
-      color: var(--cyan);
-    }
-    #vodCatalogsDropdownWrap .dropdown-icon,
-    #catalogsDropdownWrap .dropdown-icon {
-      color: var(--violet);
-    }
+    #liveSourcesDropdownWrap .dropdown-icon,
     #liveCatalogsDropdownWrap .dropdown-icon {
-      color: var(--rose);
+      background: var(--live-soft);
+      border-color: var(--live-border);
+      color: var(--live);
+    }
+    #tvToolsDropdownWrap .dropdown-icon {
+      background: var(--accent-2-soft);
+      border-color: var(--accent-2-border);
+      color: var(--accent-2);
     }
     .dropdown-title {
       font-family: var(--f-head);
@@ -834,27 +1139,20 @@
       border-radius: 4px;
       line-height: 1.1;
       white-space: nowrap;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
     }
-    .badge-sources {
-      background: #0a190b;
-      border: 1px solid #254d27;
-      color: var(--green);
-    }
-    .badge-live-sources {
-      background: #061d1e;
-      border: 1px solid #195052;
-      color: var(--cyan);
-    }
-    .badge-vod-catalogs,
-    .badge-catalogs {
-      background: #170b1a;
-      border: 1px solid #4c2954;
-      color: var(--violet);
-    }
+    .badge-live-sources,
     .badge-live-catalogs {
-      background: #240b10;
-      border: 1px solid #5a1c27;
-      color: var(--rose);
+      background: var(--live-soft);
+      border-color: var(--live-border);
+      color: var(--live);
+    }
+    .badge-tools {
+      background: var(--accent-2-soft);
+      border-color: var(--accent-2-border);
+      color: var(--accent-2);
     }
     .dropdown-preview {
       font-size: 12px;
@@ -864,7 +1162,7 @@
       text-overflow: ellipsis;
       max-width: 320px;
       display: inline-block;
-      opacity: 0.85;
+      opacity: 0.9;
     }
     .dropdown-actions {
       display: flex;
@@ -895,7 +1193,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      background: rgba(0,0,0,0.22);
+      background: var(--band-2);
     }
     .tv-tools-actions {
       display: flex;
@@ -905,28 +1203,39 @@
     }
     .tv-tools-actions .btn-action {
       border-radius: 6px;
-      color: #ffffff;
       text-decoration: none;
       min-height: 40px;
       padding: 0 16px;
       font-size: 13px;
+      background: var(--panel);
+      color: var(--ink);
+      border: 1px solid var(--line-3);
+    }
+    .tv-tools-actions .btn-action:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent-border);
+      color: var(--ink);
+    }
+    .tv-tools-actions .btn-tool-gold {
+      background: var(--accent-2-soft);
+      border-color: var(--accent-2-border);
+      color: var(--accent-2);
+    }
+    .tv-tools-actions .btn-tool-gold:hover {
+      background: var(--accent-2);
+      color: var(--on-accent-2);
+      border-color: var(--accent-2);
     }
     .dropdown-wrap.is-open .dropdown-chevron {
       transform: rotate(180deg);
-      color: var(--mint);
+      color: var(--accent);
     }
-    #liveSourcesDropdownWrap.is-open .dropdown-chevron {
-      color: var(--cyan);
-    }
-    #vodCatalogsDropdownWrap.is-open .dropdown-chevron,
-    #catalogsDropdownWrap.is-open .dropdown-chevron {
-      color: var(--violet);
-    }
+    #liveSourcesDropdownWrap.is-open .dropdown-chevron,
     #liveCatalogsDropdownWrap.is-open .dropdown-chevron {
-      color: var(--rose);
+      color: var(--live);
     }
     #tvToolsDropdownWrap.is-open .dropdown-chevron {
-      color: var(--amber);
+      color: var(--accent-2);
     }
 
     /* Smooth accordion animation using grid-template-rows */
@@ -952,7 +1261,7 @@
       background: transparent;
     }
 
-    /* CH 02 & CH 03: Compact Vertical List (cleanyour.tv guide list) */
+    /* CH 02 & CH 03: Compact Vertical List */
     .clean-list {
       border: 1.5px solid var(--line-3);
       border-radius: 6px;
@@ -984,34 +1293,25 @@
       opacity: 0.45;
     }
 
-    /* Tasteful subtle row tints and left border accents */
-    .list-row[data-tier="verified"]:has(input:checked) {
-      border-left-color: var(--green);
-      background: linear-gradient(90deg, rgba(142, 224, 143, 0.05) 0%, var(--band) 60%);
+    /* Cohesive row tints and left border accents */
+    .list-row[data-tier="verified"]:has(input:checked),
+    .list-row[data-cat="top"]:has(input:checked) {
+      border-left-color: var(--ok);
+      background: linear-gradient(90deg, var(--ok-soft) 0%, var(--band) 55%);
     }
-    .list-row[data-tier="community"]:has(input:checked) {
-      border-left-color: var(--gold);
-      background: linear-gradient(90deg, rgba(255, 204, 77, 0.05) 0%, var(--band) 60%);
+    .list-row[data-tier="community"]:has(input:checked),
+    .list-row[data-cat="classics"]:has(input:checked) {
+      border-left-color: var(--accent-2);
+      background: linear-gradient(90deg, var(--accent-2-soft) 0%, var(--band) 55%);
     }
-    .list-row[data-tier="selfhost"]:has(input:checked) {
-      border-left-color: var(--cyan);
-      background: linear-gradient(90deg, rgba(127, 227, 224, 0.05) 0%, var(--band) 60%);
+    .list-row[data-tier="selfhost"]:has(input:checked),
+    .list-row[data-cat="stream"]:has(input:checked) {
+      border-left-color: var(--accent);
+      background: linear-gradient(90deg, var(--accent-soft) 0%, var(--band) 55%);
     }
     .list-row[data-cat="livetv"]:has(input:checked) {
-      border-left-color: var(--rose);
-      background: linear-gradient(90deg, rgba(255, 82, 119, 0.06) 0%, var(--band) 60%);
-    }
-    .list-row[data-cat="classics"]:has(input:checked) {
-      border-left-color: var(--gold);
-      background: linear-gradient(90deg, rgba(255, 204, 77, 0.05) 0%, var(--band) 60%);
-    }
-    .list-row[data-cat="top"]:has(input:checked) {
-      border-left-color: var(--green);
-      background: linear-gradient(90deg, rgba(142, 224, 143, 0.05) 0%, var(--band) 60%);
-    }
-    .list-row[data-cat="stream"]:has(input:checked) {
-      border-left-color: var(--violet);
-      background: linear-gradient(90deg, rgba(213, 139, 230, 0.05) 0%, var(--band) 60%);
+      border-left-color: var(--live);
+      background: linear-gradient(90deg, var(--live-soft) 0%, var(--band) 55%);
     }
 
     .row-idx {
@@ -1023,7 +1323,7 @@
       line-height: 1;
     }
     .list-row:has(input:checked) .row-idx {
-      color: var(--mint);
+      color: var(--accent);
     }
     .row-name {
       font-family: var(--f-head);
@@ -1049,7 +1349,7 @@
       white-space: nowrap;
     }
 
-    /* Rich, Tasteful Tags */
+    /* Harmonized Tags */
     .tag {
       font-family: var(--f-mono);
       font-size: 11px;
@@ -1061,60 +1361,27 @@
       background: var(--bg);
     }
     .tag-ok {
-      color: var(--green);
-      border-color: #235929;
-      background: #07190a;
+      color: var(--ok);
+      border-color: var(--ok-border);
+      background: var(--ok-soft);
     }
-    .tag-warn {
-      color: var(--amber);
-      border-color: #634812;
-      background: #1c1404;
+    .tag-warn,
+    .tag-gold {
+      color: var(--accent-2);
+      border-color: var(--accent-2-border);
+      background: var(--accent-2-soft);
     }
-    .tag-sh {
-      color: var(--cyan);
-      border-color: #1e4b52;
-      background: #07161a;
+    .tag-sh,
+    .tag-stream {
+      color: var(--accent);
+      border-color: var(--accent-border);
+      background: var(--accent-soft);
     }
     .tag-live {
-      color: #ff6b8b;
-      border-color: #681d2c;
-      background: #20070e;
+      color: var(--live);
+      border-color: var(--live-border);
+      background: var(--live-soft);
       font-weight: 600;
-    }
-    .tag-gold {
-      color: var(--gold);
-      border-color: #664d12;
-      background: #1c1404;
-    }
-    .tag-stream {
-      color: var(--violet);
-      border-color: #4c2954;
-      background: #170b1a;
-    }
-    .tag-stream.s-netflix {
-      color: #ff5e5e;
-      border-color: #5c1818;
-      background: #1d0909;
-    }
-    .tag-stream.s-max {
-      color: #a78bfa;
-      border-color: #40306e;
-      background: #140d25;
-    }
-    .tag-stream.s-disney {
-      color: #38bdf8;
-      border-color: #154c6e;
-      background: #081a28;
-    }
-    .tag-stream.s-skyshowtime {
-      color: #c084fc;
-      border-color: #4c207a;
-      background: #160a26;
-    }
-    .tag-stream.s-prime {
-      color: #60a5fa;
-      border-color: #1d3b70;
-      background: #081427;
     }
 
     /* CH 04: Stream Tester */
@@ -1139,12 +1406,16 @@
       font-family: var(--f-body);
       font-size: 14px;
     }
+    .select-input option {
+      background: var(--band);
+      color: var(--ink);
+    }
     .text-input {
       flex: 1;
-      min-width: 220px;
+      min-width: 0;
     }
     .text-input:focus, .select-input:focus {
-      border-color: var(--mint);
+      border-color: var(--accent);
     }
     .preset-line {
       display: flex;
@@ -1167,9 +1438,9 @@
       transition: color 0.12s, border-color 0.12s, background-color 0.12s, transform 0.12s;
     }
     .preset-link:hover {
-      color: var(--mint);
-      border-color: var(--mint);
-      background: var(--panel);
+      color: var(--accent);
+      border-color: var(--accent-border);
+      background: var(--accent-soft);
       transform: translateY(-1px);
     }
     .preset-link:active {
@@ -1180,7 +1451,7 @@
     .series-bar {
       background: var(--band-2);
       border: 1.5px solid var(--line-3);
-      border-left: 3px solid var(--cyan);
+      border-left: 3px solid var(--accent);
       border-radius: 6px;
       padding: 11px 13px;
       margin-bottom: 12px;
@@ -1202,9 +1473,9 @@
       font-family: var(--f-mono);
       font-size: 13px;
       font-weight: 600;
-      color: var(--cyan);
-      background: rgba(56, 189, 248, 0.08);
-      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
       padding: 4px 10px;
       border-radius: 5px;
       max-width: 100%;
@@ -1233,9 +1504,9 @@
       user-select: none;
     }
     .btn-step:hover:not(:disabled) {
-      color: var(--mint);
-      border-color: var(--mint);
-      background: var(--panel);
+      color: var(--accent);
+      border-color: var(--accent-border);
+      background: var(--accent-soft);
     }
     .btn-step:disabled {
       opacity: 0.35;
@@ -1278,9 +1549,9 @@
       display: none;
       font-family: var(--f-mono);
       font-size: 12.5px;
-      color: var(--green);
-      background: #07190a;
-      border: 1px solid #235929;
+      color: var(--ok);
+      background: var(--ok-soft);
+      border: 1px solid var(--ok-border);
       border-radius: 5px;
       padding: 8px 12px;
       margin-bottom: 10px;
@@ -1343,7 +1614,7 @@
     .stream-idx {
       font-family: var(--f-ch);
       font-size: 17px;
-      color: var(--mint);
+      color: var(--accent);
       font-weight: 400;
     }
     .stream-sub-line {
@@ -1363,11 +1634,12 @@
       border-radius: 4px;
       border: 1px solid var(--line-3);
       color: var(--dim);
+      background: var(--panel);
     }
-    .q-tag.q1080 { color: var(--green); border-color: #235929; background: #07190a; }
-    .q-tag.q720 { color: var(--cyan); border-color: #1e4b52; background: #07161a; }
-    .q-tag.q480 { color: var(--amber); border-color: #634812; background: #1c1404; }
-    .q-tag.q360 { color: var(--violet); border-color: #4c2954; background: #170b1a; }
+    .q-tag.q1080 { color: var(--accent-2); border-color: var(--accent-2-border); background: var(--accent-2-soft); }
+    .q-tag.q720 { color: var(--accent); border-color: var(--accent-border); background: var(--accent-soft); }
+    .q-tag.q480 { color: var(--ok); border-color: var(--ok-border); background: var(--ok-soft); }
+    .q-tag.q360 { color: var(--dim); border-color: var(--line-3); background: var(--panel); }
 
     /* Toast Notification */
     .toast {
@@ -1375,10 +1647,10 @@
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%) translateY(100px);
-      background: #141414;
+      background: var(--band);
       color: var(--ink);
-      border: 1.5px solid var(--mint);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
+      border: 1.5px solid var(--accent);
+      box-shadow: var(--shadow-card);
       padding: 11px 20px;
       border-radius: 6px;
       font-family: var(--f-mono);
@@ -1408,7 +1680,7 @@
       gap: 10px;
     }
 
-    /* Tablet & Mobile Header Ordering (keep GitHub button on row 1 with Logo) */
+    /* Tablet & Split-Screen Adjustments (<= 860px) */
     @media (max-width: 860px) {
       .head-bar {
         row-gap: 8px;
@@ -1442,6 +1714,24 @@
         min-height: 36px;
         background: var(--band);
         border: 1px solid var(--line-2);
+      }
+      .dropdown-trigger {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0;
+        gap: 0;
+      }
+      .dropdown-toggle-btn {
+        width: 100%;
+        padding: 12px 14px;
+      }
+      .dropdown-actions {
+        width: 100%;
+        padding: 8px 14px 10px;
+        border-top: 1px dashed var(--line-2);
+        background: var(--band-2);
+        flex-wrap: wrap;
+        gap: 6px;
       }
     }
 
@@ -1535,7 +1825,7 @@
       .manifest-actions {
         width: 100%;
         border-left: none;
-        border-top: 2px solid var(--ink);
+        border-top: 1.5px solid var(--accent-border);
         display: grid;
         grid-template-columns: 1fr 1fr;
       }
@@ -1546,11 +1836,28 @@
         border-right: none;
       }
       .manifest-actions .btn-stremio {
-        border-right: 1px solid rgba(255, 255, 255, 0.12);
+        border-right: 1px solid var(--line-3);
       }
       .manifest-actions .btn-copy {
         grid-column: span 2;
         border-top: 1px solid var(--line-3);
+      }
+      .hero-top-bar {
+        gap: 8px;
+      }
+      .theme-toolbar {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .palette-pills {
+        flex: 1;
+        justify-content: space-between;
+      }
+      .palette-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 5px 6px;
+        font-size: 11.5px;
       }
 
       .res-bar {
@@ -1646,7 +1953,7 @@
         width: 100%;
         padding: 8px 12px 10px;
         border-top: 1px dashed var(--line-2);
-        background: rgba(0, 0, 0, 0.16);
+        background: var(--band-2);
         flex-wrap: wrap;
         gap: 6px;
       }
@@ -1846,7 +2153,7 @@
       }
       .manifest-actions .btn-stremio {
         border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        border-bottom: 1px solid var(--line-3);
       }
       .manifest-actions .btn-copy {
         grid-column: span 1;
@@ -1885,7 +2192,26 @@
   <main class="wrap">
     <!-- CH 00: HERO & MANIFEST -->
     <section class="hero">
-      <div class="kicker"><span class="live-dot"></span> CH 00 // NUVIO &amp; STREMIO DIRECT HTTP ADDON</div>
+      <div class="hero-top-bar">
+        <div class="kicker"><span class="live-dot"></span> CH 00 // NUVIO &amp; STREMIO DIRECT HTTP ADDON</div>
+        <div class="theme-toolbar" aria-label="Színkombináció és mód választó">
+          <div class="palette-pills" role="group" aria-label="Színséma">
+            <button type="button" class="palette-btn is-active" data-palette-btn="indigo" aria-pressed="true" onclick="setPalette('indigo')">
+              <span class="swatch-dot sw-indigo" aria-hidden="true"></span> Indigó
+            </button>
+            <button type="button" class="palette-btn" data-palette-btn="ocean" aria-pressed="false" onclick="setPalette('ocean')">
+              <span class="swatch-dot sw-ocean" aria-hidden="true"></span> Éjkék
+            </button>
+            <button type="button" class="palette-btn" data-palette-btn="crimson" aria-pressed="false" onclick="setPalette('crimson')">
+              <span class="swatch-dot sw-crimson" aria-hidden="true"></span> Karmazsin
+            </button>
+          </div>
+          <button type="button" class="mode-btn" id="themeModeBtn" aria-pressed="false" onclick="toggleThemeMode()">
+            <span class="mode-ico" aria-hidden="true">☀️</span>
+            <span class="mode-label">Világos</span>
+          </button>
+        </div>
+      </div>
       <div class="hero-title-row">
         <img src="/logo.svg?v=2.7.0" class="hero-logo" alt="Magyar Streaming Pro" width="60" height="60" />
         <h1>Magyar Streaming <span>Pro</span></h1>
@@ -2431,11 +2757,11 @@
       <div class="dropdown-wrap" id="tvToolsDropdownWrap">
         <div class="dropdown-trigger" style="padding-right: 0;">
           <button type="button" class="dropdown-toggle-btn" id="tvToolsDropdownTrigger" aria-expanded="false" aria-controls="tvToolsDropdownPanel" onclick="toggleDropdown('tvTools')">
-            <span class="dropdown-icon" style="color:var(--amber);background:#181204;border-color:#523b08;">📻</span>
+            <span class="dropdown-icon" aria-hidden="true">📻</span>
             <span class="dropdown-header-text">
               <span class="dropdown-title-line">
                 <span class="dropdown-title">Élő TV Lejátszási Listák &amp; 1080p Audit</span>
-                <span class="dropdown-badge" style="background:#1c1305;border:1px solid #5a3c09;color:var(--gold);">VLC · M3U · Excel</span>
+                <span class="dropdown-badge badge-tools">VLC · M3U · Excel</span>
               </span>
               <span class="dropdown-preview">XSPF, M3U IPTV lista és 1080p audit táblázat</span>
             </span>
@@ -2449,16 +2775,16 @@
               Közvetlen lejátszási listák külső médialejátszókhoz (VLC, Kodi, TiviMate, IPTV Smarters), valamint a 162 csatornás felbontás- és forrás-ellenőrzési táblázat:
             </div>
             <div class="tv-tools-actions">
-              <a class="btn-action" style="background:linear-gradient(135deg, #e67e22, #d35400);" href="/playlist.xspf" download="nuvio-magyar-tv.xspf" title="VLC és Kodi XSPF Lejátszási Lista">
+              <a class="btn-action btn-tool-gold" href="/playlist.xspf" download="nuvio-magyar-tv.xspf" title="VLC és Kodi XSPF Lejátszási Lista">
                 <span class="btn-ico">📻</span> VLC (.xspf)
               </a>
-              <a class="btn-action" style="background:linear-gradient(135deg, #27ae60, #219653);" href="/playlist.m3u" download="nuvio-magyar-tv.m3u" title="IPTV M3U Lejátszási Lista">
+              <a class="btn-action btn-tool-gold" href="/playlist.m3u" download="nuvio-magyar-tv.m3u" title="IPTV M3U Lejátszási Lista">
                 <span class="btn-ico">📺</span> M3U (.m3u)
               </a>
-              <a class="btn-action" style="background:linear-gradient(135deg, #1f4e79, #2b5797);" href="/live_stream_speed_benchmark.xlsx" download="live_stream_speed_benchmark.xlsx" title="HLS Proxy vs .m3u8 Sebesség &amp; Buffer Mérés (Excel .xlsx)">
+              <a class="btn-action" href="/live_stream_speed_benchmark.xlsx" download="live_stream_speed_benchmark.xlsx" title="HLS Proxy vs .m3u8 Sebesség &amp; Buffer Mérés (Excel .xlsx)">
                 <span class="btn-ico">⚡</span> Sebesség Mérés (.xlsx)
               </a>
-              <a class="btn-action" style="background:linear-gradient(135deg, #1e3a5f, #1b4965);" href="/live_tv_1080p_audit.xlsx" download="live_tv_1080p_audit.xlsx" title="1080p Felbontás &amp; Forrás Audit (Excel .xlsx)">
+              <a class="btn-action" href="/live_tv_1080p_audit.xlsx" download="live_tv_1080p_audit.xlsx" title="1080p Felbontás &amp; Forrás Audit (Excel .xlsx)">
                 <span class="btn-ico">📊</span> 1080p Audit (.xlsx)
               </a>
             </div>
@@ -2469,7 +2795,7 @@
 
     <footer class="footer">
       <span>Magyar Streaming Pro · Nem tárol és nem hosztol médiafájlokat (kizárólag nyilvános linkeket indexel).</span>
-      <span><a href="#tvToolsSec">📺 TV Listák &amp; Audit</a> · <a href="/configure?old=1">Régi felület</a> · <a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener">GitHub</a></span>
+      <span><a href="#tvToolsSec">📺 TV Listák &amp; Audit</a> · <a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener">GitHub</a></span>
     </footer>
   </main>
 
@@ -3215,6 +3541,55 @@
       });
     });
 
+    const META_BG_MAP = {
+      indigo: { dark: '#0B0D14', light: '#F6F5FB' },
+      ocean:  { dark: '#080E1A', light: '#F3F8FD' },
+      crimson:{ dark: '#0E0E13', light: '#FAF6F7' }
+    };
+
+    function syncThemeUI() {
+      const root = document.documentElement;
+      const palette = root.getAttribute('data-palette') || 'indigo';
+      const mode = root.getAttribute('data-mode') === 'light' ? 'light' : 'dark';
+
+      document.querySelectorAll('[data-palette-btn]').forEach(btn => {
+        const active = btn.getAttribute('data-palette-btn') === palette;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+
+      const modeBtn = document.getElementById('themeModeBtn');
+      if (modeBtn) {
+        modeBtn.setAttribute('aria-pressed', mode === 'light' ? 'true' : 'false');
+        const ico = modeBtn.querySelector('.mode-ico');
+        const lbl = modeBtn.querySelector('.mode-label');
+        if (ico) ico.textContent = mode === 'dark' ? '☀️' : '🌙';
+        if (lbl) lbl.textContent = mode === 'dark' ? 'Világos' : 'Sötét';
+        modeBtn.title = mode === 'dark' ? 'Váltás világos módra' : 'Váltás sötét módra';
+      }
+
+      const meta = document.getElementById('metaThemeColor');
+      if (meta && META_BG_MAP[palette]) {
+        meta.setAttribute('content', META_BG_MAP[palette][mode]);
+      }
+    }
+
+    function setPalette(name) {
+      const safe = (name === 'ocean' || name === 'crimson') ? name : 'indigo';
+      document.documentElement.setAttribute('data-palette', safe);
+      try { localStorage.setItem('msp-palette', safe); } catch (_) {}
+      syncThemeUI();
+    }
+
+    function toggleThemeMode() {
+      const current = document.documentElement.getAttribute('data-mode') === 'light' ? 'light' : 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-mode', next);
+      try { localStorage.setItem('msp-mode', next); } catch (_) {}
+      syncThemeUI();
+    }
+
+    syncThemeUI();
     hydrateConfigFromUrl();
     updateManifestUrl();
   </script>
