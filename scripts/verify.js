@@ -60,14 +60,24 @@ async function runVerification() {
     console.log(`✅ 4b. Zero-Proxy 302 Redirect: status=${redirectCheck.status} -> ${redirectCheck.headers.get('location')}`);
     if (redirectCheck.status !== 302) fail(`Expected 302 redirect on /proxy/hls, got ${redirectCheck.status}`);
 
-    // 5. Subtitles Endpoint Check (Hungarian only)
-    const [movieSubs, seriesSubs] = await Promise.all([
+    // 5. Subtitles Endpoint Check (Hungarian only) + Subtitles Toggle Off Config
+    const noSubsCfg = Buffer.from(JSON.stringify({ subtitles: false })).toString('base64url');
+    const [movieSubs, seriesSubs, noSubsManifest, noSubsResult] = await Promise.all([
       fetch(`${base}/subtitles/movie/tt15239678.json`).then((r) => r.json()),
-      fetch(`${base}/subtitles/series/tt1190634:1:1.json`).then((r) => r.json())
+      fetch(`${base}/subtitles/series/tt1190634:1:1.json`).then((r) => r.json()),
+      fetch(`${base}/${noSubsCfg}/manifest.json`).then((r) => r.json()),
+      fetch(`${base}/${noSubsCfg}/subtitles/movie/tt15239678.json`).then((r) => r.json())
     ]);
     console.log(`✅ 5. Subtitles (HU): Dune=${movieSubs.subtitles?.length || 0}, The Boys S01E01=${seriesSubs.subtitles?.length || 0}`);
     const nonHun = [...(movieSubs.subtitles || []), ...(seriesSubs.subtitles || [])].find((s) => s.lang !== 'hun');
     if (nonHun) fail(`Unexpected non-Hungarian subtitle lang: ${nonHun.lang}`);
+    if ((noSubsManifest.resources || []).some((r) => r.name === 'subtitles')) {
+      fail('Configured manifest with subtitles=false still includes subtitles resource');
+    }
+    if ((noSubsResult.subtitles || []).length !== 0) {
+      fail('Configured subtitles route with subtitles=false returned non-empty subtitles');
+    }
+    console.log(`   -> Subtitles Toggle OFF OK: manifest has no subtitles resource (${noSubsManifest.name})`);
 
     // 6. VOD Movie Streams (Macskafogó tt0179955 + Dűne: Második rész tt15239678)
     console.log('\n⏳ 6. Testing VOD Movie Streams (timing + sources)...');
@@ -103,6 +113,7 @@ async function runVerification() {
       console.log('\n🎉 All addon verification checks passed!');
     }
   } finally {
+    server.closeAllConnections?.();
     server.close();
   }
 }

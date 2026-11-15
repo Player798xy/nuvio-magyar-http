@@ -289,6 +289,14 @@ async function handleSubtitles(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+
+  const configParam = req.params.config || req.query.config || null;
+  const config = parseConfig(configParam, req.query);
+  if (config.subtitles === false) {
+    res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400');
+    return res.json({ subtitles: [] });
+  }
+
   const { type, id } = req.params;
   let cleanId = String(id || '').replace(/\.json$/i, '');
   try {

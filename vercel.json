@@ -35,6 +35,8 @@
     { "source": "/:config/catalog/:path*", "destination": "/api/index.js" },
     { "source": "/meta/:path*", "destination": "/api/index.js" },
     { "source": "/:config/meta/:path*", "destination": "/api/index.js" },
+    { "source": "/subtitles/:path*", "destination": "/api/index.js" },
+    { "source": "/:config/subtitles/:path*", "destination": "/api/index.js" },
     { "source": "/stream/:path*", "destination": "/api/index.js" },
     { "source": "/:config/stream/:path*", "destination": "/api/index.js" },
     { "source": "/configure", "destination": "/api/index.js" },

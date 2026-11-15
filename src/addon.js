@@ -57,14 +57,26 @@ const DEFAULT_CONFIG = {
   sources: ALL_SCRAPERS.map(s => s.id),
   catalogs: CATALOG_DEFINITIONS.filter(c => c.defaultEnabled).map(c => c.id),
   qualities: ['1080p', '720p', '480p', '360p'],
+  subtitles: true,
   maxResults: 25
 };
+
+function parseBoolFlag(val, fallback = true) {
+  if (typeof val === 'boolean') return val;
+  if (val === 0 || val === '0') return false;
+  if (val === 1 || val === '1') return true;
+  const s = String(val || '').trim().toLowerCase();
+  if (['false', 'off', 'no', 'ki', 'disabled'].includes(s)) return false;
+  if (['true', 'on', 'yes', 'be', 'enabled'].includes(s)) return true;
+  return fallback;
+}
 
 function parseConfig(configStr, query = {}) {
   const config = {
     sources: [...DEFAULT_CONFIG.sources],
     catalogs: [...DEFAULT_CONFIG.catalogs],
     qualities: [...DEFAULT_CONFIG.qualities],
+    subtitles: DEFAULT_CONFIG.subtitles,
     timeoutMs: 6500,
     maxResults: 25
   };
@@ -77,6 +89,13 @@ function parseConfig(configStr, query = {}) {
   }
   if (query.catalogs) {
     config.catalogs = String(query.catalogs).split(',').map(c => c.trim()).filter(Boolean);
+  }
+  if (query.subtitles !== undefined) {
+    config.subtitles = parseBoolFlag(query.subtitles, true);
+  } else if (query.subs !== undefined) {
+    config.subtitles = parseBoolFlag(query.subs, true);
+  } else if (query.noSubs !== undefined) {
+    config.subtitles = !parseBoolFlag(query.noSubs, false);
   }
   if (query.stage) {
     config.stage = String(query.stage).trim().toLowerCase();
@@ -97,6 +116,13 @@ function parseConfig(configStr, query = {}) {
       if (Array.isArray(parsed.sources) && parsed.sources.length) config.sources = parsed.sources;
       if (Array.isArray(parsed.catalogs) && parsed.catalogs.length) config.catalogs = parsed.catalogs;
       if (Array.isArray(qualities) && qualities.length) config.qualities = qualities;
+      if (parsed.subtitles !== undefined) {
+        config.subtitles = parseBoolFlag(parsed.subtitles, config.subtitles);
+      } else if (parsed.subs !== undefined) {
+        config.subtitles = parseBoolFlag(parsed.subs, config.subtitles);
+      } else if (parsed.noSubs !== undefined) {
+        config.subtitles = !parseBoolFlag(parsed.noSubs, false);
+      }
       if (parsed.timeout) {
         const t = parseInt(parsed.timeout, 10);
         if (!isNaN(t)) config.timeoutMs = t <= 60 ? t * 1000 : t;
@@ -118,6 +144,10 @@ function parseConfig(configStr, query = {}) {
       config.catalogs = val.split(',').map(c => c.trim()).filter(Boolean);
     } else if (key === 'resolutions' || key === 'res' || key === 'qualities') {
       config.qualities = val.split(',').map(r => r.trim().toLowerCase()).filter(Boolean);
+    } else if (key === 'subtitles' || key === 'subs') {
+      config.subtitles = parseBoolFlag(val, true);
+    } else if (key === 'nosubs') {
+      config.subtitles = !parseBoolFlag(val, false);
     } else if (key === 'timeout') {
       const t = parseInt(val, 10);
       if (!isNaN(t)) config.timeoutMs = t <= 60 ? t * 1000 : t;
@@ -137,6 +167,9 @@ function getManifest(config = {}) {
   }
   if (config.qualities && Array.isArray(config.qualities) && config.qualities.length > 0 && config.qualities.length < 4) {
     badges.push(config.qualities.join('/'));
+  }
+  if (config.subtitles === false) {
+    badges.push('felirat KI');
   }
   if (badges.length > 0) {
     name = `Magyar Streaming Pro [${badges.join(' • ')}]`;
@@ -160,6 +193,32 @@ function getManifest(config = {}) {
     'title:'
   ];
 
+  const resources = [
+    {
+      name: 'stream',
+      types: ['movie', 'series', 'tv', 'channel'],
+      idPrefixes: supportedIdPrefixes
+    },
+    {
+      name: 'meta',
+      types: ['movie', 'series', 'tv', 'channel'],
+      idPrefixes: ['tt', 'onlinestream-live-', 'mediaklikk-live-', 'mediaklikk:', 'netmozi:', 'tmdb:']
+    }
+  ];
+
+  if (config.subtitles !== false) {
+    resources.push({
+      name: 'subtitles',
+      types: ['movie', 'series'],
+      idPrefixes: ['tt', 'tmdb:']
+    });
+  }
+
+  resources.push({
+    name: 'catalog',
+    types: ['movie', 'series', 'tv']
+  });
+
   return {
     id: 'org.nuvio.magyar.http',
     version: '2.7.0',
@@ -168,27 +227,7 @@ function getManifest(config = {}) {
     logo: `${hostUrl}/logo.png?v=2.7.0`,
     icon: `${hostUrl}/logo.png?v=2.7.0`,
     background: `${hostUrl}/logo.png?v=2.7.0`,
-    resources: [
-      {
-        name: 'stream',
-        types: ['movie', 'series', 'tv', 'channel'],
-        idPrefixes: supportedIdPrefixes
-      },
-      {
-        name: 'meta',
-        types: ['movie', 'series', 'tv', 'channel'],
-        idPrefixes: ['tt', 'onlinestream-live-', 'mediaklikk-live-', 'mediaklikk:', 'netmozi:', 'tmdb:']
-      },
-      {
-        name: 'subtitles',
-        types: ['movie', 'series'],
-        idPrefixes: ['tt', 'tmdb:']
-      },
-      {
-        name: 'catalog',
-        types: ['movie', 'series', 'tv']
-      }
-    ],
+    resources,
     types: ['movie', 'series', 'tv', 'channel'],
     idPrefixes: supportedIdPrefixes,
     catalogs: getEnabledManifestCatalogs(config.catalogs),
