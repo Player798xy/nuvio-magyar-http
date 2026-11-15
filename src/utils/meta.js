@@ -3,7 +3,36 @@
  */
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY || 'ffe7ef8916c61835264d2df68276ddc2';
-const metaCache = new Map();
+const META_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+const MAX_META_CACHE = 400;
+const rawMetaCache = new Map();
+const metaCache = {
+  has(k) {
+    const entry = rawMetaCache.get(k);
+    if (!entry) return false;
+    if (Date.now() - entry.ts >= META_CACHE_TTL_MS) {
+      rawMetaCache.delete(k);
+      return false;
+    }
+    return true;
+  },
+  get(k) {
+    const entry = rawMetaCache.get(k);
+    if (!entry) return undefined;
+    if (Date.now() - entry.ts >= META_CACHE_TTL_MS) {
+      rawMetaCache.delete(k);
+      return undefined;
+    }
+    return entry.val;
+  },
+  set(k, val) {
+    if (rawMetaCache.size >= MAX_META_CACHE) {
+      const oldest = rawMetaCache.keys().next().value;
+      if (oldest !== undefined) rawMetaCache.delete(oldest);
+    }
+    rawMetaCache.set(k, { ts: Date.now(), val });
+  }
+};
 let magyarNepmesekData = null;
 try {
   magyarNepmesekData = require('../data/magyar_nepmesek_episodes.json');
@@ -616,15 +645,16 @@ async function getMediaMeta(type, rawId) {
   let englishTitle = '';
   let year = '';
   let runtimeMinutes = null;
+  let tmdbDirectHuTitle = '';
 
-  // Fetch Cinemeta metadata if we have an IMDb ID
-  if (imdbId) {
+  // Fetch Cinemeta & TMDB HU title in parallel to cut cold metadata lookup latency in half
+  const cinemetaPromise = imdbId ? (async () => {
     try {
       const cinemetaType = type === 'series' || type === 'tv' ? 'series' : 'movie';
       const cinemetaUrl = `https://v3-cinemeta.strem.io/meta/${cinemetaType}/${imdbId}.json`;
       const res = await fetch(cinemetaUrl, {
         headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-        signal: AbortSignal.timeout(5000)
+        signal: AbortSignal.timeout(4500)
       });
       if (res.ok) {
         const data = await res.json();
@@ -633,19 +663,23 @@ async function getMediaMeta(type, rawId) {
           year = (data.meta.year || '').toString().slice(0, 4);
           if (data.meta.runtime) {
             const rMatch = data.meta.runtime.toString().match(/(\d+)/);
-            if (rMatch) {
-              runtimeMinutes = parseInt(rMatch[1], 10);
-            }
+            if (rMatch) runtimeMinutes = parseInt(rMatch[1], 10);
           }
         }
       }
     } catch (err) {
       console.warn(`[Meta] Cinemeta fetch failed for ${imdbId}:`, err.message);
     }
-  }
+  })() : Promise.resolve();
 
-  // Resolve Hungarian title
-  const huTitle = initialHuTitle || (await resolveHungarianTitle(englishTitle, imdbId));
+  const tmdbHuPromise = (!initialHuTitle && imdbId && imdbId.startsWith('tt')) ? (async () => {
+    tmdbDirectHuTitle = await resolveHungarianTitle('', imdbId);
+  })() : Promise.resolve();
+
+  await Promise.all([cinemetaPromise, tmdbHuPromise]);
+
+  // Fallback Hungarian resolution only if neither initialHuTitle nor direct TMDB-by-IMDb succeeded
+  const huTitle = initialHuTitle || tmdbDirectHuTitle || (await resolveHungarianTitle(englishTitle, imdbId));
 
   let episodeTitle = '';
   if (imdbId === 'tt0861751' && season && episode && magyarNepmesekData) {

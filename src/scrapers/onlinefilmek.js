@@ -287,17 +287,17 @@ async function scrapeOnlineFilmek(meta) {
         if (!pageCheck.match) continue;
       }
 
-      // Find player options: data-type='...' data-post='...' data-nume='...'
+      // Resolve player options in parallel instead of sequentially
       const optionMatches = [...pageHtml.matchAll(/data-type=['"]([^'"]+)['"]\s+data-post=['"]([^'"]+)['"]\s+data-nume=['"]([^'"]+)['"]/g)];
+      const embedUrls = await Promise.all(
+        optionMatches
+          .filter(m => m[3] !== 'trailer')
+          .slice(0, 5)
+          .map(m => resolveDooPlayPlayer(m[2], m[3], m[1], targetUrl).catch(() => null))
+      );
 
-      for (const m of optionMatches.slice(0, 5)) {
-        const dtype = m[1];
-        const post = m[2];
-        const nume = m[3];
-        if (nume === 'trailer') continue;
-
-        const embedUrl = await resolveDooPlayPlayer(post, nume, dtype, targetUrl);
-        if (!embedUrl || seenUrls.has(embedUrl)) continue;
+      await Promise.allSettled(embedUrls.map(async (embedUrl) => {
+        if (!embedUrl || seenUrls.has(embedUrl)) return;
         seenUrls.add(embedUrl);
 
         // 1. Check if Videa embed -> decode to direct MP4
@@ -315,7 +315,7 @@ async function scrapeOnlineFilmek(meta) {
               behaviorHints: { bingeGroup: `hu-onlinefilmek-videa-${qualLabel}` }
             });
           }
-          if (vSources.length > 0) continue;
+          if (vSources.length > 0) return;
         }
 
         // 2. Check if Indavideo embed -> decode to direct MP4
@@ -336,21 +336,21 @@ async function scrapeOnlineFilmek(meta) {
               });
             }
           }
-          continue;
+          return;
         }
 
         // 3. Check if OK.ru embed -> decode to direct MP4/HLS
         if (embedUrl.includes('ok.ru/videoembed/') || embedUrl.includes('ok.ru/video/')) {
           const okStreams = await extractOkRuStreams(embedUrl, 'OnlineFilmek', meta);
           streams.push(...okStreams);
-          continue;
+          return;
         }
 
         // 3b. Check if VOE embed -> decode direct HLS/MP4 on Self-Host
         if (embedUrl.includes('voe.sx') || embedUrl.includes('voe.')) {
           const voeStreams = await extractVoeDirectStreams(embedUrl, 'OnlineFilmek', postTitle || hu, 'onlinefilmek');
           streams.push(...voeStreams);
-          continue;
+          return;
         }
 
         // 4. Direct video file (.mp4, .m3u8) only — never return HTML iframe embeds that cause infinite buffering in Nuvio
@@ -363,9 +363,8 @@ async function scrapeOnlineFilmek(meta) {
             height: 720,
             source: 'onlinefilmek'
           });
-          continue;
         }
-      }
+      }));
 
       if (streams.length > 0) break;
     } catch (e) {

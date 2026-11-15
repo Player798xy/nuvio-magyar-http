@@ -17,6 +17,9 @@ function normalizeTitle(str) {
 
 let searchIndexCache = null;
 let searchIndexTime = 0;
+const seriesPageCache = new Map();
+const PAGE_CACHE_TTL_MS = 15 * 60 * 1000;
+const MAX_PAGE_CACHE = 80;
 
 async function getSorozatokIndex() {
   if (searchIndexCache && Date.now() - searchIndexTime < 6 * 3600 * 1000) {
@@ -149,10 +152,24 @@ async function scrapeSorozatokNet(meta) {
   if (!slug) return [];
 
   const seriesUrl = `https://sorozatok.net/${slug}-online`;
-  const seriesRes = await cfRequest(seriesUrl, { timeoutMs: 6500 });
-  if (!seriesRes?.text) return [];
+  let seriesHtml = null;
+  const cachedPage = seriesPageCache.get(seriesUrl);
+  if (cachedPage && Date.now() - cachedPage.ts < PAGE_CACHE_TTL_MS) {
+    seriesHtml = cachedPage.html;
+  } else {
+    const seriesRes = await cfRequest(seriesUrl, { timeoutMs: 5500 });
+    seriesHtml = seriesRes?.text || null;
+    if (seriesHtml) {
+      if (seriesPageCache.size >= MAX_PAGE_CACHE) {
+        const oldest = seriesPageCache.keys().next().value;
+        if (oldest !== undefined) seriesPageCache.delete(oldest);
+      }
+      seriesPageCache.set(seriesUrl, { ts: Date.now(), html: seriesHtml });
+    }
+  }
+  if (!seriesHtml) return [];
 
-  const epBlocks = [...seriesRes.text.matchAll(/<a[^>]+class="clip-link"[^>]*>[\s\S]*?<h4[^>]+class="video-title"[^>]*>\s*<a[^>]*>([^<]+)<\/a>/gi)];
+  const epBlocks = [...seriesHtml.matchAll(/<a[^>]+class="clip-link"[^>]*>[\s\S]*?<h4[^>]+class="video-title"[^>]*>\s*<a[^>]*>([^<]+)<\/a>/gi)];
   let targetEpHref = null;
   let targetEmbedId = null;
   let targetEpTitle = '';

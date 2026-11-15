@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const pkg = require('./package.json');
-const { getManifest, handleStreamRequest, parseConfig: parseAddonConfig, ALL_SCRAPERS } = require('./src/addon');
+const { getManifest, handleStreamRequest, parseConfig: parseAddonConfig, getSubtitles, ALL_SCRAPERS } = require('./src/addon');
 const { getOnlineStreamMeta } = require('./src/scrapers/onlinestream');
 const { generateTvPosterSvg, generateTvBackgroundSvg, generateTvLogoSvg } = require('./src/tv_graphics');
 const { searchCatalog, getMeta } = require('./src/catalog');
@@ -262,7 +262,13 @@ async function handleMeta(req, res) {
           return cleanV;
         });
       }
-      res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800');
+      const isLiveChannelMeta = type === 'tv' || type === 'channel' || rawId.startsWith('onlinestream-live-') || rawId.startsWith('mediaklikk-live-');
+      res.setHeader(
+        'Cache-Control',
+        isLiveChannelMeta
+          ? 'public, max-age=60, s-maxage=180, stale-while-revalidate=300'
+          : 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800'
+      );
       return res.json({ meta: m });
     }
     res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=300');
@@ -278,13 +284,53 @@ app.get(['/meta/:type/:prefix/:id.json', '/meta/:type/:prefix/:id'], handleMeta)
 app.get(['/:config/meta/:type/:id.json', '/:config/meta/:type/:id'], handleMeta);
 app.get(['/:config/meta/:type/:prefix/:id.json', '/:config/meta/:type/:prefix/:id'], handleMeta);
 
+// 4b. Subtitles Routes (Hungarian OpenSubtitles v3 + TMDB->IMDb Bridge)
+async function handleSubtitles(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  const { type, id } = req.params;
+  let cleanId = String(id || '').replace(/\.json$/i, '');
+  try {
+    cleanId = decodeURIComponent(cleanId);
+  } catch {}
+
+  try {
+    const subtitles = await getSubtitles(type, cleanId);
+    res.setHeader(
+      'Cache-Control',
+      subtitles.length > 0
+        ? 'public, max-age=1800, s-maxage=3600, stale-while-revalidate=86400'
+        : 'public, max-age=120, s-maxage=300'
+    );
+    res.json({ subtitles });
+  } catch (err) {
+    console.error('[Server] Subtitles error:', err);
+    res.json({ subtitles: [] });
+  }
+}
+
+const subtitleRoutes = [
+  '/subtitles/:type/:id.json',
+  '/subtitles/:type/:id',
+  '/subtitles/:type/:id/:extra.json',
+  '/subtitles/:type/:id/:extra'
+];
+const configuredSubtitleRoutes = [
+  '/:config/subtitles/:type/:id.json',
+  '/:config/subtitles/:type/:id',
+  '/:config/subtitles/:type/:id/:extra.json',
+  '/:config/subtitles/:type/:id/:extra'
+];
+app.get(subtitleRoutes, handleSubtitles);
+app.get(configuredSubtitleRoutes, handleSubtitles);
+
 // 5. Default and Configured Stream Routes (/stream/:type/:id.json)
 async function handleStream(req, res) {
   try {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     const { config: configParam, type, prefix } = req.params;
     let rawId = prefix ? `${prefix}/${req.params.id || ''}` : (req.params.id || '');
     let cleanId = rawId.replace(/\.json$/, '');
@@ -305,6 +351,18 @@ async function handleStream(req, res) {
       }
       return copy;
     });
+
+    const isLive = type === 'tv' || type === 'channel' || cleanId.startsWith('onlinestream-live-') || cleanId.startsWith('mediaklikk-live-');
+    if (cleanStreams.length === 0) {
+      res.setHeader('Cache-Control', 'public, max-age=15, s-maxage=30');
+    } else if (cleanId.startsWith('mediaklikk-live-')) {
+      res.setHeader('Cache-Control', 'private, max-age=60');
+    } else if (isLive) {
+      res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=120, stale-while-revalidate=180');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=120, s-maxage=300, stale-while-revalidate=600');
+    }
+
     res.json({ streams: cleanStreams });
   } catch (err) {
     console.error('[Server] Stream error:', err);
@@ -529,7 +587,7 @@ app.get('/api/episodes', async (req, res) => {
     }
     const data = await getSeriesEpisodes(targetId);
     if (data) {
-      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+      res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800');
       return res.json(data);
     }
     res.json({ meta: null });
@@ -585,6 +643,7 @@ function scoreSearchRelevance(itemTitle, query, itemId = '') {
 // 9. Search API for web landing page
 app.get('/api/search', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
   const query = req.query.q || '';
   const filterType = req.query.type;
   try {
@@ -857,7 +916,7 @@ app.get('/api/provider-test', async (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
-    version: pkg.version || '2.6.5',
+    version: pkg.version || '2.7.0',
     uptime: process.uptime(),
     timestamp: new Date().toISOString()
   });

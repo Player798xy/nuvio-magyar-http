@@ -59,62 +59,67 @@ async function scrapeMeseFilm(meta) {
   }
 
   const seenUrls = new Set();
+  const seenDetailUrls = new Set();
 
-  for (const q of queries) {
+  // Parallelize search queries and candidate detail page processing
+  const linkBatches = await Promise.all(
+    queries.map(q => searchMeseKincstar(q).catch(() => []))
+  );
+
+  const matchingLinks = [];
+  for (const links of linkBatches) {
+    for (const item of links) {
+      if (seenDetailUrls.has(item.url)) continue;
+      if (
+        !isTitleMatch(hu, item.title, meta.year, isSeries) &&
+        !(meta.englishTitle && isTitleMatch(meta.englishTitle, item.title, meta.year, isSeries))
+      ) {
+        continue;
+      }
+      if (isSeries && !matchesEpisode(item.title, meta.season, meta.episode, meta.episodeTitle)) {
+        continue;
+      }
+      seenDetailUrls.add(item.url);
+      matchingLinks.push(item);
+      if (matchingLinks.length >= 4) break;
+    }
+    if (matchingLinks.length >= 4) break;
+  }
+
+  await Promise.allSettled(matchingLinks.map(async (item) => {
     try {
-      const links = await searchMeseKincstar(q);
-      // Filter search results strictly by title and year before fetching detail pages
-      const matchingLinks = links.filter(item =>
-        isTitleMatch(hu, item.title, meta.year, isSeries) ||
-        (meta.englishTitle && isTitleMatch(meta.englishTitle, item.title, meta.year, isSeries))
-      );
+      const pageRes = await fetch(item.url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+        signal: AbortSignal.timeout(4500)
+      });
+      if (!pageRes.ok) return;
 
-      for (const item of matchingLinks.slice(0, 4)) {
-        if (isSeries && !matchesEpisode(item.title, meta.season, meta.episode, meta.episodeTitle)) {
-          continue;
-        }
+      const pageHtml = await pageRes.text();
+      if (isMovie) {
+        const pageCheck = checkPageMetadata(pageHtml, meta);
+        if (!pageCheck.match) return;
+      }
 
-        const pageRes = await fetch(item.url, {
-          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-          signal: AbortSignal.timeout(5000)
-        });
-        if (!pageRes.ok) continue;
+      const videaMatches = [
+        ...pageHtml.matchAll(/videa\.hu\/player\?v=([a-zA-Z0-9]{16})/g),
+        ...pageHtml.matchAll(/videa\.hu\/videok\/[^"'\s]+-([a-zA-Z0-9]{16})/g)
+      ];
+      const indaMatches = [...pageHtml.matchAll(/embed\.indavideo\.hu\/player\/video\/([a-zA-Z0-9]+)/g)];
 
-        const pageHtml = await pageRes.text();
-
-        // Check detail page metadata (rejects wrong IMDb ID or wrong release year)
-        if (isMovie) {
-          const pageCheck = checkPageMetadata(pageHtml, meta);
-          if (!pageCheck.match) continue;
-        }
-
-        // 1. Check Videa embeds
-        const videaMatches = [
-          ...pageHtml.matchAll(/videa\.hu\/player\?v=([a-zA-Z0-9]{16})/g),
-          ...pageHtml.matchAll(/videa\.hu\/videok\/[^"'\s]+-([a-zA-Z0-9]{16})/g)
-        ];
-
-        for (const vm of videaMatches) {
+      await Promise.allSettled([
+        ...videaMatches.map(async (vm) => {
           const vData = await extractVideaStreams(vm[1]);
-          if (!vData || !vData.sources || vData.sources.length === 0) continue;
+          if (!vData || !vData.sources || vData.sources.length === 0) return;
+          if (!isValidRuntime(vData.duration, meta)) return;
+          if (isMovie && targetYear && vData.uploadYear && vData.uploadYear < targetYear) return;
 
-          // Strict duration validation (±10 min + PAL speedup tolerance)
-          if (!isValidRuntime(vData.duration, meta)) continue;
-
-          // Upload year sanity check: cannot be uploaded before movie release year
-          if (isMovie && targetYear && vData.uploadYear && vData.uploadYear < targetYear) {
-            continue;
-          }
-
-          // Video title must also match either the Hungarian or English title (unless generic episode title)
           const vTitleMatches =
             isTitleMatch(hu, vData.videoTitle, meta.year, isSeries) ||
             (meta.englishTitle && isTitleMatch(meta.englishTitle, vData.videoTitle, meta.year, isSeries)) ||
             isTitleMatch(item.title, vData.videoTitle, meta.year, isSeries);
-          if (!vTitleMatches) continue;
-
+          if (!vTitleMatches) return;
           if (isSeries && !matchesEpisode(vData.videoTitle, meta.season, meta.episode, meta.episodeTitle) && !matchesEpisode(item.title, meta.season, meta.episode, meta.episodeTitle)) {
-            continue;
+            return;
           }
 
           const durationMins = Math.round((vData.duration || 0) / 60);
@@ -138,21 +143,17 @@ async function scrapeMeseFilm(meta) {
               behaviorHints: { bingeGroup: `hu-mesefilm-${qualLabel}` }
             });
           }
-        }
-
-        // 2. Check Indavideo embeds
-        const indaMatches = [...pageHtml.matchAll(/embed\.indavideo\.hu\/player\/video\/([a-zA-Z0-9]+)/g)];
-        for (const im of indaMatches) {
+        }),
+        ...indaMatches.map(async (im) => {
           const iData = await extractIndavideoStreams(im[1]);
-          if (!iData || !iData.streams || iData.streams.length === 0) continue;
-
-          if (!isValidRuntime(iData.duration, meta)) continue;
+          if (!iData || !iData.streams || iData.streams.length === 0) return;
+          if (!isValidRuntime(iData.duration, meta)) return;
 
           const iTitle = iData.videoTitle || item.title;
           const iTitleMatches =
             isTitleMatch(hu, iTitle, meta.year, isSeries) ||
             (meta.englishTitle && isTitleMatch(meta.englishTitle, iTitle, meta.year, isSeries));
-          if (!iTitleMatches) continue;
+          if (!iTitleMatches) return;
 
           const yearVerified = !isMovie || !targetYear ||
             hasVerifiedYearInTitle(item.title, targetYear, hu) ||
@@ -172,11 +173,10 @@ async function scrapeMeseFilm(meta) {
               yearVerified
             });
           }
-        }
-      }
-      if (streams.length > 0) break;
+        })
+      ]);
     } catch (e) {}
-  }
+  }));
 
   return streams;
 }

@@ -11,7 +11,9 @@ const { scrapeFilmezek } = require('./scrapers/filmezek');
 const { scrapeOnlineFilmek } = require('./scrapers/onlinefilmek');
 const { scrapeHDMozi } = require('./scrapers/hdmozi');
 const { scrapeMediaKlikk, getLiveChannelStreams, LIVE_CHANNELS } = require('./scrapers/mediaklikk');
-const { getOnlineStreamStreams } = require('./scrapers/onlinestream');
+const { getOnlineStreamStreams, getOnlineStreamMeta } = require('./scrapers/onlinestream');
+const { getSubtitles } = require('./subtitles');
+const { getChannelEpg, formatEpgStreamBanner } = require('./epg');
 const { scrapeNetMozi } = require('./scrapers/netmozi');
 const { scrapeVideakid } = require('./scrapers/videakid');
 const { scrapeSorozatokNet } = require('./scrapers/sorozatok_net');
@@ -160,12 +162,12 @@ function getManifest(config = {}) {
 
   return {
     id: 'org.nuvio.magyar.http',
-    version: '2.6.5',
+    version: '2.7.0',
     name,
     description: desc,
-    logo: `${hostUrl}/logo.png?v=2.6.5`,
-    icon: `${hostUrl}/logo.png?v=2.6.5`,
-    background: `${hostUrl}/logo.png?v=2.6.5`,
+    logo: `${hostUrl}/logo.png?v=2.7.0`,
+    icon: `${hostUrl}/logo.png?v=2.7.0`,
+    background: `${hostUrl}/logo.png?v=2.7.0`,
     resources: [
       {
         name: 'stream',
@@ -176,6 +178,11 @@ function getManifest(config = {}) {
         name: 'meta',
         types: ['movie', 'series', 'tv', 'channel'],
         idPrefixes: ['tt', 'onlinestream-live-', 'mediaklikk-live-', 'mediaklikk:', 'netmozi:', 'tmdb:']
+      },
+      {
+        name: 'subtitles',
+        types: ['movie', 'series'],
+        idPrefixes: ['tt', 'tmdb:']
       },
       {
         name: 'catalog',
@@ -199,14 +206,31 @@ async function getStreams(type, rawId, config = {}) {
   } catch (e) {}
   id = id.replace(/\.json$/, '');
 
-  // 1. Handle Live TV channels (OnlineStream 146 adó + MTVA MédiaKlikk)
+  // 1. Handle Live TV channels (OnlineStream + MTVA MédiaKlikk) with live EPG banner in parallel
   if (type === 'tv' || type === 'channel' || (id && (id.startsWith('onlinestream-live-') || id.startsWith('mediaklikk-live-')))) {
-    const liveStreams = await getOnlineStreamStreams(id, config.clientIp, config.hostUrl, config);
-    if (liveStreams && liveStreams.length > 0) {
-      return { streams: liveStreams };
+    const osMeta = getOnlineStreamMeta(id, config.hostUrl);
+    const liveCh = LIVE_CHANNELS.find(c => c.id === id || c.channelKey === id);
+    const channelName = osMeta?.meta?.name || liveCh?.name || '';
+
+    const [liveStreams, epg] = await Promise.all([
+      getOnlineStreamStreams(id, config.clientIp, config.hostUrl, config),
+      channelName ? getChannelEpg(channelName, id).catch(() => null) : Promise.resolve(null)
+    ]);
+
+    const streams = (liveStreams && liveStreams.length > 0)
+      ? liveStreams
+      : await getLiveChannelStreams(id, config.clientIp, config.hostUrl);
+
+    const epgBanner = formatEpgStreamBanner(epg);
+    if (epgBanner && Array.isArray(streams) && streams.length > 0) {
+      return {
+        streams: streams.map(s => ({
+          ...s,
+          title: s.title ? `${epgBanner}\n${s.title}` : epgBanner
+        }))
+      };
     }
-    const fallbackStreams = await getLiveChannelStreams(id, config.clientIp, config.hostUrl);
-    return { streams: fallbackStreams };
+    return { streams };
   }
 
   if (!id) {
@@ -405,5 +429,6 @@ module.exports = {
   handleStreamRequest: getStreams,
   searchCatalog,
   getMeta,
+  getSubtitles,
   ALL_SCRAPERS
 };

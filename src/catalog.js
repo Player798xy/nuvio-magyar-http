@@ -14,6 +14,7 @@ const {
 const { searchNetMozi, getNetMoziMovieMeta, getNetMoziSeriesEpisodes } = require('./scrapers/netmozi');
 const { fetchCatalogItems, rotateWeekly } = require('./catalogs');
 const { getOnlineStreamChannels, getOnlineStreamMeta } = require('./scrapers/onlinestream');
+const { getChannelEpg, formatEpgMetaText } = require('./epg');
 
 function normalize(str) {
   return (str || '')
@@ -699,29 +700,47 @@ async function getMeta(type, id, hostUrl = null) {
   if (!id) return null;
   const baseHost = hostUrl || process.env.HOST_URL || 'https://nuvio-magyar-http.vercel.app';
 
-  // Handle Live TV channels (OnlineStream or MédiaKlikk)
+  // Handle Live TV channels (OnlineStream or MédiaKlikk) with live EPG details
   if (type === 'tv' || type === 'channel' || (id && (id.startsWith('onlinestream-live-') || id.startsWith('mediaklikk-live-')))) {
     const onlineMeta = getOnlineStreamMeta(id, baseHost);
-    if (onlineMeta) return onlineMeta;
+    let liveResult = onlineMeta;
 
-    const channel = LIVE_CHANNELS.find(ch => ch.id === id || ch.channelKey === id);
-    if (channel) {
-      return {
-        meta: {
-          id: channel.id,
-          type: type || 'movie',
-          name: channel.name,
-          poster: channel.poster,
-          background: channel.poster,
-          logo: channel.logo,
-          description: channel.description,
-          releaseInfo: channel.year,
-          behaviorHints: {
-            defaultVideoId: channel.id,
-            isLive: true
+    if (!liveResult) {
+      const channel = LIVE_CHANNELS.find(ch => ch.id === id || ch.channelKey === id);
+      if (channel) {
+        liveResult = {
+          meta: {
+            id: channel.id,
+            type: type || 'movie',
+            name: channel.name,
+            poster: channel.poster,
+            background: channel.poster,
+            logo: channel.logo,
+            description: channel.description,
+            releaseInfo: channel.year,
+            behaviorHints: {
+              defaultVideoId: channel.id,
+              isLive: true
+            }
           }
+        };
+      }
+    }
+
+    if (liveResult && liveResult.meta) {
+      const epg = await getChannelEpg(liveResult.meta.name, liveResult.meta.id).catch(() => null);
+      if (epg) {
+        const metaCopy = { ...liveResult.meta };
+        const epgText = formatEpgMetaText(epg);
+        if (epgText) {
+          metaCopy.description = metaCopy.description ? `${epgText}\n\n${metaCopy.description}` : epgText;
         }
-      };
+        if (epg.current?.title) {
+          metaCopy.releaseInfo = `${metaCopy.releaseInfo || 'ÉLŐ'} • Most: ${epg.current.title}`;
+        }
+        return { meta: metaCopy };
+      }
+      return liveResult;
     }
   }
 

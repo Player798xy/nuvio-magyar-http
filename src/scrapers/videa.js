@@ -153,10 +153,45 @@ async function extractVideaFCodeStreams(fcode) {
   }
 }
 
+const VIDEA_EXTRACT_CACHE = new Map();
+const VIDEA_INFLIGHT = new Map();
+const VIDEA_CACHE_TTL_MS = 15 * 60 * 1000;
+const MAX_VIDEA_CACHE = 250;
+
 /**
- * Extracts streams and metadata (including duration in seconds) from a Videa video code.
+ * Extracts streams and metadata (including duration in seconds) from a Videa video code
+ * with in-memory TTL caching and concurrent request deduplication.
  */
 async function extractVideaStreams(vcode) {
+  if (!vcode) return null;
+  const cached = VIDEA_EXTRACT_CACHE.get(vcode);
+  if (cached && Date.now() - cached.ts < VIDEA_CACHE_TTL_MS) {
+    return cached.data;
+  }
+  if (VIDEA_INFLIGHT.has(vcode)) {
+    return VIDEA_INFLIGHT.get(vcode);
+  }
+  const promise = _extractVideaStreamsUncached(vcode)
+    .then(data => {
+      VIDEA_INFLIGHT.delete(vcode);
+      if (data) {
+        if (VIDEA_EXTRACT_CACHE.size >= MAX_VIDEA_CACHE) {
+          const oldest = VIDEA_EXTRACT_CACHE.keys().next().value;
+          if (oldest !== undefined) VIDEA_EXTRACT_CACHE.delete(oldest);
+        }
+        VIDEA_EXTRACT_CACHE.set(vcode, { ts: Date.now(), data });
+      }
+      return data;
+    })
+    .catch(() => {
+      VIDEA_INFLIGHT.delete(vcode);
+      return null;
+    });
+  VIDEA_INFLIGHT.set(vcode, promise);
+  return promise;
+}
+
+async function _extractVideaStreamsUncached(vcode) {
   try {
     const playerUrl = `https://videa.hu/player?v=${vcode}`;
     const resp = await fetch(playerUrl, {
@@ -583,124 +618,113 @@ async function scrapeVidea(meta) {
     searchTerms.push(hu);
   }
 
+  const SKIP_CATEGORIES = new Set([
+    'zene', 'emberek-vlogok', 'hirek-politika', 'vicces',
+    'sport', 'jarmuvek', 'jatek', 'allatok', 'tudomany-technika'
+  ]);
   const seenVideoIds = new Set();
+  const candidateItems = [];
 
-  for (const term of searchTerms) {
-    try {
-      const searchUrl = `https://videa.hu/kereses/${encodeURIComponent(term)}`;
-      const res = await fetch(searchUrl, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-        signal: AbortSignal.timeout(5000)
-      });
-      if (!res.ok) continue;
-
-      const html = await res.text();
-
-      // Extract all video items with their link path: /videok/<category>/<slug>-<vcode>
-      const linkRegex = /href=["'](https?:\/\/videa\.hu)?\/videok\/([^/"'\s]+)\/[^"'#\s]+-([A-Za-z0-9]{16})["']/g;
-      const matches = [...html.matchAll(linkRegex)];
-
-      const candidateItems = [];
-      for (const m of matches) {
-        const category = m[2];
-        const vid = m[3];
-
-        // Skip non-movie categories (e.g. sport, jarmuvek, jatek, zene, hirek, emberek-vlogok)
-        if (
-          category === 'zene' ||
-          category === 'emberek-vlogok' ||
-          category === 'hirek-politika' ||
-          category === 'vicces' ||
-          category === 'sport' ||
-          category === 'jarmuvek' ||
-          category === 'jatek' ||
-          category === 'allatok' ||
-          category === 'tudomany-technika'
-        ) {
-          continue;
-        }
-
-        if (!seenVideoIds.has(vid)) {
-          seenVideoIds.add(vid);
-          const snippet = html.slice(Math.max(0, (m.index || 0) - 250), Math.min(html.length, (m.index || 0) + 500));
-          const cardUploadYear = extractUploadYearFromText(snippet);
-          candidateItems.push({ vid, cardUploadYear });
-          if (candidateItems.length >= 8) break;
-        }
+  // Parallel search-page fetching drops typical Videa latency from ~5s down to ~1.5s
+  const searchHtmlList = await Promise.all(
+    searchTerms.slice(0, 4).map(async (term) => {
+      try {
+        const searchUrl = `https://videa.hu/kereses/${encodeURIComponent(term)}`;
+        const res = await fetch(searchUrl, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+          signal: AbortSignal.timeout(4000)
+        });
+        return res.ok ? await res.text() : '';
+      } catch {
+        return '';
       }
+    })
+  );
 
-      // Parallel stream extraction for candidates (cuts latency by 4x)
-      const videoDataList = await Promise.all(
-        candidateItems.map(async (item) => {
-          const data = await extractVideaStreams(item.vid).catch(() => null);
-          if (data && !data.uploadYear && item.cardUploadYear) {
-            data.uploadYear = item.cardUploadYear;
-          }
-          return data;
-        })
-      );
-
-      for (const videoData of videoDataList) {
-        if (!videoData || !videoData.sources || videoData.sources.length === 0) continue;
-
-        // 1. Strict Duration Filter (±10 min + 4% PAL speedup against official IMDb/TMDB runtime):
-        if (!isValidRuntime(videoData.duration, meta)) {
-          continue;
-        }
-
-        // 2. Upload-year sanity check: a video uploaded before targetYear cannot be that movie
-        if (isMovie && targetYear && videoData.uploadYear && videoData.uploadYear < targetYear) {
-          continue;
-        }
-
-        // 3. Title filter: ignore music / parody / clips / F1 races
-        if (JUNK_TITLE_REGEX.test(videoData.videoTitle)) {
-          continue;
-        }
-
-        // 4. Title relevance match: must match searched title (and ±1 year / sequel rules for movies)
-        if (!isTitleMatch(hu, videoData.videoTitle, meta.year, !isMovie) && !isTitleMatch(meta.englishTitle, videoData.videoTitle, meta.year, !isMovie)) {
-          continue;
-        }
-
-        // 5. Strict episode filter for series:
-        if (!isMovie && !matchesEpisode(videoData.videoTitle, meta.season, meta.episode, meta.episodeTitle)) {
-          continue;
-        }
-
-        const durationMins = Math.round(videoData.duration / 60);
-        const yearVerified = !isMovie || !targetYear ||
-          hasVerifiedYearInTitle(videoData.videoTitle, targetYear, hu) ||
-          hasVerifiedYearInTitle(videoData.videoTitle, targetYear, meta.englishTitle);
-        const warnBadge = (!yearVerified && isMovie && targetYear) ? ' [⚠️ Év?]' : '';
-        const warnNote = (!yearVerified && isMovie && targetYear) ? ' • ⚠️ Évszám nincs a címben' : '';
-
-        for (const vs of videoData.sources) {
-          const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
-          streams.push({
-            name: `[HU] Videa ${qualLabel}${warnBadge}`,
-            title: `${videoData.videoTitle}\n🇭🇺 Videa.hu • ${qualLabel} • ${durationMins} perc • Teljes film${warnNote}`,
-            url: vs.url,
-            quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
-            height: vs.height,
-            source: 'videa',
-            yearVerified,
-            behaviorHints: {
-              bingeGroup: `hu-videa-${qualLabel}`
-            }
-          });
-        }
-
-        // Keep collecting until we have enough year-verified 1080p streams
-        const verified1080 = streams.filter(s => s.height >= 1080 && s.yearVerified !== false).length;
-        if (verified1080 >= 4 || streams.length >= 16) break;
-      }
-
-      const verified1080 = streams.filter(s => s.height >= 1080 && s.yearVerified !== false).length;
-      if (verified1080 >= 4 || streams.length >= 14) break;
-    } catch (e) {
-      // Continue to next search term
+  const linkRegex = /href=["'](https?:\/\/videa\.hu)?\/videok\/([^/"'\s]+)\/[^"'#\s]+-([A-Za-z0-9]{16})["']/g;
+  for (const html of searchHtmlList) {
+    if (!html) continue;
+    let m;
+    let addedForTerm = 0;
+    linkRegex.lastIndex = 0;
+    while ((m = linkRegex.exec(html)) !== null) {
+      const category = m[2];
+      const vid = m[3];
+      if (SKIP_CATEGORIES.has(category) || seenVideoIds.has(vid)) continue;
+      seenVideoIds.add(vid);
+      const snippet = html.slice(Math.max(0, (m.index || 0) - 250), Math.min(html.length, (m.index || 0) + 500));
+      const cardUploadYear = extractUploadYearFromText(snippet);
+      candidateItems.push({ vid, cardUploadYear });
+      addedForTerm++;
+      if (addedForTerm >= 6 || candidateItems.length >= 22) break;
     }
+    if (candidateItems.length >= 22) break;
+  }
+
+  // Parallel stream extraction across all top candidates
+  const videoDataList = await Promise.all(
+    candidateItems.map(async (item) => {
+      const data = await extractVideaStreams(item.vid).catch(() => null);
+      if (data && !data.uploadYear && item.cardUploadYear) {
+        data.uploadYear = item.cardUploadYear;
+      }
+      return data;
+    })
+  );
+
+  for (const videoData of videoDataList) {
+    if (!videoData || !videoData.sources || videoData.sources.length === 0) continue;
+
+    // 1. Strict Duration Filter (±10 min + 4% PAL speedup against official IMDb/TMDB runtime):
+    if (!isValidRuntime(videoData.duration, meta)) {
+      continue;
+    }
+
+    // 2. Upload-year sanity check: a video uploaded before targetYear cannot be that movie
+    if (isMovie && targetYear && videoData.uploadYear && videoData.uploadYear < targetYear) {
+      continue;
+    }
+
+    // 3. Title filter: ignore music / parody / clips / F1 races
+    if (JUNK_TITLE_REGEX.test(videoData.videoTitle)) {
+      continue;
+    }
+
+    // 4. Title relevance match: must match searched title (and ±1 year / sequel rules for movies)
+    if (!isTitleMatch(hu, videoData.videoTitle, meta.year, !isMovie) && !isTitleMatch(meta.englishTitle, videoData.videoTitle, meta.year, !isMovie)) {
+      continue;
+    }
+
+    // 5. Strict episode filter for series:
+    if (!isMovie && !matchesEpisode(videoData.videoTitle, meta.season, meta.episode, meta.episodeTitle)) {
+      continue;
+    }
+
+    const durationMins = Math.round(videoData.duration / 60);
+    const yearVerified = !isMovie || !targetYear ||
+      hasVerifiedYearInTitle(videoData.videoTitle, targetYear, hu) ||
+      hasVerifiedYearInTitle(videoData.videoTitle, targetYear, meta.englishTitle);
+    const warnBadge = (!yearVerified && isMovie && targetYear) ? ' [⚠️ Év?]' : '';
+    const warnNote = (!yearVerified && isMovie && targetYear) ? ' • ⚠️ Évszám nincs a címben' : '';
+
+    for (const vs of videoData.sources) {
+      const qualLabel = vs.height >= 1080 ? '1080p FHD' : vs.height >= 720 ? '720p HD' : `${vs.height}p`;
+      streams.push({
+        name: `[HU] Videa ${qualLabel}${warnBadge}`,
+        title: `${videoData.videoTitle}\n🇭🇺 Videa.hu • ${qualLabel} • ${durationMins} perc • Teljes film${warnNote}`,
+        url: vs.url,
+        quality: vs.height >= 1080 ? '1080p' : vs.height >= 720 ? '720p' : '480p',
+        height: vs.height,
+        source: 'videa',
+        yearVerified,
+        behaviorHints: {
+          bingeGroup: `hu-videa-${qualLabel}`
+        }
+      });
+    }
+
+    const verified1080 = streams.filter(s => s.height >= 1080 && s.yearVerified !== false).length;
+    if (verified1080 >= 6 || streams.length >= 16) break;
   }
 
   return streams;

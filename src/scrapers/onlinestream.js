@@ -9,9 +9,9 @@ const { getLiveChannelStreams, LIVE_CHANNELS: MEDIAKLIKK_LIVE_CHANNELS } = requi
 
 const HOST_URL = process.env.HOST_URL || 'https://nuvio-magyar-http.vercel.app';
 
-// In-Memory Stream Cache (TTL: 2 minutes) for sub-50ms instant response
+// In-Memory Stream Cache (TTL: 4 minutes) for sub-50ms instant response
 const STREAM_CACHE = new Map();
-const CACHE_TTL_MS = 2 * 60 * 1000;
+const CACHE_TTL_MS = 4 * 60 * 1000;
 
 // Verified Ground-Truth Video Heights (px)
 const VERIFIED_CHANNEL_HEIGHTS = {
@@ -150,7 +150,7 @@ const ONLINESTREAM_CATEGORIES = [
     "category": "tv",
     "description": "Természetfilmek, történelem, tudomány és dokumentumfilmek népszerűségi sorrendben: Nat Geo, History, Spektrum, stb.",
     "defaultEnabled": true,
-    "count": 15
+    "count": 14
   },
   {
     "id": "hu-live-sport",
@@ -175,9 +175,9 @@ const ONLINESTREAM_CATEGORIES = [
     "name": "📍 Élő TV: Helyi & Városi TV-k",
     "type": "movie",
     "category": "tv",
-    "description": "Magyar városok és térségek működő helyi televíziói fontossági sorrendben: Debrecen, Sopron, Fehérvár, Nyíregyháza, stb.",
+    "description": "Magyar városok és térségek működő helyi televíziói fontossági sorrendben: Debrecen, Fehérvár, Nyíregyháza, stb.",
     "defaultEnabled": true,
-    "count": 69
+    "count": 68
   }
 ];
 
@@ -3453,22 +3453,6 @@ const ALL_CHANNELS = [
     }
   },
   {
-    "id": "onlinestream-live-5982",
-    "channelId": "5982",
-    "name": "Sopron TV",
-    "category": "hu-live-helyi",
-    "type": "movie",
-    "year": "ÉLŐ • HD",
-    "releaseInfo": "ÉLŐ • HD",
-    "description": "Sopron és a Fertő-táj hírei, közéleti műsorai, kulturális programjai és helyi események tudósításai.",
-    "mtvaKey": null,
-    "streams": [],
-    "behaviorHints": {
-      "defaultVideoId": "onlinestream-live-5982",
-      "isLive": true
-    }
-  },
-  {
     "id": "onlinestream-live-1815",
     "channelId": "1815",
     "name": "Fehérvár TV",
@@ -6487,39 +6471,6 @@ const ALL_CHANNELS = [
     }
   },
   {
-    "id": "onlinestream-live-9848",
-    "channelId": "9848",
-    "name": "Viasat Nature",
-    "category": "hu-live-doksi",
-    "type": "movie",
-    "year": "ÉLŐ • HD",
-    "releaseInfo": "ÉLŐ • HD",
-    "description": "Lenyűgöző természetfilmek és a Föld élővilága.",
-    "mtvaKey": null,
-    "streams": [
-      {
-        "sub_idx": 1,
-        "url": "http://193.33.39.108:9000/play/a05r",
-        "host": "193.33.39.108",
-        "features": "SD",
-        "playerUrl": "https://gradetv.net/?q=Viasat%20Nature",
-        "onlineUrl": "http://193.33.39.108:9000/play/a05r"
-      },
-      {
-        "sub_idx": 2,
-        "url": "https://m3m8.gradetv.net/api/s/ViasatNature.hu%3ASD%3Ahbaff39d0f346d4c61159a058174a6016.m3u8",
-        "host": "m3m8.gradetv.net",
-        "features": "SD",
-        "playerUrl": "https://gradetv.net/?q=Viasat%20Nature",
-        "onlineUrl": "https://m3m8.gradetv.net/api/s/ViasatNature.hu%3ASD%3Ahbaff39d0f346d4c61159a058174a6016.m3u8"
-      }
-    ],
-    "behaviorHints": {
-      "defaultVideoId": "onlinestream-live-9848",
-      "isLive": true
-    }
-  },
-  {
     "id": "onlinestream-live-9849",
     "channelId": "9849",
     "name": "Volgyhid TV",
@@ -6968,7 +6919,7 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
       const s = sortedStreams[i];
       const res = outcome.status === 'fulfilled' ? outcome.value : null;
 
-      if (!res && !s.url) continue;
+      if (!res) continue;
 
       const serverHost = s.host || (res?.masterUrl ? new URL(res.masterUrl).hostname : `Szerver #${activeIndex}`);
       const isSlowServer = (s.host || '').includes('141.94.193.53') || (s.url || '').includes('141.94.193.53');
