@@ -1,0 +1,2789 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#050505" />
+  <title>Magyar Streaming Pro — Studio Orange Preview</title>
+  <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.7.0" />
+  <link rel="alternate icon" type="image/png" href="/logo.png?v=2.7.0" />
+  <link rel="shortcut icon" href="/favicon.ico?v=2.7.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=VT323&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050505;
+      --band: #0b0b0c;
+      --band-2: #101013;
+      --panel: #141418;
+      --panel-hover: #1b1b20;
+      --ink: #f4f4f6;
+      --dim: #c6c6ce;
+      --dim-2: #9b9ba6;
+      --mute: #71717c;
+      --line: #1f1f24;
+      --line-2: #2b2b33;
+      --line-3: #3a3a45;
+
+      /* Signature Orange & Studio Broadcast Palette (no light green) */
+      --orange: #ff9436;
+      --orange-hi: #ffb36b;
+      --orange-dim: rgba(255, 148, 54, 0.14);
+      --orange-border: rgba(255, 148, 54, 0.36);
+      --on-orange: #160900;
+
+      --amber: #f3cf7a;
+      --amber-bright: #ffd982;
+      --on-amber: #1c1302;
+
+      --blue: #6ab4ff;
+      --blue-btn: #0284c7;
+      --blue-hover: #0369a1;
+      --coral: #ff7a7a;
+      --coral-bright: #ff5c5c;
+      --violet: #a58bff;
+      --purple-btn: #7c5cdb;
+      --purple-hover: #906fe6;
+      --white: #f3f3f5;
+
+      --f-head: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      --f-body: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+      --f-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', monospace;
+      --f-ch: 'VT323', ui-monospace, monospace;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--f-body);
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    a { color: var(--orange-hi); text-underline-offset: 3px; }
+    a:hover { color: #ffffff; }
+
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--orange);
+      outline-offset: 2px;
+    }
+
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 22px;
+    }
+
+    /* Top SMPTE Broadcast Color Bar */
+    .smpte-top {
+      height: 4px;
+      width: 100%;
+      background: linear-gradient(
+        to right,
+        #f4f4f6 0% 14.28%,
+        var(--amber) 14.28% 28.57%,
+        var(--blue) 28.57% 42.85%,
+        var(--orange) 42.85% 57.14%,
+        var(--violet) 57.14% 71.42%,
+        var(--coral) 71.42% 85.71%,
+        #3b82f6 85.71% 100%
+      );
+    }
+
+    /* Sticky Navbar */
+    .site-head {
+      background: rgba(5, 5, 5, 0.94);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+    }
+
+    .head-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      min-height: 60px;
+      flex-wrap: wrap;
+      padding: 8px 0;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+      font-family: var(--f-head);
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+      min-width: 0;
+    }
+    .logo:hover { color: #ffffff; }
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      display: block;
+      flex-shrink: 0;
+    }
+    .logo-word span { color: var(--orange); }
+    .logo-ver {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      color: var(--amber);
+      background: rgba(243, 207, 122, 0.1);
+      border: 1px solid rgba(243, 207, 122, 0.28);
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .navlinks {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13.5px;
+      font-weight: 500;
+    }
+    .navlinks a {
+      color: var(--dim-2);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 5px;
+      white-space: nowrap;
+      transition: color 0.14s, background 0.14s;
+    }
+    .navlinks a:hover {
+      color: var(--ink);
+      background: var(--band-2);
+    }
+
+    .head-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pill-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      background: #ffffff;
+      color: #050505;
+      border: 1px solid #ffffff;
+      transition: background 0.15s, transform 0.12s;
+      white-space: nowrap;
+    }
+    .pill-white:hover { background: var(--orange); border-color: var(--orange); color: var(--on-orange); }
+    .pill-dark {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      background: transparent;
+      color: var(--dim);
+      border: 1px solid var(--line-3);
+      transition: border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .pill-dark:hover { border-color: var(--orange); color: var(--orange-hi); }
+
+    /* Warm Amber Announcement Strip (cleanyour.tv signature) */
+    .announce-bar {
+      background: var(--amber);
+      color: var(--on-amber);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    }
+    .announce-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 0;
+      font-size: 13px;
+      font-weight: 500;
+      flex-wrap: wrap;
+    }
+    .announce-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .announce-tag {
+      background: #140d02;
+      color: var(--amber);
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 2px 7px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+    .announce-link {
+      color: #140d02;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 1px solid rgba(20, 13, 2, 0.45);
+    }
+    .announce-link:hover { color: #000000; border-bottom-color: #000000; }
+
+    /* Hero Split */
+    .hero {
+      padding: 52px 0 38px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr);
+      gap: 34px;
+      align-items: start;
+    }
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--f-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 14px;
+    }
+    @keyframes livePulseOrange {
+      0% { box-shadow: 0 0 0 0 rgba(255, 148, 54, 0.7), 0 0 8px var(--orange); }
+      70% { box-shadow: 0 0 0 8px rgba(255, 148, 54, 0), 0 0 10px var(--orange); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 148, 54, 0), 0 0 8px var(--orange); }
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--orange);
+      animation: livePulseOrange 2s infinite;
+    }
+
+    h1 {
+      font-family: var(--f-head);
+      font-size: clamp(2.15rem, 4.7vw, 3.45rem);
+      line-height: 1.03;
+      letter-spacing: -0.035em;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+    h1 span { color: var(--orange); }
+
+    .lede {
+      font-size: 16px;
+      line-height: 1.58;
+      color: var(--dim);
+      max-width: 54ch;
+      margin-bottom: 24px;
+    }
+    .lede strong { color: #ffffff; font-weight: 600; }
+
+    /* White-Header Studio Box (cleanyour.tv "Does it work on my TV?") */
+    .manifest-box {
+      border: 2px solid var(--white);
+      border-radius: 7px;
+      overflow: hidden;
+      background: var(--band);
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.55);
+    }
+    .manifest-head {
+      background: var(--white);
+      color: #111114;
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--f-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      flex-wrap: wrap;
+    }
+    .manifest-input-strip {
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid var(--line-2);
+      background: #08080a;
+    }
+    .manifest-url {
+      flex: 1;
+      min-width: 0;
+      padding: 13px 15px;
+      font-family: var(--f-mono);
+      font-size: 12.5px;
+      color: var(--orange-hi);
+      word-break: break-all;
+      display: flex;
+      align-items: center;
+      user-select: all;
+      transition: background-color 0.25s;
+    }
+    @keyframes urlFlashOrange {
+      0% { background-color: rgba(255, 148, 54, 0.22); color: #ffffff; }
+      100% { background-color: transparent; color: var(--orange-hi); }
+    }
+    .manifest-url.url-flash { animation: urlFlashOrange 0.65s ease-out; }
+
+    .btn-copy-primary {
+      border: none;
+      background: var(--orange);
+      color: var(--on-orange);
+      font-family: var(--f-body);
+      font-weight: 700;
+      font-size: 13.5px;
+      padding: 0 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.14s;
+    }
+    .btn-copy-primary:hover { background: var(--orange-hi); }
+
+    .manifest-install-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--band);
+    }
+    .btn-action {
+      border: none;
+      padding: 12px 16px;
+      font-family: var(--f-body);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: filter 0.14s, background 0.14s;
+      white-space: nowrap;
+    }
+    .btn-stremio {
+      background: var(--purple-btn);
+      color: #ffffff;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .btn-stremio:hover { background: var(--purple-hover); color: #ffffff; }
+    .btn-nuvio {
+      background: var(--blue-btn);
+      color: #ffffff;
+    }
+    .btn-nuvio:hover { background: var(--blue-hover); color: #ffffff; }
+
+    /* Brand/Preset quick tags below manifest card */
+    .hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 13px;
+    }
+    .mini-dot-chip {
+      background: var(--band);
+      border: 1px solid var(--line-2);
+      color: var(--dim);
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      padding: 6px 11px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: border-color 0.14s, color 0.14s, background 0.14s;
+    }
+    .mini-dot-chip:hover {
+      border-color: var(--orange);
+      color: #ffffff;
+      background: var(--panel);
+    }
+    .mini-dot-chip .sq {
+      width: 6px;
+      height: 6px;
+      border-radius: 1px;
+      flex-shrink: 0;
+    }
+
+    /* Right Studio REC Terminal Window (cleanyour.tv CH 01 right panel) */
+    .studio-terminal {
+      border: 1px solid var(--line-3);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #08080a;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.65);
+    }
+    .studio-term-head {
+      background: var(--white);
+      color: #111114;
+      padding: 9px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--f-mono);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    @keyframes recBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+    .rec-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #b91c1c;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+    .rec-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #dc2626;
+      animation: recBlink 1.4s infinite;
+    }
+    .studio-term-body {
+      padding: 18px 18px 20px;
+      font-family: var(--f-mono);
+      font-size: 12.5px;
+      line-height: 1.75;
+      color: var(--dim);
+    }
+    .term-cmd { color: #ffffff; margin-bottom: 6px; }
+    .term-prompt { color: var(--orange); margin-right: 6px; }
+    .term-line { display: flex; align-items: baseline; gap: 8px; }
+    .term-arrow { color: var(--dim-2); }
+    .term-ok { color: var(--orange); font-weight: 600; }
+    .term-muted { color: var(--mute); font-size: 11.5px; margin-top: 8px; border-top: 1px dashed var(--line-2); padding-top: 10px; }
+
+    /* Pick Your Preset: 4 Colored Action Tiles */
+    .tiles-sec {
+      padding: 12px 0 32px;
+    }
+    .tiles-kicker {
+      font-family: var(--f-mono);
+      font-size: 12px;
+      color: var(--dim-2);
+      margin-bottom: 12px;
+    }
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .preset-tile {
+      border: 2px solid transparent;
+      border-radius: 7px;
+      padding: 18px 16px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 112px;
+      transition: transform 0.14s ease, filter 0.14s ease, box-shadow 0.14s ease;
+    }
+    .preset-tile:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+    .preset-tile.is-active {
+      box-shadow: 0 0 0 2px #050505, 0 0 0 4px #ffffff;
+    }
+    .tile-num {
+      font-family: var(--f-mono);
+      font-size: 12px;
+      font-weight: 700;
+      opacity: 0.72;
+      margin-bottom: 14px;
+    }
+    .tile-title {
+      font-family: var(--f-head);
+      font-size: 16.5px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+    }
+    .tile-sub {
+      font-size: 12px;
+      margin-top: 5px;
+      opacity: 0.85;
+      line-height: 1.35;
+    }
+    .tile-orange { background: var(--orange); color: var(--on-orange); }
+    .tile-amber { background: var(--amber); color: var(--on-amber); }
+    .tile-blue { background: var(--blue); color: #05162b; }
+    .tile-coral { background: var(--coral); color: #2b0707; }
+
+    /* Full-width SMPTE divider */
+    .stripe-thin {
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(
+        to right,
+        #f4f4f6 0% 14.28%,
+        var(--amber) 14.28% 28.57%,
+        var(--blue) 28.57% 42.85%,
+        var(--orange) 42.85% 57.14%,
+        var(--violet) 57.14% 71.42%,
+        var(--coral) 71.42% 85.71%,
+        #3b82f6 85.71% 100%
+      );
+      opacity: 0.9;
+    }
+
+    /* 5-Column By The Numbers Section (cleanyour.tv signature) */
+    .kpi-sec {
+      padding: 34px 0 38px;
+      border-bottom: 1px solid var(--line);
+    }
+    .kpi-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .kpi-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--f-mono);
+      font-size: 12px;
+      color: var(--coral);
+      margin-bottom: 6px;
+    }
+    .kpi-kicker .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--coral);
+    }
+    .kpi-top h2 {
+      font-family: var(--f-head);
+      font-size: clamp(1.45rem, 2.8vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+    }
+    .trend-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(243, 207, 122, 0.35);
+      background: #120e04;
+      border-radius: 6px;
+      padding: 7px 12px;
+    }
+    .trend-rank {
+      background: var(--amber);
+      color: var(--on-amber);
+      font-family: var(--f-head);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .trend-text {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      line-height: 1.3;
+      color: var(--dim);
+    }
+    .trend-text strong { color: #ffffff; display: block; font-size: 12px; }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      border: 1px solid var(--line-2);
+      border-radius: 7px;
+      overflow: hidden;
+      background: var(--band);
+    }
+    .kpi-cell {
+      padding: 18px 16px;
+      border-right: 1px solid var(--line-2);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+    .kpi-cell:last-child { border-right: none; }
+    .kpi-bar {
+      width: 24px;
+      height: 3px;
+      border-radius: 2px;
+      margin-bottom: 8px;
+    }
+    .kpi-val {
+      font-family: var(--f-head);
+      font-size: clamp(1.45rem, 2.2vw, 1.95rem);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+    .kpi-label {
+      font-size: 12.5px;
+      color: var(--dim);
+      font-weight: 500;
+    }
+    .kpi-note {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      color: var(--orange-hi);
+    }
+
+    /* Main Configurator Sections */
+    .sec {
+      padding: 38px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .sec-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .sec-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .ch-badge {
+      font-family: var(--f-mono);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 3px 9px;
+      border-radius: 4px;
+      background: var(--orange-dim);
+      color: var(--orange-hi);
+      border: 1px solid var(--orange-border);
+    }
+    .ch-badge.c-amber {
+      background: rgba(243, 207, 122, 0.12);
+      color: var(--amber);
+      border-color: rgba(243, 207, 122, 0.34);
+    }
+    .ch-badge.c-blue {
+      background: rgba(106, 180, 255, 0.12);
+      color: var(--blue);
+      border-color: rgba(106, 180, 255, 0.34);
+    }
+    .ch-badge.c-coral {
+      background: rgba(255, 122, 122, 0.12);
+      color: var(--coral);
+      border-color: rgba(255, 122, 122, 0.34);
+    }
+    .ch-badge.c-violet {
+      background: rgba(165, 139, 255, 0.12);
+      color: var(--violet);
+      border-color: rgba(165, 139, 255, 0.34);
+    }
+
+    .sec h2 {
+      font-family: var(--f-head);
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    .sec-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .btn-chip {
+      background: var(--band);
+      border: 1px solid var(--line-3);
+      color: var(--dim);
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 6px 11px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: border-color 0.13s, color 0.13s, background 0.13s;
+      white-space: nowrap;
+    }
+    .btn-chip:hover {
+      border-color: var(--orange);
+      color: #ffffff;
+      background: var(--panel);
+    }
+    .btn-chip.active {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: var(--on-orange);
+      font-weight: 700;
+    }
+
+    /* Checkboxes (Orange Accent!) */
+    .clean-cb {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 17px;
+      height: 17px;
+      border: 1.5px solid var(--line-3);
+      border-radius: 4px;
+      background: #070709;
+      display: inline-grid;
+      place-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .clean-cb::after {
+      content: "";
+      width: 9px;
+      height: 5px;
+      border-left: 2px solid var(--on-orange);
+      border-bottom: 2px solid var(--on-orange);
+      transform: rotate(-45deg) translate(0.5px, -0.5px) scale(0);
+      transition: transform 0.12s ease;
+    }
+    .clean-cb:checked {
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+    .clean-cb:checked::after {
+      transform: rotate(-45deg) translate(0.5px, -0.5px) scale(1);
+    }
+
+    /* Resolution Strip */
+    .res-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .res-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 14px;
+      background: var(--band);
+      border: 1px solid var(--line-2);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.14s, background 0.14s;
+    }
+    .res-item:hover {
+      border-color: var(--line-3);
+      background: var(--band-2);
+    }
+    .res-item:has(.clean-cb:checked) {
+      border-color: var(--orange-border);
+      background: rgba(255, 148, 54, 0.06);
+    }
+    .res-label {
+      font-weight: 600;
+      color: #ffffff;
+      font-size: 14px;
+    }
+    .res-sub {
+      margin-left: auto;
+      font-family: var(--f-mono);
+      font-size: 11px;
+      color: var(--orange-hi);
+      letter-spacing: 0.04em;
+    }
+
+    /* Subtitles Toggle Card */
+    .subtitle-toggle-card {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 15px 18px;
+      background: var(--band);
+      border: 1px solid var(--line-2);
+      border-left: 3px solid var(--orange);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .subtitle-toggle-card:hover {
+      background: var(--band-2);
+      border-color: var(--line-3);
+      border-left-color: var(--orange-hi);
+    }
+    .subtitle-toggle-card.is-off {
+      border-left-color: var(--line-3);
+    }
+    .subtitle-toggle-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+    .subtitle-toggle-title-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+    .subtitle-toggle-title {
+      font-weight: 600;
+      font-size: 15px;
+      color: #ffffff;
+    }
+    .subtitle-toggle-desc {
+      font-size: 13px;
+      color: var(--dim-2);
+      line-height: 1.4;
+    }
+    .subtitle-toggle-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .subtitle-state-pill {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 4px;
+      background: var(--orange-dim);
+      color: var(--orange-hi);
+      border: 1px solid var(--orange-border);
+      letter-spacing: 0.04em;
+    }
+    .subtitle-toggle-card.is-off .subtitle-state-pill {
+      background: #18181c;
+      color: var(--mute);
+      border-color: var(--line-2);
+    }
+    .switch-pill {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .switch-pill input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .switch-slider {
+      position: absolute;
+      inset: 0;
+      background: #232329;
+      border: 1px solid var(--line-3);
+      border-radius: 999px;
+      transition: background 0.18s, border-color 0.18s;
+    }
+    .switch-slider::before {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 3px;
+      top: 3px;
+      border-radius: 50%;
+      background: #9ca3af;
+      transition: transform 0.18s ease, background 0.18s;
+    }
+    .switch-pill input:checked + .switch-slider {
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+    .switch-pill input:checked + .switch-slider::before {
+      transform: translateX(20px);
+      background: var(--on-orange);
+    }
+
+    /* Dropdowns (Sources, Catalogs, TV Audit) */
+    .dropdown-wrap {
+      border: 1px solid var(--line-2);
+      border-radius: 7px;
+      background: var(--band);
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .dropdown-wrap:last-child { margin-bottom: 0; }
+    .dropdown-wrap.is-open { border-color: var(--line-3); }
+
+    .dropdown-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-right: 12px;
+      background: var(--band);
+    }
+    .dropdown-toggle-btn {
+      flex: 1;
+      min-width: 0;
+      background: transparent;
+      border: none;
+      color: var(--ink);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      text-align: left;
+      cursor: pointer;
+    }
+    .dropdown-toggle-btn:hover { background: rgba(255, 255, 255, 0.02); }
+    .dropdown-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--panel);
+      border: 1px solid var(--line-2);
+      color: var(--orange-hi);
+      flex-shrink: 0;
+    }
+    .dropdown-header-text {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .dropdown-title-line {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+    .dropdown-title {
+      font-family: var(--f-head);
+      font-weight: 700;
+      font-size: 15.5px;
+      color: #ffffff;
+    }
+    .dropdown-badge {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .badge-sources {
+      background: var(--orange-dim);
+      color: var(--orange-hi);
+      border: 1px solid var(--orange-border);
+    }
+    .badge-live-sources {
+      background: rgba(243, 207, 122, 0.12);
+      color: var(--amber);
+      border: 1px solid rgba(243, 207, 122, 0.32);
+    }
+    .badge-vod-catalogs {
+      background: rgba(165, 139, 255, 0.12);
+      color: var(--violet);
+      border: 1px solid rgba(165, 139, 255, 0.34);
+    }
+    .badge-live-catalogs {
+      background: rgba(255, 122, 122, 0.12);
+      color: var(--coral);
+      border-color: rgba(255, 122, 122, 0.34);
+      border: 1px solid rgba(255, 122, 122, 0.34);
+    }
+    .dropdown-preview {
+      font-size: 12.5px;
+      color: var(--dim-2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .dropdown-chevron {
+      font-size: 11px;
+      color: var(--dim-2);
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+    .dropdown-wrap.is-open .dropdown-chevron { transform: rotate(180deg); color: var(--orange); }
+
+    .dropdown-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .chip-mini { padding: 5px 10px; font-size: 11px; }
+
+    .dropdown-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.22s ease;
+      border-top: 1px solid transparent;
+    }
+    .dropdown-wrap.is-open .dropdown-panel {
+      grid-template-rows: 1fr;
+      border-top-color: var(--line-2);
+    }
+    .dropdown-panel-inner { overflow: hidden; }
+
+    .clean-list { display: flex; flex-direction: column; }
+    .list-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .list-row:last-child { border-bottom: none; }
+    .list-row:hover { background: var(--band-2); }
+    .row-idx {
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      color: var(--mute);
+      width: 22px;
+      flex-shrink: 0;
+    }
+    .row-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: #ffffff;
+      min-width: 175px;
+      flex-shrink: 0;
+    }
+    .row-desc {
+      font-size: 12.5px;
+      color: var(--dim-2);
+      flex: 1;
+      min-width: 0;
+    }
+    .row-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* Status & Category Tags (Orange replaces green!) */
+    .tag {
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .tag-ok {
+      background: var(--orange-dim);
+      color: var(--orange-hi);
+      border: 1px solid var(--orange-border);
+    }
+    .tag-live {
+      background: rgba(255, 122, 122, 0.14);
+      color: #ff9c9c;
+      border: 1px solid rgba(255, 122, 122, 0.34);
+    }
+    .tag-warn {
+      background: rgba(243, 207, 122, 0.12);
+      color: var(--amber);
+      border: 1px solid rgba(243, 207, 122, 0.3);
+    }
+    .tag-gold {
+      background: rgba(243, 207, 122, 0.14);
+      color: var(--amber-bright);
+      border: 1px solid rgba(243, 207, 122, 0.34);
+    }
+    .tag-sh {
+      background: rgba(106, 180, 255, 0.1);
+      color: var(--blue);
+      border: 1px solid rgba(106, 180, 255, 0.28);
+    }
+    .tag-stream { background: #18181f; color: #e2e2ee; border: 1px solid var(--line-3); }
+    .s-netflix { color: #ff7a7a; border-color: rgba(255, 122, 122, 0.35); }
+    .s-max { color: #8ab4ff; border-color: rgba(138, 180, 255, 0.35); }
+    .s-disney { color: #67d6ff; border-color: rgba(103, 214, 255, 0.35); }
+    .s-skyshowtime { color: #f3cf7a; border-color: rgba(243, 207, 122, 0.35); }
+    .s-prime { color: #6ab4ff; border-color: rgba(106, 180, 255, 0.35); }
+
+    /* Full-width Warm Amber Callout Band (cleanyour.tv "CH 02 Not Android?") */
+    .amber-callout {
+      background: var(--amber);
+      color: var(--on-amber);
+      padding: 34px 0;
+    }
+    .amber-callout-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .amber-callout-kicker {
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.78;
+      margin-bottom: 6px;
+    }
+    .amber-callout h3 {
+      font-family: var(--f-head);
+      font-size: clamp(1.4rem, 2.8vw, 1.95rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: #140c00;
+      margin-bottom: 6px;
+    }
+    .amber-callout p {
+      font-size: 14.5px;
+      max-width: 58ch;
+      color: #2e1f05;
+    }
+    .btn-dark-solid {
+      background: #1a1203;
+      color: #ffffff;
+      border: 1px solid #1a1203;
+      padding: 13px 22px;
+      border-radius: 6px;
+      font-family: var(--f-body);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: transform 0.12s, background 0.14s;
+    }
+    .btn-dark-solid:hover { background: #000000; color: var(--amber); transform: translateY(-1px); }
+
+    /* CH 04 Tester Box */
+    .tester-box {
+      background: var(--band);
+      border: 1px solid var(--line-2);
+      border-radius: 7px;
+      padding: 18px;
+    }
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .select-input, .text-input {
+      background: #070709;
+      border: 1px solid var(--line-3);
+      color: #ffffff;
+      border-radius: 5px;
+      padding: 11px 13px;
+      font-family: var(--f-body);
+      font-size: 14px;
+    }
+    .select-input { min-width: 170px; cursor: pointer; }
+    .text-input { flex: 1; min-width: 0; }
+    .btn-search {
+      background: var(--orange);
+      color: var(--on-orange);
+      border: none;
+      border-radius: 5px;
+      padding: 0 22px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      min-height: 44px;
+      transition: background 0.14s;
+    }
+    .btn-search:hover { background: var(--orange-hi); }
+
+    .preset-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+      font-size: 12.5px;
+      color: var(--dim-2);
+      margin-bottom: 14px;
+    }
+    .preset-link {
+      background: var(--panel);
+      border: 1px solid var(--line-2);
+      color: var(--dim);
+      font-size: 12px;
+      padding: 4px 9px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: border-color 0.12s, color 0.12s;
+    }
+    .preset-link:hover {
+      border-color: var(--orange);
+      color: #ffffff;
+    }
+
+    .series-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 12px 14px;
+      background: var(--panel);
+      border: 1px solid var(--line-3);
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+    .series-bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .series-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 13.5px;
+      color: var(--amber);
+    }
+    .series-ep-nav { display: flex; gap: 6px; }
+    .btn-step {
+      background: var(--band);
+      border: 1px solid var(--line-3);
+      color: var(--ink);
+      padding: 5px 11px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .btn-step:hover:not(:disabled) { border-color: var(--orange); color: var(--orange-hi); }
+    .btn-step:disabled { opacity: 0.35; cursor: not-allowed; }
+    .series-bar-controls { display: flex; gap: 12px; flex-wrap: wrap; }
+    .control-group { display: flex; align-items: center; gap: 8px; }
+    .control-group-ep { flex: 1; min-width: 220px; }
+    .control-label {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      color: var(--dim-2);
+    }
+
+    .matched-banner {
+      display: none;
+      padding: 10px 13px;
+      margin-bottom: 12px;
+      border-radius: 5px;
+      background: var(--orange-dim);
+      border: 1px solid var(--orange-border);
+      color: var(--orange-hi);
+      font-size: 13px;
+    }
+    .matched-banner strong { color: #ffffff; }
+
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 7px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 12px;
+      font-size: 12.5px;
+      color: var(--dim-2);
+    }
+
+    .results-list {
+      max-height: 430px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .results-empty {
+      padding: 26px 14px;
+      text-align: center;
+      color: var(--dim-2);
+      font-family: var(--f-mono);
+      font-size: 12.5px;
+      border: 1px dashed var(--line-2);
+      border-radius: 5px;
+    }
+    .stream-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 14px;
+      background: #08080a;
+      border: 1px solid var(--line-2);
+      border-radius: 5px;
+      transition: border-color 0.12s;
+    }
+    .stream-row:hover { border-color: var(--orange-border); }
+    .stream-main { min-width: 0; flex: 1; }
+    .stream-title-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 13.5px;
+      color: #ffffff;
+      flex-wrap: wrap;
+    }
+    .stream-idx { font-family: var(--f-mono); font-size: 11px; color: var(--mute); }
+    .stream-sub-line {
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      color: var(--dim-2);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .q-tag {
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .q1080 { background: var(--orange-dim); color: var(--orange-hi); border: 1px solid var(--orange-border); }
+    .q720 { background: rgba(106, 180, 255, 0.14); color: var(--blue); border: 1px solid rgba(106, 180, 255, 0.35); }
+    .q480 { background: rgba(243, 207, 122, 0.12); color: var(--amber); border: 1px solid rgba(243, 207, 122, 0.3); }
+    .q360 { background: #1b1b22; color: var(--dim-2); border: 1px solid var(--line-3); }
+
+    /* TV Tools inner */
+    .tv-tools-inner { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+    .tv-tools-actions { display: flex; flex-wrap: wrap; gap: 9px; }
+    .tv-tools-actions .btn-action { border-radius: 5px; font-size: 13px; padding: 10px 15px; }
+
+    /* CH 05: 3 Bordered Info Cards (cleanyour.tv "Yes, and you can undo it.") */
+    .safe-sec {
+      padding: 42px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .safe-kicker {
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      color: var(--blue);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .safe-sec h2 {
+      font-family: var(--f-head);
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+    .safe-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .safe-card {
+      background: var(--band);
+      border: 1px solid var(--line-2);
+      border-radius: 7px;
+      padding: 20px;
+    }
+    .safe-card h4 {
+      font-family: var(--f-head);
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+    .safe-card p {
+      font-size: 13.5px;
+      color: var(--dim-2);
+      line-height: 1.5;
+    }
+    .safe-note {
+      margin-top: 16px;
+      font-size: 13.5px;
+      color: var(--dim-2);
+    }
+
+    /* 4-Column Studio Footer (cleanyour.tv signature) */
+    .studio-footer {
+      padding: 40px 0 50px;
+      font-size: 13px;
+      color: var(--dim-2);
+    }
+    .footer-cols {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+      gap: 28px;
+    }
+    .footer-brand-name {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--f-head);
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 15.5px;
+      margin-bottom: 8px;
+    }
+    .footer-brand-sub {
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      color: var(--mute);
+      line-height: 1.5;
+    }
+    .footer-col h5 {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--mute);
+      margin-bottom: 10px;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .footer-col a {
+      color: var(--dim);
+      text-decoration: none;
+    }
+    .footer-col a:hover { color: var(--orange-hi); }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      z-index: 100;
+      background: #141418;
+      border: 1px solid var(--orange-border);
+      color: #ffffff;
+      padding: 13px 17px;
+      border-radius: 7px;
+      font-size: 13px;
+      line-height: 1.45;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.72);
+      transform: translateY(16px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      max-width: 340px;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* Responsive Breakpoints (1080 -> 960 split -> 860 -> 640 -> 400) */
+    @media (max-width: 960px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 24px; }
+      .tile-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .kpi-cell { border-bottom: 1px solid var(--line-2); }
+      .dropdown-trigger {
+        flex-direction: column;
+        align-items: stretch;
+        padding-right: 0;
+        gap: 0;
+      }
+      .dropdown-toggle-btn { width: 100%; }
+      .dropdown-actions {
+        width: 100%;
+        padding: 9px 16px 11px;
+        border-top: 1px dashed var(--line-2);
+        background: rgba(0, 0, 0, 0.2);
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .safe-cards { grid-template-columns: 1fr; }
+      .footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { padding: 0 15px; }
+      .navlinks {
+        width: 100%;
+        order: 3;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .navlinks a {
+        flex: 1 1 calc(50% - 6px);
+        text-align: center;
+        background: var(--band);
+        border: 1px solid var(--line-2);
+        padding: 8px 6px;
+      }
+      .manifest-input-strip { flex-direction: column; }
+      .btn-copy-primary { min-height: 44px; width: 100%; }
+      .manifest-install-row { grid-template-columns: 1fr; }
+      .btn-stremio { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+      .res-bar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .subtitle-toggle-card { flex-direction: column; align-items: stretch; }
+      .subtitle-toggle-control { justify-content: space-between; }
+      .list-row {
+        display: grid;
+        grid-template-columns: 20px 24px minmax(0, 1fr);
+        grid-template-areas: "cb idx name" "desc desc desc" "meta meta meta";
+        gap: 6px 8px;
+        padding: 12px;
+      }
+      .list-row .clean-cb { grid-area: cb; }
+      .list-row .row-idx { grid-area: idx; width: auto; }
+      .list-row .row-name { grid-area: name; min-width: 0; }
+      .list-row .row-desc { grid-area: desc; padding-left: 30px; }
+      .list-row .row-meta { grid-area: meta; margin-left: 0; padding-left: 30px; flex-wrap: wrap; }
+      .search-bar { flex-direction: column; }
+      .select-input, .text-input { width: 100%; font-size: 16px; }
+      .btn-search { width: 100%; }
+      .stream-row { flex-direction: column; align-items: stretch; }
+      .stream-sub-line { white-space: normal; word-break: break-word; }
+      .stream-row .btn-chip { width: 100%; text-align: center; padding: 10px; }
+      .tv-tools-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .footer-cols { grid-template-columns: 1fr; gap: 20px; }
+    }
+
+    @media (max-width: 440px) {
+      .tile-grid, .kpi-grid, .res-bar, .tv-tools-actions { grid-template-columns: 1fr; }
+      .kpi-cell { border-right: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="smpte-top" aria-hidden="true"></div>
+
+  <header class="site-head">
+    <div class="wrap head-bar">
+      <a href="/test" class="logo">
+        <img src="/logo.svg?v=2.7.0" class="logo-mark" alt="Magyar Streaming Pro" width="38" height="38" />
+        <span class="logo-word">Magyar Streaming <span>Pro</span></span>
+        <span class="logo-ver">v2.7.0</span>
+      </a>
+
+      <nav class="navlinks">
+        <a href="#ch01">Beállítások</a>
+        <a href="#ch02">Források (15)</a>
+        <a href="#ch03">Katalógusok (17)</a>
+        <a href="#ch04">Kereső</a>
+        <a href="#tvToolsSec">TV Listák</a>
+      </nav>
+
+      <div class="head-right">
+        <a href="/configure" class="pill-dark" title="Vissza az eredeti OG nézethez">← OG Felület</a>
+        <a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener" class="pill-white">GitHub ★</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="announce-bar">
+    <div class="wrap announce-inner">
+      <div class="announce-left">
+        <span class="announce-tag">TEST · NARANCS</span>
+        <span>Zero-Proxy HTTP 302 · OpenSubtitles HU feliratok &amp; 162 Élő TV csatorna valós idejű EPG-vel.</span>
+      </div>
+      <a href="#ch01" class="announce-link">Testreszabás →</a>
+    </div>
+  </div>
+
+  <main>
+    <!-- CH 00: HERO SPLIT -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="kicker"><span class="live-dot"></span> CH 00 · NUVIO &amp; STREMIO DIRECT HTTP ADDON</div>
+          <h1>Magyar filmek,<br />proxy <span>nélkül.</span></h1>
+          <p class="lede">
+            <strong>Közvetlen MP4 és HLS (.m3u8) szinkronos streamek</strong>, valós idejű <strong>Élő TV EPG</strong> és <strong>OpenSubtitles magyar feliratok</strong>. Állítsd be a forrásokat lent — a Manifest link azonnal frissül.
+          </p>
+
+          <div class="manifest-box">
+            <div class="manifest-head">
+              <span>ADDON MANIFEST ENDPOINT</span>
+              <span id="activeSummaryBadge">15 forrás · 17 katalógus · 4 felbontás · HU felirat BE</span>
+            </div>
+            <div class="manifest-input-strip">
+              <div class="manifest-url" id="manifestUrl">Betöltés...</div>
+              <button type="button" class="btn-copy-primary" onclick="copyManifest()" id="copyBtn">Link másolása</button>
+            </div>
+            <div class="manifest-install-row">
+              <a class="btn-action btn-stremio" id="stremioInstallBtn" href="#">🚀 Stremio Telepítés →</a>
+              <button type="button" class="btn-action btn-nuvio" onclick="installNuvio()" id="nuvioInstallBtn">⚡ Nuvio Telepítés →</button>
+            </div>
+          </div>
+
+          <div class="hero-chips">
+            <button type="button" class="mini-dot-chip" onclick="applyQuickProfile('all')">
+              <span class="sq" style="background: var(--orange);"></span> Teljes csomag
+            </button>
+            <button type="button" class="mini-dot-chip" onclick="applyQuickProfile('hd')">
+              <span class="sq" style="background: var(--amber);"></span> Csak HD (1080p+720p)
+            </button>
+            <button type="button" class="mini-dot-chip" onclick="applyQuickProfile('nolocal')">
+              <span class="sq" style="background: var(--blue);"></span> Helyi TV nélkül
+            </button>
+            <button type="button" class="mini-dot-chip" onclick="toggleSubtitlesQuick()">
+              <span class="sq" style="background: var(--coral);"></span> HU Felirat BE/KI
+            </button>
+          </div>
+        </div>
+
+        <!-- Studio Live REC Preview Terminal -->
+        <aside class="studio-terminal" aria-label="Élő konfiguráció előnézet">
+          <div class="studio-term-head">
+            <span>Élő konfiguráció, stúdió nézet</span>
+            <span class="rec-badge"><span class="rec-dot"></span> REC</span>
+          </div>
+          <div class="studio-term-body">
+            <div class="term-cmd"><span class="term-prompt">$</span> nuvio-magyar --manifest --zero-proxy</div>
+            <div class="term-line"><span class="term-arrow">›</span> <span id="termVodLine">13 / 13 film &amp; sorozat forrás aktív</span></div>
+            <div class="term-line"><span class="term-arrow">›</span> <span id="termLiveLine">3 / 3 IPTV csomag · 162 adó (EPG)</span></div>
+            <div class="term-line"><span class="term-arrow">›</span> <span id="termCatLine">17 / 17 katalógus polc engedélyezve</span></div>
+            <div class="term-line"><span class="term-arrow">›</span> <span id="termResLine">Felbontás: 1080p, 720p, 480p, 360p</span></div>
+            <div class="term-line" style="margin-top:6px;">
+              <span class="term-ok">✓</span>
+              <span class="term-ok" id="termSubLine">OpenSubtitles HU felirat: BEKAPCSOLVA</span>
+            </div>
+            <div class="term-muted">
+              A fenti link közvetlenül a forrásokra mutat HTTP 302-n — gyorsítótárral és 0 köztes video proxyval.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- PICK YOUR BUTTON: 4 COLORED PROFILE TILES -->
+    <section class="tiles-sec">
+      <div class="wrap">
+        <div class="tiles-kicker">Válassz gyorsprofilt (1 kattintás)</div>
+        <div class="tile-grid">
+          <button type="button" class="preset-tile tile-orange is-active" data-profile="all" onclick="applyQuickProfile('all')">
+            <div class="tile-num">1</div>
+            <div>
+              <div class="tile-title">Teljes élmény</div>
+              <div class="tile-sub">Minden forrás, 1080p–360p és magyar feliratok</div>
+            </div>
+          </button>
+          <button type="button" class="preset-tile tile-amber" data-profile="hd" onclick="applyQuickProfile('hd')">
+            <div class="tile-num">2</div>
+            <div>
+              <div class="tile-title">Csak HD minőség</div>
+              <div class="tile-sub">1080p FHD és 720p HD, felesleges SD nélkül</div>
+            </div>
+          </button>
+          <button type="button" class="preset-tile tile-blue" data-profile="tv" onclick="applyQuickProfile('tv')">
+            <div class="tile-num">3</div>
+            <div>
+              <div class="tile-title">Élő TV &amp; EPG mód</div>
+              <div class="tile-sub">Országos, Film, Sport és Gyerek csatornák</div>
+            </div>
+          </button>
+          <button type="button" class="preset-tile tile-coral" data-profile="vod" onclick="applyQuickProfile('vod')">
+            <div class="tile-num">4</div>
+            <div>
+              <div class="tile-title">Tiszta Film &amp; Sorozat</div>
+              <div class="tile-sub">Csak VOD források és toplista polcok</div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="stripe-thin" aria-hidden="true"></div>
+
+    <!-- BY THE NUMBERS: 5-COLUMN BORDERED KPI STRIP -->
+    <section class="kpi-sec">
+      <div class="wrap">
+        <div class="kpi-top">
+          <div>
+            <div class="kpi-kicker"><span class="dot"></span> Élő státusz a konfigurációd alapján</div>
+            <h2>Aktív kínálat, számokban.</h2>
+          </div>
+          <div class="trend-badge">
+            <span class="trend-rank">#HU</span>
+            <div class="trend-text">
+              <strong>Zero-Proxy Direct HTTP</strong>
+              Nuvio &amp; Stremio kompatibilis · v2.7.0
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-cell">
+            <div class="kpi-bar" style="background: var(--white);"></div>
+            <div class="kpi-val" id="kpiSources">15 / 15</div>
+            <div class="kpi-label">Aktív stream forrás</div>
+            <div class="kpi-note">VOD + IPTV csomagok</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-bar" style="background: var(--orange);"></div>
+            <div class="kpi-val" id="kpiChannels">162</div>
+            <div class="kpi-label">Élő TV csatorna</div>
+            <div class="kpi-note">Valós idejű EPG</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-bar" style="background: var(--amber);"></div>
+            <div class="kpi-val" id="kpiCatalogs">17 / 17</div>
+            <div class="kpi-label">Katalógus polc</div>
+            <div class="kpi-note">TMDB, Mafab, MTVA</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-bar" style="background: var(--blue);"></div>
+            <div class="kpi-val">302</div>
+            <div class="kpi-label">Direkt átirányítás</div>
+            <div class="kpi-note">0 köztes proxy sávszélesség</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-bar" style="background: var(--coral);"></div>
+            <div class="kpi-val" id="kpiSubtitles">BE</div>
+            <div class="kpi-label">Magyar felirat</div>
+            <div class="kpi-note">OpenSubtitles .srt</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CH 01: RESOLUTIONS & SUBTITLES -->
+    <section class="sec" id="ch01">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-title">
+            <span class="ch-badge">CH 01</span>
+            <h2>Felbontás &amp; Felirat Szűrő</h2>
+          </div>
+          <div class="sec-actions">
+            <button type="button" class="btn-chip" onclick="setResolutions(['1080p','720p','480p','360p'])">Minden felbontás</button>
+            <button type="button" class="btn-chip" onclick="setResolutions(['1080p','720p'])">Csak HD (1080p+720p)</button>
+            <button type="button" class="btn-chip" onclick="setResolutions(['1080p'])">Csak 1080p FHD</button>
+          </div>
+        </div>
+
+        <div class="res-bar" id="resolutionsGrid">
+          <label class="res-item" data-res="1080p">
+            <input type="checkbox" class="clean-cb" value="1080p" checked onchange="onConfigChange()" />
+            <span class="res-label">1080p FHD</span>
+            <span class="res-sub">FULL HD</span>
+          </label>
+          <label class="res-item" data-res="720p">
+            <input type="checkbox" class="clean-cb" value="720p" checked onchange="onConfigChange()" />
+            <span class="res-label">720p HD</span>
+            <span class="res-sub">HD</span>
+          </label>
+          <label class="res-item" data-res="480p">
+            <input type="checkbox" class="clean-cb" value="480p" checked onchange="onConfigChange()" />
+            <span class="res-label">480p SD</span>
+            <span class="res-sub">SD</span>
+          </label>
+          <label class="res-item" data-res="360p">
+            <input type="checkbox" class="clean-cb" value="360p" checked onchange="onConfigChange()" />
+            <span class="res-label">360p LQ</span>
+            <span class="res-sub">MOBIL</span>
+          </label>
+        </div>
+
+        <label class="subtitle-toggle-card" id="subtitleToggleCard" for="subtitlesToggle">
+          <div class="subtitle-toggle-info">
+            <div class="subtitle-toggle-title-row">
+              <span class="subtitle-toggle-title">📝 Magyar Feliratok (OpenSubtitles HU)</span>
+              <span class="tag tag-ok">Zero Proxy · Csak HU</span>
+            </div>
+            <span class="subtitle-toggle-desc">Automatikus magyar (.srt) felirat keresés idegen nyelvű filmekhez és sorozatokhoz (IMDb + TMDB támogatással).</span>
+          </div>
+          <div class="subtitle-toggle-control">
+            <span class="subtitle-state-pill" id="subtitlesStateBadge">BEKAPCSOLVA</span>
+            <span class="switch-pill">
+              <input type="checkbox" id="subtitlesToggle" checked onchange="onConfigChange()" aria-label="Magyar feliratok engedélyezése" />
+              <span class="switch-slider" aria-hidden="true"></span>
+            </span>
+          </div>
+        </label>
+      </div>
+    </section>
+
+    <!-- CH 02: SOURCES & LIVE IPTV -->
+    <section class="sec" id="ch02">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-title">
+            <span class="ch-badge c-amber">CH 02</span>
+            <h2>Magyar Források &amp; Élő TV (IPTV)</h2>
+          </div>
+        </div>
+
+        <div class="dropdown-wrap" id="sourcesDropdownWrap">
+          <div class="dropdown-trigger">
+            <button type="button" class="dropdown-toggle-btn" id="sourcesDropdownTrigger" aria-expanded="false" aria-controls="sourcesDropdownPanel" onclick="toggleDropdown('sources')">
+              <span class="dropdown-icon" aria-hidden="true">🌐</span>
+              <span class="dropdown-header-text">
+                <span class="dropdown-title-line">
+                  <span class="dropdown-title">Film &amp; Sorozat Források</span>
+                  <span class="dropdown-badge badge-sources" id="sourcesDropdownCount">13 / 13 aktív</span>
+                </span>
+                <span class="dropdown-preview" id="sourcesDropdownPreview">Minden VOD forrás aktív (13/13)</span>
+              </span>
+              <span class="dropdown-chevron" aria-hidden="true">▼</span>
+            </button>
+            <div class="dropdown-actions">
+              <button type="button" class="btn-chip chip-mini" onclick="toggleAllVodSources(true)">Mind be</button>
+              <button type="button" class="btn-chip chip-mini" onclick="toggleAllVodSources(false)">Mind ki</button>
+            </div>
+          </div>
+
+          <div class="dropdown-panel" id="sourcesDropdownPanel">
+            <div class="dropdown-panel-inner">
+              <div class="clean-list" id="sourcesGrid">
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="mediaklikk" checked onchange="onConfigChange()" /><span class="row-idx">01</span><span class="row-name">MédiaKlikk (MTVA)</span><span class="row-desc">43 klasszikus mese/sorozat archívum + 7 élő TV (1080p HLS)</span><span class="row-meta"><span class="tag tag-ok">Hivatalos MTVA</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="jobbmintatv" checked onchange="onConfigChange()" /><span class="row-idx">02</span><span class="row-name">JobbMintATv</span><span class="row-desc">Mozifilmek és sorozat epizódok (Videa MP4 &amp; OK.ru 1080p HLS)</span><span class="row-meta"><span class="tag tag-ok">IMDb ellenőrzött</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="filmezek" checked onchange="onConfigChange()" /><span class="row-idx">03</span><span class="row-name">Filmezek.com</span><span class="row-desc">Több tárhelyes magyar film- és sorozatgyűjtemény (Videa &amp; OK.ru 1080p)</span><span class="row-meta"><span class="tag tag-ok">IMDb ellenőrzött</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="videa" checked onchange="onConfigChange()" /><span class="row-idx">04</span><span class="row-name">Videa.hu</span><span class="row-desc">RC4 XML dekódoló — közvetlen 1080p/720p MP4 streamek</span><span class="row-meta"><span class="tag tag-warn">Közösségi MP4</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="indavideo" checked onchange="onConfigChange()" /><span class="row-idx">05</span><span class="row-name">Indavideo.hu</span><span class="row-desc">Dinamikus amfphp token feloldó — 720p/360p MP4</span><span class="row-meta"><span class="tag tag-warn">Közösségi MP4</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="filmvilag2" checked onchange="onConfigChange()" /><span class="row-idx">06</span><span class="row-name">Filmvilág2</span><span class="row-desc">Magyar szinkronos teljes filmek (Videa, Indavideo, OK.ru)</span><span class="row-meta"><span class="tag tag-warn">Cím alapú</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="mesefilm" checked onchange="onConfigChange()" /><span class="row-idx">07</span><span class="row-name">MeseKincstár</span><span class="row-desc">Családi animációk, bábfilmek és mesék (évszám/hossz szűrővel)</span><span class="row-meta"><span class="tag tag-ok">Ellenőrzött</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="videakid" checked onchange="onConfigChange()" /><span class="row-idx">08</span><span class="row-name">Videakid.hu</span><span class="row-desc">Gyerekfilmek, rajzfilmek és mesék közvetlen MP4-ben</span><span class="row-meta"><span class="tag tag-warn">Közösségi</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="netmozi" checked onchange="onConfigChange()" /><span class="row-idx">09</span><span class="row-name">NetMozi</span><span class="row-desc">Szinkronos filmek és sorozatok (vTube, StreamRuby, LuluVid, MixDrop — 0 Proxy)</span><span class="row-meta"><span class="tag tag-live">100% Vercel</span><span class="tag tag-ok">0 Proxy</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="onlinefilmek" checked onchange="onConfigChange()" /><span class="row-idx">10</span><span class="row-name">Online-Filmek.me</span><span class="row-desc">Közvetlen Videa, OK.ru és Self-Host VOE 1080p folyamok</span><span class="row-meta"><span class="tag tag-warn">Közösségi</span><span class="tag tag-sh">VOE Self-Host</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="sorozatoknet" checked onchange="onConfigChange()" /><span class="row-idx">11</span><span class="row-name">Sorozatok.net</span><span class="row-desc">Hunter JS dekódoló sorozat epizódokhoz</span><span class="row-meta"><span class="tag tag-sh">VOE Self-Host</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hdmozi" checked onchange="onConfigChange()" /><span class="row-idx">12</span><span class="row-name">HDMozi</span><span class="row-desc">1080p FHD AES-128 HLS mozifilmek és sorozatok</span><span class="row-meta"><span class="tag tag-ok">IMDb ellenőrzött</span><span class="tag tag-sh">Csak Self-Host</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="dmdamedia" checked onchange="onConfigChange()" /><span class="row-idx">13</span><span class="row-name">DMDamedia</span><span class="row-desc">Magyar szinkronos sorozatok és filmek</span><span class="row-meta"><span class="tag tag-warn">Cím alapú</span><span class="tag tag-sh">Csak Self-Host</span></span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dropdown-wrap" id="liveSourcesDropdownWrap">
+          <div class="dropdown-trigger">
+            <button type="button" class="dropdown-toggle-btn" id="liveSourcesDropdownTrigger" aria-expanded="false" aria-controls="liveSourcesDropdownPanel" onclick="toggleDropdown('liveSources')">
+              <span class="dropdown-icon" aria-hidden="true" style="color: var(--amber);">📺</span>
+              <span class="dropdown-header-text">
+                <span class="dropdown-title-line">
+                  <span class="dropdown-title">Élő TV (IPTV) Források</span>
+                  <span class="dropdown-badge badge-live-sources" id="liveSourcesDropdownCount">3 / 3 csomag aktív</span>
+                </span>
+                <span class="dropdown-preview" id="liveSourcesDropdownPreview">Minden IPTV forrás aktív (MTVA + OnlineStream)</span>
+              </span>
+              <span class="dropdown-chevron" aria-hidden="true">▼</span>
+            </button>
+            <div class="dropdown-actions">
+              <button type="button" class="btn-chip chip-mini" onclick="toggleAllLiveSources('all')">Mind be</button>
+              <button type="button" class="btn-chip chip-mini" onclick="toggleAllLiveSources('no_local')">Helyi nélkül</button>
+              <button type="button" class="btn-chip chip-mini" onclick="toggleAllLiveSources('none')">Mind ki</button>
+            </div>
+          </div>
+
+          <div class="dropdown-panel" id="liveSourcesDropdownPanel">
+            <div class="dropdown-panel-inner">
+              <div class="clean-list" id="liveSourcesGrid">
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="mediaklikk" checked onchange="onConfigChange()" /><span class="row-idx">01</span><span class="row-name">MédiaKlikk Hivatalos MTVA (1080p HLS)</span><span class="row-desc">M1, M2, Duna, M4 Sport, M5, Duna World hivatalos élő streamjei</span><span class="row-meta"><span class="tag tag-ok">Hivatalos MTVA</span><span class="tag tag-live">● Élő 1080p</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="onlinestream" checked onchange="onConfigChange()" /><span class="row-idx">02</span><span class="row-name">OnlineStream IPTV — Prémium Csatornák</span><span class="row-desc">94 országos, film, sport, doksi &amp; gyerek csatorna (RTL, TV2, Film+, Sport1-2, EuroSport...)</span><span class="row-meta"><span class="tag tag-live">● 94 Adó</span><span class="tag tag-ok">Közvetlen HLS</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="onlinestream_local" checked onchange="onConfigChange()" /><span class="row-idx">03</span><span class="row-name">OnlineStream IPTV — Helyi Városi TV-k</span><span class="row-desc">68 helyi körzeti adás (Debrecen TV, Fehérvár TV, Tisza TV, Szeged TV...)</span><span class="row-meta"><span class="tag tag-warn">68 Helyi Adó</span></span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CH 03: CATALOGS -->
+    <section class="sec" id="ch03">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-title">
+            <span class="ch-badge c-violet">CH 03</span>
+            <h2>Katalógus Polcok (11 VOD &amp; 6 Élő TV)</h2>
+          </div>
+        </div>
+
+        <div class="dropdown-wrap" id="vodCatalogsDropdownWrap">
+          <div class="dropdown-trigger">
+            <button type="button" class="dropdown-toggle-btn" id="vodCatalogsDropdownTrigger" aria-expanded="false" aria-controls="vodCatalogsDropdownPanel" onclick="toggleDropdown('vodCatalogs')">
+              <span class="dropdown-icon" aria-hidden="true" style="color: var(--violet);">📚</span>
+              <span class="dropdown-header-text">
+                <span class="dropdown-title-line">
+                  <span class="dropdown-title">Film &amp; Sorozat Katalógusok</span>
+                  <span class="dropdown-badge badge-vod-catalogs" id="vodCatalogsDropdownCount">11 / 11 aktív</span>
+                </span>
+                <span class="dropdown-preview" id="vodCatalogsDropdownPreview">Mind a 11 VOD katalógus aktív</span>
+              </span>
+              <span class="dropdown-chevron" aria-hidden="true">▼</span>
+            </button>
+            <div class="dropdown-actions">
+              <button type="button" class="btn-chip chip-mini" onclick="setVodCatalogPreset('all')">Mind be</button>
+              <button type="button" class="btn-chip chip-mini" onclick="setVodCatalogPreset('core')">Csak alap (6)</button>
+              <button type="button" class="btn-chip chip-mini" onclick="setVodCatalogPreset('none')">Mind ki</button>
+            </div>
+          </div>
+
+          <div class="dropdown-panel" id="vodCatalogsDropdownPanel">
+            <div class="dropdown-panel-inner">
+              <div class="clean-list" id="vodCatalogsGrid">
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-mediaklikk-classics" checked onchange="onConfigChange()" /><span class="row-idx">01</span><span class="row-name">MédiaKlikk Klasszikusok</span><span class="row-desc">30 MTVA archív mese és sorozat (Magyar népmesék, Süsü, Ho-ho-horgász)</span><span class="row-meta"><span class="tag tag-gold">MTVA Klasszikus</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-trending-movies" checked onchange="onConfigChange()" /><span class="row-idx">02</span><span class="row-name">Heti Trendi Filmek</span><span class="row-desc">Mafab.hu &amp; TMDB magyar heti filmes toplista</span><span class="row-meta"><span class="tag tag-ok">Heti toplista</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-trending-series" checked onchange="onConfigChange()" /><span class="row-idx">03</span><span class="row-name">Heti Trendi Sorozatok</span><span class="row-desc">Mafab.hu &amp; TMDB magyar heti sorozat toplista</span><span class="row-meta"><span class="tag tag-ok">Heti toplista</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-cinema-movies" checked onchange="onConfigChange()" /><span class="row-idx">04</span><span class="row-name">Friss Mozifilmek</span><span class="row-desc">Már elérhető szinkronos mozis sikerfilmek</span><span class="row-meta"><span class="tag tag-ok">Mozisikerek</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-hungarian-movies" checked onchange="onConfigChange()" /><span class="row-idx">05</span><span class="row-name">Magyar Filmek</span><span class="row-desc">Legjobb hazai gyártású magyar filmek és klasszikusok</span><span class="row-meta"><span class="tag tag-gold">Magyar Mozi</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-hungarian-series" checked onchange="onConfigChange()" /><span class="row-idx">06</span><span class="row-name">Magyar Sorozatok</span><span class="row-desc">Hazai sorozatok és MTVA klasszikusok</span><span class="row-meta"><span class="tag tag-gold">Magyar Sorozat</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-stream-netflix" checked onchange="onConfigChange()" /><span class="row-idx">07</span><span class="row-name">Netflix HU</span><span class="row-desc">Netflix magyarországi szinkronos kínálat</span><span class="row-meta"><span class="tag tag-stream s-netflix">Netflix</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-stream-max" checked onchange="onConfigChange()" /><span class="row-idx">08</span><span class="row-name">Max / HBO</span><span class="row-desc">Max Magyarország toplista</span><span class="row-meta"><span class="tag tag-stream s-max">Max</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-stream-disney" checked onchange="onConfigChange()" /><span class="row-idx">09</span><span class="row-name">Disney+ HU</span><span class="row-desc">Disney, Marvel, Star Wars magyar szinkronnal</span><span class="row-meta"><span class="tag tag-stream s-disney">Disney+</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-stream-skyshowtime" checked onchange="onConfigChange()" /><span class="row-idx">10</span><span class="row-name">SkyShowtime</span><span class="row-desc">Universal &amp; Paramount sikerfilmek magyarul</span><span class="row-meta"><span class="tag tag-stream s-skyshowtime">SkyShowtime</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-stream-prime" checked onchange="onConfigChange()" /><span class="row-idx">11</span><span class="row-name">Prime Video</span><span class="row-desc">Amazon Prime Video magyarországi kínálat</span><span class="row-meta"><span class="tag tag-stream s-prime">Prime</span></span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dropdown-wrap" id="liveCatalogsDropdownWrap">
+          <div class="dropdown-trigger">
+            <button type="button" class="dropdown-toggle-btn" id="liveCatalogsDropdownTrigger" aria-expanded="false" aria-controls="liveCatalogsDropdownPanel" onclick="toggleDropdown('liveCatalogs')">
+              <span class="dropdown-icon" aria-hidden="true" style="color: var(--coral);">📡</span>
+              <span class="dropdown-header-text">
+                <span class="dropdown-title-line">
+                  <span class="dropdown-title">Élő TV Katalógusok (6 Kategória)</span>
+                  <span class="dropdown-badge badge-live-catalogs" id="liveCatalogsDropdownCount">6 / 6 aktív</span>
+                </span>
+                <span class="dropdown-preview" id="liveCatalogsDropdownPreview">Mind a 6 kategória aktív (162 élő adó)</span>
+              </span>
+              <span class="dropdown-chevron" aria-hidden="true">▼</span>
+            </button>
+            <div class="dropdown-actions">
+              <button type="button" class="btn-chip chip-mini" onclick="setLiveCatalogPreset('all')">Mind be (6)</button>
+              <button type="button" class="btn-chip chip-mini" onclick="setLiveCatalogPreset('no_local')">Helyi nélkül (5)</button>
+              <button type="button" class="btn-chip chip-mini" onclick="setLiveCatalogPreset('none')">Mind ki</button>
+            </div>
+          </div>
+
+          <div class="dropdown-panel" id="liveCatalogsDropdownPanel">
+            <div class="dropdown-panel-inner">
+              <div class="clean-list" id="liveCatalogsGrid">
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-live-orszagos" checked onchange="onConfigChange()" /><span class="row-idx">01</span><span class="row-name">🔴 Élő TV: Országos &amp; Kereskedelmi</span><span class="row-desc">28 adó (RTL, TV2, M1, Duna, Super TV2, ATV, Hír TV...)</span><span class="row-meta"><span class="tag tag-live">● 28 Adó</span><span class="tag tag-ok">1080p HLS</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-live-film" checked onchange="onConfigChange()" /><span class="row-idx">02</span><span class="row-name">🎬 Élő TV: Film &amp; Sorozat</span><span class="row-desc">24 adó (Film+, Mozi+, Cool TV, AMC, HBO 1-2-3...)</span><span class="row-meta"><span class="tag tag-live">● 24 Adó</span><span class="tag tag-ok">Filmes</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-live-doksi" checked onchange="onConfigChange()" /><span class="row-idx">03</span><span class="row-name">🌍 Élő TV: Ismeretterjesztő &amp; Doksi</span><span class="row-desc">14 adó (Discovery, Animal Planet, Nat Geo, Spektrum...)</span><span class="row-meta"><span class="tag tag-live">● 14 Adó</span><span class="tag tag-gold">Dokumentum</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-live-sport" checked onchange="onConfigChange()" /><span class="row-idx">04</span><span class="row-name">⚽ Élő TV: Sport, Zene &amp; Életmód</span><span class="row-desc">20 adó (M4 Sport, Spíler 1-2, Sport 1-2, Arena4, EuroSport 1...)</span><span class="row-meta"><span class="tag tag-live">● 20 Adó</span><span class="tag tag-ok">Sport &amp; Zene</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-live-gyerek" checked onchange="onConfigChange()" /><span class="row-idx">05</span><span class="row-name">🧸 Élő TV: Rajzfilm &amp; Gyerek</span><span class="row-desc">8 adó (Minimax, Nickelodeon, Disney Channel, JimJam...)</span><span class="row-meta"><span class="tag tag-live">● 8 Adó</span><span class="tag tag-ok">Gyerek</span></span></label>
+                <label class="list-row"><input type="checkbox" class="clean-cb" value="hu-live-helyi" checked onchange="onConfigChange()" /><span class="row-idx">06</span><span class="row-name">📍 Élő TV: Helyi &amp; Városi TV-k</span><span class="row-desc">68 adó (Debrecen TV, Fehérvár TV, Tisza TV, Szeged TV...)</span><span class="row-meta"><span class="tag tag-warn">● 68 Helyi Adó</span></span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FULL-WIDTH AMBER CALLOUT BAND (cleanyour.tv "CH 02 Not Android?") -->
+    <section class="amber-callout">
+      <div class="wrap amber-callout-inner">
+        <div>
+          <div class="amber-callout-kicker">KÜLSŐ LEJÁTSZÓK · VLC, KODI &amp; TIVIMATE</div>
+          <h3>Nem Stremiót vagy Nuviót használsz?</h3>
+          <p>Töltsd le mind a 162 magyar élő TV csatornát közvetlen M3U vagy XSPF playlistként, vagy nézd meg a 1080p sebesség-audit táblázatot.</p>
+        </div>
+        <button type="button" class="btn-dark-solid" onclick="openDropdown('tvTools'); document.getElementById('tvToolsSec').scrollIntoView({behavior:'smooth'});">
+          TV Listák &amp; 1080p Audit ↓
+        </button>
+      </div>
+    </section>
+
+    <!-- CH 04: STREAM TESTER -->
+    <section class="sec" id="ch04">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-title">
+            <span class="ch-badge c-amber">CH 04</span>
+            <h2>Élő Stream &amp; Felbontás Kereső</h2>
+          </div>
+        </div>
+
+        <div class="tester-box">
+          <div class="search-bar">
+            <select id="mediaType" class="select-input" onchange="onMediaTypeChange()">
+              <option value="movie">Film / Élő TV</option>
+              <option value="series">Sorozat (Évad / Epizód)</option>
+            </select>
+            <input type="text" id="searchInput" class="text-input" value="Egri csillagok" placeholder="Cím (pl. Egri csillagok, Macskafogó, Dűne, M4 Sport)..." onkeydown="if(event.key==='Enter') testStreams()" />
+            <button type="button" class="btn-search" onclick="testStreams()">Keresés →</button>
+          </div>
+
+          <div class="preset-line">
+            <span>Gyors TV:</span>
+            <button type="button" class="preset-link" onclick="runPreset('movie', 'mediaklikk-live-m4')">M4 Sport (1080p)</button>
+            <button type="button" class="preset-link" onclick="runPreset('movie', 'onlinestream-live-6141')">RTL</button>
+            <button type="button" class="preset-link" onclick="runPreset('movie', 'onlinestream-live-5936')">Nat Geo</button>
+            <button type="button" class="preset-link" onclick="runPreset('movie', 'onlinestream-live-6150')">Film+</button>
+            <span style="opacity:0.4; margin: 0 3px;">|</span>
+            <span>Filmek &amp; Sorozatok:</span>
+            <button type="button" class="preset-link" onclick="runPreset('movie', 'Macskafogó')">Macskafogó</button>
+            <button type="button" class="preset-link" onclick="runPreset('movie', 'Egri csillagok')">Egri csillagok</button>
+            <button type="button" class="preset-link" onclick="runPreset('series', 'A nagy ho-ho-horgász')">A nagy ho-ho-horgász</button>
+            <button type="button" class="preset-link" onclick="runPreset('series', 'Magyar népmesék')">Magyar népmesék</button>
+            <button type="button" class="preset-link" onclick="runPreset('series', 'Trónok harca')">Trónok harca</button>
+          </div>
+
+          <div id="seriesSelectorBar" class="series-bar" style="display:none;">
+            <div class="series-bar-header">
+              <div class="series-badge">
+                <span>📺</span>
+                <span id="seriesTitleLabel">Sorozat epizód választó</span>
+              </div>
+              <div class="series-ep-nav">
+                <button class="btn-step" id="prevEpBtn" onclick="stepEpisode(-1)">◀ Előző</button>
+                <button class="btn-step" id="nextEpBtn" onclick="stepEpisode(1)">Következő ▶</button>
+              </div>
+            </div>
+            <div class="series-bar-controls">
+              <div class="control-group">
+                <label class="control-label" for="seasonSelect">ÉVAD</label>
+                <select id="seasonSelect" class="select-input" onchange="onSeasonChanged()">
+                  <option value="1">1. évad</option>
+                </select>
+              </div>
+              <div class="control-group control-group-ep">
+                <label class="control-label" for="episodeSelect">EPIZÓD</label>
+                <select id="episodeSelect" class="select-input" style="flex:1;" onchange="onEpisodeChanged()">
+                  <option value="1">1. rész</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div id="matchedBanner" class="matched-banner"></div>
+
+          <div class="filter-bar" id="liveResTabs">
+            <span>Szűrés:</span>
+            <button class="btn-chip active" data-res="all" onclick="setActiveResTab('all')">Összes</button>
+            <button class="btn-chip" data-res="1080p" onclick="setActiveResTab('1080p')">1080p FHD</button>
+            <button class="btn-chip" data-res="720p" onclick="setActiveResTab('720p')">720p HD</button>
+            <button class="btn-chip" data-res="480p" onclick="setActiveResTab('480p')">480p SD</button>
+            <button class="btn-chip" data-res="360p" onclick="setActiveResTab('360p')">360p</button>
+          </div>
+
+          <div class="results-list" id="testOutput">
+            <div class="results-empty">Kattints a "Keresés →" gombra vagy válassz a gyors tesztek közül.</div>
+          </div>
+        </div>
+
+        <!-- TV PLAYLISTS & AUDIT DROPDOWN -->
+        <div style="margin-top: 16px;" id="tvToolsSec">
+          <div class="dropdown-wrap" id="tvToolsDropdownWrap">
+            <div class="dropdown-trigger" style="padding-right: 0;">
+              <button type="button" class="dropdown-toggle-btn" id="tvToolsDropdownTrigger" aria-expanded="false" aria-controls="tvToolsDropdownPanel" onclick="toggleDropdown('tvTools')">
+                <span class="dropdown-icon" style="color: var(--amber);">📻</span>
+                <span class="dropdown-header-text">
+                  <span class="dropdown-title-line">
+                    <span class="dropdown-title">Élő TV Lejátszási Listák &amp; 1080p Audit</span>
+                    <span class="dropdown-badge badge-live-sources">VLC · M3U · Excel</span>
+                  </span>
+                  <span class="dropdown-preview">XSPF, M3U IPTV lista és 1080p audit táblázat letöltése</span>
+                </span>
+                <span class="dropdown-chevron" aria-hidden="true">▼</span>
+              </button>
+            </div>
+            <div class="dropdown-panel" id="tvToolsDropdownPanel">
+              <div class="dropdown-panel-inner tv-tools-inner">
+                <div style="font-size: 13px; color: var(--dim);">
+                  Közvetlen lejátszási listák külső lejátszókhoz (VLC, Kodi, TiviMate), valamint a 162 csatornás felbontás- és sebességmérési táblázat:
+                </div>
+                <div class="tv-tools-actions">
+                  <a class="btn-action" style="background: #d97706; color: #ffffff;" href="/playlist.xspf" download="nuvio-magyar-tv.xspf">📻 VLC (.xspf)</a>
+                  <a class="btn-action" style="background: var(--orange); color: var(--on-orange);" href="/playlist.m3u" download="nuvio-magyar-tv.m3u">📺 M3U (.m3u)</a>
+                  <a class="btn-action" style="background: #1f4e79; color: #ffffff;" href="/live_stream_speed_benchmark.xlsx" download="live_stream_speed_benchmark.xlsx">⚡ Sebesség Mérés (.xlsx)</a>
+                  <a class="btn-action" style="background: #1e3a5f; color: #ffffff;" href="/live_tv_1080p_audit.xlsx" download="live_tv_1080p_audit.xlsx">📊 1080p Audit (.xlsx)</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CH 05: 3 BORDERED CARDS (cleanyour.tv "Yes, and you can undo it.") -->
+    <section class="safe-sec">
+      <div class="wrap">
+        <div class="safe-kicker">CH 05 · ÁTLÁTHATÓSÁG</div>
+        <h2>Gyors, tiszta és visszafordítható.</h2>
+        <div class="safe-cards">
+          <div class="safe-card">
+            <h4>Nincs videótárolás</h4>
+            <p>A szerver nem hosztol és nem továbbít médiát; minden lejátszás HTTP 302 átirányítással közvetlenül a forrásra megy.</p>
+          </div>
+          <div class="safe-card">
+            <h4>Azonnal módosítható</h4>
+            <p>Bármelyik forrás, katalógus, helyi TV csomag vagy magyar felirat 1 kattintással ki- és bekapcsolható.</p>
+          </div>
+          <div class="safe-card">
+            <h4>Nyílt forráskód</h4>
+            <p><a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener">Nézd meg minden sorát GitHubon.</a> Közvetlen Node.js / Vercel HTTP kiegészítő.</p>
+          </div>
+        </div>
+        <p class="safe-note">
+          Ez a tesztfelület (<a href="/test">/test</a>) az új narancs-borostyán színvilágot mutatja; az eredeti nézetet itt éred el: <a href="/configure">eredeti OG felület →</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="studio-footer">
+    <div class="wrap footer-cols">
+      <div>
+        <div class="footer-brand-name">
+          <img src="/logo.svg?v=2.7.0" width="24" height="24" alt="" style="border-radius:5px;" />
+          <span>Magyar Streaming Pro</span>
+        </div>
+        <div class="footer-brand-sub">
+          v2.7.0 · HU Direct HTTP Addon<br />
+          Kizárólag nyilvános linkeket indexel.
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Beállítások</h5>
+        <ul>
+          <li><a href="#ch01">Felbontás &amp; Felirat</a></li>
+          <li><a href="#ch02">VOD &amp; IPTV Források</a></li>
+          <li><a href="#ch03">Katalógus Polcok</a></li>
+          <li><a href="#ch04">Élő Stream Kereső</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Lejátszás</h5>
+        <ul>
+          <li><a href="/manifest.json" target="_blank" rel="noopener">Alapértelmezett Manifest</a></li>
+          <li><a href="/playlist.m3u" download="nuvio-magyar-tv.m3u">IPTV M3U Lista</a></li>
+          <li><a href="/playlist.xspf" download="nuvio-magyar-tv.xspf">VLC XSPF Lista</a></li>
+          <li><a href="#tvToolsSec">1080p Audit Táblázat</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Verziók &amp; Kód</h5>
+        <ul>
+          <li><a href="/configure">OG Felület (/configure)</a></li>
+          <li><a href="/test">Narancs Teszt (/test)</a></li>
+          <li><a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener">GitHub Repó ↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const origin = window.location.origin;
+
+    const ALL_VOD_SOURCE_IDS = [
+      'mediaklikk','videa','indavideo','hdmozi','filmvilag2','jobbmintatv',
+      'netmozi','filmezek','onlinefilmek','dmdamedia','mesefilm','videakid','sorozatoknet'
+    ];
+    const ALL_LIVE_SOURCE_IDS = ['mediaklikk', 'onlinestream', 'onlinestream_local'];
+    const ALL_SOURCE_IDS = [...ALL_VOD_SOURCE_IDS, 'onlinestream', 'onlinestream_local'];
+    const ALL_RES_IDS = ['1080p', '720p', '480p', '360p'];
+
+    const ALL_VOD_CATALOG_IDS = [
+      'hu-mediaklikk-classics','hu-trending-movies',
+      'hu-trending-series','hu-cinema-movies','hu-hungarian-movies','hu-hungarian-series',
+      'hu-stream-netflix','hu-stream-max','hu-stream-disney','hu-stream-skyshowtime','hu-stream-prime'
+    ];
+    const CORE_VOD_CATALOG_IDS = [
+      'hu-mediaklikk-classics','hu-trending-movies',
+      'hu-trending-series','hu-cinema-movies','hu-hungarian-movies','hu-hungarian-series'
+    ];
+    const ALL_LIVE_CATALOG_IDS = [
+      'hu-live-orszagos','hu-live-film','hu-live-doksi','hu-live-sport','hu-live-gyerek','hu-live-helyi'
+    ];
+    const CORE_LIVE_CATALOG_IDS = [
+      'hu-live-orszagos','hu-live-film','hu-live-doksi','hu-live-sport','hu-live-gyerek'
+    ];
+    const DEFAULT_CATALOG_IDS = [...ALL_LIVE_CATALOG_IDS, ...ALL_VOD_CATALOG_IDS];
+
+    let lastFetchedStreams = [];
+    let activeResTab = 'all';
+
+    function showToast(html, duration = 3000) {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      toast.innerHTML = html;
+      toast.classList.add('show');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => toast.classList.remove('show'), duration);
+    }
+
+    async function copyTextToClipboard(text) {
+      if (!text || text === 'Betöltés...') return false;
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        try { await navigator.clipboard.writeText(text); return true; } catch (_) {}
+      }
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return Boolean(ok);
+      } catch (_) { return false; }
+    }
+
+    async function copyManifest() {
+      const urlEl = document.getElementById('manifestUrl');
+      const copyBtn = document.getElementById('copyBtn');
+      const url = urlEl ? urlEl.textContent.trim() : `${origin}/manifest.json`;
+      const ok = await copyTextToClipboard(url);
+      if (copyBtn) {
+        if (!copyBtn.dataset.origHtml) copyBtn.dataset.origHtml = copyBtn.innerHTML;
+        copyBtn.innerHTML = ok ? '✓ Kimásolva!' : 'Kijelölve';
+        clearTimeout(window._copyBtnTimer);
+        window._copyBtnTimer = setTimeout(() => { copyBtn.innerHTML = copyBtn.dataset.origHtml; }, 2000);
+      }
+      showToast(ok
+        ? '✅ <strong>Manifest link kimásolva!</strong><br>Illeszd be Nuvio vagy Stremio Addonok közé.'
+        : '⚠️ Automatikus másolás sikertelen — másold ki a fenti linket!', 3600);
+    }
+
+    async function installNuvio() {
+      const urlEl = document.getElementById('manifestUrl');
+      const url = urlEl ? urlEl.textContent.trim() : `${origin}/manifest.json`;
+      const ok = await copyTextToClipboard(url);
+      showToast(ok
+        ? '⚡ <strong>Manifest link másolva Nuvio-hoz!</strong><br>Nuvio app → <b>Addons</b> → <b>+ Add Addon</b> → Illeszd be!'
+        : '⚡ <strong>Nuvio telepítés:</strong><br>Másold ki a fenti Manifest linket!', 4500);
+    }
+
+    function getSubtitlesEnabled() {
+      const cb = document.getElementById('subtitlesToggle');
+      return cb ? Boolean(cb.checked) : true;
+    }
+
+    function toggleSubtitlesQuick() {
+      const cb = document.getElementById('subtitlesToggle');
+      if (!cb) return;
+      cb.checked = !cb.checked;
+      onConfigChange();
+    }
+
+    function applyQuickProfile(profile) {
+      document.querySelectorAll('.preset-tile').forEach(el => {
+        el.classList.toggle('is-active', el.getAttribute('data-profile') === profile);
+      });
+
+      if (profile === 'all') {
+        document.querySelectorAll('#sourcesGrid input, #liveSourcesGrid input, #resolutionsGrid input, #vodCatalogsGrid input, #liveCatalogsGrid input').forEach(cb => cb.checked = true);
+        const sub = document.getElementById('subtitlesToggle');
+        if (sub) sub.checked = true;
+      } else if (profile === 'hd') {
+        document.querySelectorAll('#sourcesGrid input, #liveSourcesGrid input, #vodCatalogsGrid input, #liveCatalogsGrid input').forEach(cb => cb.checked = true);
+        document.querySelectorAll('#resolutionsGrid input').forEach(cb => cb.checked = (cb.value === '1080p' || cb.value === '720p'));
+        const sub = document.getElementById('subtitlesToggle');
+        if (sub) sub.checked = true;
+      } else if (profile === 'tv') {
+        document.querySelectorAll('#sourcesGrid input').forEach(cb => cb.checked = (cb.value === 'mediaklikk'));
+        document.querySelectorAll('#liveSourcesGrid input').forEach(cb => cb.checked = true);
+        document.querySelectorAll('#vodCatalogsGrid input').forEach(cb => cb.checked = false);
+        document.querySelectorAll('#liveCatalogsGrid input').forEach(cb => cb.checked = true);
+        document.querySelectorAll('#resolutionsGrid input').forEach(cb => cb.checked = true);
+      } else if (profile === 'vod') {
+        document.querySelectorAll('#sourcesGrid input').forEach(cb => cb.checked = true);
+        document.querySelectorAll('#liveSourcesGrid input').forEach(cb => cb.checked = (cb.value === 'mediaklikk'));
+        document.querySelectorAll('#vodCatalogsGrid input').forEach(cb => cb.checked = true);
+        document.querySelectorAll('#liveCatalogsGrid input').forEach(cb => cb.checked = false);
+        document.querySelectorAll('#resolutionsGrid input').forEach(cb => cb.checked = true);
+      } else if (profile === 'nolocal') {
+        document.querySelectorAll('#liveSourcesGrid input').forEach(cb => cb.checked = (cb.value !== 'onlinestream_local'));
+        document.querySelectorAll('#liveCatalogsGrid input').forEach(cb => cb.checked = (cb.value !== 'hu-live-helyi'));
+      }
+      onConfigChange();
+      showToast('🎛️ <strong>Gyorsprofil alkalmazva!</strong> A Manifest link azonnal frissült.');
+    }
+
+    function getSelectedVodSources() { return [...document.querySelectorAll('#sourcesGrid input[type="checkbox"]:checked')].map(cb => cb.value); }
+    function getSelectedLiveSources() { return [...document.querySelectorAll('#liveSourcesGrid input[type="checkbox"]:checked')].map(cb => cb.value); }
+    function getSelectedSources() { return [...new Set([...getSelectedVodSources(), ...getSelectedLiveSources()])]; }
+    function getSelectedResolutions() { return [...document.querySelectorAll('#resolutionsGrid input[type="checkbox"]:checked')].map(cb => cb.value); }
+    function getSelectedVodCatalogs() { return [...document.querySelectorAll('#vodCatalogsGrid input[type="checkbox"]:checked')].map(cb => cb.value); }
+    function getSelectedLiveCatalogs() { return [...document.querySelectorAll('#liveCatalogsGrid input[type="checkbox"]:checked')].map(cb => cb.value); }
+    function getSelectedCatalogs() { return [...getSelectedLiveCatalogs(), ...getSelectedVodCatalogs()]; }
+
+    function onConfigChange() {
+      updateManifestUrl();
+      if (lastFetchedStreams.length > 0) renderStreams();
+    }
+
+    function countLiveChannels(liveCats) {
+      const counts = {
+        'hu-live-orszagos': 28,
+        'hu-live-film': 24,
+        'hu-live-doksi': 14,
+        'hu-live-sport': 20,
+        'hu-live-gyerek': 8,
+        'hu-live-helyi': 68
+      };
+      return liveCats.reduce((acc, id) => acc + (counts[id] || 0), 0);
+    }
+
+    function updateManifestUrl() {
+      const selectedVodSources = getSelectedVodSources();
+      const selectedLiveSources = getSelectedLiveSources();
+      const selectedSources = getSelectedSources();
+      const selectedRes = getSelectedResolutions();
+      const selectedVodCats = getSelectedVodCatalogs();
+      const selectedLiveCats = getSelectedLiveCatalogs();
+      const selectedCats = getSelectedCatalogs();
+      const subtitlesEnabled = getSubtitlesEnabled();
+
+      // Update subtitle card state
+      const card = document.getElementById('subtitleToggleCard');
+      const badge = document.getElementById('subtitlesStateBadge');
+      if (card) card.classList.toggle('is-off', !subtitlesEnabled);
+      if (badge) badge.textContent = subtitlesEnabled ? 'BEKAPCSOLVA' : 'KIKAPCSOLVA';
+
+      // Summary bar
+      const summaryEl = document.getElementById('activeSummaryBadge');
+      if (summaryEl) {
+        summaryEl.textContent = `${selectedSources.length} forrás · ${selectedCats.length} katalógus · ${selectedRes.length} felbontás · HU felirat ${subtitlesEnabled ? 'BE' : 'KI'}`;
+      }
+
+      // KPI & Terminal updates
+      const chCount = countLiveChannels(selectedLiveCats);
+      const elKpiS = document.getElementById('kpiSources');
+      const elKpiCh = document.getElementById('kpiChannels');
+      const elKpiCat = document.getElementById('kpiCatalogs');
+      const elKpiSub = document.getElementById('kpiSubtitles');
+      if (elKpiS) elKpiS.textContent = `${selectedSources.length} / 15`;
+      if (elKpiCh) elKpiCh.textContent = String(chCount);
+      if (elKpiCat) elKpiCat.textContent = `${selectedCats.length} / 17`;
+      if (elKpiSub) elKpiSub.textContent = subtitlesEnabled ? 'BE' : 'KI';
+
+      const tVod = document.getElementById('termVodLine');
+      const tLive = document.getElementById('termLiveLine');
+      const tCat = document.getElementById('termCatLine');
+      const tRes = document.getElementById('termResLine');
+      const tSub = document.getElementById('termSubLine');
+      if (tVod) tVod.textContent = `${selectedVodSources.length} / 13 film & sorozat forrás aktív`;
+      if (tLive) tLive.textContent = `${selectedLiveSources.length} / 3 IPTV csomag · ${chCount} adó (EPG)`;
+      if (tCat) tCat.textContent = `${selectedCats.length} / 17 katalógus polc engedélyezve`;
+      if (tRes) tRes.textContent = `Felbontás: ${selectedRes.length ? selectedRes.join(', ') : 'nincs szűrő'}`;
+      if (tSub) tSub.textContent = `OpenSubtitles HU felirat: ${subtitlesEnabled ? 'BEKAPCSOLVA' : 'KIKAPCSOLVA'}`;
+
+      // Dropdown previews
+      const sCnt = document.getElementById('sourcesDropdownCount');
+      const sPrev = document.getElementById('sourcesDropdownPreview');
+      if (sCnt) sCnt.textContent = `${selectedVodSources.length} / ${ALL_VOD_SOURCE_IDS.length} aktív`;
+      if (sPrev) sPrev.textContent = selectedVodSources.length === 13 ? 'Minden VOD forrás aktív (13/13)' : (selectedVodSources.length === 0 ? 'Nincs VOD forrás kiválasztva' : `${selectedVodSources.length} kiválasztott VOD forrás`);
+
+      const lCnt = document.getElementById('liveSourcesDropdownCount');
+      const lPrev = document.getElementById('liveSourcesDropdownPreview');
+      if (lCnt) lCnt.textContent = `${selectedLiveSources.length} / ${ALL_LIVE_SOURCE_IDS.length} csomag aktív`;
+      if (lPrev) lPrev.textContent = selectedLiveSources.length === 3 ? 'Minden IPTV forrás aktív (MTVA + OnlineStream)' : (selectedLiveSources.length === 0 ? 'Nincs IPTV forrás' : `${selectedLiveSources.length} IPTV csomag aktív`);
+
+      const vcCnt = document.getElementById('vodCatalogsDropdownCount');
+      const vcPrev = document.getElementById('vodCatalogsDropdownPreview');
+      if (vcCnt) vcCnt.textContent = `${selectedVodCats.length} / ${ALL_VOD_CATALOG_IDS.length} aktív`;
+      if (vcPrev) vcPrev.textContent = selectedVodCats.length === 11 ? 'Mind a 11 VOD katalógus aktív' : `${selectedVodCats.length} / 11 VOD katalógus`;
+
+      const lcCnt = document.getElementById('liveCatalogsDropdownCount');
+      const lcPrev = document.getElementById('liveCatalogsDropdownPreview');
+      if (lcCnt) lcCnt.textContent = `${selectedLiveCats.length} / ${ALL_LIVE_CATALOG_IDS.length} aktív`;
+      if (lcPrev) lcPrev.textContent = selectedLiveCats.length === 6 ? 'Mind a 6 kategória aktív (162 élő adó)' : `${selectedLiveCats.length} / 6 kategória (${chCount} élő adó)`;
+
+      // Manifest assembly
+      let manifestUrl = `${origin}/manifest.json`;
+      const cfgObj = {};
+      if (selectedSources.length > 0 && selectedSources.length < ALL_SOURCE_IDS.length) cfgObj.sources = selectedSources;
+      if (selectedRes.length > 0 && selectedRes.length < ALL_RES_IDS.length) cfgObj.qualities = selectedRes;
+      const isDefaultCats = selectedCats.length === DEFAULT_CATALOG_IDS.length && DEFAULT_CATALOG_IDS.every(c => selectedCats.includes(c));
+      if (!isDefaultCats && selectedCats.length > 0) cfgObj.catalogs = selectedCats;
+      if (!subtitlesEnabled) cfgObj.subtitles = false;
+
+      if (Object.keys(cfgObj).length > 0) {
+        const b64 = btoa(JSON.stringify(cfgObj)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        manifestUrl = `${origin}/${b64}/manifest.json`;
+      }
+
+      const urlEl = document.getElementById('manifestUrl');
+      const prevUrl = urlEl.textContent;
+      urlEl.textContent = manifestUrl;
+      if (prevUrl && prevUrl !== 'Betöltés...' && prevUrl !== manifestUrl) {
+        urlEl.classList.remove('url-flash');
+        void urlEl.offsetWidth;
+        urlEl.classList.add('url-flash');
+      }
+      document.getElementById('stremioInstallBtn').href = manifestUrl.replace(/^https?:\/\//, 'stremio://');
+    }
+
+    function setResolutions(resList) {
+      const set = new Set(resList);
+      document.querySelectorAll('#resolutionsGrid input[type="checkbox"]').forEach(cb => cb.checked = set.has(cb.value));
+      onConfigChange();
+    }
+    function toggleAllVodSources(state) {
+      document.querySelectorAll('#sourcesGrid input[type="checkbox"]').forEach(cb => cb.checked = state);
+      onConfigChange();
+    }
+    function toggleAllLiveSources(mode) {
+      document.querySelectorAll('#liveSourcesGrid input[type="checkbox"]').forEach(cb => {
+        cb.checked = mode === 'all' ? true : (mode === 'none' ? false : cb.value !== 'onlinestream_local');
+      });
+      onConfigChange();
+    }
+    function setVodCatalogPreset(mode) {
+      const set = new Set(mode === 'core' ? CORE_VOD_CATALOG_IDS : ALL_VOD_CATALOG_IDS);
+      document.querySelectorAll('#vodCatalogsGrid input[type="checkbox"]').forEach(cb => {
+        cb.checked = mode === 'all' ? true : (mode === 'none' ? false : set.has(cb.value));
+      });
+      onConfigChange();
+    }
+    function setLiveCatalogPreset(mode) {
+      const set = new Set(mode === 'no_local' ? CORE_LIVE_CATALOG_IDS : ALL_LIVE_CATALOG_IDS);
+      document.querySelectorAll('#liveCatalogsGrid input[type="checkbox"]').forEach(cb => {
+        cb.checked = mode === 'all' ? true : (mode === 'none' ? false : set.has(cb.value));
+      });
+      onConfigChange();
+    }
+
+    function toggleDropdown(type) {
+      const map = {
+        'sources': { wrap: 'sourcesDropdownWrap', trigger: 'sourcesDropdownTrigger' },
+        'liveSources': { wrap: 'liveSourcesDropdownWrap', trigger: 'liveSourcesDropdownTrigger' },
+        'vodCatalogs': { wrap: 'vodCatalogsDropdownWrap', trigger: 'vodCatalogsDropdownTrigger' },
+        'liveCatalogs': { wrap: 'liveCatalogsDropdownWrap', trigger: 'liveCatalogsDropdownTrigger' },
+        'tvTools': { wrap: 'tvToolsDropdownWrap', trigger: 'tvToolsDropdownTrigger' }
+      };
+      const item = map[type];
+      if (!item) return;
+      const wrap = document.getElementById(item.wrap);
+      const trigger = document.getElementById(item.trigger);
+      if (!wrap) return;
+      const isOpen = wrap.classList.toggle('is-open');
+      if (trigger) trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+
+    function openDropdown(type) {
+      const map = {
+        'sources': { wrap: 'sourcesDropdownWrap', trigger: 'sourcesDropdownTrigger' },
+        'liveSources': { wrap: 'liveSourcesDropdownWrap', trigger: 'liveSourcesDropdownTrigger' },
+        'vodCatalogs': { wrap: 'vodCatalogsDropdownWrap', trigger: 'vodCatalogsDropdownTrigger' },
+        'liveCatalogs': { wrap: 'liveCatalogsDropdownWrap', trigger: 'liveCatalogsDropdownTrigger' },
+        'tvTools': { wrap: 'tvToolsDropdownWrap', trigger: 'tvToolsDropdownTrigger' }
+      };
+      const item = map[type];
+      if (!item) return;
+      const wrap = document.getElementById(item.wrap);
+      const trigger = document.getElementById(item.trigger);
+      if (wrap) wrap.classList.add('is-open');
+      if (trigger) trigger.setAttribute('aria-expanded', 'true');
+    }
+
+    function getStreamBucket(s) {
+      const h = s.height || 0;
+      const q = String(s.quality || '').toLowerCase();
+      const name = String(s.name || '');
+      if (h >= 1080 || q === '1080p' || name.includes('1080')) return '1080p';
+      if (h >= 720 || q === '720p' || name.includes('720')) return '720p';
+      if (h >= 480 || q === '480p' || name.includes('480')) return '480p';
+      return '360p';
+    }
+
+    function setActiveResTab(res) {
+      activeResTab = res;
+      document.querySelectorAll('#liveResTabs button').forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-res') === res));
+      renderStreams();
+    }
+
+    function updateTabCounts(streams) {
+      const counts = { all: streams.length, '1080p': 0, '720p': 0, '480p': 0, '360p': 0 };
+      streams.forEach(s => { const b = getStreamBucket(s); counts[b] = (counts[b] || 0) + 1; });
+      const labels = {
+        all: `Összes (${counts.all})`,
+        '1080p': `1080p FHD (${counts['1080p']})`,
+        '720p': `720p HD (${counts['720p']})`,
+        '480p': `480p SD (${counts['480p']})`,
+        '360p': `360p (${counts['360p']})`
+      };
+      document.querySelectorAll('#liveResTabs button').forEach(btn => {
+        const r = btn.getAttribute('data-res');
+        if (labels[r]) btn.textContent = labels[r];
+      });
+    }
+
+    function renderStreams() {
+      const out = document.getElementById('testOutput');
+      const selectedResSet = new Set(getSelectedResolutions());
+      const allowedByCheckbox = lastFetchedStreams.filter(s => selectedResSet.has(getStreamBucket(s)));
+      updateTabCounts(allowedByCheckbox);
+
+      const filtered = activeResTab === 'all' ? allowedByCheckbox : allowedByCheckbox.filter(s => getStreamBucket(s) === activeResTab);
+      if (filtered.length === 0) {
+        out.innerHTML = '<div class="results-empty">Nincs találat a kiválasztott felbontás-szűrővel.</div>';
+        return;
+      }
+
+      out.innerHTML = filtered.map((s, idx) => {
+        const bucket = getStreamBucket(s);
+        const badgeClass = bucket === '1080p' ? 'q1080' : bucket === '720p' ? 'q720' : bucket === '480p' ? 'q480' : 'q360';
+        const num = String(idx + 1).padStart(2, '0');
+        return `
+          <div class="stream-row">
+            <div class="stream-main">
+              <div class="stream-title-line">
+                <span class="stream-idx">${num}</span>
+                <span>${(s.name || '').replace(/\n/g, ' — ')}</span>
+                <span class="q-tag ${badgeClass}">${s.quality || (s.height ? s.height + 'p' : bucket)}</span>
+              </div>
+              <div class="stream-sub-line">${(s.title || '').replace(/\n/g, ' · ')}</div>
+            </div>
+            <a class="btn-chip" style="text-decoration:none;" href="${s.playerUrl || s.externalUrl || s.url}" target="_blank" rel="noopener">Megnyitás →</a>
+          </div>
+        `;
+      }).join('');
+    }
+
+    let currentSeriesData = null;
+    let currentSelectedSeason = 1;
+    let currentSelectedEpisode = 1;
+    let lastTestedSeriesQuery = '';
+
+    function onMediaTypeChange() {
+      const type = document.getElementById('mediaType').value;
+      const bar = document.getElementById('seriesSelectorBar');
+      if (type === 'series') {
+        if (bar) bar.style.display = 'flex';
+        const query = document.getElementById('searchInput').value.trim();
+        if (query && !currentSeriesData) testStreams();
+      } else if (bar) {
+        bar.style.display = 'none';
+      }
+    }
+
+    function populateSeriesSelector(seriesMeta, seasonToSelect = null, episodeToSelect = null) {
+      if (!seriesMeta || !seriesMeta.seasons || Object.keys(seriesMeta.seasons).length === 0) return;
+      currentSeriesData = seriesMeta;
+      const bar = document.getElementById('seriesSelectorBar');
+      if (bar) bar.style.display = 'flex';
+
+      const seasonKeys = Object.keys(seriesMeta.seasons).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+      let totalEpisodes = 0;
+      seasonKeys.forEach(k => totalEpisodes += (seriesMeta.seasons[k] || []).length);
+
+      const badgeTitle = document.getElementById('seriesTitleLabel');
+      if (badgeTitle) badgeTitle.textContent = `${seriesMeta.name || 'Sorozat'} · ${seasonKeys.length} évad · ${totalEpisodes} epizód`;
+
+      const sSelect = document.getElementById('seasonSelect');
+      const activeS = seasonToSelect != null ? String(seasonToSelect) : (sSelect.value || seasonKeys[0] || '1');
+      sSelect.innerHTML = seasonKeys.map(sNum => `<option value="${sNum}">${sNum}. évad (${(seriesMeta.seasons[sNum] || []).length} rész)</option>`).join('');
+      sSelect.value = seasonKeys.includes(String(activeS)) ? String(activeS) : seasonKeys[0];
+      currentSelectedSeason = parseInt(sSelect.value, 10) || 1;
+      populateEpisodeDropdown(episodeToSelect);
+    }
+
+    function populateEpisodeDropdown(episodeToSelect = null) {
+      if (!currentSeriesData || !currentSeriesData.seasons) return;
+      const episodes = currentSeriesData.seasons[String(currentSelectedSeason)] || [];
+      const epSelect = document.getElementById('episodeSelect');
+      if (episodes.length === 0) {
+        epSelect.innerHTML = '<option value="1">1. rész</option>';
+        currentSelectedEpisode = 1;
+        updateStepButtons();
+        return;
+      }
+      const activeEp = episodeToSelect != null ? parseInt(episodeToSelect, 10) : (parseInt(epSelect.value, 10) || episodes[0].episode || 1);
+      epSelect.innerHTML = episodes.map(ep => `<option value="${ep.episode}">${ep.episode}. rész${ep.name ? ' — ' + ep.name : ''}</option>`).join('');
+      if (episodes.some(e => e.episode === activeEp)) {
+        epSelect.value = String(activeEp);
+        currentSelectedEpisode = activeEp;
+      } else {
+        epSelect.value = String(episodes[0].episode);
+        currentSelectedEpisode = episodes[0].episode;
+      }
+      updateStepButtons();
+    }
+
+    function updateStepButtons() {
+      if (!currentSeriesData || !currentSeriesData.seasons) return;
+      const sNum = String(currentSelectedSeason);
+      const eps = currentSeriesData.seasons[sNum] || [];
+      const currentIdx = eps.findIndex(e => e.episode === currentSelectedEpisode);
+      const seasonKeys = Object.keys(currentSeriesData.seasons).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+      const sIdx = seasonKeys.indexOf(sNum);
+      const prevBtn = document.getElementById('prevEpBtn');
+      const nextBtn = document.getElementById('nextEpBtn');
+      if (prevBtn) prevBtn.disabled = !(currentIdx > 0 || sIdx > 0);
+      if (nextBtn) nextBtn.disabled = !((currentIdx >= 0 && currentIdx < eps.length - 1) || sIdx < seasonKeys.length - 1);
+    }
+
+    function onSeasonChanged() {
+      currentSelectedSeason = parseInt(document.getElementById('seasonSelect').value, 10) || 1;
+      populateEpisodeDropdown(1);
+      testStreams(true);
+    }
+    function onEpisodeChanged() {
+      currentSelectedEpisode = parseInt(document.getElementById('episodeSelect').value, 10) || 1;
+      updateStepButtons();
+      testStreams(true);
+    }
+    function stepEpisode(delta) {
+      if (!currentSeriesData || !currentSeriesData.seasons) return;
+      const seasonKeys = Object.keys(currentSeriesData.seasons).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+      const sNum = String(currentSelectedSeason);
+      const eps = currentSeriesData.seasons[sNum] || [];
+      const epIdx = eps.findIndex(e => e.episode === currentSelectedEpisode);
+      const sIdx = seasonKeys.indexOf(sNum);
+      let newSeason = null, newEp = null;
+      if (delta > 0) {
+        if (epIdx >= 0 && epIdx < eps.length - 1) { newSeason = currentSelectedSeason; newEp = eps[epIdx + 1].episode; }
+        else if (sIdx < seasonKeys.length - 1) { newSeason = parseInt(seasonKeys[sIdx + 1], 10); newEp = (currentSeriesData.seasons[String(newSeason)] || [])[0]?.episode || 1; }
+      } else {
+        if (epIdx > 0) { newSeason = currentSelectedSeason; newEp = eps[epIdx - 1].episode; }
+        else if (sIdx > 0) {
+          newSeason = parseInt(seasonKeys[sIdx - 1], 10);
+          const prevEps = currentSeriesData.seasons[String(newSeason)] || [];
+          newEp = prevEps[prevEps.length - 1]?.episode || 1;
+        }
+      }
+      if (newSeason != null && newEp != null) {
+        currentSelectedSeason = newSeason;
+        currentSelectedEpisode = newEp;
+        document.getElementById('seasonSelect').value = String(newSeason);
+        populateEpisodeDropdown(newEp);
+        testStreams(true);
+      }
+    }
+
+    function runPreset(type, query) {
+      document.getElementById('mediaType').value = type;
+      document.getElementById('searchInput').value = query;
+      onMediaTypeChange();
+      testStreams();
+    }
+
+    async function testStreams(isEpisodeChange = false) {
+      const type = document.getElementById('mediaType').value;
+      const query = document.getElementById('searchInput').value.trim();
+      const out = document.getElementById('testOutput');
+      const banner = document.getElementById('matchedBanner');
+      const sources = getSelectedSources().join(',');
+
+      if (type === 'movie') {
+        const bar = document.getElementById('seriesSelectorBar');
+        if (bar) bar.style.display = 'none';
+      }
+      if (!isEpisodeChange && query !== lastTestedSeriesQuery) {
+        lastTestedSeriesQuery = query;
+        currentSeriesData = null;
+        currentSelectedSeason = 1;
+        currentSelectedEpisode = 1;
+      }
+
+      banner.style.display = 'none';
+      out.innerHTML = '<div class="results-empty">Keresés folyamatban...</div>';
+
+      try {
+        let url = `${origin}/api/test?type=${encodeURIComponent(type)}&id=${encodeURIComponent(query)}&sources=${encodeURIComponent(sources)}`;
+        if (type === 'series' || currentSeriesData) {
+          url += `&season=${encodeURIComponent(currentSelectedSeason)}&episode=${encodeURIComponent(currentSelectedEpisode)}`;
+        }
+        const res = await fetch(url);
+        const data = await res.json();
+        lastFetchedStreams = data.streams || [];
+
+        if (data.seriesEpisodes && data.seriesEpisodes.seasons) {
+          populateSeriesSelector(data.seriesEpisodes, data.seriesEpisodes.currentSeason || currentSelectedSeason, data.seriesEpisodes.currentEpisode || currentSelectedEpisode);
+        }
+
+        if (data.metaInfo && (data.metaInfo.hungarianTitle || data.metaInfo.englishTitle)) {
+          const epLabel = (type === 'series' || data.seriesEpisodes) ? ` · ${currentSelectedSeason}. évad ${currentSelectedEpisode}. rész` : '';
+          banner.style.display = 'block';
+          banner.innerHTML = `[OK] Feloldott cím: <strong>${data.metaInfo.hungarianTitle || data.metaInfo.englishTitle}</strong>${epLabel} ${data.metaInfo.englishTitle && data.metaInfo.englishTitle !== data.metaInfo.hungarianTitle ? `(${data.metaInfo.englishTitle})` : ''} ${data.metaInfo.year ? `[${data.metaInfo.year}]` : ''} · ${lastFetchedStreams.length} találat`;
+        } else if (data.matchedItem) {
+          const epLabel = (type === 'series' || data.seriesEpisodes) ? ` · ${currentSelectedSeason}. évad ${currentSelectedEpisode}. rész` : '';
+          banner.style.display = 'block';
+          banner.innerHTML = `[OK] Katalógus találat: <strong>${data.matchedItem.name}</strong>${epLabel} ${data.matchedItem.year ? `[${data.matchedItem.year}]` : ''} · ${lastFetchedStreams.length} találat`;
+        }
+
+        if (lastFetchedStreams.length === 0) {
+          updateTabCounts([]);
+          out.innerHTML = '<div class="results-empty">Nem található közvetlen magyar stream ehhez a címhez és epizódhoz.</div>';
+          return;
+        }
+        renderStreams();
+      } catch (e) {
+        out.innerHTML = '<div class="results-empty">Hiba: ' + e.message + '</div>';
+      }
+    }
+
+    function hydrateConfigFromUrl() {
+      try {
+        let cfg = null;
+        const pathMatch = window.location.pathname.match(/^\/([^/]+)\/(?:configure|test)\/?$/);
+        if (pathMatch && pathMatch[1]) {
+          const rawB64 = decodeURIComponent(pathMatch[1]).replace(/-/g, '+').replace(/_/g, '/');
+          const padded = rawB64 + '='.repeat((4 - (rawB64.length % 4)) % 4);
+          const decoded = atob(padded);
+          if (decoded.startsWith('{') && decoded.endsWith('}')) cfg = JSON.parse(decoded);
+        }
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('subtitles') || params.has('subs') || params.has('noSubs')) {
+          cfg = cfg || {};
+          if (params.has('subtitles')) cfg.subtitles = !['0', 'false', 'off', 'no'].includes(String(params.get('subtitles')).toLowerCase());
+          else if (params.has('subs')) cfg.subtitles = !['0', 'false', 'off', 'no'].includes(String(params.get('subs')).toLowerCase());
+          else cfg.subtitles = ['0', 'false', 'off', 'no'].includes(String(params.get('noSubs')).toLowerCase());
+        }
+        if (!cfg) return;
+
+        if (Array.isArray(cfg.sources) && cfg.sources.length > 0) {
+          const set = new Set(cfg.sources.map(s => String(s).toLowerCase()));
+          document.querySelectorAll('#sourcesGrid input, #liveSourcesGrid input').forEach(cb => cb.checked = set.has(cb.value));
+        }
+        const quals = cfg.qualities || cfg.resolutions;
+        if (Array.isArray(quals) && quals.length > 0) {
+          const set = new Set(quals.map(q => String(q).toLowerCase()));
+          document.querySelectorAll('#resolutionsGrid input').forEach(cb => cb.checked = set.has(cb.value));
+        }
+        if (Array.isArray(cfg.catalogs) && cfg.catalogs.length > 0) {
+          const set = new Set(cfg.catalogs);
+          document.querySelectorAll('#vodCatalogsGrid input, #liveCatalogsGrid input').forEach(cb => cb.checked = set.has(cb.value));
+        }
+        if (typeof cfg.subtitles === 'boolean') document.getElementById('subtitlesToggle').checked = cfg.subtitles;
+        else if (typeof cfg.subs === 'boolean') document.getElementById('subtitlesToggle').checked = cfg.subs;
+      } catch (_) {}
+    }
+
+    document.querySelectorAll('a[href="#ch02"]').forEach(a => a.addEventListener('click', () => { openDropdown('sources'); openDropdown('liveSources'); }));
+    document.querySelectorAll('a[href="#ch03"]').forEach(a => a.addEventListener('click', () => { openDropdown('vodCatalogs'); openDropdown('liveCatalogs'); }));
+    document.querySelectorAll('a[href="#tvToolsSec"]').forEach(a => a.addEventListener('click', () => { openDropdown('tvTools'); }));
+
+    hydrateConfigFromUrl();
+    updateManifestUrl();
+  </script>
+</body>
+</html>

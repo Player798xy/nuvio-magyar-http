@@ -41,6 +41,8 @@
     { "source": "/:config/stream/:path*", "destination": "/api/index.js" },
     { "source": "/configure", "destination": "/api/index.js" },
     { "source": "/:config/configure", "destination": "/api/index.js" },
+    { "source": "/test", "destination": "/api/index.js" },
+    { "source": "/:config/test", "destination": "/api/index.js" },
     { "source": "/", "destination": "/api/index.js" }
   ]
 }
