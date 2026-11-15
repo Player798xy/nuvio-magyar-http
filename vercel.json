@@ -39,6 +39,13 @@
     { "source": "/:config/subtitles/:path*", "destination": "/api/index.js" },
     { "source": "/stream/:path*", "destination": "/api/index.js" },
     { "source": "/:config/stream/:path*", "destination": "/api/index.js" },
+    { "source": "/configurator.js", "destination": "/api/index.js" },
+    { "source": "/v1", "destination": "/api/index.js" },
+    { "source": "/:config/v1", "destination": "/api/index.js" },
+    { "source": "/v2", "destination": "/api/index.js" },
+    { "source": "/:config/v2", "destination": "/api/index.js" },
+    { "source": "/v3", "destination": "/api/index.js" },
+    { "source": "/:config/v3", "destination": "/api/index.js" },
     { "source": "/configure", "destination": "/api/index.js" },
     { "source": "/:config/configure", "destination": "/api/index.js" },
     { "source": "/", "destination": "/api/index.js" }

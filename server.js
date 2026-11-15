@@ -67,6 +67,12 @@ app.get('/favicon.ico', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'favicon.ico'));
 });
 
+app.get('/configurator.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  res.sendFile(path.join(__dirname, 'public', 'configurator.js'));
+});
+
 app.get('/channels/:file', (req, res) => {
   const safeFile = path.basename(req.params.file || '');
   res.setHeader('Content-Type', 'image/png');
@@ -930,13 +936,32 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Configure Route & Index Page (supports ?old=1 or /old for legacy UI)
+// Configure Route, Variant Previews & Index Page (supports ?old=1 or /old for legacy UI)
 app.get('/old', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.old.html'));
 });
 
+app.get(['/v1', '/:config/v1'], (req, res) => {
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  res.sendFile(path.join(__dirname, 'public', 'variants', 'v1.html'));
+});
+
+app.get(['/v2', '/:config/v2'], (req, res) => {
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  res.sendFile(path.join(__dirname, 'public', 'variants', 'v2.html'));
+});
+
+app.get(['/v3', '/:config/v3'], (req, res) => {
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  res.sendFile(path.join(__dirname, 'public', 'variants', 'v3.html'));
+});
+
 app.get(['/configure', '/:config/configure'], (req, res) => {
   res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  const v = req.query.variant;
+  if (v === 'v1' || v === 'v2' || v === 'v3') {
+    return res.sendFile(path.join(__dirname, 'public', 'variants', `${v}.html`));
+  }
   const file = req.query.old === '1' ? 'index.old.html' : 'index.html';
   res.sendFile(path.join(__dirname, 'public', file));
 });
@@ -944,6 +969,10 @@ app.get(['/configure', '/:config/configure'], (req, res) => {
 // Catch-all route to serve index.html for root
 app.get('/', (req, res) => {
   res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  const v = req.query.variant;
+  if (v === 'v1' || v === 'v2' || v === 'v3') {
+    return res.sendFile(path.join(__dirname, 'public', 'variants', `${v}.html`));
+  }
   const file = req.query.old === '1' ? 'index.old.html' : 'index.html';
   res.sendFile(path.join(__dirname, 'public', file));
 });
