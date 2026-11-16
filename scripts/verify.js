@@ -192,6 +192,35 @@ async function runVerification() {
     }
     console.log('✅ 10. SEO & Canonical Verification (Render indexed + Vercel noindex) OK');
 
+    // 11. Private Stats Endpoint & Bot Filtering
+    const beforeHealthStats = await fetch(`${base}/api/stats?format=json`, {
+      headers: { 'x-forwarded-for': '203.0.113.10' }
+    }).then((r) => r.json());
+    await fetch(`${base}/api/health`, { headers: { 'x-forwarded-for': '203.0.113.55', 'user-agent': 'cron-job.org' } });
+    await fetch(`${base}/manifest.json`, { headers: { 'x-forwarded-for': '203.0.113.77', 'user-agent': 'Stremio/4.4' } });
+    const afterStats = await fetch(`${base}/api/stats?format=json`, {
+      headers: { 'x-forwarded-for': '203.0.113.10' }
+    }).then((r) => r.json());
+    if ((afterStats.requestsToday?.manifest || 0) <= (beforeHealthStats.requestsToday?.manifest || 0)) {
+      fail('/api/stats did not record addon manifest request');
+    }
+    if ((afterStats.users?.todayAddon || 0) < 1 || (afterStats.requestsToday?.stream_vod || 0) < 1) {
+      fail('/api/stats missing unique addon user or stream_vod count');
+    }
+    const prevStatsKey = process.env.STATS_KEY;
+    try {
+      process.env.STATS_KEY = 'secret-test-key';
+      const unauthStats = await fetch(`${base}/api/stats?format=json`);
+      const authStatsHtml = await fetch(`${base}/api/stats?key=secret-test-key`, { headers: { Accept: 'text/html' } });
+      if (unauthStats.status !== 401) fail(`Expected 401 without STATS_KEY, got ${unauthStats.status}`);
+      if (authStatsHtml.status !== 200 || !(await authStatsHtml.text()).includes('Használati Statisztika')) {
+        fail('Authenticated HTML /api/stats dashboard failed to render');
+      }
+    } finally {
+      if (prevStatsKey === undefined) delete process.env.STATS_KEY; else process.env.STATS_KEY = prevStatsKey;
+    }
+    console.log(`✅ 11. Privacy-Safe Stats Dashboard & STATS_KEY Guard OK (todayAddon=${afterStats.users?.todayAddon}, stream_vod=${afterStats.requestsToday?.stream_vod})`);
+
     if (hasError) {
       process.exitCode = 1;
       console.error('\n❌ One or more verification assertions failed.');

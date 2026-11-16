@@ -9,6 +9,7 @@ const { generateTvPosterSvg, generateTvBackgroundSvg, generateTvLogoSvg } = requ
 const { searchCatalog, getMeta } = require('./src/catalog');
 const { getMediaMeta, getSeriesEpisodes } = require('./src/utils/meta');
 const { getLiveHlsStream, getRewrittenMasterPlaylist } = require('./src/scrapers/mediaklikk');
+const { recordRequestMetric, isAuthorizedStatsRequest, getStatsSnapshot, renderStatsHtml } = require('./src/stats');
 
 const app = express();
 const PORT = process.env.PORT || 7000;
@@ -35,13 +36,16 @@ function isVercelRequest(req) {
   return Boolean(process.env.VERCEL || process.env.VERCEL_URL || host.includes('.vercel.app'));
 }
 
-// Keep Vercel domain out of Google index so Render primary URL ranks first
+// Keep Vercel domain out of Google index so Render primary URL ranks first & track anonymous stats
 app.use((req, res, next) => {
   if (req.path === '/uj-link' || req.path === '/uj-link.html') {
     res.setHeader('X-Robots-Tag', 'noindex, follow');
   } else if (isVercelRequest(req) && (req.path === '/' || req.path === '/configure' || req.path.endsWith('/configure'))) {
     res.setHeader('X-Robots-Tag', 'noindex, follow');
   }
+  res.on('finish', () => {
+    recordRequestMetric({ req, res, clientIp: getClientIp(req) });
+  });
   next();
 });
 
@@ -377,6 +381,17 @@ async function handleStream(req, res) {
     });
 
     const isLive = type === 'tv' || type === 'channel' || cleanId.startsWith('onlinestream-live-') || cleanId.startsWith('mediaklikk-live-');
+    res.locals.statStreamType = isLive ? 'stream_live' : 'stream_vod';
+    if (isLive) {
+      const tvMeta = getOnlineStreamMeta(cleanId, config.hostUrl);
+      const chName = tvMeta?.meta?.name;
+      if (chName) res.locals.statLabel = `${chName} [Élő TV]`;
+    } else if (result.metaInfo && (result.metaInfo.hungarianTitle || result.metaInfo.englishTitle)) {
+      const mTitle = result.metaInfo.hungarianTitle || result.metaInfo.englishTitle;
+      const mYear = result.metaInfo.year ? ` (${result.metaInfo.year})` : '';
+      res.locals.statLabel = `${mTitle}${mYear}`;
+    }
+
     if (config.previewMigration) {
       res.setHeader('Cache-Control', 'no-store');
     } else if (cleanStreams.length === 0) {
@@ -988,6 +1003,28 @@ app.get('/sitemap.xml', (req, res) => {
   </url>
 </urlset>
 `);
+});
+
+// Private Usage Statistics Dashboard & JSON API (/api/stats)
+app.get('/api/stats', async (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+
+  if (!isAuthorizedStatsRequest(req)) {
+    return res.status(401).json({ error: 'Unauthorized (invalid or missing STATS_KEY)' });
+  }
+
+  try {
+    const snapshot = await getStatsSnapshot();
+    const wantsHtml = req.query.format === 'html' || (req.query.format !== 'json' && String(req.headers.accept || '').includes('text/html'));
+    if (wantsHtml) {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      return res.send(renderStatsHtml(snapshot, String(req.query.key || '')));
+    }
+    res.json(snapshot);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Health check endpoint
