@@ -169,6 +169,29 @@ async function runVerification() {
     }
     console.log('✅ 9. Vercel-Only Yellow Notice, Render Isolation, /qr.js & /uj-link OK');
 
+    // 10. SEO & Canonical Verification (Render primary vs Vercel noindex)
+    const [homeHtml, robotsRenderRes, sitemapRes, vercelRobotsTest] = await Promise.all([
+      fetch(`${base}/`).then((r) => r.text()),
+      fetch(`${base}/robots.txt`),
+      fetch(`${base}/sitemap.xml`).then((r) => r.text()),
+      fetch(`${base}/`, { headers: { 'x-forwarded-host': 'nuvio-magyar-http.vercel.app' } })
+    ]);
+    if (!homeHtml.includes('rel="canonical" href="https://nuvio-magyar-http.onrender.com/"')) {
+      fail('Homepage missing canonical link pointing to Render');
+    }
+    if (vercelRobotsTest.headers.get('x-robots-tag') !== 'noindex, follow') {
+      fail(`Vercel forwarded host missing X-Robots-Tag noindex header, got "${vercelRobotsTest.headers.get('x-robots-tag')}"`);
+    }
+    const renderHomeRes = await fetch(`${base}/`, { headers: { 'x-forwarded-host': 'nuvio-magyar-http.onrender.com' } });
+    if (renderHomeRes.headers.get('x-robots-tag')) {
+      fail(`Render host must not emit X-Robots-Tag noindex header, got "${renderHomeRes.headers.get('x-robots-tag')}"`);
+    }
+    const robotsTxt = await robotsRenderRes.text();
+    if (!robotsTxt.includes('Sitemap: https://nuvio-magyar-http.onrender.com/sitemap.xml') || !sitemapRes.includes('https://nuvio-magyar-http.onrender.com/configure')) {
+      fail('robots.txt or sitemap.xml missing Render canonical URL');
+    }
+    console.log('✅ 10. SEO & Canonical Verification (Render indexed + Vercel noindex) OK');
+
     if (hasError) {
       process.exitCode = 1;
       console.error('\n❌ One or more verification assertions failed.');

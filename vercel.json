@@ -21,6 +21,33 @@
       ]
     },
     {
+      "source": "/",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    },
+    {
+      "source": "/configure",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    },
+    {
+      "source": "/:config/configure",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    },
+    {
       "source": "/(uj-link|uj-link\\.html)",
       "headers": [
         {
@@ -30,12 +57,18 @@
         {
           "key": "Access-Control-Allow-Origin",
           "value": "*"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
         }
       ]
     }
   ],
   "rewrites": [
     { "source": "/uj-link", "destination": "/uj-link.html" },
+    { "source": "/robots.txt", "destination": "/api/index.js" },
+    { "source": "/sitemap.xml", "destination": "/api/index.js" },
     { "source": "/proxy/:path*", "destination": "/api/index.js" },
     { "source": "/playlist.xspf", "destination": "/api/index.js" },
     { "source": "/playlist.m3u", "destination": "/api/index.js" },

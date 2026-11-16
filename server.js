@@ -29,6 +29,22 @@ app.use(cors({
 }));
 app.options('*', cors());
 
+function isVercelRequest(req) {
+  if (process.env.RENDER || process.env.RENDER_EXTERNAL_URL || process.env.RENDER_SERVICE_ID) return false;
+  const host = String(req.headers['x-forwarded-host'] || req.get('host') || '').toLowerCase();
+  return Boolean(process.env.VERCEL || process.env.VERCEL_URL || host.includes('.vercel.app'));
+}
+
+// Keep Vercel domain out of Google index so Render primary URL ranks first
+app.use((req, res, next) => {
+  if (req.path === '/uj-link' || req.path === '/uj-link.html') {
+    res.setHeader('X-Robots-Tag', 'noindex, follow');
+  } else if (isVercelRequest(req) && (req.path === '/' || req.path === '/configure' || req.path.endsWith('/configure'))) {
+    res.setHeader('X-Robots-Tag', 'noindex, follow');
+  }
+  next();
+});
+
 // Serve static landing & configuration page + logos + channel icons
 app.use(express.static(path.join(__dirname, 'public'), {
   etag: true,
@@ -937,8 +953,41 @@ app.get('/api/runtime-info', (req, res) => {
 
 // Static Migration & QR Code Page
 app.get(['/uj-link', '/uj-link.html'], (req, res) => {
+  res.setHeader('X-Robots-Tag', 'noindex, follow');
   res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800');
   res.sendFile(path.join(__dirname, 'public', 'uj-link.html'));
+});
+
+// SEO: robots.txt & sitemap.xml prioritizing Render primary domain
+app.get('/robots.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400');
+  if (isVercelRequest(req)) {
+    return res.send('User-agent: *\nAllow: /\n');
+  }
+  res.send('User-agent: *\nAllow: /\n\nSitemap: https://nuvio-magyar-http.onrender.com/sitemap.xml\n');
+});
+
+app.get('/sitemap.xml', (req, res) => {
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400');
+  if (isVercelRequest(req)) {
+    res.setHeader('X-Robots-Tag', 'noindex, follow');
+  }
+  res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://nuvio-magyar-http.onrender.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://nuvio-magyar-http.onrender.com/configure</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+</urlset>
+`);
 });
 
 // Health check endpoint
