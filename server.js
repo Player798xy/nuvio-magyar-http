@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const pkg = require('./package.json');
-const { getManifest, handleStreamRequest, parseConfig: parseAddonConfig, getSubtitles, ALL_SCRAPERS } = require('./src/addon');
+const { getManifest, handleStreamRequest, parseConfig: parseAddonConfig, getSubtitles, ALL_SCRAPERS, getRuntimeNoticeMeta } = require('./src/addon');
 const { getOnlineStreamMeta } = require('./src/scrapers/onlinestream');
 const { generateTvPosterSvg, generateTvBackgroundSvg, generateTvLogoSvg } = require('./src/tv_graphics');
 const { searchCatalog, getMeta } = require('./src/catalog');
@@ -109,7 +109,7 @@ app.get('/manifest.json', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=7200, stale-while-revalidate=86400');
   const config = parseConfig(null, req.query);
   config.hostUrl = getHostUrl(req);
   res.json(getManifest(config));
@@ -120,7 +120,7 @@ app.get('/:config/manifest.json', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=7200, stale-while-revalidate=86400');
   const config = parseConfig(req.params.config, req.query);
   config.hostUrl = getHostUrl(req);
   res.json(getManifest(config));
@@ -208,7 +208,7 @@ async function handleCatalog(req, res) {
   try {
     const rawMetas = await searchCatalog(type, searchQuery, cleanId, { skip, search: searchQuery, hostUrl: getHostUrl(req) });
     const metas = (rawMetas || []).map(m => sanitizeMetaPreview(m, type)).filter(Boolean);
-    res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400');
+    res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=7200, stale-while-revalidate=86400');
     res.json({ metas });
   } catch (err) {
     console.error('[Server] Catalog error:', err);
@@ -308,8 +308,8 @@ async function handleSubtitles(req, res) {
     res.setHeader(
       'Cache-Control',
       subtitles.length > 0
-        ? 'public, max-age=1800, s-maxage=3600, stale-while-revalidate=86400'
-        : 'public, max-age=120, s-maxage=300'
+        ? 'public, max-age=3600, s-maxage=21600, stale-while-revalidate=86400'
+        : 'public, max-age=300, s-maxage=900'
     );
     res.json({ subtitles });
   } catch (err) {
@@ -361,14 +361,16 @@ async function handleStream(req, res) {
     });
 
     const isLive = type === 'tv' || type === 'channel' || cleanId.startsWith('onlinestream-live-') || cleanId.startsWith('mediaklikk-live-');
-    if (cleanStreams.length === 0) {
-      res.setHeader('Cache-Control', 'public, max-age=15, s-maxage=30');
+    if (config.previewMigration) {
+      res.setHeader('Cache-Control', 'no-store');
+    } else if (cleanStreams.length === 0) {
+      res.setHeader('Cache-Control', 'public, max-age=30, s-maxage=120, stale-while-revalidate=300');
     } else if (cleanId.startsWith('mediaklikk-live-')) {
       res.setHeader('Cache-Control', 'private, max-age=60');
     } else if (isLive) {
-      res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=120, stale-while-revalidate=180');
+      res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=180, stale-while-revalidate=300');
     } else {
-      res.setHeader('Cache-Control', 'public, max-age=120, s-maxage=300, stale-while-revalidate=600');
+      res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=1800, stale-while-revalidate=3600');
     }
 
     res.json({ streams: cleanStreams });
@@ -651,7 +653,7 @@ function scoreSearchRelevance(itemTitle, query, itemId = '') {
 // 9. Search API for web landing page
 app.get('/api/search', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=7200, stale-while-revalidate=86400');
   const query = req.query.q || '';
   const filterType = req.query.type;
   try {
@@ -920,6 +922,25 @@ app.get('/api/provider-test', async (req, res) => {
   }
 });
 
+// Runtime & Migration Metadata API (used by configurator & /uj-link migration page)
+app.get('/api/runtime-info', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const cfg = parseConfig(null, req.query);
+  cfg.hostUrl = getHostUrl(req);
+  if (cfg.previewMigration) {
+    res.setHeader('Cache-Control', 'no-store');
+  } else {
+    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  }
+  res.json(getRuntimeNoticeMeta(cfg));
+});
+
+// Static Migration & QR Code Page
+app.get(['/uj-link', '/uj-link.html'], (req, res) => {
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800');
+  res.sendFile(path.join(__dirname, 'public', 'uj-link.html'));
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
@@ -932,13 +953,13 @@ app.get('/api/health', (req, res) => {
 
 // Configure & Index Routes
 app.get(['/configure', '/:config/configure'], (req, res) => {
-  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Catch-all route to serve index.html for root
 app.get('/', (req, res) => {
-  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 

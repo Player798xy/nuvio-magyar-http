@@ -89,7 +89,7 @@ async function runVerification() {
     console.log(`✅ Dune Part Two: ${duneJson.streams?.length} streams in ${duneMs}ms (Cache-Control: ${duneCache})`);
     if (!duneJson.streams?.length) fail('Dune Part Two returned 0 streams');
     for (const s of (duneJson.streams || []).slice(0, 5)) {
-      console.log(`   - [${s.name.replace(/\n/g, ' ')}] -> ${s.url.slice(0, 80)}...`);
+      console.log(`   - [${s.name.replace(/\n/g, ' ')}] -> ${(s.url || s.externalUrl || '').slice(0, 80)}...`);
     }
 
     // 7. Series Streams (The Boys S01E01 tt1190634:1:1 & A nagy ho-ho-ho-horgász tt0154077:1:1)
@@ -103,8 +103,71 @@ async function runVerification() {
     console.log(`✅ Series in ${seriesMs}ms: The Boys S01E01=${boysJson.streams?.length || 0}, A nagy ho-ho-ho-horgász S01E01=${hohoJson.streams?.length || 0}`);
     if (!boysJson.streams?.length) fail('The Boys S01E01 returned 0 streams');
     for (const s of (boysJson.streams || []).slice(0, 4)) {
-      console.log(`   - [${s.name.replace(/\n/g, ' ')}] -> ${s.url.slice(0, 80)}...`);
+      console.log(`   - [${s.name.replace(/\n/g, ' ')}] -> ${(s.url || s.externalUrl || '').slice(0, 80)}...`);
     }
+
+    // 8. Cache-Control (30m Edge Cache) & In-Memory VOD Cache Speedup
+    if (!duneCache.includes('s-maxage=1800')) {
+      fail(`Expected s-maxage=1800 on VOD streams, got "${duneCache}"`);
+    }
+    const tCachedStart = Date.now();
+    const duneCachedJson = await fetch(`${base}/stream/movie/tt15239678.json`).then((r) => r.json());
+    const cachedMs = Date.now() - tCachedStart;
+    console.log(`✅ 8. VOD Edge + In-Memory Cache: s-maxage=1800 OK, second hit in ${cachedMs}ms (${duneCachedJson.streams?.length} streams)`);
+    if (duneCachedJson.streams?.length !== duneJson.streams?.length || cachedMs > 250) {
+      fail(`In-memory VOD cache miss or mismatch (${cachedMs}ms, ${duneCachedJson.streams?.length} vs ${duneJson.streams?.length})`);
+    }
+
+    // 9. Vercel-Only Migration Banner & QR Code Static Pages (Never shown on Render)
+    const { handleStreamRequest, getRuntimeNoticeMeta } = require('../src/addon');
+    const [qrJsRes, ujLinkRes, runtimeRes, previewStreamRes] = await Promise.all([
+      fetch(`${base}/qr.js`),
+      fetch(`${base}/uj-link`),
+      fetch(`${base}/api/runtime-info`),
+      fetch(`${base}/stream/movie/tt15239678.json?previewMigration=1`).then((r) => r.json())
+    ]);
+    if (qrJsRes.status !== 200) fail(`/qr.js returned HTTP ${qrJsRes.status}`);
+    if (ujLinkRes.status !== 200) fail(`/uj-link returned HTTP ${ujLinkRes.status}`);
+    const runtimeJson = await runtimeRes.json();
+    if (runtimeJson.showMigrationBanner !== false && !process.env.MIGRATION_NOTICE_URL) {
+      fail('Default runtime-info should keep showMigrationBanner=false until MIGRATION_NOTICE_URL is set');
+    }
+    if (!previewStreamRes.streams?.[0]?.name?.includes('🟨') || !previewStreamRes.streams?.[0]?.externalUrl?.includes('/uj-link.html')) {
+      fail('Preview migration stream did not prepend yellow notice at index 0');
+    }
+    if (previewStreamRes.streams[0].description) {
+      fail('Migration notice stream must not include description alongside title');
+    }
+
+    // Simulate Vercel vs Render env isolation
+    const prevEnv = {
+      VERCEL: process.env.VERCEL,
+      RENDER: process.env.RENDER,
+      MIGRATION_NOTICE_URL: process.env.MIGRATION_NOTICE_URL
+    };
+    try {
+      delete process.env.RENDER;
+      process.env.VERCEL = '1';
+      process.env.MIGRATION_NOTICE_URL = 'https://nuvio-magyar-http.onrender.com';
+      const vercelVod = await handleStreamRequest('movie', 'tt15239678', { hostUrl: 'https://nuvio-magyar-http.vercel.app' });
+      const vercelLive = await handleStreamRequest('movie', 'onlinestream-live-5903', { hostUrl: 'https://nuvio-magyar-http.vercel.app' });
+      const vercelMeta = getRuntimeNoticeMeta({ hostUrl: 'https://nuvio-magyar-http.vercel.app' });
+      if (!vercelMeta.showMigrationBanner || vercelMeta.platform !== 'vercel') fail('Vercel runtime meta failed');
+      if (!vercelVod.streams?.[0]?.name?.includes('🟨')) fail('Vercel VOD stream missing yellow banner at top');
+      if (!vercelLive.streams?.[0]?.name?.includes('🟨')) fail('Vercel Live TV stream missing yellow banner at top');
+
+      delete process.env.VERCEL;
+      process.env.RENDER = 'true';
+      const renderVod = await handleStreamRequest('movie', 'tt15239678', { hostUrl: 'https://nuvio-magyar-http.onrender.com' });
+      const renderMeta = getRuntimeNoticeMeta({ hostUrl: 'https://nuvio-magyar-http.onrender.com' });
+      if (renderMeta.showMigrationBanner || renderMeta.platform !== 'render') fail('Render runtime meta leaked migration banner');
+      if (renderVod.streams?.[0]?.name?.includes('🟨')) fail('Render VOD stream must NOT show Vercel migration banner');
+    } finally {
+      if (prevEnv.VERCEL === undefined) delete process.env.VERCEL; else process.env.VERCEL = prevEnv.VERCEL;
+      if (prevEnv.RENDER === undefined) delete process.env.RENDER; else process.env.RENDER = prevEnv.RENDER;
+      if (prevEnv.MIGRATION_NOTICE_URL === undefined) delete process.env.MIGRATION_NOTICE_URL; else process.env.MIGRATION_NOTICE_URL = prevEnv.MIGRATION_NOTICE_URL;
+    }
+    console.log('✅ 9. Vercel-Only Yellow Notice, Render Isolation, /qr.js & /uj-link OK');
 
     if (hasError) {
       process.exitCode = 1;

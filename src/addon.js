@@ -61,6 +61,136 @@ const DEFAULT_CONFIG = {
   maxResults: 25
 };
 
+const DEFAULT_RENDER_MIGRATION_URL = 'https://nuvio-magyar-http.onrender.com';
+const VOD_STREAM_CACHE = new Map();
+const INFLIGHT_VOD_SCRAPES = new Map();
+const VOD_CACHE_TTL_MS = 20 * 60 * 1000;
+const VOD_EMPTY_CACHE_TTL_MS = 2 * 60 * 1000;
+const MAX_VOD_CACHE = 250;
+
+function isRenderRuntime() {
+  return Boolean(
+    process.env.RENDER ||
+    process.env.RENDER_EXTERNAL_URL ||
+    process.env.RENDER_SERVICE_ID
+  );
+}
+
+function isVercelRuntime() {
+  return Boolean(
+    process.env.VERCEL ||
+    process.env.VERCEL_URL ||
+    process.env.VERCEL_ENV
+  );
+}
+
+function isRemoteCloudRuntime() {
+  return Boolean(
+    isVercelRuntime() ||
+    isRenderRuntime() ||
+    process.env.NETMOZI_REMOTE === '1'
+  );
+}
+
+function normalizeMigrationUrl(raw) {
+  const trimmed = String(raw || '').trim().replace(/\/+$/, '');
+  if (!trimmed) return '';
+  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
+function getMigrationTargetUrl(config = {}) {
+  const explicit = normalizeMigrationUrl(config.migrationTargetUrl || process.env.MIGRATION_NOTICE_URL || '');
+  if (explicit) return explicit;
+  return config.previewMigration ? DEFAULT_RENDER_MIGRATION_URL : '';
+}
+
+function shouldShowVercelMigrationNotice(config = {}) {
+  if (isRenderRuntime()) return false;
+  const hostUrl = String(config.hostUrl || '').toLowerCase();
+  if (hostUrl.includes('.onrender.com')) return false;
+  if (config.previewMigration) return true;
+  const targetUrl = getMigrationTargetUrl(config);
+  if (!targetUrl) return false;
+  return Boolean(isVercelRuntime() || hostUrl.includes('.vercel.app'));
+}
+
+function getRuntimeNoticeMeta(config = {}) {
+  const hostUrl = String(config.hostUrl || '');
+  const showMigrationBanner = shouldShowVercelMigrationNotice(config);
+  const migrationTargetUrl = showMigrationBanner
+    ? (getMigrationTargetUrl(config) || DEFAULT_RENDER_MIGRATION_URL)
+    : (normalizeMigrationUrl(process.env.MIGRATION_NOTICE_URL) || DEFAULT_RENDER_MIGRATION_URL);
+  const platform = isRenderRuntime() || hostUrl.toLowerCase().includes('.onrender.com')
+    ? 'render'
+    : ((isVercelRuntime() || hostUrl.toLowerCase().includes('.vercel.app')) ? 'vercel' : 'local');
+
+  return {
+    platform,
+    showMigrationBanner,
+    migrationTargetUrl,
+    defaultRenderUrl: DEFAULT_RENDER_MIGRATION_URL
+  };
+}
+
+function buildVercelMigrationNoticeStream(config = {}) {
+  const targetOrigin = getMigrationTargetUrl(config) || DEFAULT_RENDER_MIGRATION_URL;
+  const targetHost = targetOrigin.replace(/^https?:\/\//i, '');
+  const vercelOrigin = String(config.hostUrl || 'https://nuvio-magyar-http.vercel.app').replace(/\/+$/, '');
+  const params = new URLSearchParams();
+  if (targetOrigin !== DEFAULT_RENDER_MIGRATION_URL) {
+    params.set('target', targetOrigin);
+  }
+  if (config.configSlug) {
+    params.set('c', config.configSlug);
+  }
+  const qs = params.toString();
+  const qrPageUrl = `${vercelOrigin}/uj-link.html${qs ? `?${qs}` : ''}`;
+  const shortQrPath = `${vercelOrigin.replace(/^https?:\/\//i, '')}/uj-link.html`;
+
+  return {
+    name: '🟨 ÚJ SZERVER! (VÁLTS)',
+    title: [
+      '🟨 FIGYELEM: Ez a Vercel szerver hamarosan eléri a havi ingyenes keretet!',
+      `👉 Új (korlátlan) Render cím: ${targetHost}/configure`,
+      `📱 Telefonos QR-kód és 1-kattintásos telepítés: ${shortQrPath}`,
+      '👇 A lejátszáshoz válassz a lenti források közül (ez csak tájékoztató).'
+    ].join('\n'),
+    externalUrl: qrPageUrl,
+    behaviorHints: {
+      notWebReady: true
+    }
+  };
+}
+
+function prependVercelNoticeIfNeeded(streams, config = {}) {
+  if (!Array.isArray(streams) || streams.length === 0) return [];
+  const cloned = streams.map(s => ({ ...s }));
+  if (!shouldShowVercelMigrationNotice(config)) return cloned;
+  return [buildVercelMigrationNoticeStream(config), ...cloned];
+}
+
+function getVodCacheKey(type, id, activeScrapers, config) {
+  const srcKey = activeScrapers.map(s => s.id).sort().join(',');
+  const qualList = config.qualities || config.resolutions || [];
+  const qualKey = Array.isArray(qualList) && qualList.length > 0
+    ? [...qualList].map(q => String(q).toLowerCase()).sort().join(',')
+    : 'all';
+  const stageKey = config.stage || 'all';
+  const hostScope = isRemoteCloudRuntime() ? 'remote' : (config.clientIp || 'local');
+  return `${type}|${id}|${srcKey}|${qualKey}|${stageKey}|${hostScope}`;
+}
+
+function setVodCacheEntry(key, value) {
+  if (VOD_STREAM_CACHE.size >= MAX_VOD_CACHE) {
+    const oldestKey = VOD_STREAM_CACHE.keys().next().value;
+    if (oldestKey !== undefined) VOD_STREAM_CACHE.delete(oldestKey);
+  }
+  VOD_STREAM_CACHE.set(key, {
+    ts: Date.now(),
+    data: value
+  });
+}
+
 function parseBoolFlag(val, fallback = true) {
   if (typeof val === 'boolean') return val;
   if (val === 0 || val === '0') return false;
@@ -100,12 +230,16 @@ function parseConfig(configStr, query = {}) {
   if (query.stage) {
     config.stage = String(query.stage).trim().toLowerCase();
   }
+  if (query.previewMigration !== undefined) {
+    config.previewMigration = parseBoolFlag(query.previewMigration, false);
+  }
   if (query.timeout) {
     const t = parseInt(query.timeout, 10);
     if (!isNaN(t)) config.timeoutMs = t <= 60 ? t * 1000 : t;
   }
 
   if (!configStr) return config;
+  config.configSlug = String(configStr);
 
   // 1. Base64 / Base64url JSON
   try {
@@ -261,15 +395,16 @@ async function getStreams(type, rawId, config = {}) {
       : await getLiveChannelStreams(id, config.clientIp, config.hostUrl);
 
     const epgBanner = formatEpgStreamBanner(epg);
-    if (epgBanner && Array.isArray(streams) && streams.length > 0) {
-      return {
-        streams: streams.map(s => ({
+    const enrichedLiveStreams = (epgBanner && Array.isArray(streams) && streams.length > 0)
+      ? streams.map(s => ({
           ...s,
           title: s.title ? `${epgBanner}\n${s.title}` : epgBanner
         }))
-      };
-    }
-    return { streams };
+      : streams;
+
+    return {
+      streams: prependVercelNoticeIfNeeded(enrichedLiveStreams, config)
+    };
   }
 
   if (!id) {
@@ -280,25 +415,19 @@ async function getStreams(type, rawId, config = {}) {
   if (id.startsWith('mediaklikk:video:') || id.startsWith('mediaklikk:program:')) {
     const streams = await scrapeMediaKlikk({ id, clientIp: config.clientIp });
     if (streams && streams.length > 0) {
-      return { streams };
+      return {
+        streams: prependVercelNoticeIfNeeded(streams, config)
+      };
     }
   }
-
-  // 3. Resolve Hungarian & English metadata from IMDb/TMDB
-  const meta = await getMediaMeta(type, id);
-  if (!meta) {
-    return { streams: [] };
-  }
-  meta.clientIp = config.clientIp || null;
-  meta.hostUrl = config.hostUrl || null;
 
   let candidateScrapers = ALL_SCRAPERS;
   let timeoutMs = config.timeoutMs || 6500;
 
-  // On Vercel Serverless, skip strictly IP-bound Self-Host-only scrapers so stream requests never time out
-  if (process.env.VERCEL) {
+  // On remote cloud servers (Vercel, Render), skip strictly IP-bound Self-Host-only scrapers
+  if (isRemoteCloudRuntime()) {
     candidateScrapers = candidateScrapers.filter(s => s.id !== 'hdmozi' && s.id !== 'dmdamedia');
-    timeoutMs = Math.min(timeoutMs, 6500);
+    timeoutMs = Math.min(timeoutMs, isVercelRuntime() ? 5200 : 6500);
   }
 
   if (config.stage === 'fast') {
@@ -311,153 +440,203 @@ async function getStreams(type, rawId, config = {}) {
     return config.sources.includes(s.id);
   });
 
-  const fastScrapers = activeScrapers.filter(s => s.fast);
-  const otherScrapers = activeScrapers.filter(s => !s.fast);
-  const allStreams = [];
+  if (activeScrapers.length === 0) {
+    return { streams: [] };
+  }
 
-  const fastPromises = fastScrapers.map(scraper =>
-    Promise.race([
-      scraper.fn(meta),
-      new Promise(resolve => setTimeout(() => resolve([]), Math.min(timeoutMs, 6000)))
-    ]).catch(() => [])
-  );
-
-  const otherPromises = otherScrapers.map(scraper =>
-    Promise.race([
-      scraper.fn(meta),
-      new Promise(resolve => setTimeout(() => resolve([]), timeoutMs))
-    ]).catch(() => [])
-  );
-
-  const fastResults = await Promise.allSettled(fastPromises);
-  fastResults.forEach(res => {
-    if (res.status === 'fulfilled' && Array.isArray(res.value)) {
-      allStreams.push(...res.value);
+  const vodCacheKey = getVodCacheKey(type, id, activeScrapers, config);
+  const cachedEntry = VOD_STREAM_CACHE.get(vodCacheKey);
+  if (cachedEntry) {
+    const ttl = (cachedEntry.data?.streams?.length || 0) > 0 ? VOD_CACHE_TTL_MS : VOD_EMPTY_CACHE_TTL_MS;
+    if (Date.now() - cachedEntry.ts < ttl) {
+      return {
+        streams: prependVercelNoticeIfNeeded(cachedEntry.data.streams, config),
+        metaInfo: cachedEntry.data.metaInfo
+      };
     }
-  });
+    VOD_STREAM_CACHE.delete(vodCacheKey);
+  }
 
-  const hasGoodStreams =
-    allStreams.some(s => s.height >= 720 && s.yearVerified !== false) ||
-    allStreams.filter(s => s.yearVerified !== false).length >= 3;
-  if (!hasGoodStreams && otherScrapers.length > 0 && config.stage !== 'fast') {
-    const otherResults = await Promise.allSettled(otherPromises);
-    otherResults.forEach(res => {
+  if (INFLIGHT_VOD_SCRAPES.has(vodCacheKey)) {
+    const sharedResult = await INFLIGHT_VOD_SCRAPES.get(vodCacheKey);
+    if (!sharedResult) return { streams: [] };
+    return {
+      streams: prependVercelNoticeIfNeeded(sharedResult.streams, config),
+      metaInfo: sharedResult.metaInfo
+    };
+  }
+
+  const scrapePromise = (async () => {
+    // 3. Resolve Hungarian & English metadata from IMDb/TMDB
+    const meta = await getMediaMeta(type, id);
+    if (!meta) {
+      return null;
+    }
+    meta.clientIp = config.clientIp || null;
+    meta.hostUrl = config.hostUrl || null;
+
+    const fastScrapers = activeScrapers.filter(s => s.fast);
+    const otherScrapers = activeScrapers.filter(s => !s.fast);
+    const allStreams = [];
+    const fastTimeoutMs = Math.min(timeoutMs, isVercelRuntime() ? 5200 : 6000);
+
+    const fastPromises = fastScrapers.map(scraper =>
+      Promise.race([
+        scraper.fn(meta),
+        new Promise(resolve => setTimeout(() => resolve([]), fastTimeoutMs))
+      ]).catch(() => [])
+    );
+
+    const fastResults = await Promise.allSettled(fastPromises);
+    fastResults.forEach(res => {
       if (res.status === 'fulfilled' && Array.isArray(res.value)) {
         allStreams.push(...res.value);
       }
     });
-  }
 
-  // Deduplicate by stream URL, reject non-direct HTML embed hosters, and apply resolution filter
-  const seenUrls = new Set();
-  const uniqueStreams = [];
-  const activeQualities = config.qualities || config.resolutions;
-  const hasQualityFilter = Array.isArray(activeQualities) && activeQualities.length > 0 && activeQualities.length < 4;
-  const qualSet = hasQualityFilter ? new Set(activeQualities.map(q => String(q).toLowerCase())) : null;
-
-  const ALWAYS_REJECT_PATTERNS = [
-    'frdl.io', 'fredl.ru', 'katfile.', 'uploady.', 'rapidgator.', 'turbobit.',
-    'embed.indavideo.hu/player', 'videa.hu/player'
-  ];
-
-  const HTML_EMBED_PATTERNS = [
-    'filemoon.', 'voe.sx', 'voe.to', 'vidmoly.', 'streamwish.', 'streamruby.', 'rubystream.',
-    'dood.', 'd000d.', 'mixdrop.', 'mxdrop.', 'byse', 'vinovo.', 'vidara.', 'luluvdo.', 'luluvid.',
-    'vidoza.', 'speedfiles.', 'supervideo.'
-  ];
-
-  for (const s of allStreams) {
-    if (!s || !s.url || seenUrls.has(s.url)) continue;
-    const urlLower = String(s.url).toLowerCase();
-    let parsedHost = '';
-    let parsedPath = '';
-    try {
-      const parsed = new URL(s.url);
-      parsedHost = parsed.hostname.toLowerCase();
-      parsedPath = parsed.pathname.toLowerCase();
-    } catch {}
-
-    const isInternalProxy = parsedPath.startsWith('/proxy/hls');
-    const isDirectMediaFile = parsedPath.endsWith('.m3u8') || parsedPath.endsWith('.mp4');
-
-    // Reject webpage iframe embed URLs & download landing pages that cause infinite buffering in Nuvio
-    if (
-      ALWAYS_REJECT_PATTERNS.some(pat => urlLower.includes(pat)) ||
-      (!isInternalProxy && !isDirectMediaFile && (
-        HTML_EMBED_PATTERNS.some(pat => parsedHost.includes(pat)) ||
-        (!urlLower.includes('.mp4') && !urlLower.includes('.m3u8') && !urlLower.includes('videa.hu/static/video/') && !urlLower.includes('videakid.hu/static/video/') && !urlLower.includes('indavideo.hu/') && !urlLower.includes('okcdn.ru') && !urlLower.includes('vkuser') && (parsedPath.includes('/e/') || parsedPath.includes('/embed-')))
-      ))
-    ) {
-      continue;
-    }
-    seenUrls.add(s.url);
-
-    if (qualSet) {
-      const h = s.height || 0;
-      const qStr = String(s.quality || '').toLowerCase();
-      const nameStr = String(s.name || '');
-      let matches = false;
-      if (qualSet.has('1080p') && (h >= 1080 || qStr === '1080p' || nameStr.includes('1080'))) matches = true;
-      if (qualSet.has('720p') && ((h >= 720 && h < 1080) || qStr === '720p' || nameStr.includes('720'))) matches = true;
-      if (qualSet.has('480p') && ((h >= 480 && h < 720) || qStr === '480p' || nameStr.includes('480'))) matches = true;
-      if (qualSet.has('360p') && ((h > 0 && h < 480) || qStr === '360p' || nameStr.includes('360') || nameStr.includes('240'))) matches = true;
-      if (!matches) continue;
+    const hasGoodStreams =
+      allStreams.some(s => s.height >= 720 && s.yearVerified !== false) ||
+      allStreams.filter(s => s.yearVerified !== false).length >= 3;
+    if (!hasGoodStreams && otherScrapers.length > 0 && config.stage !== 'fast') {
+      const otherPromises = otherScrapers.map(scraper =>
+        Promise.race([
+          scraper.fn(meta),
+          new Promise(resolve => setTimeout(() => resolve([]), timeoutMs))
+        ]).catch(() => [])
+      );
+      const otherResults = await Promise.allSettled(otherPromises);
+      otherResults.forEach(res => {
+        if (res.status === 'fulfilled' && Array.isArray(res.value)) {
+          allStreams.push(...res.value);
+        }
+      });
     }
 
-    // Add clear Nuvio stream warning when a video is unverified or from a community upload source
-    const USER_UPLOAD_SOURCES = new Set(['videa', 'indavideo', 'videakid', 'onlinefilmek', 'filmvilag2', 'dmdamedia']);
-    const cleanName = String(s.name || '').replace(/\s*\[⚠️\s*Év\?\]/g, '').trim();
-    const cleanTitle = String(s.title || '').replace(/\s*•\s*⚠️\s*Évszám nincs a címben/g, '').trim();
+    // Deduplicate by stream URL, reject non-direct HTML embed hosters, and apply resolution filter
+    const seenUrls = new Set();
+    const uniqueStreams = [];
+    const activeQualities = config.qualities || config.resolutions;
+    const hasQualityFilter = Array.isArray(activeQualities) && activeQualities.length > 0 && activeQualities.length < 4;
+    const qualSet = hasQualityFilter ? new Set(activeQualities.map(q => String(q).toLowerCase())) : null;
 
-    if (s.yearVerified === false) {
-      s.name = `${cleanName} ⚠️ [Lehet nem jó a videó!]`;
-      s.title = `${cleanTitle}\n⚠️ FIGYELEM: Lehet, hogy nem a jó videó (nem ellenőrzött évszám/feltöltés)!`;
-    } else if (USER_UPLOAD_SOURCES.has(s.source)) {
-      s.name = cleanName;
-      if (!cleanTitle.includes('FIGYELEM') && !cleanTitle.includes('lehet, hogy nem a jó videó')) {
-        s.title = `${cleanTitle}\n⚠️ Közösségi feltöltés – lehet, hogy nem a jó videó`;
+    const ALWAYS_REJECT_PATTERNS = [
+      'frdl.io', 'fredl.ru', 'katfile.', 'uploady.', 'rapidgator.', 'turbobit.',
+      'embed.indavideo.hu/player', 'videa.hu/player'
+    ];
+
+    const HTML_EMBED_PATTERNS = [
+      'filemoon.', 'voe.sx', 'voe.to', 'vidmoly.', 'streamwish.', 'streamruby.', 'rubystream.',
+      'dood.', 'd000d.', 'mixdrop.', 'mxdrop.', 'byse', 'vinovo.', 'vidara.', 'luluvdo.', 'luluvid.',
+      'vidoza.', 'speedfiles.', 'supervideo.'
+    ];
+
+    for (const s of allStreams) {
+      if (!s || !s.url || seenUrls.has(s.url)) continue;
+      const urlLower = String(s.url).toLowerCase();
+      let parsedHost = '';
+      let parsedPath = '';
+      try {
+        const parsed = new URL(s.url);
+        parsedHost = parsed.hostname.toLowerCase();
+        parsedPath = parsed.pathname.toLowerCase();
+      } catch {}
+
+      const isInternalProxy = parsedPath.startsWith('/proxy/hls');
+      const isDirectMediaFile = parsedPath.endsWith('.m3u8') || parsedPath.endsWith('.mp4');
+
+      // Reject webpage iframe embed URLs & download landing pages that cause infinite buffering in Nuvio
+      if (
+        ALWAYS_REJECT_PATTERNS.some(pat => urlLower.includes(pat)) ||
+        (!isInternalProxy && !isDirectMediaFile && (
+          HTML_EMBED_PATTERNS.some(pat => parsedHost.includes(pat)) ||
+          (!urlLower.includes('.mp4') && !urlLower.includes('.m3u8') && !urlLower.includes('videa.hu/static/video/') && !urlLower.includes('videakid.hu/static/video/') && !urlLower.includes('indavideo.hu/') && !urlLower.includes('okcdn.ru') && !urlLower.includes('vkuser') && (parsedPath.includes('/e/') || parsedPath.includes('/embed-')))
+        ))
+      ) {
+        continue;
       }
-    }
-    // Never include both `title` and `description` on a Stream object:
-    // Stremio's Rust engine (stremio-core) defines `#[serde(alias = "title")] pub description: Option<String>`,
-    // so sending both `title` and `description` throws `duplicate field 'description'` in serde!
-    delete s.description;
-    s.url = String(s.url).trim().replace(/\s+/g, '%20');
-    s.behaviorHints = { notWebReady: false, ...(s.behaviorHints || {}) };
+      seenUrls.add(s.url);
 
-    uniqueStreams.push(s);
+      if (qualSet) {
+        const h = s.height || 0;
+        const qStr = String(s.quality || '').toLowerCase();
+        const nameStr = String(s.name || '');
+        let matches = false;
+        if (qualSet.has('1080p') && (h >= 1080 || qStr === '1080p' || nameStr.includes('1080'))) matches = true;
+        if (qualSet.has('720p') && ((h >= 720 && h < 1080) || qStr === '720p' || nameStr.includes('720'))) matches = true;
+        if (qualSet.has('480p') && ((h >= 480 && h < 720) || qStr === '480p' || nameStr.includes('480'))) matches = true;
+        if (qualSet.has('360p') && ((h > 0 && h < 480) || qStr === '360p' || nameStr.includes('360') || nameStr.includes('240'))) matches = true;
+        if (!matches) continue;
+      }
+
+      // Add clear Nuvio stream warning when a video is unverified or from a community upload source
+      const USER_UPLOAD_SOURCES = new Set(['videa', 'indavideo', 'videakid', 'onlinefilmek', 'filmvilag2', 'dmdamedia']);
+      const cleanName = String(s.name || '').replace(/\s*\[⚠️\s*Év\?\]/g, '').trim();
+      const cleanTitle = String(s.title || '').replace(/\s*•\s*⚠️\s*Évszám nincs a címben/g, '').trim();
+
+      if (s.yearVerified === false) {
+        s.name = `${cleanName} ⚠️ [Lehet nem jó a videó!]`;
+        s.title = `${cleanTitle}\n⚠️ FIGYELEM: Lehet, hogy nem a jó videó (nem ellenőrzött évszám/feltöltés)!`;
+      } else if (USER_UPLOAD_SOURCES.has(s.source)) {
+        s.name = cleanName;
+        if (!cleanTitle.includes('FIGYELEM') && !cleanTitle.includes('lehet, hogy nem a jó videó')) {
+          s.title = `${cleanTitle}\n⚠️ Közösségi feltöltés – lehet, hogy nem a jó videó`;
+        }
+      }
+      // Never include both `title` and `description` on a Stream object:
+      // Stremio's Rust engine (stremio-core) defines `#[serde(alias = "title")] pub description: Option<String>`,
+      // so sending both `title` and `description` throws `duplicate field 'description'` in serde!
+      delete s.description;
+      s.url = String(s.url).trim().replace(/\s+/g, '%20');
+      s.behaviorHints = { notWebReady: false, ...(s.behaviorHints || {}) };
+
+      uniqueStreams.push(s);
+    }
+
+    // Priority sorting: 1. Matched source (e.g. NetMozi if id is netmozi:), 2. Year-verified streams first, 3. Resolution height (1080p -> 720p -> 480p), 4. Direct MP4/MédiaKlikk
+    uniqueStreams.sort((a, b) => {
+      const isPreferredA = (id.startsWith('netmozi:') && (a.source === 'netmozi' || (a.name && a.name.includes('NetMozi')))) ||
+                           (id.startsWith('mediaklikk:') && a.source === 'mediaklikk');
+      const isPreferredB = (id.startsWith('netmozi:') && (b.source === 'netmozi' || (b.name && b.name.includes('NetMozi')))) ||
+                           (id.startsWith('mediaklikk:') && b.source === 'mediaklikk');
+      if (isPreferredA && !isPreferredB) return -1;
+      if (isPreferredB && !isPreferredA) return 1;
+
+      const verA = a.yearVerified !== false ? 1 : 0;
+      const verB = b.yearVerified !== false ? 1 : 0;
+      if (verB !== verA) return verB - verA;
+      const heightA = a.height || 0;
+      const heightB = b.height || 0;
+      if (heightB !== heightA) return heightB - heightA;
+      const isDirectA = a.source === 'mediaklikk' || (a.url && (a.url.includes('videa.hu/static/') || a.url.includes('videakid.hu/static/') || a.url.includes('indavideo.hu/') || (a.url.includes('.mp4') && !a.url.includes('okcdn.ru'))));
+      const isDirectB = b.source === 'mediaklikk' || (b.url && (b.url.includes('videa.hu/static/') || b.url.includes('videakid.hu/static/') || b.url.includes('indavideo.hu/') || (b.url.includes('.mp4') && !b.url.includes('okcdn.ru'))));
+      if (isDirectA && !isDirectB) return -1;
+      if (isDirectB && !isDirectA) return 1;
+      return 0;
+    });
+
+    const cleanResult = {
+      streams: uniqueStreams,
+      metaInfo: {
+        hungarianTitle: meta.hungarianTitle,
+        englishTitle: meta.englishTitle,
+        year: meta.year
+      }
+    };
+    setVodCacheEntry(vodCacheKey, cleanResult);
+    return cleanResult;
+  })();
+
+  INFLIGHT_VOD_SCRAPES.set(vodCacheKey, scrapePromise);
+  try {
+    const freshResult = await scrapePromise;
+    if (!freshResult) return { streams: [] };
+    return {
+      streams: prependVercelNoticeIfNeeded(freshResult.streams, config),
+      metaInfo: freshResult.metaInfo
+    };
+  } finally {
+    INFLIGHT_VOD_SCRAPES.delete(vodCacheKey);
   }
-
-  // Priority sorting: 1. Matched source (e.g. NetMozi if id is netmozi:), 2. Year-verified streams first, 3. Resolution height (1080p -> 720p -> 480p), 4. Direct MP4/MédiaKlikk
-  uniqueStreams.sort((a, b) => {
-    const isPreferredA = (id.startsWith('netmozi:') && (a.source === 'netmozi' || (a.name && a.name.includes('NetMozi')))) ||
-                         (id.startsWith('mediaklikk:') && a.source === 'mediaklikk');
-    const isPreferredB = (id.startsWith('netmozi:') && (b.source === 'netmozi' || (b.name && b.name.includes('NetMozi')))) ||
-                         (id.startsWith('mediaklikk:') && b.source === 'mediaklikk');
-    if (isPreferredA && !isPreferredB) return -1;
-    if (isPreferredB && !isPreferredA) return 1;
-
-    const verA = a.yearVerified !== false ? 1 : 0;
-    const verB = b.yearVerified !== false ? 1 : 0;
-    if (verB !== verA) return verB - verA;
-    const heightA = a.height || 0;
-    const heightB = b.height || 0;
-    if (heightB !== heightA) return heightB - heightA;
-    const isDirectA = a.source === 'mediaklikk' || (a.url && (a.url.includes('videa.hu/static/') || a.url.includes('videakid.hu/static/') || a.url.includes('indavideo.hu/') || (a.url.includes('.mp4') && !a.url.includes('okcdn.ru'))));
-    const isDirectB = b.source === 'mediaklikk' || (b.url && (b.url.includes('videa.hu/static/') || b.url.includes('videakid.hu/static/') || b.url.includes('indavideo.hu/') || (b.url.includes('.mp4') && !b.url.includes('okcdn.ru'))));
-    if (isDirectA && !isDirectB) return -1;
-    if (isDirectB && !isDirectA) return 1;
-    return 0;
-  });
-
-  return {
-    streams: uniqueStreams,
-    metaInfo: {
-      hungarianTitle: meta.hungarianTitle,
-      englishTitle: meta.englishTitle,
-      year: meta.year
-    }
-  };
 }
 
 module.exports = {
@@ -469,5 +648,7 @@ module.exports = {
   searchCatalog,
   getMeta,
   getSubtitles,
-  ALL_SCRAPERS
+  ALL_SCRAPERS,
+  getRuntimeNoticeMeta,
+  isRemoteCloudRuntime
 };

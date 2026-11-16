@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#050505" />
+  <title>Új Szerver Link &amp; QR-kód — Magyar Streaming Pro</title>
+  <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.7.0" />
+  <link rel="alternate icon" type="image/png" href="/logo.png?v=2.7.0" />
+  <link rel="shortcut icon" href="/favicon.ico?v=2.7.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=VT323&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050505;
+      --band: #0c0c0c;
+      --panel: #141414;
+      --panel-hover: #1b1b1b;
+      --ink: #ececec;
+      --dim: #c4c4c4;
+      --mute: #888888;
+      --line: #242424;
+      --line-2: #343434;
+      --mint: #ff9c42;
+      --green: #ff7b1c;
+      --gold: #ffcc4d;
+      --amber: #ffdc96;
+      --purple-btn: #7c5cdb;
+      --purple-hover: #906fe6;
+      --cyan-btn: #0284c7;
+      --cyan-hover: #0369a1;
+      --on-gold: #261b00;
+      --f-head: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      --f-body: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+      --f-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', monospace;
+      --f-ch: 'VT323', ui-monospace, monospace;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--f-body);
+      font-size: 15px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 24px 18px 54px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 18px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+      font-family: var(--f-head);
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .brand span { color: var(--mint); }
+    .brand img { width: 38px; height: 38px; border-radius: 9px; }
+
+    .back-link {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dim);
+      text-decoration: none;
+      border: 1px solid var(--line-2);
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: var(--panel);
+    }
+    .back-link:hover { color: #ffffff; border-color: var(--mint); }
+
+    .notice-card {
+      background: linear-gradient(180deg, rgba(255, 204, 77, 0.10) 0%, rgba(20, 20, 20, 0.98) 100%);
+      border: 1.5px solid rgba(255, 204, 77, 0.55);
+      border-radius: 12px;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 250px;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .badge-yellow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: var(--on-gold);
+      font-family: var(--f-head);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 4px 10px;
+      border-radius: 5px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: var(--f-head);
+      font-size: clamp(24px, 4vw, 34px);
+      line-height: 1.15;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    h1 span { color: var(--gold); }
+
+    .desc {
+      color: var(--dim);
+      font-size: 14.5px;
+      margin-bottom: 16px;
+    }
+
+    .url-box {
+      background: #080808;
+      border: 1px solid var(--line-2);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: var(--f-mono);
+      font-size: 13px;
+      color: var(--gold);
+      word-break: break-all;
+      margin-bottom: 14px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 40px;
+      padding: 0 15px;
+      border-radius: 7px;
+      border: 1px solid transparent;
+      font-family: var(--f-head);
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s, filter 0.15s;
+    }
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
+    .btn-stremio { background: var(--purple-btn); color: #ffffff; }
+    .btn-nuvio { background: var(--cyan-btn); color: #ffffff; }
+    .btn-copy { background: var(--gold); color: var(--on-gold); }
+    .btn-open { background: var(--panel-hover); border-color: var(--line-2); color: var(--ink); }
+
+    .qr-panel {
+      background: var(--panel);
+      border: 1px solid rgba(255, 204, 77, 0.35);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .qr-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .qr-tab {
+      flex: 1;
+      background: #0b0b0b;
+      border: 1px solid var(--line-2);
+      color: var(--dim);
+      font-family: var(--f-body);
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 5px 6px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .qr-tab.active {
+      background: var(--gold);
+      color: var(--on-gold);
+      border-color: var(--gold);
+    }
+    .qr-frame {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 10px;
+      width: 210px;
+      height: 210px;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qr-frame svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .qr-caption {
+      font-size: 12px;
+      color: var(--amber);
+      line-height: 1.35;
+    }
+
+    .tv-tips {
+      margin-top: 22px;
+      background: var(--band);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .tip-item h3 {
+      font-family: var(--f-head);
+      font-size: 14px;
+      color: var(--mint);
+      margin-bottom: 5px;
+    }
+    .tip-item p {
+      font-size: 13px;
+      color: var(--dim);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #1a1a1a;
+      border: 1px solid var(--gold);
+      color: var(--ink);
+      padding: 11px 18px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 99;
+      text-align: center;
+      max-width: 92vw;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 760px) {
+      .notice-card {
+        grid-template-columns: 1fr;
+      }
+      .qr-panel {
+        max-width: 280px;
+        margin: 0 auto;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="/">
+        <img src="/logo.svg?v=2.7.0" alt="Magyar Streaming Pro" />
+        <span>Magyar Streaming <span>Pro</span></span>
+      </a>
+      <a class="back-link" href="/configure">← Vissza a konfigurátorhoz</a>
+    </div>
+
+    <div class="notice-card">
+      <div>
+        <div class="badge-yellow" id="statusBadge">🟨 ÁTKÖLTÖZÉS ÚJ RENDER SZERVERRE</div>
+        <h1 id="headline">Új, korlátlan <span>Render link</span> az addonhoz</h1>
+        <p class="desc" id="leadText">
+          A régi Vercel szerver havi ingyenes CPU-kerete a nagy felhasználószám miatt hamarosan betelhet.
+          Telepítsd az új címet egy kattintással — <strong>telefonon Stremióban elég egyszer hozzáadni, a TV-dre automatikusan szinkronizál!</strong>
+        </p>
+
+        <div class="url-box" id="targetManifestBox">Betöltés...</div>
+
+        <div class="actions">
+          <a class="btn btn-stremio" id="stremioBtn" href="#">🚀 Új Stremio Telepítés →</a>
+          <button type="button" class="btn btn-nuvio" onclick="copyManifestForNuvio()">⚡ Nuvio Telepítés →</button>
+          <button type="button" class="btn btn-copy" onclick="copyNewManifest()">📋 Új Link Másolása</button>
+          <a class="btn btn-open" id="openConfigBtn" href="#">🌐 Új Weboldal Megnyitása</a>
+        </div>
+      </div>
+
+      <div class="qr-panel">
+        <div class="qr-tabs">
+          <button type="button" class="qr-tab active" id="tabConfig" onclick="setQrMode('configure')">Konfigurátor QR</button>
+          <button type="button" class="qr-tab" id="tabManifest" onclick="setQrMode('manifest')">Manifest QR</button>
+        </div>
+        <div class="qr-frame" id="qrFrame">Betöltés...</div>
+        <div class="qr-caption" id="qrCaption">Szkenneld be telefonnal, és nem kell begépelned semmit a TV-n!</div>
+      </div>
+    </div>
+
+    <div class="tv-tips">
+      <div class="tip-item">
+        <h3>📺 Stremio TV-n használod?</h3>
+        <p>Olvasd be telefonnal a QR-kódot, nyomj a <strong>Stremio Telepítés</strong> gombra ugyanazzal a Stremio-fiókkal, majd a TV-n nyisd újra a Stremiót — az új addon azonnal megjelenik, és a régit érdemes eltávolítani.</p>
+      </div>
+      <div class="tip-item">
+        <h3>⚡ Nuvio appot használsz?</h3>
+        <p>Nyomj a <strong>Nuvio Telepítés / Link másolása</strong> gombra, majd a Nuvio → <em>Addons</em> menüben illeszd be az új linket. (A Render ingyenes szerver 15 perc tétlenség után alhat el; első ébresztésnél várj kb. 30–50 mp-et.)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/qr.js"></script>
+  <script>
+    const DEFAULT_RENDER_URL = 'https://nuvio-magyar-http.onrender.com';
+    let resolvedTargetOrigin = DEFAULT_RENDER_URL;
+    let currentConfigSlug = '';
+    let qrMode = 'configure';
+
+    function showToast(html) {
+      const el = document.getElementById('toast');
+      el.innerHTML = html;
+      el.classList.add('show');
+      clearTimeout(window._t);
+      window._t = setTimeout(() => el.classList.remove('show'), 3600);
+    }
+
+    async function copyStr(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch (_) {}
+      }
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return Boolean(ok);
+      } catch (_) {
+        return false;
+      }
+    }
+
+    function getUrls() {
+      const prefix = currentConfigSlug ? `/${encodeURIComponent(currentConfigSlug)}` : '';
+      const configureUrl = `${resolvedTargetOrigin}${prefix}/configure`;
+      const manifestUrl = `${resolvedTargetOrigin}${prefix}/manifest.json`;
+      return { configureUrl, manifestUrl };
+    }
+
+    function renderQr() {
+      const { configureUrl, manifestUrl } = getUrls();
+      const target = qrMode === 'manifest' ? manifestUrl : configureUrl;
+      const frame = document.getElementById('qrFrame');
+      try {
+        frame.innerHTML = window.NuvioQR.toSvg(target, { margin: 3 });
+      } catch (e) {
+        // If custom config slug makes URL very long, fallback cleanly to base URL
+        const fallback = qrMode === 'manifest'
+          ? `${resolvedTargetOrigin}/manifest.json`
+          : `${resolvedTargetOrigin}/configure`;
+        frame.innerHTML = window.NuvioQR.toSvg(fallback, { margin: 3 });
+      }
+      document.getElementById('qrCaption').textContent = qrMode === 'manifest'
+        ? 'Közvetlen Manifest URL QR (bemásoláshoz Nuvio / Stremio appba).'
+        : 'Szkenneld be telefonnal az új konfigurátor megnyitásához — nem kell linket gépelni!';
+    }
+
+    function setQrMode(mode) {
+      qrMode = mode;
+      document.getElementById('tabConfig').classList.toggle('active', mode === 'configure');
+      document.getElementById('tabManifest').classList.toggle('active', mode === 'manifest');
+      renderQr();
+    }
+
+    function updateUi() {
+      const { configureUrl, manifestUrl } = getUrls();
+      document.getElementById('targetManifestBox').textContent = manifestUrl;
+      document.getElementById('stremioBtn').href = manifestUrl.replace(/^https?:\/\//i, 'stremio://');
+      document.getElementById('openConfigBtn').href = configureUrl;
+
+      if (window.location.hostname.toLowerCase().includes('.onrender.com')) {
+        document.getElementById('statusBadge').textContent = '✅ MÁR AZ ÚJ RENDER SZERVEREN VAGY';
+        document.getElementById('headline').innerHTML = 'Már a <span>Render</span> szervert használod';
+        document.getElementById('leadText').textContent =
+          'Ez az új, stabil cím. Használd az alábbi QR-kódot vagy a telepítő gombokat a másodlagos eszközeidhez (telefon, TV).';
+      }
+      renderQr();
+    }
+
+    async function copyNewManifest() {
+      const { manifestUrl } = getUrls();
+      const ok = await copyStr(manifestUrl);
+      showToast(ok ? '✅ Új Manifest link kimásolva a vágólapra!' : 'Másold ki a fenti sárga mezőből a linket.');
+    }
+
+    async function copyManifestForNuvio() {
+      const { manifestUrl } = getUrls();
+      const ok = await copyStr(manifestUrl);
+      showToast(ok
+        ? '⚡ Új Manifest link másolva! Nuvio → Addons → + Add Addon → Beillesztés.'
+        : 'Másold ki a fenti Manifest linket, majd Nuvio → Addons!');
+    }
+
+    async function init() {
+      const params = new URLSearchParams(window.location.search);
+      const qTarget = (params.get('target') || '').trim().replace(/\/+$/, '');
+      const qCfg = (params.get('c') || params.get('config') || '').trim();
+      if (qCfg && /^[A-Za-z0-9_-]+$/.test(qCfg)) {
+        currentConfigSlug = qCfg;
+      }
+
+      if (window.location.hostname.toLowerCase().includes('.onrender.com')) {
+        resolvedTargetOrigin = window.location.origin;
+        updateUi();
+        return;
+      }
+
+      if (qTarget && /^https?:\/\/[^/\s]+$/i.test(qTarget)) {
+        resolvedTargetOrigin = qTarget;
+        updateUi();
+        return;
+      }
+
+      try {
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 2000);
+        const res = await fetch('/api/runtime-info', { signal: ctrl.signal });
+        clearTimeout(tid);
+        if (res.ok) {
+          const info = await res.json();
+          if (info && info.migrationTargetUrl) {
+            resolvedTargetOrigin = String(info.migrationTargetUrl).replace(/\/+$/, '');
+          }
+        }
+      } catch (_) {}
+
+      updateUi();
+    }
+
+    init();
+  </script>
+</body>
+</html>
