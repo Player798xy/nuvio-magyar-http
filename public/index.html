@@ -1518,7 +1518,7 @@
 
     /* Footer */
     .footer {
-      margin: 32px 0 48px;
+      margin: 32px 0 76px;
       padding-top: 16px;
       border-top: 1px solid var(--line);
       font-size: 12.5px;
@@ -2631,7 +2631,7 @@
 
     <footer class="footer">
       <span>Magyar Streaming Pro · Nem tárol és nem hosztol médiafájlokat (kizárólag nyilvános linkeket indexel).</span>
-      <span><a href="#tvToolsSec">📺 TV Listák &amp; Audit</a> · <a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener">GitHub</a></span>
+      <span><a href="#tvToolsSec">📺 TV Listák &amp; Audit</a> · <a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener">GitHub</a> · <a href="https://ko-fi.com/playerxy" target="_blank" rel="noopener">☕ Tip Me (Ko-fi)</a></span>
     </footer>
   </main>
 
@@ -3479,5 +3479,17 @@
   <!-- Cloudflare Web Analytics -->
   <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "755d43cd56e349e38529055befb9725a"}'></script>
   <!-- End Cloudflare Web Analytics -->
+  <!-- Ko-fi Floating Tip Widget -->
+  <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+  <script>
+    if (typeof kofiWidgetOverlay !== 'undefined') {
+      kofiWidgetOverlay.draw('playerxy', {
+        'type': 'floating-chat',
+        'floating-chat.donateButton.text': 'Tip Me',
+        'floating-chat.donateButton.background-color': '#f45d22',
+        'floating-chat.donateButton.text-color': '#fff'
+      });
+    }
+  </script>
 </body>
 </html>
