@@ -221,6 +221,29 @@ async function runVerification() {
     }
     console.log(`✅ 11. Privacy-Safe Stats Dashboard & STATS_KEY Guard OK (todayAddon=${afterStats.users?.todayAddon}, stream_vod=${afterStats.requestsToday?.stream_vod})`);
 
+    // 12. Render PNG Asset Offloading to Free jsDelivr CDN (Saves 5 GB Render bandwidth limit)
+    const prevRenderForCdn = process.env.RENDER;
+    try {
+      process.env.RENDER = 'true';
+      const [renderManifest, renderLiveCat, renderAssetRedirect] = await Promise.all([
+        fetch(`${base}/manifest.json`).then((r) => r.json()),
+        fetch(`${base}/catalog/movie/hu-live-tv.json`).then((r) => r.json()),
+        fetch(`${base}/tv-posters/5903.png`, { redirect: 'manual' })
+      ]);
+      if (!String(renderManifest.logo || '').startsWith('https://cdn.jsdelivr.net/gh/Player798xy/nuvio-magyar-http@main/public/logo.png')) {
+        fail(`Render manifest logo not offloaded to jsDelivr CDN: ${renderManifest.logo}`);
+      }
+      if (!String(renderLiveCat.metas?.[0]?.poster || '').startsWith('https://cdn.jsdelivr.net/gh/Player798xy/nuvio-magyar-http@main/public/tv-posters/')) {
+        fail(`Render Live TV poster not offloaded to jsDelivr CDN: ${renderLiveCat.metas?.[0]?.poster}`);
+      }
+      if (renderAssetRedirect.status !== 302 || !String(renderAssetRedirect.headers.get('location') || '').startsWith('https://cdn.jsdelivr.net/')) {
+        fail(`Expected 302 CDN redirect for legacy PNG hit on Render, got status=${renderAssetRedirect.status}`);
+      }
+    } finally {
+      if (prevRenderForCdn === undefined) delete process.env.RENDER; else process.env.RENDER = prevRenderForCdn;
+    }
+    console.log('✅ 12. Render Heavy TV Artwork Offload to Free jsDelivr CDN OK');
+
     if (hasError) {
       process.exitCode = 1;
       console.error('\n❌ One or more verification assertions failed.');

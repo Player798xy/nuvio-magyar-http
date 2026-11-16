@@ -3,7 +3,17 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const pkg = require('./package.json');
-const { getManifest, handleStreamRequest, parseConfig: parseAddonConfig, getSubtitles, ALL_SCRAPERS, getRuntimeNoticeMeta } = require('./src/addon');
+const {
+  getManifest,
+  handleStreamRequest,
+  parseConfig: parseAddonConfig,
+  getSubtitles,
+  ALL_SCRAPERS,
+  getRuntimeNoticeMeta,
+  getCdnPublicBaseUrl,
+  rewriteStaticAssetUrl,
+  rewriteMetaMediaUrls
+} = require('./src/addon');
 const { getOnlineStreamMeta } = require('./src/scrapers/onlinestream');
 const { generateTvPosterSvg, generateTvBackgroundSvg, generateTvLogoSvg } = require('./src/tv_graphics');
 const { searchCatalog, getMeta } = require('./src/catalog');
@@ -43,6 +53,17 @@ app.use((req, res, next) => {
   } else if (isVercelRequest(req) && (req.path === '/' || req.path === '/configure' || req.path.endsWith('/configure'))) {
     res.setHeader('X-Robots-Tag', 'noindex, follow');
   }
+
+  // Offload heavy static PNG TV artwork & icons on Render to free jsDelivr CDN (saves ~26 MB/catalog load)
+  const cdnBase = getCdnPublicBaseUrl();
+  if (cdnBase && req.method === 'GET') {
+    const assetMatch = req.path.match(/^\/((?:tv-posters|tv-backgrounds|tv-logos|channels)\/[a-zA-Z0-9._-]+\.png|logo\.png|icon\.png)$/i);
+    if (assetMatch && fs.existsSync(path.join(__dirname, 'public', assetMatch[1]))) {
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+      return res.redirect(302, `${cdnBase}/${assetMatch[1]}`);
+    }
+  }
+
   res.on('finish', () => {
     recordRequestMetric({ req, res, clientIp: getClientIp(req) });
   });
@@ -227,7 +248,11 @@ async function handleCatalog(req, res) {
 
   try {
     const rawMetas = await searchCatalog(type, searchQuery, cleanId, { skip, search: searchQuery, hostUrl: getHostUrl(req) });
-    const metas = (rawMetas || []).map(m => sanitizeMetaPreview(m, type)).filter(Boolean);
+    const cdnBase = getCdnPublicBaseUrl();
+    const metas = (rawMetas || [])
+      .map(m => sanitizeMetaPreview(m, type))
+      .filter(Boolean)
+      .map(m => rewriteMetaMediaUrls(m, cdnBase));
     res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=7200, stale-while-revalidate=86400');
     res.json({ metas });
   } catch (err) {
@@ -289,7 +314,7 @@ async function handleMeta(req, res) {
           ? 'public, max-age=60, s-maxage=180, stale-while-revalidate=300'
           : 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800'
       );
-      return res.json({ meta: m });
+      return res.json({ meta: rewriteMetaMediaUrls(m, getCdnPublicBaseUrl()) });
     }
     res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=300');
     res.json({ meta: null });
@@ -482,7 +507,7 @@ app.get(['/playlist.xspf', '/tv.xspf'], async (req, res) => {
     }
 
     if (targetStream) {
-      const logoUrl = `${hostUrl}/tv-logos/${ch.channelId}.png`;
+      const logoUrl = rewriteStaticAssetUrl(`${hostUrl}/tv-logos/${ch.channelId}.png`, getCdnPublicBaseUrl());
       tracks.push(`    <track>
       <title>${escapeXml(ch.name)}</title>
       <creator>${escapeXml(catName)}</creator>
@@ -530,7 +555,7 @@ app.get(['/playlist.m3u', '/playlist.m3u8', '/tv.m3u', '/tv.m3u8'], async (req, 
     }
 
     if (targetStream) {
-      const logoUrl = `${hostUrl}/tv-logos/${ch.channelId}.png`;
+      const logoUrl = rewriteStaticAssetUrl(`${hostUrl}/tv-logos/${ch.channelId}.png`, getCdnPublicBaseUrl());
       lines.push(`#EXTINF:-1 tvg-id="${ch.channelId}" tvg-name="${ch.name}" tvg-logo="${logoUrl}" group-title="${catName}",${ch.name}`);
       lines.push(targetStream);
     }
@@ -546,6 +571,8 @@ app.get(['/tv-poster/:id', '/tv-poster/:id.png', '/tv-poster/:id.svg'], (req, re
   const rawId = (req.params.id || '').replace(/\.(svg|png)$/i, '');
   const pngPath = path.join(__dirname, 'public', 'tv-posters', `${rawId}.png`);
   if (fs.existsSync(pngPath)) {
+    const cdnBase = getCdnPublicBaseUrl();
+    if (cdnBase) return res.redirect(302, `${cdnBase}/tv-posters/${rawId}.png`);
     res.setHeader('Content-Type', 'image/png');
     return res.sendFile(pngPath);
   }
@@ -561,6 +588,8 @@ app.get(['/tv-background/:id', '/tv-background/:id.png', '/tv-background/:id.svg
   const rawId = (req.params.id || '').replace(/\.(svg|png)$/i, '');
   const pngPath = path.join(__dirname, 'public', 'tv-backgrounds', `${rawId}.png`);
   if (fs.existsSync(pngPath)) {
+    const cdnBase = getCdnPublicBaseUrl();
+    if (cdnBase) return res.redirect(302, `${cdnBase}/tv-backgrounds/${rawId}.png`);
     res.setHeader('Content-Type', 'image/png');
     return res.sendFile(pngPath);
   }
@@ -576,6 +605,8 @@ app.get(['/tv-logo/:id', '/tv-logo/:id.png', '/tv-logo/:id.svg'], (req, res) => 
   const rawId = (req.params.id || '').replace(/\.(svg|png)$/i, '');
   const pngPath = path.join(__dirname, 'public', 'tv-logos', `${rawId}.png`);
   if (fs.existsSync(pngPath)) {
+    const cdnBase = getCdnPublicBaseUrl();
+    if (cdnBase) return res.redirect(302, `${cdnBase}/tv-logos/${rawId}.png`);
     res.setHeader('Content-Type', 'image/png');
     return res.sendFile(pngPath);
   }
@@ -687,22 +718,26 @@ app.get('/api/search', async (req, res) => {
   res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=7200, stale-while-revalidate=86400');
   const query = req.query.q || '';
   const filterType = req.query.type;
+  const sendCdnResults = (items) => {
+    const cdnBase = getCdnPublicBaseUrl();
+    return res.json({ results: cdnBase ? (items || []).map(m => rewriteMetaMediaUrls(m, cdnBase)) : items });
+  };
   try {
     if (filterType === 'tv') {
       const results = await searchCatalog('tv', query);
-      return res.json({ results });
+      return sendCdnResults(results);
     }
     if (filterType === 'movie') {
       const results = await searchCatalog('movie', query);
-      return res.json({ results });
+      return sendCdnResults(results);
     }
     if (filterType === 'classics') {
       const results = await searchCatalog('series', query, 'hu-mediaklikk-classics');
-      return res.json({ results });
+      return sendCdnResults(results);
     }
     if (filterType === 'series') {
       const results = await searchCatalog('series', query);
-      return res.json({ results });
+      return sendCdnResults(results);
     }
 
     const [tvResults, movieResults, seriesResults] = await Promise.all([
@@ -737,7 +772,7 @@ app.get('/api/search', async (req, res) => {
           combined.push(item);
         }
       }
-      return res.json({ results: combined });
+      return sendCdnResults(combined);
     }
 
     const seen = new Set();
@@ -751,7 +786,7 @@ app.get('/api/search', async (req, res) => {
     if (query) {
       combined.sort((a, b) => scoreSearchRelevance(b.name, query, b.id) - scoreSearchRelevance(a.name, query, a.id));
     }
-    res.json({ results: combined });
+    sendCdnResults(combined);
   } catch (err) {
     res.status(500).json({ error: err.message, results: [] });
   }

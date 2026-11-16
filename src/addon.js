@@ -62,6 +62,7 @@ const DEFAULT_CONFIG = {
 };
 
 const DEFAULT_RENDER_MIGRATION_URL = 'https://nuvio-magyar-http.onrender.com';
+const DEFAULT_CDN_PUBLIC_BASE = 'https://cdn.jsdelivr.net/gh/Player798xy/nuvio-magyar-http@main/public';
 const VOD_STREAM_CACHE = new Map();
 const INFLIGHT_VOD_SCRAPES = new Map();
 const VOD_CACHE_TTL_MS = 20 * 60 * 1000;
@@ -90,6 +91,30 @@ function isRemoteCloudRuntime() {
     isRenderRuntime() ||
     process.env.NETMOZI_REMOTE === '1'
   );
+}
+
+function getCdnPublicBaseUrl() {
+  const custom = String(process.env.ASSET_CDN_URL || '').trim().replace(/\/+$/, '');
+  if (custom === 'off' || custom === '0' || custom === 'false') return '';
+  if (custom) return custom;
+  return isRenderRuntime() ? DEFAULT_CDN_PUBLIC_BASE : '';
+}
+
+function rewriteStaticAssetUrl(rawUrl, cdnBase = getCdnPublicBaseUrl()) {
+  if (!rawUrl || !cdnBase) return rawUrl;
+  const s = String(rawUrl).trim();
+  const match = s.match(/^https?:\/\/[^/]+\/((?:tv-posters|tv-backgrounds|tv-logos|channels)\/[^?#\s]+\.png|logo\.png|icon\.png)(?:\?[^#\s]*)?$/i);
+  if (!match) return s;
+  return `${cdnBase}/${match[1]}`;
+}
+
+function rewriteMetaMediaUrls(item, cdnBase = getCdnPublicBaseUrl()) {
+  if (!item || !cdnBase || typeof item !== 'object') return item;
+  const copy = { ...item };
+  if (copy.poster) copy.poster = rewriteStaticAssetUrl(copy.poster, cdnBase);
+  if (copy.background) copy.background = rewriteStaticAssetUrl(copy.background, cdnBase);
+  if (copy.logo) copy.logo = rewriteStaticAssetUrl(copy.logo, cdnBase);
+  return copy;
 }
 
 function normalizeMigrationUrl(raw) {
@@ -353,14 +378,17 @@ function getManifest(config = {}) {
     types: ['movie', 'series', 'tv']
   });
 
+  const cdnBase = getCdnPublicBaseUrl();
+  const logoUrl = rewriteStaticAssetUrl(`${hostUrl}/logo.png?v=2.7.0`, cdnBase);
+
   return {
     id: 'org.nuvio.magyar.http',
     version: '2.7.0',
     name,
     description: desc,
-    logo: `${hostUrl}/logo.png?v=2.7.0`,
-    icon: `${hostUrl}/logo.png?v=2.7.0`,
-    background: `${hostUrl}/logo.png?v=2.7.0`,
+    logo: logoUrl,
+    icon: logoUrl,
+    background: logoUrl,
     resources,
     types: ['movie', 'series', 'tv', 'channel'],
     idPrefixes: supportedIdPrefixes,
@@ -650,5 +678,8 @@ module.exports = {
   getSubtitles,
   ALL_SCRAPERS,
   getRuntimeNoticeMeta,
-  isRemoteCloudRuntime
+  isRemoteCloudRuntime,
+  getCdnPublicBaseUrl,
+  rewriteStaticAssetUrl,
+  rewriteMetaMediaUrls
 };
