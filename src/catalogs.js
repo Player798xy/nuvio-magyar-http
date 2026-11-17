@@ -11,8 +11,8 @@ const { createBoundedCache } = require('./cache');
 const TMDB_API_KEY = process.env.TMDB_API_KEY || 'ffe7ef8916c61835264d2df68276ddc2';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
-// Bounded in-memory catalog (4h) and IMDb mapping (7d) caches with inflight dedup
-const CACHE_TTL_MS = 4 * 60 * 60 * 1000;
+// Bounded in-memory catalog (24h, invalidated immediately on weekly seed rotation) and IMDb mapping (7d) caches
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const CATALOG_EMPTY_TTL_MS = 2 * 60 * 1000;
 const catalogCache = createBoundedCache({ maxEntries: 300, ttlMs: CACHE_TTL_MS });
 const imdbIdCache = createBoundedCache({ maxEntries: 2500, ttlMs: 7 * 24 * 60 * 60 * 1000 });

@@ -710,7 +710,7 @@ function scoreItemRelevance(itemTitle, query, itemId = '') {
 
 const VOD_META_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const VOD_META_EMPTY_TTL_MS = 2 * 60 * 1000;
-const LIVE_META_CACHE_TTL_MS = 90 * 1000;
+const LIVE_META_CACHE_TTL_MS = 3 * 60 * 1000;
 const VOD_META_CACHE = createBoundedCache({ maxEntries: 400, ttlMs: VOD_META_CACHE_TTL_MS });
 const LIVE_META_CACHE = createBoundedCache({ maxEntries: 250, ttlMs: LIVE_META_CACHE_TTL_MS });
 

@@ -19,9 +19,17 @@ const {
 const { getOnlineStreamMeta } = require('./src/scrapers/onlinestream');
 const { generateTvPosterSvg, generateTvBackgroundSvg, generateTvLogoSvg } = require('./src/tv_graphics');
 const { searchCatalog, getMeta } = require('./src/catalog');
+const { getWeeklyRotationSeed } = require('./src/catalogs');
 const { getMediaMeta, getSeriesEpisodes } = require('./src/utils/meta');
 const { getLiveHlsStream, getRewrittenMasterPlaylist } = require('./src/scrapers/mediaklikk');
-const { recordRequestMetric, isAuthorizedStatsRequest, getStatsSnapshot, renderStatsHtml } = require('./src/stats');
+const {
+  recordRequestMetric,
+  isAuthorizedStatsRequest,
+  getStatsSnapshot,
+  exportStatsBackup,
+  importStatsBackup,
+  renderStatsHtml
+} = require('./src/stats');
 
 const app = express();
 const PORT = process.env.PORT || 7000;
@@ -152,7 +160,7 @@ app.get('/manifest.json', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=14400, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control', 'public, max-age=21600, s-maxage=43200, stale-while-revalidate=86400');
   const config = parseConfig(null, req.query);
   config.hostUrl = getHostUrl(req);
   res.json(getManifest(config));
@@ -163,7 +171,7 @@ app.get('/:config/manifest.json', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=14400, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control', 'public, max-age=21600, s-maxage=43200, stale-while-revalidate=86400');
   const config = parseConfig(req.params.config, req.query);
   config.hostUrl = getHostUrl(req);
   res.json(getManifest(config));
@@ -221,8 +229,8 @@ function sanitizeMetaPreview(item, defaultType = 'movie') {
   return meta;
 }
 
-// Pre-serialized HTTP catalog response cache (eliminates redundant JSON rebuilds & enables 304 ETag hits)
-const CATALOG_BROWSE_CACHE_MS = 2 * 60 * 60 * 1000;
+// Pre-serialized HTTP catalog response cache (24h browse / weekly rotation key + 304 ETag hits)
+const CATALOG_BROWSE_CACHE_MS = 24 * 60 * 60 * 1000;
 const CATALOG_SEARCH_CACHE_MS = 30 * 60 * 1000;
 const CATALOG_EMPTY_CACHE_MS = 2 * 60 * 1000;
 const CATALOG_RESPONSE_CACHE = createBoundedCache({ maxEntries: 250, ttlMs: CATALOG_BROWSE_CACHE_MS });
@@ -258,7 +266,8 @@ async function handleCatalog(req, res) {
   const hostUrl = getHostUrl(req);
   const normSearch = String(searchQuery || '').trim().toLowerCase();
   const cacheHostKey = cdnBase ? `cdn:${cdnBase}` : `host:${hostUrl}`;
-  const respCacheKey = `${type}:${cleanId}:${skip}:${normSearch}:${cacheHostKey}`;
+  const weekSeed = getWeeklyRotationSeed();
+  const respCacheKey = `${type}:${cleanId}:${skip}:${normSearch}:w${weekSeed}:${cacheHostKey}`;
 
   try {
     const entry = await CATALOG_RESPONSE_CACHE.getOrLoad(
@@ -275,7 +284,7 @@ async function handleCatalog(req, res) {
           ? 'public, max-age=120, s-maxage=300'
           : (normSearch
               ? 'public, max-age=1800, s-maxage=7200, stale-while-revalidate=86400'
-              : 'public, max-age=7200, s-maxage=21600, stale-while-revalidate=86400');
+              : 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800');
         return { json, etag, cacheControl, count: metas.length };
       },
       {
@@ -461,7 +470,7 @@ async function handleStream(req, res) {
     } else if (cleanId.startsWith('mediaklikk-live-')) {
       res.setHeader('Cache-Control', 'private, max-age=60');
     } else if (isLive) {
-      res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=180, stale-while-revalidate=300');
+      res.setHeader('Cache-Control', 'public, max-age=180, s-maxage=300, stale-while-revalidate=600');
     } else {
       res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=1800, stale-while-revalidate=3600');
     }
@@ -1096,6 +1105,42 @@ app.get('/api/stats', async (req, res) => {
     res.json(snapshot);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Download full anonymous stats backup JSON
+app.get('/api/stats/backup', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+
+  if (!isAuthorizedStatsRequest(req)) {
+    return res.status(401).json({ error: 'Unauthorized (invalid or missing STATS_KEY)' });
+  }
+
+  const backup = exportStatsBackup();
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="nuvio-stats-backup-${backup.dayKey}.json"`);
+  res.send(JSON.stringify(backup, null, 2));
+});
+
+// Restore previously saved stats backup JSON (strictly requires configured STATS_KEY)
+app.post('/api/stats/import', express.json({ limit: '512kb' }), (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+
+  const configuredKey = String(process.env.STATS_KEY || '').trim();
+  if (!configuredKey) {
+    return res.status(403).json({ error: 'Set STATS_KEY environment variable before importing stats backups' });
+  }
+  if (!isAuthorizedStatsRequest(req)) {
+    return res.status(401).json({ error: 'Unauthorized (invalid STATS_KEY)' });
+  }
+
+  try {
+    const restored = importStatsBackup(req.body);
+    res.json(restored);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 });
 

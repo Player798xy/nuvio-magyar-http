@@ -97,12 +97,12 @@ const LIVE_CHANNELS = [
 
 // In-memory cache for live stream URLs (HLS tokens are valid for ~2-3 hours)
 const LIVE_STREAM_CACHE = new Map();
-const LIVE_CACHE_TTL_MS = 45 * 60 * 1000; // 45 minutes
+const LIVE_CACHE_TTL_MS = 60 * 60 * 1000; // 60 minutes
 
 // In-memory cache for MédiaKlikk programs and series episodes
 let mediaklikkProgramsCache = null;
 let lastProgramsRefresh = 0;
-const PROGRAMS_REFRESH_INTERVAL_MS = 12 * 60 * 60 * 1000; // 12 hours
+const PROGRAMS_REFRESH_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
 const showEpisodesCache = new Map();
 
 // 100% Verified & Tested MédiaKlikk (MTVA) Classic Series Catalog

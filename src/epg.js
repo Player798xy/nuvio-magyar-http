@@ -5,11 +5,13 @@
  */
 
 const INIT_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
-const SCHEDULE_CACHE_TTL_MS = 60 * 60 * 1000;
+const SCHEDULE_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const MAX_SCHEDULE_CACHE = 200;
 
 let portChannelsCache = { ts: 0, list: [], byNorm: new Map() };
+let inflightPortInit = null;
 const channelScheduleCache = new Map();
+const inflightSchedules = new Map();
 
 const CHANNEL_ALIASES = {
   'duna': ['duna televizio', 'duna tv'],
@@ -72,29 +74,39 @@ async function ensurePortChannelsLoaded() {
   if (portChannelsCache.list.length > 0 && Date.now() - portChannelsCache.ts < INIT_CACHE_TTL_MS) {
     return portChannelsCache;
   }
+  if (inflightPortInit) return inflightPortInit;
+
+  inflightPortInit = (async () => {
+    try {
+      const res = await fetch('https://port.hu/tvapi/init', {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+        signal: AbortSignal.timeout(3500)
+      });
+      if (!res.ok) return portChannelsCache;
+      const data = await res.json();
+      const list = Array.isArray(data?.channels) ? data.channels : [];
+      const byNorm = new Map();
+
+      for (const ch of list) {
+        if (!ch?.id || !ch?.name) continue;
+        const norm = normalizeChannelName(ch.name);
+        if (norm && !byNorm.has(norm)) byNorm.set(norm, ch.id);
+        const cmp = compactKey(norm);
+        if (cmp && !byNorm.has(cmp)) byNorm.set(cmp, ch.id);
+      }
+
+      if (list.length > 0) {
+        portChannelsCache = { ts: Date.now(), list, byNorm };
+      }
+    } catch {}
+    return portChannelsCache;
+  })();
+
   try {
-    const res = await fetch('https://port.hu/tvapi/init', {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-      signal: AbortSignal.timeout(3500)
-    });
-    if (!res.ok) return portChannelsCache;
-    const data = await res.json();
-    const list = Array.isArray(data?.channels) ? data.channels : [];
-    const byNorm = new Map();
-
-    for (const ch of list) {
-      if (!ch?.id || !ch?.name) continue;
-      const norm = normalizeChannelName(ch.name);
-      if (norm && !byNorm.has(norm)) byNorm.set(norm, ch.id);
-      const cmp = compactKey(norm);
-      if (cmp && !byNorm.has(cmp)) byNorm.set(cmp, ch.id);
-    }
-
-    if (list.length > 0) {
-      portChannelsCache = { ts: Date.now(), list, byNorm };
-    }
-  } catch {}
-  return portChannelsCache;
+    return await inflightPortInit;
+  } finally {
+    inflightPortInit = null;
+  }
 }
 
 async function resolvePortChannelId(channelName, channelId = '') {
@@ -155,46 +167,60 @@ async function fetchChannelSchedule(portId) {
     return cached.programs;
   }
 
-  try {
-    const url = `https://port.hu/tvapi?channel_id[]=${encodeURIComponent(portId)}&i_datetime_from=${todayStr}&i_datetime_to=${tomorrowStr}`;
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-      signal: AbortSignal.timeout(3000)
-    });
-    if (!res.ok) return cached ? cached.programs : [];
-    const data = await res.json();
+  const inflightKey = `${portId}:${todayStr}`;
+  if (inflightSchedules.has(inflightKey)) {
+    return inflightSchedules.get(inflightKey);
+  }
 
-    const programs = [];
-    for (const val of Object.values(data || {})) {
-      const chList = Array.isArray(val?.channels) ? val.channels : [];
-      for (const chObj of chList) {
-        if (chObj.id === portId && Array.isArray(chObj.programs)) {
-          programs.push(...chObj.programs);
+  const fetchPromise = (async () => {
+    try {
+      const url = `https://port.hu/tvapi?channel_id[]=${encodeURIComponent(portId)}&i_datetime_from=${todayStr}&i_datetime_to=${tomorrowStr}`;
+      const res = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+        signal: AbortSignal.timeout(3000)
+      });
+      if (!res.ok) return cached ? cached.programs : [];
+      const data = await res.json();
+
+      const programs = [];
+      for (const val of Object.values(data || {})) {
+        const chList = Array.isArray(val?.channels) ? val.channels : [];
+        for (const chObj of chList) {
+          if (chObj.id === portId && Array.isArray(chObj.programs)) {
+            programs.push(...chObj.programs);
+          }
         }
       }
-    }
 
-    const parsed = programs
-      .map(p => ({
-        title: String(p.title || '').trim(),
-        episodeTitle: p.episode_title ? String(p.episode_title).trim() : '',
-        shortDesc: p.short_description ? String(p.short_description).trim() : '',
-        startMs: Date.parse(p.start_datetime),
-        endMs: Date.parse(p.end_datetime),
-        startHm: formatHm(p.start_datetime),
-        endHm: formatHm(p.end_datetime)
-      }))
-      .filter(p => p.title && !isNaN(p.startMs) && !isNaN(p.endMs))
-      .sort((a, b) => a.startMs - b.startMs);
+      const parsed = programs
+        .map(p => ({
+          title: String(p.title || '').trim(),
+          episodeTitle: p.episode_title ? String(p.episode_title).trim() : '',
+          shortDesc: p.short_description ? String(p.short_description).trim() : '',
+          startMs: Date.parse(p.start_datetime),
+          endMs: Date.parse(p.end_datetime),
+          startHm: formatHm(p.start_datetime),
+          endHm: formatHm(p.end_datetime)
+        }))
+        .filter(p => p.title && !isNaN(p.startMs) && !isNaN(p.endMs))
+        .sort((a, b) => a.startMs - b.startMs);
 
-    if (channelScheduleCache.size >= MAX_SCHEDULE_CACHE) {
-      const firstKey = channelScheduleCache.keys().next().value;
-      if (firstKey !== undefined) channelScheduleCache.delete(firstKey);
+      if (channelScheduleCache.size >= MAX_SCHEDULE_CACHE) {
+        const firstKey = channelScheduleCache.keys().next().value;
+        if (firstKey !== undefined) channelScheduleCache.delete(firstKey);
+      }
+      channelScheduleCache.set(portId, { ts: Date.now(), dayStr: todayStr, programs: parsed });
+      return parsed;
+    } catch {
+      return cached ? cached.programs : [];
     }
-    channelScheduleCache.set(portId, { ts: Date.now(), dayStr: todayStr, programs: parsed });
-    return parsed;
-  } catch {
-    return cached ? cached.programs : [];
+  })();
+
+  inflightSchedules.set(inflightKey, fetchPromise);
+  try {
+    return await fetchPromise;
+  } finally {
+    inflightSchedules.delete(inflightKey);
   }
 }
 

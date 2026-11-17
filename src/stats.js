@@ -441,10 +441,101 @@ function formatDuration(sec) {
   return `${m}p ${s % 60}mp`;
 }
 
+function exportStatsBackup() {
+  ensureCurrentDayWindow();
+  const topItems = {};
+  for (const [k, v] of mem.topItemsToday.entries()) {
+    topItems[k] = v;
+  }
+  return {
+    backupVersion: 1,
+    exportedAt: new Date().toISOString(),
+    dayKey: mem.dayKey,
+    monthKey: mem.monthKey,
+    todayCounts: { ...mem.todayCounts },
+    totalCounts: { ...mem.totalCounts },
+    clientsToday: { ...mem.clientsToday },
+    topItemsToday: topItems,
+    addonHashesToday: [...mem.addonHashesToday],
+    webHashesToday: [...mem.webHashesToday],
+    addonHashesSinceBoot: [...mem.addonHashesSinceBoot]
+  };
+}
+
+function mergeCounterObject(target, source) {
+  if (!source || typeof source !== 'object') return;
+  for (const [k, v] of Object.entries(source)) {
+    const safeKey = String(k || '').slice(0, 64);
+    const num = Math.max(0, Math.floor(Number(v) || 0));
+    if (safeKey && num > 0) {
+      target[safeKey] = Math.max(target[safeKey] || 0, num);
+    }
+  }
+}
+
+function importStatsBackup(backup) {
+  if (!backup || typeof backup !== 'object') {
+    throw new Error('Érvénytelen backup JSON formátum');
+  }
+  ensureCurrentDayWindow();
+
+  mergeCounterObject(mem.totalCounts, backup.totalCounts);
+
+  if (!backup.dayKey || backup.dayKey === mem.dayKey) {
+    mergeCounterObject(mem.todayCounts, backup.todayCounts);
+    mergeCounterObject(mem.clientsToday, backup.clientsToday);
+    if (backup.topItemsToday && typeof backup.topItemsToday === 'object') {
+      for (const [label, count] of Object.entries(backup.topItemsToday)) {
+        const cleanLabel = String(label || '').trim().slice(0, 90);
+        const num = Math.max(0, Math.floor(Number(count) || 0));
+        if (cleanLabel && num > 0) {
+          mem.topItemsToday.set(cleanLabel, Math.max(mem.topItemsToday.get(cleanLabel) || 0, num));
+        }
+      }
+    }
+    if (Array.isArray(backup.addonHashesToday)) {
+      for (const h of backup.addonHashesToday) {
+        if (typeof h === 'string' && h.length >= 8 && mem.addonHashesToday.size < MAX_DAILY_HASHES) {
+          mem.addonHashesToday.add(h);
+        }
+      }
+    }
+    if (Array.isArray(backup.webHashesToday)) {
+      for (const h of backup.webHashesToday) {
+        if (typeof h === 'string' && h.length >= 8 && mem.webHashesToday.size < MAX_DAILY_HASHES) {
+          mem.webHashesToday.add(h);
+        }
+      }
+    }
+  }
+
+  if (Array.isArray(backup.addonHashesSinceBoot)) {
+    for (const h of backup.addonHashesSinceBoot) {
+      if (typeof h === 'string' && h.length >= 8 && mem.addonHashesSinceBoot.size < MAX_DAILY_HASHES * 2) {
+        mem.addonHashesSinceBoot.add(h);
+      }
+    }
+  }
+
+  return {
+    ok: true,
+    dayKey: mem.dayKey,
+    restoredSinceBootUsers: mem.addonHashesSinceBoot.size,
+    restoredTodayUsers: mem.addonHashesToday.size,
+    restoredTotalCatalogs: mem.totalCounts.catalog || 0
+  };
+}
+
 function renderStatsHtml(data, queryKey = '') {
   const jsonHref = queryKey
     ? `?key=${encodeURIComponent(queryKey)}&format=json`
     : '?format=json';
+  const backupHref = queryKey
+    ? `/api/stats/backup?key=${encodeURIComponent(queryKey)}`
+    : '/api/stats/backup';
+  const importActionUrl = queryKey
+    ? `/api/stats/import?key=${encodeURIComponent(queryKey)}`
+    : '/api/stats/import';
   const rt = data.requestsToday || {};
   const tot = data.requestsTotal || {};
   const vodToday = rt.stream_vod || 0;
@@ -529,6 +620,8 @@ function renderStatsHtml(data, queryKey = '') {
       </div>
       <div class="actions">
         <button class="btn btn-primary" onclick="location.reload()">↻ Frissítés</button>
+        <a class="btn" href="${escapeHtml(backupHref)}">Mentés (JSON)</a>
+        ${data.passwordProtected ? '<label class="btn">Visszatöltés<input id="statsImportInput" type="file" accept=".json,application/json" style="display:none" /></label>' : ''}
         <a class="btn" href="${escapeHtml(jsonHref)}">JSON</a>
         <a class="btn" href="/configure">← Konfigurátor</a>
       </div>
@@ -595,7 +688,32 @@ function renderStatsHtml(data, queryKey = '') {
         <tbody>${dayRows}</tbody>
       </table>
     </div>
-  </div>
+  </div>${data.passwordProtected ? `
+  <script>
+    (function () {
+      var input = document.getElementById('statsImportInput');
+      if (!input) return;
+      input.addEventListener('change', async function () {
+        var file = input.files && input.files[0];
+        if (!file) return;
+        try {
+          var text = await file.text();
+          var res = await fetch(${JSON.stringify(importActionUrl)}, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: text
+          });
+          var json = await res.json().catch(function () { return {}; });
+          if (!res.ok) throw new Error(json.error || ('HTTP ' + res.status));
+          location.reload();
+        } catch (err) {
+          alert('Visszatöltési hiba: ' + err.message);
+        } finally {
+          input.value = '';
+        }
+      });
+    })();
+  </script>` : ''}
 </body>
 </html>`;
 }
@@ -604,6 +722,8 @@ module.exports = {
   recordRequestMetric,
   isAuthorizedStatsRequest,
   getStatsSnapshot,
+  exportStatsBackup,
+  importStatsBackup,
   renderStatsHtml,
   hasUpstashConfigured
 };

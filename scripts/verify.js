@@ -209,12 +209,35 @@ async function runVerification() {
     }
     const prevStatsKey = process.env.STATS_KEY;
     try {
+      const importWithoutKeyEnv = await fetch(`${base}/api/stats/import`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ totalCounts: { catalog: 99999 } })
+      });
+      if (importWithoutKeyEnv.status !== 403) {
+        fail(`Expected 403 on /api/stats/import when STATS_KEY is unset, got ${importWithoutKeyEnv.status}`);
+      }
+
       process.env.STATS_KEY = 'secret-test-key';
       const unauthStats = await fetch(`${base}/api/stats?format=json`);
       const authStatsHtml = await fetch(`${base}/api/stats?key=secret-test-key`, { headers: { Accept: 'text/html' } });
+      const backupRes = await fetch(`${base}/api/stats/backup?key=secret-test-key`);
+      const backupJson = await backupRes.json();
       if (unauthStats.status !== 401) fail(`Expected 401 without STATS_KEY, got ${unauthStats.status}`);
       if (authStatsHtml.status !== 200 || !(await authStatsHtml.text()).includes('Használati Statisztika')) {
         fail('Authenticated HTML /api/stats dashboard failed to render');
+      }
+      if (backupRes.status !== 200 || !backupJson.exportedAt || typeof backupJson.totalCounts !== 'object') {
+        fail('Stats backup export endpoint failed');
+      }
+      const importOkRes = await fetch(`${base}/api/stats/import?key=secret-test-key`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ totalCounts: { catalog: 10 }, addonHashesSinceBoot: ['testhash_backup_1'] })
+      });
+      const importOkJson = await importOkRes.json();
+      if (importOkRes.status !== 200 || !importOkJson.ok) {
+        fail(`Authenticated stats import failed: HTTP ${importOkRes.status}`);
       }
     } finally {
       if (prevStatsKey === undefined) delete process.env.STATS_KEY; else process.env.STATS_KEY = prevStatsKey;
@@ -244,21 +267,33 @@ async function runVerification() {
     }
     console.log('✅ 12. Render Heavy TV Artwork Offload to Free jsDelivr CDN OK');
 
-    // 13. Aggressive Bandwidth-Saving Caches (Catalog, Search, Meta, Manifest + 304 ETag)
-    const [manCacheRes, liveCatRes, trendCachedStartRes] = await Promise.all([
+    // 13. Daily Catalog, Extended Live TV, Search, Meta, Manifest + 304 ETag Caches
+    const [manCacheRes, liveCatRes, trendCachedStartRes, liveStreamCacheRes] = await Promise.all([
       fetch(`${base}/manifest.json`),
       fetch(`${base}/catalog/movie/hu-live-tv.json`),
-      fetch(`${base}/catalog/movie/hu-trending-movies.json`)
+      fetch(`${base}/catalog/movie/hu-trending-movies.json`),
+      fetch(`${base}/stream/movie/onlinestream-live-6141.json`)
     ]);
     const manCC = manCacheRes.headers.get('cache-control') || '';
     const liveCatCC = liveCatRes.headers.get('cache-control') || '';
     const trendCC = trendCachedStartRes.headers.get('cache-control') || '';
     const trendEtag = trendCachedStartRes.headers.get('etag') || '';
-    if (!manCC.includes('max-age=3600')) fail(`Expected max-age=3600 on /manifest.json, got "${manCC}"`);
-    if (!liveCatCC.includes('max-age=7200') || !trendCC.includes('max-age=7200')) {
-      fail(`Expected max-age=7200 on browse catalogs, got live="${liveCatCC}", trend="${trendCC}"`);
+    const liveStreamCC2 = liveStreamCacheRes.headers.get('cache-control') || '';
+    if (!manCC.includes('max-age=21600')) fail(`Expected max-age=21600 on /manifest.json, got "${manCC}"`);
+    if (!liveCatCC.includes('max-age=86400') || !trendCC.includes('max-age=86400')) {
+      fail(`Expected max-age=86400 (daily) on browse catalogs, got live="${liveCatCC}", trend="${trendCC}"`);
+    }
+    if (!liveStreamCC2.includes('max-age=180')) {
+      fail(`Expected max-age=180 on OnlineStream Live TV stream, got "${liveStreamCC2}"`);
     }
     if (!trendEtag) fail('Expected ETag header on /catalog/movie/hu-trending-movies.json');
+
+    const tLiveStart = Date.now();
+    const liveStreamHit2 = await fetch(`${base}/stream/movie/onlinestream-live-6141.json`).then((r) => r.json());
+    const liveHitMs = Date.now() - tLiveStart;
+    if (!liveStreamHit2.streams?.length || liveHitMs > 250) {
+      fail(`Live TV stream second hit slow or empty (${liveHitMs}ms)`);
+    }
 
     const etag304Res = await fetch(`${base}/catalog/movie/hu-trending-movies.json`, {
       headers: { 'If-None-Match': trendEtag }

@@ -6,12 +6,15 @@
 
 const fetch = globalThis.fetch;
 const { getLiveChannelStreams, LIVE_CHANNELS: MEDIAKLIKK_LIVE_CHANNELS } = require('./mediaklikk');
+const { createBoundedCache } = require('../cache');
 
-const HOST_URL = process.env.HOST_URL || 'https://nuvio-magyar-http.vercel.app';
+const HOST_URL = process.env.HOST_URL || 'https://nuvio-magyar-http.onrender.com';
 
-// In-Memory Stream Cache (TTL: 4 minutes) for sub-50ms instant response
-const STREAM_CACHE = new Map();
-const CACHE_TTL_MS = 4 * 60 * 1000;
+// Bounded In-Memory Live Stream Cache with inflight dedup:
+// Static direct .m3u8 servers cache 30 min; redirected/tokenized servers cache 12 min
+const STATIC_STREAM_CACHE_TTL_MS = 30 * 60 * 1000;
+const DYNAMIC_STREAM_CACHE_TTL_MS = 12 * 60 * 1000;
+const STREAM_CACHE = createBoundedCache({ maxEntries: 500, ttlMs: STATIC_STREAM_CACHE_TTL_MS });
 
 // Verified Ground-Truth Video Heights (px)
 const VERIFIED_CHANNEL_HEIGHTS = {
@@ -6701,93 +6704,99 @@ function parseHlsVariants(m3u8Content, masterUrl, defaultHeight = 1080) {
  */
 async function resolveServerStream(serverConfig, channelHeight = 1080) {
   const cacheKey = serverConfig.url || serverConfig.onlineUrl || serverConfig.playerUrl;
-  const cached = STREAM_CACHE.get(cacheKey);
-  if (cached && (Date.now() - cached.timestamp < CACHE_TTL_MS)) {
-    return cached.data;
-  }
-
-  let masterUrl = serverConfig.url;
-
-  // 1. If redirect or missing URL: fetch onlineUrl or playerUrl
   const pageUrl = serverConfig.onlineUrl || serverConfig.playerUrl;
-  if (pageUrl && (!masterUrl || masterUrl.includes('redirect.onlinestream.live'))) {
-    try {
-      const pageRes = await fetch(pageUrl, {
-        headers: {
+  const isDynamicToken = Boolean(
+    pageUrl && (!serverConfig.url || serverConfig.url.includes('redirect.onlinestream.live'))
+  );
+  const ttlMs = isDynamicToken ? DYNAMIC_STREAM_CACHE_TTL_MS : STATIC_STREAM_CACHE_TTL_MS;
+
+  return STREAM_CACHE.getOrLoad(
+    cacheKey,
+    async () => {
+      let masterUrl = serverConfig.url;
+
+      // 1. If redirect or missing URL: fetch onlineUrl or playerUrl
+      if (pageUrl && (!masterUrl || masterUrl.includes('redirect.onlinestream.live'))) {
+        try {
+          const pageRes = await fetch(pageUrl, {
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+              'Referer': 'https://onlinestream.live/'
+            },
+            signal: AbortSignal.timeout(3000)
+          });
+          if (pageRes.ok) {
+            const html = await pageRes.text();
+            const m = html.match(/https?:\/\/[^\s"'<>]+\.m3u8[^\s"'<>]*/i);
+            if (m) {
+              masterUrl = m[0];
+            }
+          }
+        } catch (e) {}
+      }
+
+      if (!masterUrl) return null;
+
+      // 2. Fetch master m3u8 and parse variants
+      try {
+        const headers = {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
           'Referer': 'https://onlinestream.live/'
-        },
-        signal: AbortSignal.timeout(3000)
-      });
-      if (pageRes.ok) {
-        const html = await pageRes.text();
-        const m = html.match(/https?:\/\/[^\s"'<>]+\.m3u8[^\s"'<>]*/i);
-        if (m) {
-          masterUrl = m[0];
+        };
+        if (masterUrl.includes('videa')) {
+          headers['Referer'] = 'https://videa.hu/';
         }
+
+        const res = await fetch(masterUrl, {
+          headers,
+          signal: AbortSignal.timeout(3500)
+        });
+
+        if (!res.ok) return null;
+        const text = await res.text();
+        if (!text.includes('#EXTM3U')) return null;
+
+        const variants = parseHlsVariants(text, masterUrl, channelHeight);
+        const topVariant = variants.length > 0 ? variants[0] : null;
+
+        let quality = '1080p FHD';
+        let height = channelHeight || 1080;
+
+        if (topVariant && topVariant.quality && topVariant.height) {
+          quality = topVariant.quality;
+          height = topVariant.height;
+        } else {
+          if (height >= 1080 || masterUrl.includes('1080') || masterUrl.includes('_HD')) {
+            quality = '1080p FHD';
+            height = 1080;
+          } else if (height >= 720 || masterUrl.includes('720')) {
+            quality = '720p HD';
+            height = 720;
+          } else if (height >= 480 || masterUrl.includes('576') || masterUrl.includes('sd') || masterUrl.includes(':SD:')) {
+            quality = '576p SD';
+            height = 576;
+          } else {
+            quality = 'SD';
+            height = 480;
+          }
+        }
+
+        return {
+          masterUrl,
+          topVariantUrl: topVariant ? topVariant.url : masterUrl,
+          quality,
+          height,
+          variants
+        };
+      } catch (e) {
+        return null;
       }
-    } catch (e) {}
-  }
-
-  if (!masterUrl) return null;
-
-  // 2. Fetch master m3u8 and parse variants
-  try {
-    const headers = {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-      'Referer': 'https://onlinestream.live/'
-    };
-    if (masterUrl.includes('videa')) {
-      headers['Referer'] = 'https://videa.hu/';
+    },
+    {
+      ttlMs,
+      shouldCache: (val) => Boolean(val && val.masterUrl)
     }
-
-    const res = await fetch(masterUrl, {
-      headers,
-      signal: AbortSignal.timeout(3500)
-    });
-
-    if (!res.ok) return null;
-    const text = await res.text();
-    if (!text.includes('#EXTM3U')) return null;
-
-    const variants = parseHlsVariants(text, masterUrl, channelHeight);
-    const topVariant = variants.length > 0 ? variants[0] : null;
-
-    let quality = '1080p FHD';
-    let height = channelHeight || 1080;
-
-    if (topVariant && topVariant.quality && topVariant.height) {
-      quality = topVariant.quality;
-      height = topVariant.height;
-    } else {
-      if (height >= 1080 || masterUrl.includes('1080') || masterUrl.includes('_HD')) {
-        quality = '1080p FHD';
-        height = 1080;
-      } else if (height >= 720 || masterUrl.includes('720')) {
-        quality = '720p HD';
-        height = 720;
-      } else if (height >= 480 || masterUrl.includes('576') || masterUrl.includes('sd') || masterUrl.includes(':SD:')) {
-        quality = '576p SD';
-        height = 576;
-      } else {
-        quality = 'SD';
-        height = 480;
-      }
-    }
-
-    const data = {
-      masterUrl,
-      topVariantUrl: topVariant ? topVariant.url : masterUrl,
-      quality,
-      height,
-      variants
-    };
-
-    STREAM_CACHE.set(cacheKey, { data, timestamp: Date.now() });
-    return data;
-  } catch (e) {
-    return null;
-  }
+  );
 }
 
 /**
