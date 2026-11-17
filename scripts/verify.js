@@ -66,8 +66,12 @@ async function runVerification() {
     const playableLiveAll = [...liveStreamJson.streams, ...(rtlLiveJson.streams || [])].filter((s) => s.url);
     if (!playableLiveAll.length) fail('RTL/M4 Sport returned 0 playable live streams');
     for (const ls of playableLiveAll) {
-      if (ls.behaviorHints?.notWebReady !== true || !ls.behaviorHints?.proxyHeaders?.request?.['User-Agent']) {
-        fail(`Live stream "${ls.name}" missing Stremio notWebReady=true + proxyHeaders User-Agent`);
+      if (ls.behaviorHints?.proxyHeaders) {
+        fail(`Live stream "${ls.name}" must omit proxyHeaders (triggers Stremio Android /proxy/ crash)`);
+      }
+      const needsNotWebReady = !String(ls.url || '').startsWith('https://') || String(ls.url || '').includes('gradetv');
+      if (Boolean(ls.behaviorHints?.notWebReady) !== needsNotWebReady) {
+        fail(`Live stream "${ls.name}" expected notWebReady=${needsNotWebReady}, got ${ls.behaviorHints?.notWebReady}`);
       }
     }
     const brokenGradetv = (rtlLiveJson.streams || []).find((s) => String(s.url || '').includes('m3m8.gradetv.net') && !String(s.url).includes('faixa=video'));

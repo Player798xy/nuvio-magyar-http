@@ -963,30 +963,17 @@ async function getReorderedMasterPlaylist(streamId, clientIp = null) {
   }
 }
 
-const LIVE_STREAM_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
-
 /**
- * Stremio requires `notWebReady: true` + `proxyHeaders.request` for plain HTTP or custom-header
- * HLS streams so desktop/web clients route via the local Stremio proxy instead of Chromium HLS.js
- * (which hits Mixed Content / OPTIONS 503) and bypass Lavf/Dalvik CDN blackholes with 0 server egress.
+ * Stremio Android's local /proxy/d=... route (triggered by `proxyHeaders`) crashes on plain HTTP
+ * URLs (ERR_INVALID_PROTOCOL) and relative HLS .ts paths ("All internal players failed"),
+ * so Live TV omits `proxyHeaders` and sets `notWebReady: true` only when the stream or its segments
+ * use plain HTTP (passing the direct URL straight to ExoPlayer/LibVLC/MPV).
  */
 function buildLiveStreamBehaviorHints(streamUrl = '') {
   const urlLower = String(streamUrl || '').toLowerCase();
-  let referer = 'https://onlinestream.live/';
-  if (urlLower.includes('mediaklikk') || urlLower.includes('connectmedia') || urlLower.includes('/api/live/')) {
-    referer = 'https://mediaklikk.hu/';
-  } else if (urlLower.includes('videa')) {
-    referer = 'https://videa.hu/';
-  }
+  const usesHttpOrMixed = !urlLower.startsWith('https://') || urlLower.includes('gradetv');
   return {
-    notWebReady: true,
-    isLive: true,
-    proxyHeaders: {
-      request: {
-        'User-Agent': LIVE_STREAM_USER_AGENT,
-        'Referer': referer
-      }
-    }
+    notWebReady: usesHttpOrMixed
   };
 }
 
