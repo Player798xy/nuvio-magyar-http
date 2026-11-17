@@ -1,5 +1,5 @@
 const { getMediaMeta } = require('./utils/meta');
-const { searchCatalog, getMeta } = require('./catalog');
+const { searchCatalog, getMeta, HUNGARIAN_CLASSIC_SERIES_IDS } = require('./catalog');
 const { CATALOG_DEFINITIONS, getEnabledManifestCatalogs } = require('./catalogs');
 const { scrapeVidea } = require('./scrapers/videa');
 const { scrapeIndavideo } = require('./scrapers/indavideo');
@@ -65,8 +65,8 @@ const DEFAULT_RENDER_MIGRATION_URL = 'https://nuvio-magyar-http.onrender.com';
 const DEFAULT_CDN_PUBLIC_BASE = 'https://cdn.jsdelivr.net/gh/Player798xy/nuvio-magyar-http@main/public';
 const VOD_STREAM_CACHE = new Map();
 const INFLIGHT_VOD_SCRAPES = new Map();
-const VOD_CACHE_TTL_MS = 20 * 60 * 1000;
-const VOD_EMPTY_CACHE_TTL_MS = 2 * 60 * 1000;
+const VOD_CACHE_TTL_MS = 60 * 60 * 1000;
+const VOD_EMPTY_CACHE_TTL_MS = 5 * 60 * 1000;
 const MAX_VOD_CACHE = 250;
 
 function isRenderRuntime() {
@@ -361,7 +361,7 @@ function getManifest(config = {}) {
     {
       name: 'meta',
       types: ['movie', 'series', 'tv', 'channel'],
-      idPrefixes: ['tt', 'onlinestream-live-', 'mediaklikk-live-', 'mediaklikk:', 'netmozi:', 'tmdb:']
+      idPrefixes: ['onlinestream-live-', 'mediaklikk-live-', 'mediaklikk:', 'netmozi:', 'tmdb:', ...HUNGARIAN_CLASSIC_SERIES_IDS]
     }
   ];
 

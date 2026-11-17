@@ -18,7 +18,7 @@ const {
 } = require('./src/addon');
 const { getOnlineStreamMeta } = require('./src/scrapers/onlinestream');
 const { generateTvPosterSvg, generateTvBackgroundSvg, generateTvLogoSvg } = require('./src/tv_graphics');
-const { searchCatalog, getMeta } = require('./src/catalog');
+const { searchCatalog, getMeta, HUNGARIAN_CLASSIC_SERIES_IDS } = require('./src/catalog');
 const { getWeeklyRotationSeed } = require('./src/catalogs');
 const { getMediaMeta, getSeriesEpisodes } = require('./src/utils/meta');
 const { getLiveHlsStream, getRewrittenMasterPlaylist } = require('./src/scrapers/mediaklikk');
@@ -324,6 +324,14 @@ async function handleMeta(req, res) {
     rawId = decodeURIComponent(rawId);
   } catch (e) {}
 
+  // Offload standard IMDb tt... metadata directly to Cinemeta (0 bytes JSON + 0 outbound scraper traffic)
+  const imdbBaseMatch = rawId.match(/^(tt\d+)(?::\d+:\d+)?$/i);
+  if (imdbBaseMatch && !HUNGARIAN_CLASSIC_SERIES_IDS.has(imdbBaseMatch[1])) {
+    const cinemetaType = type === 'series' ? 'series' : 'movie';
+    res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
+    return res.redirect(302, `https://v3-cinemeta.strem.io/meta/${cinemetaType}/${imdbBaseMatch[1]}.json`);
+  }
+
   try {
     const metaObj = await getMeta(type, rawId, getHostUrl(req));
     if (metaObj) {
@@ -472,7 +480,7 @@ async function handleStream(req, res) {
     } else if (isLive) {
       res.setHeader('Cache-Control', 'public, max-age=180, s-maxage=300, stale-while-revalidate=600');
     } else {
-      res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=1800, stale-while-revalidate=3600');
+      res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=1800, stale-while-revalidate=3600');
     }
 
     res.json({ streams: cleanStreams });

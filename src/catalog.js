@@ -17,6 +17,11 @@ const { getOnlineStreamChannels, getOnlineStreamMeta } = require('./scrapers/onl
 const { getChannelEpg, formatEpgMetaText } = require('./epg');
 const { createBoundedCache } = require('./cache');
 
+const HUNGARIAN_CLASSIC_SERIES_IDS = new Set([
+  'tt0154077', 'tt0861751', 'tt0129719', 'tt0056789', 'tt0136650',
+  'tt1225872', 'tt0167595', 'tt0168342', 'tt0166931', 'tt0168343'
+]);
+
 function normalize(str) {
   return (str || '')
     .toLowerCase()
@@ -942,11 +947,6 @@ async function fetchMetaUncached(type, id, baseHost) {
 
   // If standard IMDb id, check curated Hungarian classic series episodes first, then Cinemeta
   if (id.startsWith('tt')) {
-    const HUNGARIAN_CLASSIC_SERIES_IDS = new Set([
-      'tt0154077', 'tt0861751', 'tt0129719', 'tt0056789', 'tt0136650',
-      'tt1225872', 'tt0167595', 'tt0168342', 'tt0166931', 'tt0168343'
-    ]);
-
     if (type === 'series' && HUNGARIAN_CLASSIC_SERIES_IDS.has(id)) {
       try {
         const { getSeriesEpisodes } = require('./utils/meta');
@@ -1102,5 +1102,6 @@ async function fetchMetaUncached(type, id, baseHost) {
 
 module.exports = {
   searchCatalog,
-  getMeta
+  getMeta,
+  HUNGARIAN_CLASSIC_SERIES_IDS
 };

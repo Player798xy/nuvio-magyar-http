@@ -20,7 +20,10 @@ async function runVerification() {
     const metaRes = (manifest.resources || []).find((r) => r.name === 'meta');
     const subRes = (manifest.resources || []).find((r) => r.name === 'subtitles');
     console.log(`✅ 1. Manifest: ${manifest.name} v${manifest.version} (${manifest.catalogs.length} catalogs)`);
-    if (!metaRes?.idPrefixes?.includes('tt')) fail('Manifest meta resource is missing "tt" idPrefix');
+    if (metaRes?.idPrefixes?.includes('tt')) fail('Manifest meta resource must NOT declare broad "tt" prefix (triggers Stremio library meta flood)');
+    if (!metaRes?.idPrefixes?.includes('tt0154077') || !metaRes?.idPrefixes?.includes('tmdb:')) {
+      fail('Manifest meta resource missing curated classic or tmdb prefix');
+    }
     if (!subRes) fail('Manifest is missing "subtitles" resource');
 
     // 2. Live TV Catalog (All dead channels should be filtered out, sample >= 150)
@@ -36,9 +39,13 @@ async function runVerification() {
     const sampleMovie = trendCat.metas?.[0];
     console.log(`✅ 3. Trending Movies Catalog: ${trendCat.metas?.length} movies (sample: ${sampleMovie?.name})`);
     if (sampleMovie) {
+      const manualMeta = await fetch(`${base}/meta/${sampleMovie.type}/${encodeURIComponent(sampleMovie.id)}.json`, { redirect: 'manual' });
+      if (sampleMovie.id.startsWith('tt') && (manualMeta.status !== 302 || !String(manualMeta.headers.get('location') || '').startsWith('https://v3-cinemeta.strem.io/'))) {
+        fail(`Expected 302 Cinemeta offload for standard IMDb ${sampleMovie.id}, got status=${manualMeta.status}`);
+      }
       const metaCheck = await fetch(`${base}/meta/${sampleMovie.type}/${encodeURIComponent(sampleMovie.id)}.json`).then((r) => r.json());
       if (!metaCheck?.meta?.name) fail(`Meta lookup failed for ${sampleMovie.id}`);
-      else console.log(`   -> Meta OK: ${metaCheck.meta.name} (${metaCheck.meta.id})`);
+      else console.log(`   -> Meta OK (302 Cinemeta offload): ${metaCheck.meta.name} (${metaCheck.meta.id})`);
     }
 
     // 4. Live TV Meta + Stream + EPG Check (RTL or M4 Sport)
@@ -320,19 +327,24 @@ async function runVerification() {
       fail(`Search catalog cache miss or mismatch (${searchHitMs}ms)`);
     }
 
-    await fetch(`${base}/meta/movie/tt15239678.json`);
+    const metaOffloadRes = await fetch(`${base}/meta/movie/tt15239678.json`, { redirect: 'manual' });
+    if (metaOffloadRes.status !== 302 || !String(metaOffloadRes.headers.get('location') || '').includes('v3-cinemeta.strem.io')) {
+      fail(`Expected 302 Cinemeta offload on standard IMDb /meta/, got status=${metaOffloadRes.status}`);
+    }
+
+    await fetch(`${base}/meta/series/tt0154077.json`);
     const tMetaStart = Date.now();
-    const metaHitRes = await fetch(`${base}/meta/movie/tt15239678.json`);
+    const metaHitRes = await fetch(`${base}/meta/series/tt0154077.json`);
     const metaHitMs = Date.now() - tMetaStart;
     const metaHitCC = metaHitRes.headers.get('cache-control') || '';
     const metaHitJson = await metaHitRes.json();
     if (!metaHitJson?.meta?.id || metaHitMs > 150) {
-      fail(`VOD meta cache miss or slow hit (${metaHitMs}ms)`);
+      fail(`Curated VOD meta cache miss or slow hit (${metaHitMs}ms)`);
     }
     if (!metaHitCC.includes('max-age=7200')) {
-      fail(`Expected max-age=7200 on VOD /meta/, got "${metaHitCC}"`);
+      fail(`Expected max-age=7200 on curated VOD /meta/, got "${metaHitCC}"`);
     }
-    console.log(`✅ 13. Catalog (${catHitMs}ms), Search (${searchHitMs}ms), Meta (${metaHitMs}ms), ETag 304 & Cache-Control OK`);
+    console.log(`✅ 13. Catalog (${catHitMs}ms), Search (${searchHitMs}ms), Curated Meta (${metaHitMs}ms), Cinemeta 302 Offload & ETag 304 OK`);
 
     if (hasError) {
       process.exitCode = 1;
