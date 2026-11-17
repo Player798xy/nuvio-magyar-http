@@ -5,7 +5,7 @@
  */
 
 const fetch = globalThis.fetch;
-const { getLiveChannelStreams, LIVE_CHANNELS: MEDIAKLIKK_LIVE_CHANNELS } = require('./mediaklikk');
+const { getLiveChannelStreams, buildLiveStreamBehaviorHints, LIVE_CHANNELS: MEDIAKLIKK_LIVE_CHANNELS } = require('./mediaklikk');
 const { createBoundedCache } = require('../cache');
 
 const HOST_URL = process.env.HOST_URL || 'https://nuvio-magyar-http.onrender.com';
@@ -6759,6 +6759,50 @@ async function resolveServerStream(serverConfig, channelHeight = 1080) {
         const variants = parseHlsVariants(text, masterUrl, channelHeight);
         const topVariant = variants.length > 0 ? variants[0] : null;
 
+        let cleanMasterUrl = masterUrl;
+        let directOriginUrl = null;
+        const isGradeTvMuxWrapper = Boolean(
+          topVariant &&
+          topVariant.url &&
+          topVariant.url.includes('faixa=video') &&
+          text.includes('#EXT-X-MEDIA:TYPE=AUDIO')
+        );
+        if (isGradeTvMuxWrapper) {
+          try {
+            const audioUrl = topVariant.url.replace('faixa=video', 'faixa=audio');
+            const [vRes, aRes] = await Promise.all([
+              fetch(topVariant.url, { headers, signal: AbortSignal.timeout(2500) }),
+              fetch(audioUrl, { headers, signal: AbortSignal.timeout(2500) })
+            ]);
+            if (vRes.ok) {
+              const vText = await vRes.text();
+              const vSeg = vText.split(/\r?\n/).find(l => l && !l.startsWith('#')) || '';
+              let aSeg = '';
+              if (aRes.ok) {
+                const aText = await aRes.text();
+                aSeg = aText.split(/\r?\n/).find(l => l && !l.startsWith('#')) || '';
+              }
+              // GradeTV wraps muxed video+audio 88.212.7.14 segments inside a bogus dual TYPE=AUDIO + faixa=video master;
+              // returning the single media playlist prevents ExoPlayer/HLS.js stalls on duplicate track buffering in Stremio.
+              if (vText.includes('#EXTINF:') && (!aSeg || vSeg === aSeg)) {
+                cleanMasterUrl = topVariant.url;
+              }
+              if (vSeg && vSeg.includes('88.212.7.14/live/')) {
+                try {
+                  const originCandidate = new URL('index.m3u8', vSeg).toString();
+                  const origRes = await fetch(originCandidate, { headers, signal: AbortSignal.timeout(1800) });
+                  if (origRes.ok) {
+                    const origTxt = await origRes.text();
+                    if (origTxt.includes('#EXTM3U') && origTxt.includes('#EXTINF:')) {
+                      directOriginUrl = originCandidate;
+                    }
+                  }
+                } catch {}
+              }
+            }
+          } catch {}
+        }
+
         let quality = '1080p FHD';
         let height = channelHeight || 1080;
 
@@ -6782,8 +6826,9 @@ async function resolveServerStream(serverConfig, channelHeight = 1080) {
         }
 
         return {
-          masterUrl,
-          topVariantUrl: topVariant ? topVariant.url : masterUrl,
+          masterUrl: cleanMasterUrl,
+          topVariantUrl: topVariant ? topVariant.url : cleanMasterUrl,
+          directOriginUrl,
           quality,
           height,
           variants
@@ -6951,8 +6996,15 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
         ? ' [Tartalék Szerver]'
         : (isDirectBetter ? ' [Leggyorsabb]' : '');
 
-      // A Master Playlist (masterUrl) MINDIG az 1. helyre kerül, mert az tartalmazza a hangot (audio) ÉS a képet (video) szinkronban!
-      // Ha a sub-variant (pl. faixa=video) külön kerülne be, a lejátszó hang nélkül maradna és 10 másodpercenként elakadna/pufferelne!
+      if (res.directOriginUrl && !results.some(r => String(r.url || '').includes('88.212.7.14'))) {
+        serverDirectStreams.push({
+          name: `🔴 [HU] ${ch.name} — ${quality} (.m3u8) [Leggyorsabb]`,
+          title: `📡 ${ch.name} • 88.212.7.14 (Közvetlen / Leggyorsabb)\n${quality} Teljes HLS Stream (Kép + Hang) • Korlátlan\nKözvetlen Forrás`,
+          url: res.directOriginUrl,
+          behaviorHints: buildLiveStreamBehaviorHints(res.directOriginUrl)
+        });
+      }
+
       if (masterUrl) {
         serverDirectStreams.push({
           name: `🔴 [HU] ${ch.name} — ${quality} (.m3u8)${directTag}`,
@@ -6962,10 +7014,7 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
               ? `📡 ${ch.name} • ${serverHost} (Közvetlen / Leggyorsabb)\n${quality} Teljes HLS Master Stream (Kép + Hang szinkronban) • Nulla késleltetés\nKözvetlen Forrás`
               : `📡 ${ch.name} • ${serverHost}\n${quality} Közvetlen HLS Adás (Kép + Hang) (.m3u8)\nKözvetlen Forrás`),
           url: masterUrl,
-          behaviorHints: {
-            notWebReady: false,
-            isLive: true
-          }
+          behaviorHints: buildLiveStreamBehaviorHints(masterUrl)
         });
       }
 
@@ -6975,10 +7024,7 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
           name: `🔴 [HU] ${ch.name} — ${quality} FHD Direkt (.m3u8)${isSlowServer ? ' [Tartalék]' : ''}`,
           title: `📡 ${ch.name} • ${serverHost}\nKözvetlen Stream Variáns (.m3u8)\nKözvetlen Forrás`,
           url: topUrl,
-          behaviorHints: {
-            notWebReady: false,
-            isLive: true
-          }
+          behaviorHints: buildLiveStreamBehaviorHints(topUrl)
         });
       }
 
@@ -6998,10 +7044,7 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
         name: `🔴 [HU] ${ch.name} [Tartalék Adás]`,
         title: `📡 ${ch.name} • Tartalék IPTV Közvetítés\nOnlineStream IPTV Forrás`,
         url: targetUrl,
-        behaviorHints: {
-          notWebReady: false,
-          isLive: true
-        }
+        behaviorHints: buildLiveStreamBehaviorHints(targetUrl)
       });
     }
   }

@@ -963,6 +963,33 @@ async function getReorderedMasterPlaylist(streamId, clientIp = null) {
   }
 }
 
+const LIVE_STREAM_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
+
+/**
+ * Stremio requires `notWebReady: true` + `proxyHeaders.request` for plain HTTP or custom-header
+ * HLS streams so desktop/web clients route via the local Stremio proxy instead of Chromium HLS.js
+ * (which hits Mixed Content / OPTIONS 503) and bypass Lavf/Dalvik CDN blackholes with 0 server egress.
+ */
+function buildLiveStreamBehaviorHints(streamUrl = '') {
+  const urlLower = String(streamUrl || '').toLowerCase();
+  let referer = 'https://onlinestream.live/';
+  if (urlLower.includes('mediaklikk') || urlLower.includes('connectmedia') || urlLower.includes('/api/live/')) {
+    referer = 'https://mediaklikk.hu/';
+  } else if (urlLower.includes('videa')) {
+    referer = 'https://videa.hu/';
+  }
+  return {
+    notWebReady: true,
+    isLive: true,
+    proxyHeaders: {
+      request: {
+        'User-Agent': LIVE_STREAM_USER_AGENT,
+        'Referer': referer
+      }
+    }
+  };
+}
+
 /**
  * Resolves streams for a live channel ID (e.g. 'mediaklikk-live-m4' or 'm4')
  * @param {string} channelIdOrKey Channel identifier
@@ -991,19 +1018,13 @@ async function getLiveChannelStreams(channelIdOrKey, clientIp = null, hostUrl = 
       name: `🔴 ${channel.name} — 1080p FHD (.m3u8) [Közvetlen]`,
       title: `📡 Hivatalos MTVA CDN Élő Közvetítés (1080p Full HD .m3u8)\n${channel.description}\nKözvetlen HLS adás TV-re és mobilra optimalizálva (Zero Vercel sávszélesség).`,
       url: hlsUrl,
-      behaviorHints: {
-        notWebReady: false,
-        isLive: true
-      }
+      behaviorHints: buildLiveStreamBehaviorHints(hlsUrl)
     },
     {
       name: `🔴 ${channel.name} — Auto (.m3u8) [Közvetlen]`,
       title: `📡 1080p FULL HD Adaptív MTVA HLS (.m3u8)\n${channel.description}\nKözvetlen 1080p indítás az első másodperctől, nulla felbontásugrálás.`,
       url: instant1080Url,
-      behaviorHints: {
-        notWebReady: false,
-        isLive: true
-      }
+      behaviorHints: buildLiveStreamBehaviorHints(instant1080Url)
     }
   ];
 }
@@ -1334,6 +1355,7 @@ module.exports = {
   getReorderedMasterPlaylist,
   getRewrittenMasterPlaylist: getReorderedMasterPlaylist,
   getLiveChannelStreams,
+  buildLiveStreamBehaviorHints,
   getMediaKlikkLiveStreams: getLiveChannelStreams,
   getMediaKlikkPrograms,
   getMediaKlikkSeriesEpisodes,

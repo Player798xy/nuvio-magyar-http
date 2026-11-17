@@ -62,6 +62,18 @@ async function runVerification() {
     if (firstPlayableLive?.title) {
       console.log(`   -> Stream Title Preview: ${firstPlayableLive.title.split('\n')[0]}`);
     }
+    const rtlLiveJson = await fetch(`${base}/stream/movie/onlinestream-live-6141.json`).then((r) => r.json());
+    const playableLiveAll = [...liveStreamJson.streams, ...(rtlLiveJson.streams || [])].filter((s) => s.url);
+    if (!playableLiveAll.length) fail('RTL/M4 Sport returned 0 playable live streams');
+    for (const ls of playableLiveAll) {
+      if (ls.behaviorHints?.notWebReady !== true || !ls.behaviorHints?.proxyHeaders?.request?.['User-Agent']) {
+        fail(`Live stream "${ls.name}" missing Stremio notWebReady=true + proxyHeaders User-Agent`);
+      }
+    }
+    const brokenGradetv = (rtlLiveJson.streams || []).find((s) => String(s.url || '').includes('m3m8.gradetv.net') && !String(s.url).includes('faixa=video'));
+    if (brokenGradetv) {
+      fail(`GradeTV RTL stream still uses dual TYPE=AUDIO wrapper instead of clean muxed faixa=video: ${brokenGradetv.url}`);
+    }
 
     // 4b. Zero-Proxy 302 Redirect Check
     const redirectCheck = await fetch(`${base}/proxy/hls?url=${encodeURIComponent('https://example.com/test.m3u8')}`, { redirect: 'manual' });
@@ -203,6 +215,9 @@ async function runVerification() {
     ]);
     if (!homeHtml.includes('rel="canonical" href="https://nuvio-magyar-http.onrender.com/"')) {
       fail('Homepage missing canonical link pointing to Render');
+    }
+    if (homeHtml.includes('supportQrFrame') || homeHtml.includes('migrationQrFrame')) {
+      fail('Homepage must NOT embed inline QR frames (only dedicated /tamogatas.html and /uj-link.html show TV QR)');
     }
     if (vercelRobotsTest.headers.get('x-robots-tag') !== 'noindex, follow') {
       fail(`Vercel forwarded host missing X-Robots-Tag noindex header, got "${vercelRobotsTest.headers.get('x-robots-tag')}"`);
