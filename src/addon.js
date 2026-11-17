@@ -187,11 +187,36 @@ function buildVercelMigrationNoticeStream(config = {}) {
   };
 }
 
+function buildSupportNoticeStream(config = {}) {
+  const hostOrigin = String(config.hostUrl || DEFAULT_RENDER_MIGRATION_URL).replace(/\/+$/, '');
+  const supportPageUrl = `${hostOrigin}/tamogatas.html`;
+  const shortSupportPath = `${hostOrigin.replace(/^https?:\/\//i, '')}/tamogatas`;
+
+  return {
+    name: '☕ TÁMOGATÁS (KO-FI)',
+    title: [
+      '☕ Cél: Budapesti ServerAstra VPS (4,99 €/hó · 4 TB · 10 Gbps)!',
+      '⚠️ Az ingyenes hosztok szűk korlátai miatt van gond a szerverekkel.',
+      `📱 TV-n nézed? QR-kód telefonhoz: ${shortSupportPath} · ko-fi.com/playerxy`,
+      '👇 Lejátszáshoz válaszd az 1. sort vagy bármelyik forrást (1–2 € is segít ❤️).'
+    ].join('\n'),
+    externalUrl: supportPageUrl,
+    behaviorHints: {
+      notWebReady: true
+    }
+  };
+}
+
 function prependVercelNoticeIfNeeded(streams, config = {}) {
   if (!Array.isArray(streams) || streams.length === 0) return [];
   const cloned = streams.map(s => ({ ...s }));
-  if (!shouldShowVercelMigrationNotice(config)) return cloned;
-  return [buildVercelMigrationNoticeStream(config), ...cloned];
+  if (shouldShowVercelMigrationNotice(config)) {
+    return [buildVercelMigrationNoticeStream(config), ...cloned];
+  }
+  const supportNotice = buildSupportNoticeStream(config);
+  const insertAt = Math.min(1, cloned.length);
+  cloned.splice(insertAt, 0, supportNotice);
+  return cloned;
 }
 
 function getVodCacheKey(type, id, activeScrapers, config) {

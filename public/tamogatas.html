@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#050505" />
+  <link rel="canonical" href="https://nuvio-magyar-http.onrender.com/tamogatas.html" />
+  <title>Szerver Támogatás (Ko-fi) &amp; TV QR-kód — Magyar Streaming Pro</title>
+  <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.7.0" />
+  <link rel="alternate icon" type="image/png" href="/logo.png?v=2.7.0" />
+  <link rel="shortcut icon" href="/favicon.ico?v=2.7.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=VT323&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #141414;
+      --panel-hover: #1b1b1b;
+      --ink: #ececec;
+      --dim: #c4c4c4;
+      --mute: #888888;
+      --line: #242424;
+      --line-2: #343434;
+      --mint: #ff9c42;
+      --kofi: #f45d22;
+      --kofi-hi: #ff7b1c;
+      --peach: #ffb08c;
+      --f-head: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      --f-body: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+      --f-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', monospace;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--f-body);
+      font-size: 15px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 24px 18px 54px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 18px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+      font-family: var(--f-head);
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .brand span { color: var(--mint); }
+    .brand img { width: 38px; height: 38px; border-radius: 9px; }
+
+    .back-link {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dim);
+      text-decoration: none;
+      border: 1px solid var(--line-2);
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: var(--panel);
+    }
+    .back-link:hover { color: #ffffff; border-color: var(--mint); }
+
+    .support-card {
+      background: linear-gradient(135deg, rgba(244, 93, 34, 0.14) 0%, rgba(255, 156, 66, 0.06) 55%, rgba(18, 18, 18, 0.98) 100%);
+      border: 1.5px solid rgba(244, 93, 34, 0.55);
+      border-radius: 12px;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 248px;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .badge-kofi {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(244, 93, 34, 0.22);
+      border: 1px solid rgba(244, 93, 34, 0.65);
+      color: var(--peach);
+      font-family: var(--f-head);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 4px 10px;
+      border-radius: 5px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: var(--f-head);
+      font-size: clamp(22px, 3vw, 29px);
+      line-height: 1.18;
+      margin-bottom: 10px;
+    }
+    h1 span { color: var(--mint); }
+
+    .lead {
+      color: var(--dim);
+      font-size: 14.5px;
+      margin-bottom: 14px;
+    }
+    .lead strong { color: #ffffff; }
+
+    .url-box {
+      background: #090909;
+      border: 1px solid var(--line-2);
+      border-radius: 8px;
+      padding: 11px 13px;
+      font-family: var(--f-mono);
+      font-size: 13px;
+      color: var(--peach);
+      word-break: break-all;
+      margin-bottom: 14px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 8px;
+      font-family: var(--f-head);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
+    .btn-kofi { background: linear-gradient(135deg, var(--kofi), var(--kofi-hi)); color: #ffffff; }
+    .btn-ghost { background: var(--panel); color: var(--ink); border-color: var(--line-2); }
+
+    .qr-panel {
+      background: #0d0d0d;
+      border: 1px solid rgba(244, 93, 34, 0.35);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .qr-frame {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 10px;
+      width: 212px;
+      height: 212px;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qr-frame svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .qr-note {
+      font-size: 12px;
+      color: var(--peach);
+      line-height: 1.4;
+    }
+
+    .steps {
+      margin-top: 22px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .steps h2 {
+      font-family: var(--f-head);
+      font-size: 15.5px;
+      color: var(--mint);
+      margin-bottom: 8px;
+    }
+    .steps ul {
+      padding-left: 20px;
+      color: var(--dim);
+      font-size: 13.5px;
+      display: grid;
+      gap: 6px;
+    }
+    .steps strong { color: #ffffff; }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #141414;
+      color: var(--ink);
+      border: 1.5px solid var(--mint);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-family: var(--f-mono);
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      z-index: 50;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    @media (max-width: 720px) {
+      .support-card {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+      .qr-panel {
+        max-width: 270px;
+        margin: 0 auto;
+        width: 100%;
+      }
+      .actions .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a href="/configure" class="brand">
+        <img src="/logo.svg?v=2.7.0" alt="Magyar Streaming Pro" />
+        Magyar Streaming <span>Pro</span>
+      </a>
+      <a href="/configure" class="back-link">← Vissza a konfigurátorhoz</a>
+    </div>
+
+    <section class="support-card">
+      <div>
+        <div class="badge-kofi">☕ SZERVER TÁMOGATÁS · KO-FI</div>
+        <h1>Segíts egy <span>stabil, budapesti VPS szerverre</span> (~5 €/hó)!</h1>
+        <p class="lead">
+          Az ingyenes hosztok (korábban Vercel, most Render) <strong>nagyon szűk havi sávszélesség- és erőforrás-korlátai</strong> miatt a növekvő magyar közösséget már csak nehezen bírják el — ezért volt szükség költözésre is.
+        </p>
+        <p class="lead">
+          Ha közösen összejön havonta <strong>4,99 € (~2 000 Ft)</strong>, át tudunk állni a <strong>ServerAstra budapesti VPS szerverére (Base Compute AMD)</strong>: <strong>AMD Epyc CPU, 20 GB NVMe SSD, 10 Gbps kapcsolat, havi 4 TB forgalom, 24/7 ébrenlét</strong> — így nincs alvás/leállás, és soha többé nem kell linket cserélni ❤️
+        </p>
+        <div class="url-box">https://ko-fi.com/playerxy</div>
+        <div class="actions">
+          <a class="btn btn-kofi" href="https://ko-fi.com/playerxy" target="_blank" rel="noopener noreferrer">☕ Tip Me (Ko-fi) →</a>
+          <button class="btn btn-ghost" type="button" onclick="copyKofiUrl()">📋 Ko-fi link másolása</button>
+        </div>
+      </div>
+
+      <div class="qr-panel">
+        <div class="qr-frame" id="qrFrame">QR</div>
+        <div class="qr-note">📱 <strong>TV-n vagy monitoron nézed?</strong><br>Olvasd be a telefonod kamerájával — nem kell címet begépelned!</div>
+      </div>
+    </section>
+
+    <section class="steps">
+      <h2>Mire megy a támogatás?</h2>
+      <ul>
+        <li><strong>ServerAstra Base Compute AMD – Budapest (4,99 €/hó):</strong> AMD Epyc 3.2 GHz, 1 GB ECC DDR4 RAM, 20 GB NVMe SSD, 10 Gbps kapcsolat és havi 4 TB kimenő forgalom (korlátlan bejövő, 24/7 ébrenlét, 0 cold-start).</li>
+        <li><strong>Állandó budapesti elérhetőség:</strong> magyar adatközpont alacsony válaszidővel — többé nem kell újratelepítened az addont Stremioban vagy Nuvioban.</li>
+        <li><strong>Teljesen önkéntes:</strong> az addon használata mindenki számára ingyenes marad, már <strong>1–2 €</strong> kávé is óriási segítség!</li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/qr.js"></script>
+  <script>
+    const KOFI_URL = 'https://ko-fi.com/playerxy';
+
+    function showToast(html) {
+      const el = document.getElementById('toast');
+      el.innerHTML = html;
+      el.classList.add('show');
+      clearTimeout(window._t);
+      window._t = setTimeout(() => el.classList.remove('show'), 3400);
+    }
+
+    async function copyKofiUrl() {
+      let ok = false;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(KOFI_URL);
+          ok = true;
+        } catch (_) {}
+      }
+      if (!ok) {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = KOFI_URL;
+          ta.style.position = 'fixed';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          ok = Boolean(document.execCommand('copy'));
+          document.body.removeChild(ta);
+        } catch (_) {}
+      }
+      showToast(ok ? '✅ Ko-fi link kimásolva a vágólapra!' : 'Másold ki: https://ko-fi.com/playerxy');
+    }
+
+    if (window.NuvioQR) {
+      document.getElementById('qrFrame').innerHTML = window.NuvioQR.toSvg(KOFI_URL, { margin: 3 });
+    }
+  </script>
+  <!-- Cloudflare Web Analytics -->
+  <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "755d43cd56e349e38529055befb9725a"}'></script>
+  <!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -125,16 +125,18 @@ async function runVerification() {
       fail(`In-memory VOD cache miss or mismatch (${cachedMs}ms, ${duneCachedJson.streams?.length} vs ${duneJson.streams?.length})`);
     }
 
-    // 9. Vercel-Only Migration Banner & QR Code Static Pages (Never shown on Render)
+    // 9. Vercel-Only Migration Banner, Universal Ko-fi Support Notice & QR Code Static Pages
     const { handleStreamRequest, getRuntimeNoticeMeta } = require('../src/addon');
-    const [qrJsRes, ujLinkRes, runtimeRes, previewStreamRes] = await Promise.all([
+    const [qrJsRes, ujLinkRes, supportPageRes, runtimeRes, previewStreamRes] = await Promise.all([
       fetch(`${base}/qr.js`),
       fetch(`${base}/uj-link`),
+      fetch(`${base}/tamogatas`),
       fetch(`${base}/api/runtime-info`),
       fetch(`${base}/stream/movie/tt15239678.json?previewMigration=1`).then((r) => r.json())
     ]);
     if (qrJsRes.status !== 200) fail(`/qr.js returned HTTP ${qrJsRes.status}`);
     if (ujLinkRes.status !== 200) fail(`/uj-link returned HTTP ${ujLinkRes.status}`);
+    if (supportPageRes.status !== 200) fail(`/tamogatas returned HTTP ${supportPageRes.status}`);
     const runtimeJson = await runtimeRes.json();
     if (runtimeJson.showMigrationBanner !== false && !process.env.MIGRATION_NOTICE_URL) {
       fail('Default runtime-info should keep showMigrationBanner=false until MIGRATION_NOTICE_URL is set');
@@ -166,15 +168,24 @@ async function runVerification() {
       delete process.env.VERCEL;
       process.env.RENDER = 'true';
       const renderVod = await handleStreamRequest('movie', 'tt15239678', { hostUrl: 'https://nuvio-magyar-http.onrender.com' });
+      const renderLive = await handleStreamRequest('movie', 'onlinestream-live-5903', { hostUrl: 'https://nuvio-magyar-http.onrender.com' });
       const renderMeta = getRuntimeNoticeMeta({ hostUrl: 'https://nuvio-magyar-http.onrender.com' });
       if (renderMeta.showMigrationBanner || renderMeta.platform !== 'render') fail('Render runtime meta leaked migration banner');
-      if (renderVod.streams?.[0]?.name?.includes('🟨')) fail('Render VOD stream must NOT show Vercel migration banner');
+      if (renderVod.streams?.[0]?.name?.includes('🟨') || renderVod.streams?.[0]?.name?.includes('☕')) {
+        fail('Render VOD streams[0] must remain a playable video stream for auto-play');
+      }
+      if (!renderVod.streams?.[1]?.name?.includes('☕') || !renderVod.streams?.[1]?.externalUrl?.includes('/tamogatas.html')) {
+        fail('Render VOD streams[1] missing universal Ko-fi TV QR notice');
+      }
+      if (!renderLive.streams?.[1]?.name?.includes('☕') || !renderLive.streams?.[1]?.externalUrl?.includes('/tamogatas.html')) {
+        fail('Render Live TV streams[1] missing universal Ko-fi TV QR notice');
+      }
     } finally {
       if (prevEnv.VERCEL === undefined) delete process.env.VERCEL; else process.env.VERCEL = prevEnv.VERCEL;
       if (prevEnv.RENDER === undefined) delete process.env.RENDER; else process.env.RENDER = prevEnv.RENDER;
       if (prevEnv.MIGRATION_NOTICE_URL === undefined) delete process.env.MIGRATION_NOTICE_URL; else process.env.MIGRATION_NOTICE_URL = prevEnv.MIGRATION_NOTICE_URL;
     }
-    console.log('✅ 9. Vercel-Only Yellow Notice, Render Isolation, /qr.js & /uj-link OK');
+    console.log('✅ 9. Vercel-Only Yellow Notice, Universal Ko-fi Notice, /qr.js, /uj-link & /tamogatas OK');
 
     // 10. SEO & Canonical Verification (Render primary vs Vercel noindex)
     const [homeHtml, robotsRenderRes, sitemapRes, vercelRobotsTest] = await Promise.all([

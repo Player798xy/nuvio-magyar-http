@@ -63,10 +63,28 @@
           "value": "noindex, follow"
         }
       ]
+    },
+    {
+      "source": "/(tamogatas|tamogatas\\.html)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
     }
   ],
   "rewrites": [
     { "source": "/uj-link", "destination": "/uj-link.html" },
+    { "source": "/tamogatas", "destination": "/tamogatas.html" },
     { "source": "/robots.txt", "destination": "/api/index.js" },
     { "source": "/sitemap.xml", "destination": "/api/index.js" },
     { "source": "/proxy/:path*", "destination": "/api/index.js" },

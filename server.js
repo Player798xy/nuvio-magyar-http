@@ -58,7 +58,7 @@ function isVercelRequest(req) {
 
 // Keep Vercel domain out of Google index so Render primary URL ranks first & track anonymous stats
 app.use((req, res, next) => {
-  if (req.path === '/uj-link' || req.path === '/uj-link.html') {
+  if (req.path === '/uj-link' || req.path === '/uj-link.html' || req.path === '/tamogatas' || req.path === '/tamogatas.html') {
     res.setHeader('X-Robots-Tag', 'noindex, follow');
   } else if (isVercelRequest(req) && (req.path === '/' || req.path === '/configure' || req.path.endsWith('/configure'))) {
     res.setHeader('X-Robots-Tag', 'noindex, follow');
@@ -1055,11 +1055,16 @@ app.get('/api/runtime-info', (req, res) => {
   res.json(getRuntimeNoticeMeta(cfg));
 });
 
-// Static Migration & QR Code Page
+// Static Migration & Ko-fi TV QR Pages
 app.get(['/uj-link', '/uj-link.html'], (req, res) => {
   res.setHeader('X-Robots-Tag', 'noindex, follow');
   res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800');
   res.sendFile(path.join(__dirname, 'public', 'uj-link.html'));
+});
+
+app.get(['/tamogatas', '/tamogatas.html'], (req, res) => {
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800');
+  res.sendFile(path.join(__dirname, 'public', 'tamogatas.html'));
 });
 
 // SEO: robots.txt & sitemap.xml prioritizing Render primary domain
