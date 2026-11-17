@@ -193,12 +193,17 @@ function buildSupportNoticeStream(config = {}) {
   const shortSupportPath = `${hostOrigin.replace(/^https?:\/\//i, '')}/tamogatas`;
 
   return {
-    name: '☕ TÁMOGATÁS (KO-FI)',
+    name: [
+      '🟧☕ TÁMOGATÁS',
+      '🆓 MINDIG INGYENES',
+      '👇 FORRÁSOK ALUL'
+    ].join('\n'),
     title: [
-      '☕ Cél: Budapesti ServerAstra VPS (4,99 €/hó · 4 TB · 10 Gbps)!',
-      '⚠️ Az ingyenes hosztok szűk korlátai miatt van gond a szerverekkel.',
-      `📱 TV-n nézed? QR-kód telefonhoz: ${shortSupportPath} · ko-fi.com/playerxy`,
-      '👇 Lejátszáshoz válaszd az 1. sort vagy bármelyik forrást (1–2 € is segít ❤️).'
+      '🔶━━【 📢 TÁMOGATÁS · TELJESEN OPCIONÁLIS 】━━🔶',
+      '☕ Cél: Budapesti ServerAstra VPS (4,99 €/hó · 4 TB · 10 Gbps) az ingyenes hosztok szűk korlátai miatt.',
+      '💯 GARANCIA: Mindig minden opció, film és csatorna 100% ingyenes lesz — fizetés nélkül is teljes az addon!',
+      `📱 TV-n QR-kód telefonhoz: ${shortSupportPath} · ko-fi.com/playerxy`,
+      '👇 LEJÁTSZÁS: Válassz bármelyik lenti videóforrást (semmi nincs lezárva ❤️)'
     ].join('\n'),
     externalUrl: supportPageUrl,
     behaviorHints: {
@@ -213,10 +218,7 @@ function prependVercelNoticeIfNeeded(streams, config = {}) {
   if (shouldShowVercelMigrationNotice(config)) {
     return [buildVercelMigrationNoticeStream(config), ...cloned];
   }
-  const supportNotice = buildSupportNoticeStream(config);
-  const insertAt = Math.min(1, cloned.length);
-  cloned.splice(insertAt, 0, supportNotice);
-  return cloned;
+  return [buildSupportNoticeStream(config), ...cloned];
 }
 
 function getVodCacheKey(type, id, activeScrapers, config) {
@@ -640,7 +642,8 @@ async function getStreams(type, rawId, config = {}) {
       // so sending both `title` and `description` throws `duplicate field 'description'` in serde!
       delete s.description;
       s.url = String(s.url).trim().replace(/\s+/g, '%20');
-      s.behaviorHints = { notWebReady: false, ...(s.behaviorHints || {}) };
+      const bingeGroup = `hu-stream-${String(s.source || 'vod').toLowerCase().replace(/[^a-z0-9_-]/g, '')}-${s.height || 0}`;
+      s.behaviorHints = { notWebReady: false, bingeGroup, ...(s.behaviorHints || {}) };
 
       uniqueStreams.push(s);
     }

@@ -58,8 +58,9 @@ async function runVerification() {
     if (liveMetaRes?.meta?.description) {
       console.log(`   -> Meta EPG Preview: ${liveMetaRes.meta.description.split('\n')[0]}`);
     }
-    if (liveStreamJson.streams?.[0]) {
-      console.log(`   -> Stream Title Preview: ${liveStreamJson.streams[0].title.split('\n')[0]}`);
+    const firstPlayableLive = liveStreamJson.streams.find((s) => s.url);
+    if (firstPlayableLive?.title) {
+      console.log(`   -> Stream Title Preview: ${firstPlayableLive.title.split('\n')[0]}`);
     }
 
     // 4b. Zero-Proxy 302 Redirect Check
@@ -171,14 +172,20 @@ async function runVerification() {
       const renderLive = await handleStreamRequest('movie', 'onlinestream-live-5903', { hostUrl: 'https://nuvio-magyar-http.onrender.com' });
       const renderMeta = getRuntimeNoticeMeta({ hostUrl: 'https://nuvio-magyar-http.onrender.com' });
       if (renderMeta.showMigrationBanner || renderMeta.platform !== 'render') fail('Render runtime meta leaked migration banner');
-      if (renderVod.streams?.[0]?.name?.includes('🟨') || renderVod.streams?.[0]?.name?.includes('☕')) {
-        fail('Render VOD streams[0] must remain a playable video stream for auto-play');
+      if (!renderVod.streams?.[0]?.name?.includes('☕') || !renderVod.streams?.[0]?.externalUrl?.includes('/tamogatas.html')) {
+        fail('Render VOD streams[0] missing top standout Ko-fi TV QR notice');
       }
-      if (!renderVod.streams?.[1]?.name?.includes('☕') || !renderVod.streams?.[1]?.externalUrl?.includes('/tamogatas.html')) {
-        fail('Render VOD streams[1] missing universal Ko-fi TV QR notice');
+      if (!renderVod.streams?.[0]?.title?.includes('OPCIONÁLIS') || !renderVod.streams?.[0]?.title?.toLowerCase().includes('ingyenes')) {
+        fail('Render VOD streams[0] must clearly state optional + always free');
       }
-      if (!renderLive.streams?.[1]?.name?.includes('☕') || !renderLive.streams?.[1]?.externalUrl?.includes('/tamogatas.html')) {
-        fail('Render Live TV streams[1] missing universal Ko-fi TV QR notice');
+      if (!renderVod.streams?.[1]?.url || !renderVod.streams?.[1]?.behaviorHints?.bingeGroup) {
+        fail('Render VOD streams[1] must remain a playable video stream with bingeGroup');
+      }
+      if (!renderLive.streams?.[0]?.name?.includes('☕') || !renderLive.streams?.[0]?.externalUrl?.includes('/tamogatas.html')) {
+        fail('Render Live TV streams[0] missing top standout Ko-fi TV QR notice');
+      }
+      if (!renderLive.streams?.[1]?.url) {
+        fail('Render Live TV streams[1] must remain a playable live stream');
       }
     } finally {
       if (prevEnv.VERCEL === undefined) delete process.env.VERCEL; else process.env.VERCEL = prevEnv.VERCEL;
