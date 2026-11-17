@@ -15,6 +15,7 @@ const { searchNetMozi, getNetMoziMovieMeta, getNetMoziSeriesEpisodes } = require
 const { fetchCatalogItems, rotateWeekly } = require('./catalogs');
 const { getOnlineStreamChannels, getOnlineStreamMeta } = require('./scrapers/onlinestream');
 const { getChannelEpg, formatEpgMetaText } = require('./epg');
+const { createBoundedCache } = require('./cache');
 
 function normalize(str) {
   return (str || '')
@@ -74,7 +75,7 @@ const FEATURED_HUNGARIAN_MOVIES = [
   { id: 'tt0848228', name: 'Bosszúállók (The Avengers)', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0848228/img', background: 'https://images.metahub.space/poster/medium/tt0848228/img', releaseInfo: '2012', year: '2012', description: 'Marvel Bosszúállók magyar szinkronnal.' }
 ];
 
-const actorFilmographyCache = new Map();
+const actorFilmographyCache = createBoundedCache({ maxEntries: 300, ttlMs: 12 * 60 * 60 * 1000 });
 
 /**
  * Searches filmography when user queries an actor or person name (e.g. "Bud Spencer", "Terence Hill").
@@ -83,83 +84,84 @@ const actorFilmographyCache = new Map();
 async function searchActorFilmography(query) {
   if (!query || query.length < 3) return [];
   const clean = query.trim().toLowerCase();
-  if (actorFilmographyCache.has(clean)) {
-    return actorFilmographyCache.get(clean);
-  }
+  return actorFilmographyCache.getOrLoad(
+    clean,
+    async () => {
+      try {
+        const searchUrl = `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(query)}&language=hu&type=item&format=json`;
+        const sRes = await fetch(searchUrl, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+          signal: AbortSignal.timeout(2500)
+        });
+        if (!sRes.ok) return undefined;
 
-  try {
-    const searchUrl = `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(query)}&language=hu&type=item&format=json`;
-    const sRes = await fetch(searchUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-      signal: AbortSignal.timeout(2500)
-    });
-    if (!sRes.ok) return [];
+        const sData = await sRes.json();
+        const searchList = sData.search || [];
+        if (searchList.length === 0) return [];
 
-    const sData = await sRes.json();
-    const searchList = sData.search || [];
-    if (searchList.length === 0) return [];
+        const actorEntity = searchList.find(item => {
+          const desc = (item.description || '').toLowerCase();
+          return desc.includes('actor') || desc.includes('színész') || desc.includes('szinesz') || desc.includes('actress') || desc.includes('film');
+        }) || searchList[0];
 
-    const actorEntity = searchList.find(item => {
-      const desc = (item.description || '').toLowerCase();
-      return desc.includes('actor') || desc.includes('színész') || desc.includes('szinesz') || desc.includes('actress') || desc.includes('film');
-    }) || searchList[0];
+        const desc = (actorEntity.description || '').toLowerCase();
+        const isPerson = desc.includes('actor') || desc.includes('színész') || desc.includes('szinesz') || desc.includes('actress') || desc.includes('film') || desc.includes('director') || desc.includes('producer');
+        if (!isPerson && searchList.length > 3) {
+          return [];
+        }
 
-    const desc = (actorEntity.description || '').toLowerCase();
-    const isPerson = desc.includes('actor') || desc.includes('színész') || desc.includes('szinesz') || desc.includes('actress') || desc.includes('film') || desc.includes('director') || desc.includes('producer');
-    if (!isPerson && searchList.length > 3) {
-      return [];
-    }
+        const qId = actorEntity.id;
 
-    const qId = actorEntity.id;
+        const sparql = `SELECT DISTINCT ?item ?itemLabel ?imdbId ?year WHERE {
+          ?item wdt:P161 wd:${qId} .
+          ?item wdt:P345 ?imdbId .
+          OPTIONAL { ?item wdt:P577 ?date . BIND(YEAR(?date) AS ?year) }
+          SERVICE wikibase:label { bd:serviceParam wikibase:language "hu,en". }
+        } ORDER BY DESC(?year) LIMIT 35`;
 
-    const sparql = `SELECT DISTINCT ?item ?itemLabel ?imdbId ?year WHERE {
-      ?item wdt:P161 wd:${qId} .
-      ?item wdt:P345 ?imdbId .
-      OPTIONAL { ?item wdt:P577 ?date . BIND(YEAR(?date) AS ?year) }
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "hu,en". }
-    } ORDER BY DESC(?year) LIMIT 35`;
+        const qUrl = `https://query.wikidata.org/sparql?query=${encodeURIComponent(sparql)}&format=json`;
+        const qRes = await fetch(qUrl, {
+          headers: {
+            'User-Agent': 'NuvioHungarianAddon/1.0',
+            'Accept': 'application/json'
+          },
+          signal: AbortSignal.timeout(3500)
+        });
 
-    const qUrl = `https://query.wikidata.org/sparql?query=${encodeURIComponent(sparql)}&format=json`;
-    const qRes = await fetch(qUrl, {
-      headers: {
-        'User-Agent': 'NuvioHungarianAddon/1.0',
-        'Accept': 'application/json'
-      },
-      signal: AbortSignal.timeout(3500)
-    });
+        if (!qRes.ok) return undefined;
+        const qData = await qRes.json();
+        const bindings = qData.results?.bindings || [];
 
-    if (!qRes.ok) return [];
-    const qData = await qRes.json();
-    const bindings = qData.results?.bindings || [];
+        const movies = [];
+        const seen = new Set();
+        for (const b of bindings) {
+          const imdbId = b.imdbId?.value;
+          if (!imdbId || seen.has(imdbId)) continue;
+          seen.add(imdbId);
 
-    const movies = [];
-    const seen = new Set();
-    for (const b of bindings) {
-      const imdbId = b.imdbId?.value;
-      if (!imdbId || seen.has(imdbId)) continue;
-      seen.add(imdbId);
+          const title = b.itemLabel?.value || '';
+          const year = b.year?.value || '';
 
-      const title = b.itemLabel?.value || '';
-      const year = b.year?.value || '';
+          movies.push({
+            id: imdbId,
+            type: 'movie',
+            name: title,
+            poster: `https://images.metahub.space/poster/medium/${imdbId}/img`,
+            year,
+            description: `${actorEntity.label || query} filmje (${year})`
+          });
+        }
 
-      movies.push({
-        id: imdbId,
-        type: 'movie',
-        name: title,
-        poster: `https://images.metahub.space/poster/medium/${imdbId}/img`,
-        year,
-        description: `${actorEntity.label || query} filmje (${year})`
-      });
-    }
-
-    actorFilmographyCache.set(clean, movies);
-    return movies;
-  } catch (err) {
-    return [];
-  }
+        return movies;
+      } catch (err) {
+        return undefined;
+      }
+    },
+    { ttlMs: (res) => (Array.isArray(res) && res.length > 0 ? 12 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000) }
+  ).then(res => (Array.isArray(res) ? res : []));
 }
 
-const huToEnCache = new Map();
+const huToEnCache = createBoundedCache({ maxEntries: 400, ttlMs: 12 * 60 * 60 * 1000 });
 
 /**
  * Resolves Hungarian movie/series titles to original English franchise/title via Wikipedia & langlinks
@@ -168,48 +170,50 @@ const huToEnCache = new Map();
 async function resolveHungarianQueryToEnglish(query) {
   if (!query || query.length < 3) return [];
   const clean = query.trim().toLowerCase();
-  if (huToEnCache.has(clean)) return huToEnCache.get(clean);
+  return huToEnCache.getOrLoad(
+    clean,
+    async () => {
+      try {
+        const headers = { 'User-Agent': 'NuvioHungarianAddon/1.0 (https://nuvio-magyar-http.onrender.com)' };
+        const searchUrl = `https://hu.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json`;
+        const sRes = await fetch(searchUrl, { headers, signal: AbortSignal.timeout(2500) });
+        if (!sRes.ok) return undefined;
+        const sData = await sRes.json();
+        const topHits = (sData.query?.search || []).slice(0, 4);
+        if (topHits.length === 0) return [];
 
-  try {
-    const headers = { 'User-Agent': 'NuvioHungarianAddon/1.0 (https://nuvio-hungarian-addon.vercel.app)' };
-    const searchUrl = `https://hu.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json`;
-    const sRes = await fetch(searchUrl, { headers, signal: AbortSignal.timeout(2500) });
-    if (!sRes.ok) return [];
-    const sData = await sRes.json();
-    const topHits = (sData.query?.search || []).slice(0, 4);
-    if (topHits.length === 0) return [];
+        const titles = topHits.map(h => h.title).join('|');
+        const langUrl = `https://hu.wikipedia.org/w/api.php?action=query&prop=langlinks&titles=${encodeURIComponent(titles)}&lllang=en&format=json`;
+        const lRes = await fetch(langUrl, { headers, signal: AbortSignal.timeout(2500) });
+        if (!lRes.ok) return undefined;
+        const lData = await lRes.json();
 
-    const titles = topHits.map(h => h.title).join('|');
-    const langUrl = `https://hu.wikipedia.org/w/api.php?action=query&prop=langlinks&titles=${encodeURIComponent(titles)}&lllang=en&format=json`;
-    const lRes = await fetch(langUrl, { headers, signal: AbortSignal.timeout(2500) });
-    if (!lRes.ok) return [];
-    const lData = await lRes.json();
+        const enTitles = new Set();
+        const pages = lData.query?.pages || {};
 
-    const enTitles = new Set();
-    const pages = lData.query?.pages || {};
-
-    // Iterate in exact topHits relevance order, NOT Object.keys(pages) which sorts by integer pageid
-    for (const hit of topHits) {
-      const page = Object.values(pages).find(p => p.title === hit.title);
-      let enTitle = page?.langlinks?.[0]?.['*'];
-      if (enTitle) {
-        enTitle = enTitle.replace(/\s*\([^)]+\)\s*$/g, '').trim();
-        if (enTitle.length > 1) {
-          enTitles.add(enTitle);
-          // If title has a sequel number or subtitle (e.g. 'Toy Story 2' -> add 'Toy Story')
-          const franchiseMatch = enTitle.match(/^([A-Za-z0-9\s:,'-]+?)(?:\s+\d+|\s*:\s*.+)?$/);
-          if (franchiseMatch && franchiseMatch[1] && franchiseMatch[1].length >= 3) {
-            enTitles.add(franchiseMatch[1].trim());
+        // Iterate in exact topHits relevance order, NOT Object.keys(pages) which sorts by integer pageid
+        for (const hit of topHits) {
+          const page = Object.values(pages).find(p => p.title === hit.title);
+          let enTitle = page?.langlinks?.[0]?.['*'];
+          if (enTitle) {
+            enTitle = enTitle.replace(/\s*\([^)]+\)\s*$/g, '').trim();
+            if (enTitle.length > 1) {
+              enTitles.add(enTitle);
+              // If title has a sequel number or subtitle (e.g. 'Toy Story 2' -> add 'Toy Story')
+              const franchiseMatch = enTitle.match(/^([A-Za-z0-9\s:,'-]+?)(?:\s+\d+|\s*:\s*.+)?$/);
+              if (franchiseMatch && franchiseMatch[1] && franchiseMatch[1].length >= 3) {
+                enTitles.add(franchiseMatch[1].trim());
+              }
+            }
           }
         }
+        return Array.from(enTitles);
+      } catch (e) {
+        return undefined;
       }
-    }
-    const result = Array.from(enTitles);
-    huToEnCache.set(clean, result);
-    return result;
-  } catch (e) {
-    return [];
-  }
+    },
+    { ttlMs: (res) => (Array.isArray(res) && res.length > 0 ? 12 * 60 * 60 * 1000 : 2 * 60 * 60 * 1000) }
+  ).then(res => (Array.isArray(res) ? res : []));
 }
 
 async function executeMultiSourceSearch(type, query) {
@@ -354,111 +358,119 @@ async function executeMultiSourceSearch(type, query) {
   return results;
 }
 
-const CATALOG_SEARCH_CACHE = new Map();
-const SEARCH_CACHE_TTL_MS = 5 * 60 * 1000;
+const SEARCH_CACHE_TTL_MS = 60 * 60 * 1000;
+const SEARCH_EMPTY_CACHE_TTL_MS = 2 * 60 * 1000;
+const CATALOG_SEARCH_CACHE = createBoundedCache({ maxEntries: 350, ttlMs: SEARCH_CACHE_TTL_MS });
 
 async function searchCatalog(type, query, catalogId = null, extra = {}) {
   const skipNum = typeof extra === 'number' ? extra : (extra?.skip || 0);
-  const cacheKey = String(type || 'all') + ':' + String(catalogId || 'all') + ':' + String(query || '').trim().toLowerCase() + ':' + String(skipNum);
-  if (query) {
-    const cached = CATALOG_SEARCH_CACHE.get(cacheKey);
-    if (cached && (Date.now() - cached.timestamp < SEARCH_CACHE_TTL_MS)) {
-      return cached.data;
-    }
-  }
-
-  // If dynamic toplist or streaming catalog requested (TMDB / Mafab)
-  if (catalogId && (
+  const trimmedQuery = String(query || '').trim();
+  const isDynamicShelf = Boolean(catalogId && (
     catalogId.startsWith('hu-trending-') ||
     catalogId.startsWith('hu-cinema-') ||
     catalogId.startsWith('hu-hungarian-') ||
     catalogId.startsWith('hu-top-rated-') ||
     catalogId.startsWith('hu-stream-')
-  )) {
-    if (!query) {
-    }
-    const shelfResults = await fetchCatalogItems(catalogId, type, { search: query, skip: skipNum });
-    const searchResults = await executeMultiSourceSearch(type, query);
-    const seen = new Set();
-    const merged = [];
-    for (const item of [...shelfResults, ...searchResults]) {
-      if (item && item.id && !seen.has(item.id)) {
-        seen.add(item.id);
-        merged.push(item);
+  ));
+
+  const runUncachedCatalog = async () => {
+    // If dynamic toplist or streaming catalog requested (TMDB / Mafab)
+    if (isDynamicShelf) {
+      const shelfResults = await fetchCatalogItems(catalogId, type, { search: trimmedQuery, skip: skipNum });
+      if (!trimmedQuery) return shelfResults;
+      const searchResults = await executeMultiSourceSearch(type, trimmedQuery);
+      const seen = new Set();
+      const merged = [];
+      for (const item of [...shelfResults, ...searchResults]) {
+        if (item && item.id && !seen.has(item.id)) {
+          seen.add(item.id);
+          merged.push(item);
+        }
       }
+      return merged;
     }
-    return merged;
-  }
 
-  // If MédiaKlikk classics catalog requested
-  if (catalogId === 'hu-mediaklikk-classics') {
-    const verifiedList = VERIFIED_MEDIAKLIKK_CLASSICS.map(item => ({
-      id: item.id,
-      name: item.name,
-      type: 'series',
-      poster: item.poster,
-      background: item.poster,
-      description: item.description,
-      releaseInfo: item.year,
-      year: item.year,
-      genres: item.categories || ['MTVA Archívum'],
-      categories: item.categories || ['MTVA Archívum']
-    }));
+    // If MédiaKlikk classics catalog requested
+    if (catalogId === 'hu-mediaklikk-classics') {
+      const verifiedList = VERIFIED_MEDIAKLIKK_CLASSICS.map(item => ({
+        id: item.id,
+        name: item.name,
+        type: 'series',
+        poster: item.poster,
+        background: item.poster,
+        description: item.description,
+        releaseInfo: item.year,
+        year: item.year,
+        genres: item.categories || ['MTVA Archívum'],
+        categories: item.categories || ['MTVA Archívum']
+      }));
 
-    if (!query) return rotateWeekly(verifiedList, 'hu-mediaklikk-classics', 4);
-    const qNorm = normalize(query);
-    const matched = verifiedList.filter(item =>
-      normalize(item.name).includes(qNorm) ||
-      normalize(item.description || '').includes(qNorm) ||
-      (item.categories && item.categories.some(c => normalize(c).includes(qNorm)))
+      if (!trimmedQuery) return rotateWeekly(verifiedList, 'hu-mediaklikk-classics', 4);
+      const qNorm = normalize(trimmedQuery);
+      const matched = verifiedList.filter(item =>
+        normalize(item.name).includes(qNorm) ||
+        normalize(item.description || '').includes(qNorm) ||
+        (item.categories && item.categories.some(c => normalize(c).includes(qNorm)))
+      );
+      if (matched.length > 0) return matched;
+      return await executeMultiSourceSearch(type || 'series', trimmedQuery);
+    }
+
+    // If Live TV catalog requested (either by catalog id or by type)
+    if (catalogId && (catalogId.startsWith('hu-live-') || catalogId === 'hu-live-tv' || catalogId === 'hu-live-tv-channel' || type === 'tv' || type === 'channel')) {
+      const baseHost = (extra && extra.hostUrl) || process.env.HOST_URL || 'https://nuvio-magyar-http.onrender.com';
+      return getOnlineStreamChannels(catalogId === 'hu-live-tv' ? 'all' : catalogId, trimmedQuery, baseHost).map(ch => ({
+        id: ch.id,
+        name: ch.name,
+        type: type || 'movie',
+        poster: ch.poster,
+        background: ch.background,
+        logo: ch.logo,
+        description: ch.description,
+        releaseInfo: ch.releaseInfo || 'ÉLŐ • TV',
+        year: ch.year || 'ÉLŐ • TV',
+        posterShape: 'poster',
+        behaviorHints: {
+          defaultVideoId: ch.id,
+          isLive: true
+        }
+      }));
+    }
+
+    if (!trimmedQuery) {
+      if (catalogId === 'hu-series' || type === 'series') return FEATURED_HUNGARIAN_SERIES;
+      if (catalogId === 'hu-movies' || type === 'movie') return FEATURED_HUNGARIAN_MOVIES;
+      const liveItems = LIVE_CHANNELS.map(ch => ({
+        id: ch.id,
+        name: ch.name,
+        type: 'movie',
+        poster: ch.poster,
+        background: ch.poster,
+        logo: ch.logo,
+        description: ch.description,
+        releaseInfo: ch.year || 'ÉLŐ • 1080p FHD',
+        year: ch.year || 'ÉLŐ • 1080p FHD',
+        posterShape: 'poster'
+      }));
+      return [...liveItems, ...FEATURED_HUNGARIAN_MOVIES, ...FEATURED_HUNGARIAN_SERIES];
+    }
+
+    return await executeMultiSourceSearch(type, trimmedQuery);
+  };
+
+  if (trimmedQuery) {
+    const cacheKey = `${type || 'all'}:${catalogId || 'all'}:${trimmedQuery.toLowerCase()}:${skipNum}`;
+    return CATALOG_SEARCH_CACHE.getOrLoad(
+      cacheKey,
+      runUncachedCatalog,
+      {
+        ttlMs: (arr) => (Array.isArray(arr) && arr.length > 0 ? SEARCH_CACHE_TTL_MS : SEARCH_EMPTY_CACHE_TTL_MS),
+        shouldCache: (arr) => Array.isArray(arr)
+      }
     );
-    if (matched.length > 0) return matched;
-    return await executeMultiSourceSearch(type || 'series', query);
   }
 
-  // If Live TV catalog requested (either by catalog id or by type)
-  if (catalogId && (catalogId.startsWith('hu-live-') || catalogId === 'hu-live-tv' || catalogId === 'hu-live-tv-channel' || type === 'tv' || type === 'channel')) {
-    const baseHost = (extra && extra.hostUrl) || process.env.HOST_URL || 'https://nuvio-magyar-http.vercel.app';
-    const list = getOnlineStreamChannels(catalogId === 'hu-live-tv' ? 'all' : catalogId, query, baseHost).map(ch => ({
-      id: ch.id,
-      name: ch.name,
-      type: type || 'movie',
-      poster: ch.poster,
-      background: ch.background,
-      logo: ch.logo,
-      description: ch.description,
-      releaseInfo: ch.releaseInfo || 'ÉLŐ • TV',
-      year: ch.year || 'ÉLŐ • TV',
-      posterShape: 'poster',
-      behaviorHints: {
-        defaultVideoId: ch.id,
-        isLive: true
-      }
-    }));
-    return list;
-  }
-
-  if (!query) {
-    if (catalogId === 'hu-series' || type === 'series') return FEATURED_HUNGARIAN_SERIES;
-    if (catalogId === 'hu-movies' || type === 'movie') return FEATURED_HUNGARIAN_MOVIES;
-    const liveItems = LIVE_CHANNELS.map(ch => ({
-      id: ch.id,
-      name: ch.name,
-      type: 'movie',
-      poster: ch.poster,
-      background: ch.poster,
-      logo: ch.logo,
-      description: ch.description,
-      releaseInfo: ch.year || 'ÉLŐ • 1080p FHD',
-      year: ch.year || 'ÉLŐ • 1080p FHD',
-      posterShape: 'poster'
-    }));
-    return [...liveItems, ...FEATURED_HUNGARIAN_MOVIES, ...FEATURED_HUNGARIAN_SERIES];
-  }
-
-  const searchOut = await executeMultiSourceSearch(type, query);
-  if (query) CATALOG_SEARCH_CACHE.set(cacheKey, { data: searchOut, timestamp: Date.now() });
-  return searchOut;
+  return runUncachedCatalog();
 }
 
 const TMDB_API_KEY = 'ffe7ef8916c61835264d2df68276ddc2';
@@ -696,10 +708,41 @@ function scoreItemRelevance(itemTitle, query, itemId = '') {
   return baseScore;
 }
 
+const VOD_META_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+const VOD_META_EMPTY_TTL_MS = 2 * 60 * 1000;
+const LIVE_META_CACHE_TTL_MS = 90 * 1000;
+const VOD_META_CACHE = createBoundedCache({ maxEntries: 400, ttlMs: VOD_META_CACHE_TTL_MS });
+const LIVE_META_CACHE = createBoundedCache({ maxEntries: 250, ttlMs: LIVE_META_CACHE_TTL_MS });
+
 async function getMeta(type, id, hostUrl = null) {
   if (!id) return null;
-  const baseHost = hostUrl || process.env.HOST_URL || 'https://nuvio-magyar-http.vercel.app';
+  const baseHost = hostUrl || process.env.HOST_URL || 'https://nuvio-magyar-http.onrender.com';
+  const isLive = type === 'tv' || type === 'channel' || (id && (id.startsWith('onlinestream-live-') || id.startsWith('mediaklikk-live-')));
 
+  if (isLive) {
+    const liveKey = `${type || 'movie'}:${id}:${baseHost}`;
+    return LIVE_META_CACHE.getOrLoad(
+      liveKey,
+      () => fetchMetaUncached(type, id, baseHost),
+      {
+        ttlMs: (res) => (res?.meta ? LIVE_META_CACHE_TTL_MS : 30 * 1000),
+        shouldCache: (res) => Boolean(res?.meta)
+      }
+    );
+  }
+
+  const vodKey = `${type || 'movie'}:${id}`;
+  return VOD_META_CACHE.getOrLoad(
+    vodKey,
+    () => fetchMetaUncached(type, id, baseHost),
+    {
+      ttlMs: (res) => (res?.meta ? VOD_META_CACHE_TTL_MS : VOD_META_EMPTY_TTL_MS),
+      shouldCache: (res) => res === null || Boolean(res?.meta)
+    }
+  );
+}
+
+async function fetchMetaUncached(type, id, baseHost) {
   // Handle Live TV channels (OnlineStream or MédiaKlikk) with live EPG details
   if (type === 'tv' || type === 'channel' || (id && (id.startsWith('onlinestream-live-') || id.startsWith('mediaklikk-live-')))) {
     const onlineMeta = getOnlineStreamMeta(id, baseHost);

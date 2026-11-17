@@ -244,6 +244,61 @@ async function runVerification() {
     }
     console.log('✅ 12. Render Heavy TV Artwork Offload to Free jsDelivr CDN OK');
 
+    // 13. Aggressive Bandwidth-Saving Caches (Catalog, Search, Meta, Manifest + 304 ETag)
+    const [manCacheRes, liveCatRes, trendCachedStartRes] = await Promise.all([
+      fetch(`${base}/manifest.json`),
+      fetch(`${base}/catalog/movie/hu-live-tv.json`),
+      fetch(`${base}/catalog/movie/hu-trending-movies.json`)
+    ]);
+    const manCC = manCacheRes.headers.get('cache-control') || '';
+    const liveCatCC = liveCatRes.headers.get('cache-control') || '';
+    const trendCC = trendCachedStartRes.headers.get('cache-control') || '';
+    const trendEtag = trendCachedStartRes.headers.get('etag') || '';
+    if (!manCC.includes('max-age=3600')) fail(`Expected max-age=3600 on /manifest.json, got "${manCC}"`);
+    if (!liveCatCC.includes('max-age=7200') || !trendCC.includes('max-age=7200')) {
+      fail(`Expected max-age=7200 on browse catalogs, got live="${liveCatCC}", trend="${trendCC}"`);
+    }
+    if (!trendEtag) fail('Expected ETag header on /catalog/movie/hu-trending-movies.json');
+
+    const etag304Res = await fetch(`${base}/catalog/movie/hu-trending-movies.json`, {
+      headers: { 'If-None-Match': trendEtag }
+    });
+    if (etag304Res.status !== 304) fail(`Expected 304 Not Modified for matching ETag, got ${etag304Res.status}`);
+
+    const tCatHitStart = Date.now();
+    const trendCatHit = await fetch(`${base}/catalog/movie/hu-trending-movies.json`).then((r) => r.json());
+    const catHitMs = Date.now() - tCatHitStart;
+    if (!trendCatHit.metas?.length || catHitMs > 150) {
+      fail(`Catalog cache hit too slow or empty (${catHitMs}ms)`);
+    }
+
+    const searchRes1 = await fetch(`${base}/catalog/movie/hu-trending-movies/search=Matrix.json`);
+    const searchCC = searchRes1.headers.get('cache-control') || '';
+    const searchJson1 = await searchRes1.json();
+    const tSearchStart = Date.now();
+    const searchJson2 = await fetch(`${base}/catalog/movie/hu-trending-movies/search=Matrix.json`).then((r) => r.json());
+    const searchHitMs = Date.now() - tSearchStart;
+    if (searchJson1.metas?.length > 0 && !searchCC.includes('max-age=1800')) {
+      fail(`Expected max-age=1800 on search catalog, got "${searchCC}"`);
+    }
+    if (searchJson2.metas?.length !== searchJson1.metas?.length || searchHitMs > 150) {
+      fail(`Search catalog cache miss or mismatch (${searchHitMs}ms)`);
+    }
+
+    await fetch(`${base}/meta/movie/tt15239678.json`);
+    const tMetaStart = Date.now();
+    const metaHitRes = await fetch(`${base}/meta/movie/tt15239678.json`);
+    const metaHitMs = Date.now() - tMetaStart;
+    const metaHitCC = metaHitRes.headers.get('cache-control') || '';
+    const metaHitJson = await metaHitRes.json();
+    if (!metaHitJson?.meta?.id || metaHitMs > 150) {
+      fail(`VOD meta cache miss or slow hit (${metaHitMs}ms)`);
+    }
+    if (!metaHitCC.includes('max-age=7200')) {
+      fail(`Expected max-age=7200 on VOD /meta/, got "${metaHitCC}"`);
+    }
+    console.log(`✅ 13. Catalog (${catHitMs}ms), Search (${searchHitMs}ms), Meta (${metaHitMs}ms), ETag 304 & Cache-Control OK`);
+
     if (hasError) {
       process.exitCode = 1;
       console.error('\n❌ One or more verification assertions failed.');

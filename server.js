@@ -2,7 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('node:crypto');
 const pkg = require('./package.json');
+const { createBoundedCache } = require('./src/cache');
 const {
   getManifest,
   handleStreamRequest,
@@ -150,7 +152,7 @@ app.get('/manifest.json', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=7200, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=14400, stale-while-revalidate=86400');
   const config = parseConfig(null, req.query);
   config.hostUrl = getHostUrl(req);
   res.json(getManifest(config));
@@ -161,7 +163,7 @@ app.get('/:config/manifest.json', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=7200, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=14400, stale-while-revalidate=86400');
   const config = parseConfig(req.params.config, req.query);
   config.hostUrl = getHostUrl(req);
   res.json(getManifest(config));
@@ -219,6 +221,12 @@ function sanitizeMetaPreview(item, defaultType = 'movie') {
   return meta;
 }
 
+// Pre-serialized HTTP catalog response cache (eliminates redundant JSON rebuilds & enables 304 ETag hits)
+const CATALOG_BROWSE_CACHE_MS = 2 * 60 * 60 * 1000;
+const CATALOG_SEARCH_CACHE_MS = 30 * 60 * 1000;
+const CATALOG_EMPTY_CACHE_MS = 2 * 60 * 1000;
+const CATALOG_RESPONSE_CACHE = createBoundedCache({ maxEntries: 250, ttlMs: CATALOG_BROWSE_CACHE_MS });
+
 // 3. Catalog Routes (Enables searching and browsing Hungarian movies/series in Nuvio & Stremio)
 async function handleCatalog(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -246,15 +254,44 @@ async function handleCatalog(req, res) {
     }
   }
 
+  const cdnBase = getCdnPublicBaseUrl();
+  const hostUrl = getHostUrl(req);
+  const normSearch = String(searchQuery || '').trim().toLowerCase();
+  const cacheHostKey = cdnBase ? `cdn:${cdnBase}` : `host:${hostUrl}`;
+  const respCacheKey = `${type}:${cleanId}:${skip}:${normSearch}:${cacheHostKey}`;
+
   try {
-    const rawMetas = await searchCatalog(type, searchQuery, cleanId, { skip, search: searchQuery, hostUrl: getHostUrl(req) });
-    const cdnBase = getCdnPublicBaseUrl();
-    const metas = (rawMetas || [])
-      .map(m => sanitizeMetaPreview(m, type))
-      .filter(Boolean)
-      .map(m => rewriteMetaMediaUrls(m, cdnBase));
-    res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=7200, stale-while-revalidate=86400');
-    res.json({ metas });
+    const entry = await CATALOG_RESPONSE_CACHE.getOrLoad(
+      respCacheKey,
+      async () => {
+        const rawMetas = await searchCatalog(type, searchQuery, cleanId, { skip, search: searchQuery, hostUrl });
+        const metas = (rawMetas || [])
+          .map(m => sanitizeMetaPreview(m, type))
+          .filter(Boolean)
+          .map(m => rewriteMetaMediaUrls(m, cdnBase));
+        const json = JSON.stringify({ metas });
+        const etag = `W/"${crypto.createHash('sha1').update(json).digest('hex').slice(0, 16)}"`;
+        const cacheControl = metas.length === 0
+          ? 'public, max-age=120, s-maxage=300'
+          : (normSearch
+              ? 'public, max-age=1800, s-maxage=7200, stale-while-revalidate=86400'
+              : 'public, max-age=7200, s-maxage=21600, stale-while-revalidate=86400');
+        return { json, etag, cacheControl, count: metas.length };
+      },
+      {
+        ttlMs: (val) => (val?.count > 0 ? (normSearch ? CATALOG_SEARCH_CACHE_MS : CATALOG_BROWSE_CACHE_MS) : CATALOG_EMPTY_CACHE_MS),
+        shouldCache: (val) => Boolean(val && typeof val.json === 'string')
+      }
+    );
+
+    res.setHeader('Cache-Control', entry.cacheControl);
+    res.setHeader('ETag', entry.etag);
+    const ifNoneMatch = String(req.headers['if-none-match'] || '').trim();
+    if (ifNoneMatch && (ifNoneMatch === entry.etag || ifNoneMatch.replace(/^W\//, '') === entry.etag.replace(/^W\//, ''))) {
+      return res.status(304).end();
+    }
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    return res.send(entry.json);
   } catch (err) {
     console.error('[Server] Catalog error:', err);
     res.json({ metas: [] });
@@ -312,7 +349,7 @@ async function handleMeta(req, res) {
         'Cache-Control',
         isLiveChannelMeta
           ? 'public, max-age=60, s-maxage=180, stale-while-revalidate=300'
-          : 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800'
+          : 'public, max-age=7200, s-maxage=86400, stale-while-revalidate=604800'
       );
       return res.json({ meta: rewriteMetaMediaUrls(m, getCdnPublicBaseUrl()) });
     }
@@ -715,7 +752,7 @@ function scoreSearchRelevance(itemTitle, query, itemId = '') {
 // 9. Search API for web landing page
 app.get('/api/search', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=7200, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control', 'public, max-age=1800, s-maxage=7200, stale-while-revalidate=86400');
   const query = req.query.q || '';
   const filterType = req.query.type;
   const sendCdnResults = (items) => {

@@ -6,14 +6,16 @@
 
 const { LIVE_CHANNELS, VERIFIED_MEDIAKLIKK_CLASSICS } = require('./scrapers/mediaklikk');
 const { ONLINESTREAM_CATEGORIES, getOnlineStreamChannels } = require('./scrapers/onlinestream');
+const { createBoundedCache } = require('./cache');
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY || 'ffe7ef8916c61835264d2df68276ddc2';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
-// In-memory catalog and IMDb mapping caches (TTL: 1 hour)
-const catalogCache = new Map();
-const imdbIdCache = new Map();
-const CACHE_TTL_MS = 60 * 60 * 1000;
+// Bounded in-memory catalog (4h) and IMDb mapping (7d) caches with inflight dedup
+const CACHE_TTL_MS = 4 * 60 * 60 * 1000;
+const CATALOG_EMPTY_TTL_MS = 2 * 60 * 1000;
+const catalogCache = createBoundedCache({ maxEntries: 300, ttlMs: CACHE_TTL_MS });
+const imdbIdCache = createBoundedCache({ maxEntries: 2500, ttlMs: 7 * 24 * 60 * 60 * 1000 });
 
 /**
  * Returns deterministic ISO Year-Week seed (changes every week on Monday 00:00 UTC)
@@ -301,24 +303,26 @@ async function tryFetchMafabList(catalogId) {
  */
 async function resolveImdbId(tmdbId, isSeries = false) {
   const cacheKey = `${isSeries ? 'tv' : 'movie'}:${tmdbId}`;
-  if (imdbIdCache.has(cacheKey)) {
-    return imdbIdCache.get(cacheKey);
-  }
-
-  try {
-    const endpoint = isSeries ? `tv/${tmdbId}/external_ids` : `movie/${tmdbId}/external_ids`;
-    const res = await fetch(`${TMDB_BASE_URL}/${endpoint}?api_key=${TMDB_API_KEY}`, {
-      signal: AbortSignal.timeout(3500)
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const imdbId = data.imdb_id || null;
-      imdbIdCache.set(cacheKey, imdbId);
-      return imdbId;
+  return imdbIdCache.getOrLoad(
+    cacheKey,
+    async () => {
+      try {
+        const endpoint = isSeries ? `tv/${tmdbId}/external_ids` : `movie/${tmdbId}/external_ids`;
+        const res = await fetch(`${TMDB_BASE_URL}/${endpoint}?api_key=${TMDB_API_KEY}`, {
+          signal: AbortSignal.timeout(3500)
+        });
+        if (res.ok) {
+          const data = await res.json();
+          return data.imdb_id || null;
+        }
+      } catch (e) {}
+      return undefined;
+    },
+    {
+      ttlMs: (val) => (val ? 7 * 24 * 60 * 60 * 1000 : 15 * 60 * 1000),
+      shouldCache: (val) => val !== undefined
     }
-  } catch (e) {}
-
-  return null;
+  ).then(v => (v === undefined ? null : v));
 }
 
 /**
@@ -402,50 +406,40 @@ async function fetchTwoTmdbPages(buildUrlFn, isSeries = false, allowRecentDays =
  * Fetches catalog items for a given catalog ID and options
  */
 async function fetchCatalogItems(catalogId, type, { search = '', skip = 0, hostUrl = null } = {}) {
+  if (catalogId && catalogId.startsWith('hu-live-')) {
+    const liveChannels = getOnlineStreamChannels(catalogId === 'hu-live-tv' ? 'all' : catalogId, search, hostUrl);
+    return liveChannels.map(ch => ({
+      id: ch.id,
+      name: ch.name,
+      type: 'movie',
+      poster: ch.poster,
+      background: ch.background,
+      logo: ch.logo,
+      description: ch.description,
+      releaseInfo: ch.releaseInfo || 'ÉLŐ • TV',
+      year: ch.year || 'ÉLŐ • TV',
+      posterShape: 'poster',
+      behaviorHints: {
+        defaultVideoId: ch.id,
+        isLive: true
+      }
+    }));
+  }
+
   const isSeries = type === 'series' || catalogId.includes('series');
   const page = Math.floor(skip / 20) + 1;
   const weekSeed = getWeeklyRotationSeed();
-  const cacheKey = `${catalogId}:${page}:${weekSeed}:${search || ''}`;
+  const normSearch = String(search || '').trim().toLowerCase();
+  const cacheKey = `${catalogId}:${page}:${weekSeed}:${normSearch}`;
 
-  if (catalogCache.has(cacheKey)) {
-    const cached = catalogCache.get(cacheKey);
-    if (Date.now() - cached.timestamp < CACHE_TTL_MS) {
-      return cached.items;
-    }
-  }
+  return catalogCache.getOrLoad(
+    cacheKey,
+    async () => {
+      let items = [];
 
-  let items = [];
-
-  // Official TMDB + Verified MédiaKlikk/Mafab catalog with guaranteed posters, VOD availability, and weekly rotation
-  if (items.length === 0) {
-    try {
-      switch (catalogId) {
-      case 'hu-live-orszagos':
-      case 'hu-live-film':
-      case 'hu-live-doksi':
-      case 'hu-live-sport':
-      case 'hu-live-gyerek':
-      case 'hu-live-helyi':
-      case 'hu-live-tv': {
-        const liveChannels = getOnlineStreamChannels(catalogId === 'hu-live-tv' ? 'all' : catalogId, search, hostUrl);
-        items = liveChannels.map(ch => ({
-          id: ch.id,
-          name: ch.name,
-          type: 'movie',
-          poster: ch.poster,
-          background: ch.background,
-          logo: ch.logo,
-          description: ch.description,
-          releaseInfo: ch.releaseInfo || 'ÉLŐ • TV',
-          year: ch.year || 'ÉLŐ • TV',
-          posterShape: 'poster',
-          behaviorHints: {
-            defaultVideoId: ch.id,
-            isLive: true
-          }
-        }));
-        break;
-      }
+      // Official TMDB + Verified MédiaKlikk/Mafab catalog with guaranteed posters, VOD availability, and weekly rotation
+      try {
+        switch (catalogId) {
 
       case 'hu-trending-movies': {
         if (page === 1) {
@@ -599,42 +593,43 @@ async function fetchCatalogItems(catalogId, type, { search = '', skip = 0, hostU
         break;
       }
 
-      default:
-        items = [];
+          default:
+            items = [];
+        }
+      } catch (err) {
+        console.warn(`[Catalogs] Error fetching catalog ${catalogId}:`, err.message);
       }
-    } catch (err) {
-      console.warn(`[Catalogs] Error fetching catalog ${catalogId}:`, err.message);
-    }
-  }
 
-  // Filter by search query if present, and query TMDB search if needed
-  if (search && search.trim()) {
-    const qNorm = normalize(search);
-    const shelfMatches = items.filter(item =>
-      normalize(item.name).includes(qNorm) ||
-      normalize(item.description || '').includes(qNorm)
-    );
+      // Filter by search query if present, and query TMDB search if needed
+      if (search && search.trim()) {
+        const qNorm = normalize(search);
+        const shelfMatches = items.filter(item =>
+          normalize(item.name).includes(qNorm) ||
+          normalize(item.description || '').includes(qNorm)
+        );
 
-    if (shelfMatches.length > 0) {
-      items = shelfMatches;
-    } else {
-      try {
-        const searchType = isSeries ? 'tv' : 'movie';
-        const url = `${TMDB_BASE_URL}/search/${searchType}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(search.trim())}&language=hu-HU&include_adult=false&page=${page}`;
-        const sRes = await fetch(url, { signal: AbortSignal.timeout(3000) }).then(r => r.json()).catch(() => ({}));
-        const searchItems = await enrichTmdbItems(sRes.results || [], isSeries);
-        items = searchItems;
-      } catch (e) {
-        items = [];
+        if (shelfMatches.length > 0) {
+          items = shelfMatches;
+        } else {
+          try {
+            const searchType = isSeries ? 'tv' : 'movie';
+            const url = `${TMDB_BASE_URL}/search/${searchType}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(search.trim())}&language=hu-HU&include_adult=false&page=${page}`;
+            const sRes = await fetch(url, { signal: AbortSignal.timeout(3000) }).then(r => r.json()).catch(() => ({}));
+            const searchItems = await enrichTmdbItems(sRes.results || [], isSeries);
+            items = searchItems;
+          } catch (e) {
+            items = [];
+          }
+        }
       }
+
+      return items;
+    },
+    {
+      ttlMs: (res) => (Array.isArray(res) && res.length > 0 ? CACHE_TTL_MS : CATALOG_EMPTY_TTL_MS),
+      shouldCache: (res) => Array.isArray(res)
     }
-  }
-
-  if (items.length > 0) {
-    catalogCache.set(cacheKey, { items, timestamp: Date.now() });
-  }
-
-  return items;
+  );
 }
 
 /**
