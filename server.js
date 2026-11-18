@@ -1180,7 +1180,7 @@ app.get('/', (req, res) => {
 });
 
 if (require.main === module) {
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`\n======================================================`);
     console.log(`🚀 Nuvio & Stremio Hungarian Addon is running!`);
     console.log(`📡 Local Port: http://localhost:${PORT}`);
@@ -1188,6 +1188,14 @@ if (require.main === module) {
     console.log(`⚙️ Configurator: http://localhost:${PORT}/configure`);
     console.log(`======================================================\n`);
   });
+
+  const shutdown = (signal) => {
+    console.log(`\n[Server] ${signal} received, closing HTTP server...`);
+    server.close(() => process.exit(0));
+    setTimeout(() => process.exit(0), 3000).unref();
+  };
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
 }
 
 module.exports = app;

@@ -135,7 +135,31 @@ A közösségi videómegosztóknál (`Videa`, `Indavideo`, `Videakid`) **3 lépc
 
 Ha szeretnéd, hogy a **HDMozi**, **DMDAMedia**, **OnlineFilmek (VOE)**, **Sorozatok.net (VOE)** és **NetMozi (extra VOE tükrök)** is a saját otthoni IP-címeddel működjön:
 
-### A) PC / Mac / Linux (Node.js v18+)
+### A) Docker & Docker Compose (Ajánlott — Multi-Arch `amd64` + `arm64`, Watchtower támogatással)
+
+1. Töltsd le a [`docker-compose.yml`](docker-compose.yml) fájlt (vagy másold ki a tartalmát):
+```bash
+curl -O https://raw.githubusercontent.com/Player798xy/nuvio-magyar-http/main/docker-compose.yml
+```
+2. Indítás:
+```bash
+# Normál indítás (ha már van Watchtowered vagy kézzel frissítesz):
+docker compose up -d
+
+# Indítás beépített automata frissítéssel (Watchtower 6 óránként frissíti az új GHCR buildet):
+docker compose --profile auto-update up -d
+```
+Kézi frissítés bármikor Watchtower nélkül: `docker compose pull && docker compose up -d`
+
+Vagy egyetlen `docker run` paranccsal:
+```bash
+docker run -d --name nuvio-magyar-http -p 7000:7000 \
+  --label com.centurylinklabs.watchtower.enable=true \
+  --restart unless-stopped \
+  ghcr.io/player798xy/nuvio-magyar-http:latest
+```
+
+### B) PC / Mac / Linux (Node.js v18+)
 ```bash
 git clone https://github.com/Player798xy/nuvio-magyar-http.git
 cd nuvio-magyar-http
@@ -144,7 +168,7 @@ npm start
 ```
 Az addon elérhető lesz a `http://127.0.0.1:7000/manifest.json` (valamint a helyi hálózati IP-címeden) keresztül, ellenőrzéshez pedig futtatható az `npm test` (`scripts/verify.js`).
 
-### B) Android telefon / TV Box (Termux)
+### C) Android telefon / TV Box (Termux)
 ```bash
 pkg update -y && pkg install -y nodejs git
 git clone https://github.com/Player798xy/nuvio-magyar-http.git

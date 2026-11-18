@@ -1,0 +1,13 @@
+.git
+.github
+node_modules
+npm-debug.log*
+.env
+.env.*
+api
+render.yaml
+vercel.json
+GEMINI_HYDROGEN_CONTEXT.md
+gradetv_hu_channels.json
+scripts/test_*.js
+*.log

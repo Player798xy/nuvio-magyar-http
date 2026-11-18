@@ -1,0 +1,124 @@
+name: Build and Publish Docker Image
+
+on:
+  push:
+    branches: ["main"]
+    paths-ignore:
+      - "*.md"
+      - "README.md"
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  smoke-test:
+    name: Syntax & Container Smoke Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check server.js
+          find src scripts -name "*.js" ! -name "test_*.js" -print0 | xargs -0 -n1 node --check
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build Docker image for smoke test
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          load: true
+          push: false
+          tags: nuvio-magyar-http:smoke-test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Boot container and verify HTTP endpoints & graceful shutdown
+        run: |
+          docker run -d --name nuvio-smoke -p 7000:7000 nuvio-magyar-http:smoke-test
+          trap 'docker logs nuvio-smoke || true; docker rm -f nuvio-smoke >/dev/null 2>&1 || true' EXIT
+
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:7000/api/health >/tmp/health.json 2>/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+
+          cat /tmp/health.json
+          node -e '
+            const fs = require("fs");
+            const h = JSON.parse(fs.readFileSync("/tmp/health.json", "utf8"));
+            if (h.status !== "ok") throw new Error("Unhealthy status: " + JSON.stringify(h));
+          '
+
+          curl -fsS http://127.0.0.1:7000/manifest.json >/tmp/manifest.json
+          node -e '
+            const fs = require("fs");
+            const m = JSON.parse(fs.readFileSync("/tmp/manifest.json", "utf8"));
+            if (!m.id || !Array.isArray(m.catalogs) || m.catalogs.length < 15) {
+              throw new Error("Unexpected manifest payload");
+            }
+            console.log("Manifest OK:", m.name, m.version, "catalogs=" + m.catalogs.length);
+          '
+
+          curl -fsS http://127.0.0.1:7000/ | grep -q "Magyar Streaming"
+          curl -fsS http://127.0.0.1:7000/tamogatas.html | grep -q "ko-fi.com/playerxy"
+
+          start_ts=$(date +%s)
+          docker stop nuvio-smoke
+          end_ts=$(date +%s)
+          echo "Graceful shutdown took $((end_ts - start_ts))s"
+
+  publish:
+    name: Build & Push Multi-Arch GHCR Image
+    needs: smoke-test
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ghcr.io/player798xy/nuvio-magyar-http
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,prefix=sha-
+
+      - name: Build and push multi-arch image (amd64 + arm64)
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

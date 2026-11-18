@@ -1,0 +1,28 @@
+services:
+  nuvio-magyar-http:
+    image: ghcr.io/player798xy/nuvio-magyar-http:latest
+    container_name: nuvio-magyar-http
+    restart: unless-stopped
+    ports:
+      - "${PORT:-7000}:7000"
+    environment:
+      NODE_ENV: production
+      PORT: "7000"
+      # NETMOZI_REMOTE: "1"        # Csak felhős VPS-en kapcsold be; otthoni IP-n maradjon kikapcsolva (VOE 1080p)!
+      # STATS_KEY: "titkos-kulcs"  # Opcionális: védett /api/stats statisztika oldalhoz
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+  # Opcionális automata frissítő (indítás: docker compose --profile auto-update up -d)
+  # Modern Docker Engine (API 1.44+) kompatibilis nickfedor/watchtower image-et használ
+  watchtower:
+    image: nickfedor/watchtower:latest
+    container_name: nuvio-watchtower
+    profiles: ["auto-update"]
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      WATCHTOWER_CLEANUP: "true"
+      WATCHTOWER_LABEL_ENABLE: "true"
+      WATCHTOWER_POLL_INTERVAL: "21600" # 6 óránként ellenőrzi az új verziót
