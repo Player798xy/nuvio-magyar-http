@@ -6,8 +6,16 @@
 [![Élő TV](https://img.shields.io/badge/Élő_TV-162_Adó_%2B_EPG-red?style=for-the-badge)](#4-élő-tv-162-magyar-csatorna--valós-idejű-epg)
 [![Katalógusok](https://img.shields.io/badge/Katalógusok-17_(11_VOD_%2B_6_Élő_TV)-orange?style=for-the-badge)](#7-katalógusok-poszter--forrás-garancia)
 [![Licenc](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Közös_Szerver_Támogatás-13C3FF?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/playerxy)
 
 Közvetlen **Direct HTTP** magyar szinkronos és feliratos film-, sorozat-, mese- és élő TV-streamek **Nuvio** és **Stremio** lejátszókhoz — **torrent (P2P), Real-Debrid előfizetés és videó proxy nélkül (`Zero Proxy`)!**
+
+- **Telepítés & Konfigurátor (Render):** 👉 **[https://nuvio-magyar-http.onrender.com](https://nuvio-magyar-http.onrender.com)** *(Manifest: `https://nuvio-magyar-http.onrender.com/manifest.json`)*
+- **Élő TV kompatibilitás:** Nuvio-ban teljesen működik (és PC-s Stremión is jó), Stremio Androidon jelenleg nem megy a sima HTTP / relatív `.ts` szegmensek miatt.
+
+> ☕ **Közös szerver támogatás (Teljesen opcionális — mindig 100% ingyenes!)**  
+> A növekvő forgalom miatt az ingyenes tárhelyek (korábban Vercel, most Render) szűk korlátai hamar betelnek. A cél, hogy közösen összeálljunk egy saját **budapesti szerverre (ServerAstra VPS — 4,99 € / ~2 000 Ft havonta, 4 TB/hó)**, hogy gond nélkül elbírja az összes felhasználót leállások nélkül, és a támogatás az extra fejlesztésekben is sokat segít. Minden csatorna és funkció mindig 100% ingyenes marad!  
+> 👉 **Ko-fi:** [https://ko-fi.com/playerxy](https://ko-fi.com/playerxy) · **QR-kód oldal TV-hez:** [https://nuvio-magyar-http.onrender.com/tamogatas](https://nuvio-magyar-http.onrender.com/tamogatas)
 
 ---
 
