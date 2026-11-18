@@ -191,7 +191,7 @@ async function runVerification() {
       if (!renderVod.streams?.[0]?.name?.includes('☕') || !renderVod.streams?.[0]?.externalUrl?.includes('/tamogatas.html')) {
         fail('Render VOD streams[0] missing top standout Ko-fi TV QR notice');
       }
-      if (!renderVod.streams?.[0]?.title?.includes('OPCIONÁLIS') || !renderVod.streams?.[0]?.title?.toLowerCase().includes('ingyenes')) {
+      if (!renderVod.streams?.[0]?.title?.toLowerCase().includes('opcionális') || !renderVod.streams?.[0]?.title?.toLowerCase().includes('ingyenes')) {
         fail('Render VOD streams[0] must clearly state optional + always free');
       }
       if (!renderVod.streams?.[1]?.url || !renderVod.streams?.[1]?.behaviorHints?.bingeGroup) {

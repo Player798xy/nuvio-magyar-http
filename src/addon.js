@@ -193,14 +193,11 @@ function buildSupportNoticeStream(config = {}) {
   const shortSupportPath = `${hostOrigin.replace(/^https?:\/\//i, '')}/tamogatas`;
 
   return {
-    name: [
-      '💠☕ TÁMOGATÁS',
-      '🆓 MINDIG INGYENES'
-    ].join('\n'),
+    name: '☕ Támogatás\nMindig ingyenes',
     title: [
-      '🔷【 OPCIONÁLIS · MINDIG MINDEN OPCIÓ INGYENES 】🔷',
-      '☕ Cél: BP VPS (4,99 €/hó · 4 TB) → Android & Web élő TV!',
-      `📱 TV QR & infó: ${shortSupportPath}  ·  👇 Videók lent`
+      'Teljesen opcionális — mindig minden opció 100% ingyenes marad!',
+      'Cél: közös saját szerver (4,99 €/hó), hogy bírja az összes felhasználót, és segít a további fejlesztésekben is.',
+      `Támogatáshoz kattints ide (böngészőben nyílik): ${shortSupportPath} · Videók lejjebb`
     ].join('\n'),
     externalUrl: supportPageUrl,
     behaviorHints: {
