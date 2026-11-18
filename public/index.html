@@ -2653,7 +2653,9 @@
   <div id="toast" class="toast"></div>
 
   <script>
-    const origin = window.location.origin;
+    const privateMatch = window.location.pathname.match(/^(\/p\/[^/]+)/);
+    const privatePrefix = privateMatch ? privateMatch[1] : '';
+    const origin = window.location.origin + privatePrefix;
 
     const ALL_VOD_SOURCE_IDS = [
       'mediaklikk','videa','indavideo','hdmozi','filmvilag2','jobbmintatv',
@@ -3391,7 +3393,10 @@
     function hydrateConfigFromUrl() {
       try {
         let cfg = null;
-        const pathMatch = window.location.pathname.match(/^\/([^/]+)\/configure\/?$/);
+        const cleanPathname = privatePrefix && window.location.pathname.startsWith(privatePrefix)
+          ? (window.location.pathname.slice(privatePrefix.length) || '/')
+          : window.location.pathname;
+        const pathMatch = cleanPathname.match(/^\/([^/]+)\/configure\/?$/);
         if (pathMatch && pathMatch[1]) {
           const rawB64 = decodeURIComponent(pathMatch[1]).replace(/-/g, '+').replace(/_/g, '/');
           const padded = rawB64 + '='.repeat((4 - (rawB64.length % 4)) % 4);

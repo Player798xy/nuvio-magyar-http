@@ -196,6 +196,21 @@ app.use((req, res, next) => {
     return res.status(410).type('html').send(buildPublicShutdownHtml());
   }
 
+  const accessKey = String(process.env.ACCESS_KEY || '').trim();
+  if (accessKey) {
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+    if (req.path !== '/api/health') {
+      const expectedPrefix = `/p/${accessKey}`;
+      const hasExactPrefix = req.path === expectedPrefix || req.path.startsWith(`${expectedPrefix}/`);
+      if (!hasExactPrefix) {
+        return res.status(404).type('text/plain').send('Not Found');
+      }
+      req._privatePrefix = expectedPrefix;
+      const remainder = req.url.slice(expectedPrefix.length);
+      req.url = remainder.startsWith('/') ? remainder : (remainder.startsWith('?') ? `/${remainder}` : `/${remainder}`);
+    }
+  }
+
   if (req.path === '/uj-link' || req.path === '/uj-link.html' || req.path === '/tamogatas' || req.path === '/tamogatas.html') {
     res.setHeader('X-Robots-Tag', 'noindex, follow');
   } else if (isVercelRequest(req) && (req.path === '/' || req.path === '/configure' || req.path.endsWith('/configure'))) {
@@ -218,8 +233,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static landing & configuration page + logos + channel icons
+// Serve static landing & configuration page + logos + channel icons (index: false lets private prefix rewriter handle /)
 app.use(express.static(path.join(__dirname, 'public'), {
+  index: false,
   etag: true,
   maxAge: '1h',
   setHeaders: (res, filePath) => {
@@ -276,7 +292,7 @@ function parseConfig(configParam, query = {}) {
 function getHostUrl(req) {
   const proto = String(req.headers['x-forwarded-proto'] || req.protocol || 'http').split(',')[0].trim();
   const host = String(req.headers['x-forwarded-host'] || req.get('host') || `127.0.0.1:${PORT}`).split(',')[0].trim();
-  return `${proto}://${host}`;
+  return `${proto}://${host}${req._privatePrefix || ''}`;
 }
 
 /**
@@ -1307,16 +1323,32 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+let cachedIndexHtml = null;
+function sendConfiguratorHtml(req, res) {
+  if (!cachedIndexHtml) {
+    cachedIndexHtml = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
+  }
+  const prefix = req._privatePrefix || '';
+  if (!prefix) {
+    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800');
+    return res.type('html').send(cachedIndexHtml);
+  }
+  res.setHeader('Cache-Control', 'private, no-store');
+  const rewritten = cachedIndexHtml.replace(
+    /(href|src)="\/(logo\.svg|logo\.png|favicon\.ico|configure|playlist\.xspf|playlist\.m3u|live_stream_speed_benchmark\.xlsx|live_tv_1080p_audit\.xlsx)/g,
+    `$1="${prefix}/$2`
+  );
+  return res.type('html').send(rewritten);
+}
+
 // Configure & Index Routes
 app.get(['/configure', '/:config/configure'], (req, res) => {
-  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800');
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  return sendConfiguratorHtml(req, res);
 });
 
 // Catch-all route to serve index.html for root
 app.get('/', (req, res) => {
-  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800');
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  return sendConfiguratorHtml(req, res);
 });
 
 if (require.main === module) {

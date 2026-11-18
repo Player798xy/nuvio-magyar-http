@@ -103,7 +103,7 @@ function getCdnPublicBaseUrl() {
 function rewriteStaticAssetUrl(rawUrl, cdnBase = getCdnPublicBaseUrl()) {
   if (!rawUrl || !cdnBase) return rawUrl;
   const s = String(rawUrl).trim();
-  const match = s.match(/^https?:\/\/[^/]+\/((?:tv-posters|tv-backgrounds|tv-logos|channels)\/[^?#\s]+\.png|logo\.png|icon\.png)(?:\?[^#\s]*)?$/i);
+  const match = s.match(/^https?:\/\/[^/]+(?:\/p\/[^/]+)?\/((?:tv-posters|tv-backgrounds|tv-logos|channels)\/[^?#\s]+\.png|logo\.png|icon\.png)(?:\?[^#\s]*)?$/i);
   if (!match) return s;
   return `${cdnBase}/${match[1]}`;
 }

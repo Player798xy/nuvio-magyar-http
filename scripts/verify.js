@@ -371,6 +371,47 @@ async function runVerification() {
     }
     console.log(`✅ 13. Catalog (${catHitMs}ms), Search (${searchHitMs}ms), Curated Meta (${metaHitMs}ms), Cinemeta 302 Offload & ETag 304 OK`);
 
+    // 14. Private ACCESS_KEY Mode (/p/<ACCESS_KEY>/ prefix lock)
+    const prevAccessKey = process.env.ACCESS_KEY;
+    try {
+      process.env.ACCESS_KEY = 'secret-test-token-42';
+      const [
+        unauthHomeRes,
+        unauthManifestRes,
+        unauthWrongPrefixRes,
+        privHealthRes,
+        privHomeRes,
+        privManifestRes,
+        privStreamRes
+      ] = await Promise.all([
+        fetch(`${base}/`),
+        fetch(`${base}/manifest.json`),
+        fetch(`${base}/p/wrong-token/manifest.json`),
+        fetch(`${base}/api/health`),
+        fetch(`${base}/p/secret-test-token-42/`),
+        fetch(`${base}/p/secret-test-token-42/manifest.json`).then((r) => r.json()),
+        fetch(`${base}/p/secret-test-token-42/stream/movie/onlinestream-live-5903.json`).then((r) => r.json())
+      ]);
+      if (unauthHomeRes.status !== 404 || unauthManifestRes.status !== 404 || unauthWrongPrefixRes.status !== 404) {
+        fail(`ACCESS_KEY must return 404 for unauthenticated paths, got ${unauthHomeRes.status}/${unauthManifestRes.status}/${unauthWrongPrefixRes.status}`);
+      }
+      if (privHealthRes.status !== 200) fail(`/api/health should remain 200 when ACCESS_KEY is set, got ${privHealthRes.status}`);
+      if (privHomeRes.status !== 200) fail(`Private /p/<ACCESS_KEY>/ configurator failed: HTTP ${privHomeRes.status}`);
+      const privHomeHtml = await privHomeRes.text();
+      if (!privHomeHtml.includes('src="/p/secret-test-token-42/logo.svg')) {
+        fail('Private configurator HTML missing /p/<ACCESS_KEY>/ asset rewrite');
+      }
+      if (!privManifestRes?.logo?.includes('/p/secret-test-token-42/logo.png') || !privManifestRes?.catalogs?.length) {
+        fail(`Private /p/<ACCESS_KEY>/manifest.json failed: logo=${privManifestRes?.logo}`);
+      }
+      if (!privStreamRes?.streams?.[0]?.url) {
+        fail('Private /p/<ACCESS_KEY>/stream/ failed to resolve live stream');
+      }
+    } finally {
+      if (prevAccessKey === undefined) delete process.env.ACCESS_KEY; else process.env.ACCESS_KEY = prevAccessKey;
+    }
+    console.log('✅ 14. Private ACCESS_KEY Lock (404 public / 200 /p/<ACCESS_KEY>/) OK');
+
     if (hasError) {
       process.exitCode = 1;
       console.error('\n❌ One or more verification assertions failed.');
