@@ -2,37 +2,12 @@
  * Metadata resolver: fetches Cinemeta info and resolves localized Hungarian titles via Wikipedia / Wikidata.
  */
 
+const { createBoundedCache } = require('../cache');
+
 const TMDB_API_KEY = process.env.TMDB_API_KEY || 'ffe7ef8916c61835264d2df68276ddc2';
 const META_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
-const MAX_META_CACHE = 400;
-const rawMetaCache = new Map();
-const metaCache = {
-  has(k) {
-    const entry = rawMetaCache.get(k);
-    if (!entry) return false;
-    if (Date.now() - entry.ts >= META_CACHE_TTL_MS) {
-      rawMetaCache.delete(k);
-      return false;
-    }
-    return true;
-  },
-  get(k) {
-    const entry = rawMetaCache.get(k);
-    if (!entry) return undefined;
-    if (Date.now() - entry.ts >= META_CACHE_TTL_MS) {
-      rawMetaCache.delete(k);
-      return undefined;
-    }
-    return entry.val;
-  },
-  set(k, val) {
-    if (rawMetaCache.size >= MAX_META_CACHE) {
-      const oldest = rawMetaCache.keys().next().value;
-      if (oldest !== undefined) rawMetaCache.delete(oldest);
-    }
-    rawMetaCache.set(k, { ts: Date.now(), val });
-  }
-};
+const MAX_META_CACHE = 120;
+const metaCache = createBoundedCache({ maxEntries: MAX_META_CACHE, ttlMs: META_CACHE_TTL_MS });
 let magyarNepmesekData = null;
 try {
   magyarNepmesekData = require('../data/magyar_nepmesek_episodes.json');
@@ -867,7 +842,7 @@ async function fetchTmdbSeriesEpisodes(cleanId, fallbackTitle = '') {
   }
 }
 
-const seriesEpisodesCache = new Map();
+const seriesEpisodesCache = createBoundedCache({ maxEntries: 80, ttlMs: META_CACHE_TTL_MS });
 
 async function getSeriesEpisodes(imdbId) {
   if (!imdbId) return null;

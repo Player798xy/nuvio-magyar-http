@@ -80,7 +80,7 @@ const FEATURED_HUNGARIAN_MOVIES = [
   { id: 'tt0848228', name: 'Bosszúállók (The Avengers)', type: 'movie', poster: 'https://images.metahub.space/poster/medium/tt0848228/img', background: 'https://images.metahub.space/poster/medium/tt0848228/img', releaseInfo: '2012', year: '2012', description: 'Marvel Bosszúállók magyar szinkronnal.' }
 ];
 
-const actorFilmographyCache = createBoundedCache({ maxEntries: 300, ttlMs: 12 * 60 * 60 * 1000 });
+const actorFilmographyCache = createBoundedCache({ maxEntries: 100, ttlMs: 12 * 60 * 60 * 1000 });
 
 /**
  * Searches filmography when user queries an actor or person name (e.g. "Bud Spencer", "Terence Hill").
@@ -166,7 +166,7 @@ async function searchActorFilmography(query) {
   ).then(res => (Array.isArray(res) ? res : []));
 }
 
-const huToEnCache = createBoundedCache({ maxEntries: 400, ttlMs: 12 * 60 * 60 * 1000 });
+const huToEnCache = createBoundedCache({ maxEntries: 150, ttlMs: 12 * 60 * 60 * 1000 });
 
 /**
  * Resolves Hungarian movie/series titles to original English franchise/title via Wikipedia & langlinks
@@ -365,7 +365,7 @@ async function executeMultiSourceSearch(type, query) {
 
 const SEARCH_CACHE_TTL_MS = 60 * 60 * 1000;
 const SEARCH_EMPTY_CACHE_TTL_MS = 2 * 60 * 1000;
-const CATALOG_SEARCH_CACHE = createBoundedCache({ maxEntries: 350, ttlMs: SEARCH_CACHE_TTL_MS });
+const CATALOG_SEARCH_CACHE = createBoundedCache({ maxEntries: 100, ttlMs: SEARCH_CACHE_TTL_MS });
 
 async function searchCatalog(type, query, catalogId = null, extra = {}) {
   const skipNum = typeof extra === 'number' ? extra : (extra?.skip || 0);
@@ -716,8 +716,8 @@ function scoreItemRelevance(itemTitle, query, itemId = '') {
 const VOD_META_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const VOD_META_EMPTY_TTL_MS = 2 * 60 * 1000;
 const LIVE_META_CACHE_TTL_MS = 3 * 60 * 1000;
-const VOD_META_CACHE = createBoundedCache({ maxEntries: 400, ttlMs: VOD_META_CACHE_TTL_MS });
-const LIVE_META_CACHE = createBoundedCache({ maxEntries: 250, ttlMs: LIVE_META_CACHE_TTL_MS });
+const VOD_META_CACHE = createBoundedCache({ maxEntries: 120, ttlMs: VOD_META_CACHE_TTL_MS });
+const LIVE_META_CACHE = createBoundedCache({ maxEntries: 180, ttlMs: LIVE_META_CACHE_TTL_MS });
 
 async function getMeta(type, id, hostUrl = null) {
   if (!id) return null;

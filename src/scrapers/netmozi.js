@@ -13,6 +13,7 @@ const { isDownloadOnlyHost, isUrlIpLocked } = require('../utils/netmozi_hosters'
 const { extractVideaStreams } = require('./videa');
 const { extractIndavideoStreams } = require('./indavideo');
 const { extractOkRuStreams } = require('./filmezek');
+const { createBoundedMap } = require('../cache');
 
 function escapeRegex(str) {
   return String(str || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -41,8 +42,8 @@ function isRemoteHostContext(hostUrl) {
   return Boolean(hostUrl && !isLocalHostUrl(hostUrl));
 }
 
-const netmoziTitleCache = new Map();
-const netmoziSlugCache = new Map();
+const netmoziTitleCache = createBoundedMap(350);
+const netmoziSlugCache = createBoundedMap(350);
 
 function getNetMoziTitle(mid) {
   return netmoziTitleCache.get(String(mid)) || '';
@@ -158,11 +159,22 @@ function netmoziTlsRequest(targetUrl, options = {}, cookieJar = new Map()) {
       }
     });
 
+    const MAX_TLS_BODY_BYTES = 4 * 1024 * 1024;
     const chunks = [];
-    socket.on('data', d => chunks.push(d));
+    let totalBytes = 0;
+    socket.on('data', d => {
+      totalBytes += d.length;
+      if (totalBytes > MAX_TLS_BODY_BYTES) {
+        chunks.length = 0;
+        socket.destroy();
+        return reject(new Error('NetMozi TLS response too large'));
+      }
+      chunks.push(d);
+    });
 
     socket.on('end', () => {
       const fullBuf = Buffer.concat(chunks);
+      chunks.length = 0;
       let headerEnd = -1;
       for (let i = 0; i < fullBuf.length - 3; i++) {
         if (fullBuf[i] === 0x0D && fullBuf[i + 1] === 0x0A && fullBuf[i + 2] === 0x0D && fullBuf[i + 3] === 0x0A) {

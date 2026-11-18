@@ -88,6 +88,31 @@ function createBoundedCache({ maxEntries = 300, ttlMs = 60 * 60 * 1000 } = {}) {
   };
 }
 
+/**
+ * Drop-in bounded Map with oldest-entry eviction to prevent unbounded heap growth.
+ */
+class BoundedMap extends Map {
+  constructor(maxEntries = 300) {
+    super();
+    this.maxEntries = Math.max(1, Number(maxEntries) || 300);
+  }
+
+  set(key, value) {
+    if (super.has(key)) {
+      super.delete(key);
+    } else if (this.size >= this.maxEntries) {
+      const oldestKey = this.keys().next().value;
+      if (oldestKey !== undefined) super.delete(oldestKey);
+    }
+    return super.set(key, value);
+  }
+}
+
+function createBoundedMap(maxEntries = 300) {
+  return new BoundedMap(maxEntries);
+}
+
 module.exports = {
-  createBoundedCache
+  createBoundedCache,
+  createBoundedMap
 };

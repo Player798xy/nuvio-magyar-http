@@ -103,11 +103,23 @@ function cfRequest(urlStr, options = {}, redirectCount = 4) {
       }
     );
 
+    const MAX_CF_BODY_BYTES = 4 * 1024 * 1024;
     const chunks = [];
-    socket.on('data', (c) => chunks.push(c));
+    let totalBytes = 0;
+    socket.on('data', (c) => {
+      totalBytes += c.length;
+      if (totalBytes > MAX_CF_BODY_BYTES) {
+        chunks.length = 0;
+        clearTimeout(timer);
+        try { socket.destroy(); } catch {}
+        return done(null);
+      }
+      chunks.push(c);
+    });
     socket.on('end', async () => {
       clearTimeout(timer);
       const raw = Buffer.concat(chunks);
+      chunks.length = 0;
       const sep = raw.indexOf('\r\n\r\n');
       if (sep === -1) return done(null);
 

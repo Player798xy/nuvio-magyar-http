@@ -67,7 +67,7 @@ const VOD_STREAM_CACHE = new Map();
 const INFLIGHT_VOD_SCRAPES = new Map();
 const VOD_CACHE_TTL_MS = 60 * 60 * 1000;
 const VOD_EMPTY_CACHE_TTL_MS = 5 * 60 * 1000;
-const MAX_VOD_CACHE = 250;
+const MAX_VOD_CACHE = 100;
 
 function isRenderRuntime() {
   return Boolean(

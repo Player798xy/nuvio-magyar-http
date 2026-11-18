@@ -4,7 +4,8 @@ WORKDIR /app
 
 ENV NODE_ENV=production \
     PORT=7000 \
-    TZ=Europe/Budapest
+    TZ=Europe/Budapest \
+    NODE_OPTIONS="--max-old-space-size=256 --max-semi-space-size=8"
 
 RUN apk add --no-cache tzdata
 

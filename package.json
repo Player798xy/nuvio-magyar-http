@@ -4,7 +4,7 @@
   "description": "Magyar HTTP Streaming Addon Nuvio & Stremio kliensekhez (magyar filmek, sorozatok, feliratok & Élő TV EPG)",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node --max-old-space-size=220 --max-semi-space-size=8 server.js",
     "dev": "node --watch server.js",
     "test": "node scripts/verify.js"
   },

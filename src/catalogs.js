@@ -14,8 +14,8 @@ const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 // Bounded in-memory catalog (24h, invalidated immediately on weekly seed rotation) and IMDb mapping (7d) caches
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const CATALOG_EMPTY_TTL_MS = 2 * 60 * 1000;
-const catalogCache = createBoundedCache({ maxEntries: 300, ttlMs: CACHE_TTL_MS });
-const imdbIdCache = createBoundedCache({ maxEntries: 2500, ttlMs: 7 * 24 * 60 * 60 * 1000 });
+const catalogCache = createBoundedCache({ maxEntries: 100, ttlMs: CACHE_TTL_MS });
+const imdbIdCache = createBoundedCache({ maxEntries: 1000, ttlMs: 7 * 24 * 60 * 60 * 1000 });
 
 /**
  * Returns deterministic ISO Year-Week seed (changes every week on Monday 00:00 UTC)

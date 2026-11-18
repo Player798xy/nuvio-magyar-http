@@ -23,7 +23,7 @@ function normalize(str) {
 
 const INDA_EXTRACT_CACHE = new Map();
 const INDA_CACHE_TTL_MS = 15 * 60 * 1000;
-const MAX_INDA_CACHE = 200;
+const MAX_INDA_CACHE = 80;
 
 async function extractIndavideoStreams(embHash) {
   if (!embHash) return null;

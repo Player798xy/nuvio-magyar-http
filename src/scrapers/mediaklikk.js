@@ -6,6 +6,7 @@
  */
 
 // Official MTVA Live TV Channels with high-definition static branding posters and logos
+const { createBoundedMap } = require('../cache');
 const HOST_URL = process.env.HOST_URL || 'https://nuvio-magyar-http.vercel.app';
 
 const LIVE_CHANNELS = [
@@ -95,15 +96,15 @@ const LIVE_CHANNELS = [
   }
 ];
 
-// In-memory cache for live stream URLs (HLS tokens are valid for ~2-3 hours)
-const LIVE_STREAM_CACHE = new Map();
+// Bounded in-memory cache for live stream URLs (HLS tokens are valid for ~2-3 hours)
+const LIVE_STREAM_CACHE = createBoundedMap(200);
 const LIVE_CACHE_TTL_MS = 60 * 60 * 1000; // 60 minutes
 
-// In-memory cache for MédiaKlikk programs and series episodes
+// Bounded in-memory cache for MédiaKlikk programs and series episodes
 let mediaklikkProgramsCache = null;
 let lastProgramsRefresh = 0;
 const PROGRAMS_REFRESH_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
-const showEpisodesCache = new Map();
+const showEpisodesCache = createBoundedMap(60);
 
 // 100% Verified & Tested MédiaKlikk (MTVA) Classic Series Catalog
 const VERIFIED_MEDIAKLIKK_CLASSICS = [

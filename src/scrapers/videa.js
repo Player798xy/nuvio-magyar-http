@@ -156,7 +156,7 @@ async function extractVideaFCodeStreams(fcode) {
 const VIDEA_EXTRACT_CACHE = new Map();
 const VIDEA_INFLIGHT = new Map();
 const VIDEA_CACHE_TTL_MS = 15 * 60 * 1000;
-const MAX_VIDEA_CACHE = 250;
+const MAX_VIDEA_CACHE = 80;
 
 /**
  * Extracts streams and metadata (including duration in seconds) from a Videa video code

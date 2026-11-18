@@ -7,7 +7,7 @@ const TMDB_API_KEY = process.env.TMDB_API_KEY || 'ffe7ef8916c61835264d2df68276dd
 const SUBTITLES_CACHE = new Map();
 const IMDB_FROM_TMDB_CACHE = new Map();
 const CACHE_TTL_MS = 2 * 60 * 60 * 1000;
-const MAX_CACHE_ENTRIES = 400;
+const MAX_CACHE_ENTRIES = 150;
 
 function setBoundedCache(map, key, val) {
   if (map.size >= MAX_CACHE_ENTRIES) {

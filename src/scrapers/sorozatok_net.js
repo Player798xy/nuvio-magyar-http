@@ -18,8 +18,8 @@ function normalizeTitle(str) {
 let searchIndexCache = null;
 let searchIndexTime = 0;
 const seriesPageCache = new Map();
-const PAGE_CACHE_TTL_MS = 15 * 60 * 1000;
-const MAX_PAGE_CACHE = 80;
+const PAGE_CACHE_TTL_MS = 10 * 60 * 1000;
+const MAX_PAGE_CACHE = 15;
 
 async function getSorozatokIndex() {
   if (searchIndexCache && Date.now() - searchIndexTime < 6 * 3600 * 1000) {

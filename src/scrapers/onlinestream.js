@@ -14,7 +14,7 @@ const HOST_URL = process.env.HOST_URL || 'https://nuvio-magyar-http.onrender.com
 // Static direct .m3u8 servers cache 30 min; redirected/tokenized servers cache 12 min
 const STATIC_STREAM_CACHE_TTL_MS = 30 * 60 * 1000;
 const DYNAMIC_STREAM_CACHE_TTL_MS = 12 * 60 * 1000;
-const STREAM_CACHE = createBoundedCache({ maxEntries: 500, ttlMs: STATIC_STREAM_CACHE_TTL_MS });
+const STREAM_CACHE = createBoundedCache({ maxEntries: 200, ttlMs: STATIC_STREAM_CACHE_TTL_MS });
 
 // Verified Ground-Truth Video Heights (px)
 const VERIFIED_CHANNEL_HEIGHTS = {

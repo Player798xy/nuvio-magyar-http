@@ -5,7 +5,7 @@ const UPSTASH_URL = String(process.env.UPSTASH_REDIS_REST_URL || '').trim().repl
 const UPSTASH_TOKEN = String(process.env.UPSTASH_REDIS_REST_TOKEN || '').trim();
 
 const BOT_UA_RE = /(cron-job|uptimerobot|better[\s-]?stack|statuscake|hetrixtools|googlebot|bingbot|yandexbot|ahrefsbot|semrushbot|petalbot|bytespider|mj12bot|render\/|pingdom|newrelicpinger)/i;
-const MAX_DAILY_HASHES = 20000;
+const MAX_DAILY_HASHES = 10000;
 const MAX_TOP_ITEMS = 250;
 const FLUSH_INTERVAL_MS = 15000;
 

@@ -233,7 +233,7 @@ function sanitizeMetaPreview(item, defaultType = 'movie') {
 const CATALOG_BROWSE_CACHE_MS = 24 * 60 * 60 * 1000;
 const CATALOG_SEARCH_CACHE_MS = 30 * 60 * 1000;
 const CATALOG_EMPTY_CACHE_MS = 2 * 60 * 1000;
-const CATALOG_RESPONSE_CACHE = createBoundedCache({ maxEntries: 250, ttlMs: CATALOG_BROWSE_CACHE_MS });
+const CATALOG_RESPONSE_CACHE = createBoundedCache({ maxEntries: 80, ttlMs: CATALOG_BROWSE_CACHE_MS });
 
 // 3. Catalog Routes (Enables searching and browsing Hungarian movies/series in Nuvio & Stremio)
 async function handleCatalog(req, res) {
