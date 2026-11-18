@@ -50,21 +50,159 @@ app.use(cors({
 }));
 app.options('*', cors());
 
+const LEGACY_PUBLIC_HOSTS = new Set([
+  'nuvio-magyar-http.onrender.com',
+  'nuvio-magyar-http.vercel.app'
+]);
+
+const GITHUB_REPO_URL = 'https://github.com/Player798xy/nuvio-magyar-http';
+const VERCEL_CLONE_URL = 'https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FPlayer798xy%2Fnuvio-magyar-http';
+
+function getNormalizedRequestHost(req) {
+  return String(req.headers['x-forwarded-host'] || req.get('host') || '')
+    .split(',')[0]
+    .trim()
+    .toLowerCase()
+    .replace(/:\d+$/, '');
+}
+
+function isLegacyAuthorPublicHost(req) {
+  if (process.env.PUBLIC_SHUTDOWN === '1') return true;
+  if (process.env.ALLOW_LEGACY_PUBLIC_HOST === '1') return false;
+  if (process.env.RENDER_SERVICE_ID === 'srv-dbtghautlv9c73fajam0') return true;
+  if (String(process.env.RENDER_EXTERNAL_URL || '').toLowerCase().includes('nuvio-magyar-http.onrender.com')) return true;
+  if (String(process.env.VERCEL_PROJECT_PRODUCTION_URL || '').toLowerCase() === 'nuvio-magyar-http.vercel.app') return true;
+  const host = getNormalizedRequestHost(req);
+  if (LEGACY_PUBLIC_HOSTS.has(host)) return true;
+  return host.startsWith('nuvio-magyar-http-') && host.endsWith('.vercel.app');
+}
+
+function buildPublicShutdownHtml() {
+  return `<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Nyilvános szerver leállítva — Magyar Streaming Pro</title>
+  <style>
+    body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: #070707; color: #ececec; display: grid; place-items: center; min-height: 100vh; padding: 20px; }
+    .card { max-width: 620px; background: #121212; border: 1px solid #2b2b2b; border-radius: 12px; padding: 28px; line-height: 1.55; }
+    h1 { font-size: 22px; margin: 0 0 12px; color: #ff6b6b; }
+    p { margin: 0 0 14px; color: #c8c8c8; font-size: 15px; }
+    strong { color: #ffffff; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    a.btn { display: inline-block; padding: 10px 16px; border-radius: 7px; font-weight: 700; font-size: 14px; text-decoration: none; }
+    .btn-vercel { background: #ffffff; color: #050505; }
+    .btn-gh { background: #10b981; color: #032016; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>⛔ Nyilvános szerver véglegesen leállítva</h1>
+    <p>
+      A fejlesztő a továbbiakban <strong>nem hosztol nyilvános szervert</strong> (a publikus Render és Vercel linkek megszűntek).
+    </p>
+    <p>
+      A kód nyílt forráskódú (MIT): <strong>bárki szabadon nyithat magának saját ingyenes Vercelt</strong>, vagy futtathatja otthon saját gépen / Dockerrel a GitHub repóból.
+    </p>
+    <p style="font-size:13.5px;color:#9a9a9a">
+      <strong>English:</strong> Public hosting has been permanently discontinued. Anyone is free to deploy their own private Vercel instance or self-host via Docker/Node.js from GitHub.
+    </p>
+    <div class="actions">
+      <a class="btn btn-vercel" href="${VERCEL_CLONE_URL}" target="_blank" rel="noopener">▲ Saját Vercel indítása (1 kattintás)</a>
+      <a class="btn btn-gh" href="${GITHUB_REPO_URL}" target="_blank" rel="noopener">GitHub &amp; Docker Útmutató →</a>
+    </div>
+  </main>
+</body>
+</html>`;
+}
+
 function isVercelRequest(req) {
   if (process.env.RENDER || process.env.RENDER_EXTERNAL_URL || process.env.RENDER_SERVICE_ID) return false;
-  const host = String(req.headers['x-forwarded-host'] || req.get('host') || '').toLowerCase();
+  const host = getNormalizedRequestHost(req);
   return Boolean(process.env.VERCEL || process.env.VERCEL_URL || host.includes('.vercel.app'));
 }
 
-// Keep Vercel domain out of Google index so Render primary URL ranks first & track anonymous stats
+// Block author's retired public hosts while allowing private user-hosted / own Vercel forks
 app.use((req, res, next) => {
+  if (isLegacyAuthorPublicHost(req)) {
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+
+    if (req.path === '/api/health') {
+      return res.json({
+        status: 'discontinued',
+        publicHosting: false,
+        version: pkg.version || '2.7.0',
+        github: GITHUB_REPO_URL,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    if (req.path === '/manifest.json' || req.path.endsWith('/manifest.json')) {
+      return res.json({
+        id: 'hu.nuvio.magyar.streams',
+        version: pkg.version || '2.7.0',
+        name: 'Magyar Streaming Pro [Nyilvános szerver leállítva]',
+        description: `A publikus hosztolás megszűnt. Nyiss saját ingyenes Vercel vagy Docker példányt: ${GITHUB_REPO_URL}`,
+        logo: `${GITHUB_REPO_URL}/raw/main/public/logo.png`,
+        resources: ['stream'],
+        types: ['movie', 'series', 'tv'],
+        catalogs: [],
+        behaviorHints: { configurable: false, configurationRequired: false }
+      });
+    }
+
+    if (req.path.includes('/stream/')) {
+      return res.json({
+        streams: [{
+          name: '⛔ Nyilvános szerver leállítva',
+          title: [
+            'A fejlesztő többé nem hosztol nyilvános szervert.',
+            'Szabadon nyithatsz saját ingyenes Vercelt vagy Docker szervert:',
+            GITHUB_REPO_URL
+          ].join('\n'),
+          externalUrl: GITHUB_REPO_URL,
+          behaviorHints: { notWebReady: true }
+        }]
+      });
+    }
+
+    if (
+      req.path.endsWith('.json') ||
+      req.path.startsWith('/catalog/') ||
+      req.path.includes('/catalog/') ||
+      req.path.startsWith('/meta/') ||
+      req.path.includes('/meta/') ||
+      req.path.startsWith('/subtitles/') ||
+      req.path.includes('/subtitles/') ||
+      req.path.startsWith('/api/')
+    ) {
+      return res.status(410).json({
+        error: 'Public hosting discontinued. Deploy your own Vercel or self-host instance.',
+        github: GITHUB_REPO_URL,
+        deployVercel: VERCEL_CLONE_URL
+      });
+    }
+
+    if (req.path === '/robots.txt') {
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+      return res.send('User-agent: *\nDisallow: /\n');
+    }
+
+    return res.status(410).type('html').send(buildPublicShutdownHtml());
+  }
+
   if (req.path === '/uj-link' || req.path === '/uj-link.html' || req.path === '/tamogatas' || req.path === '/tamogatas.html') {
     res.setHeader('X-Robots-Tag', 'noindex, follow');
   } else if (isVercelRequest(req) && (req.path === '/' || req.path === '/configure' || req.path.endsWith('/configure'))) {
     res.setHeader('X-Robots-Tag', 'noindex, follow');
   }
 
-  // Offload heavy static PNG TV artwork & icons on Render to free jsDelivr CDN (saves ~26 MB/catalog load)
+  // Offload heavy static PNG TV artwork & icons on cloud runtimes to jsDelivr CDN
   const cdnBase = getCdnPublicBaseUrl();
   if (cdnBase && req.method === 'GET') {
     const assetMatch = req.path.match(/^\/((?:tv-posters|tv-backgrounds|tv-logos|channels)\/[a-zA-Z0-9._-]+\.png|logo\.png|icon\.png)$/i);
@@ -136,8 +274,8 @@ function parseConfig(configParam, query = {}) {
  * Helper to resolve public Host URL from request
  */
 function getHostUrl(req) {
-  const proto = req.headers['x-forwarded-proto'] || req.protocol || 'https';
-  const host = req.headers['x-forwarded-host'] || req.get('host') || 'nuvio-magyar-http.vercel.app';
+  const proto = String(req.headers['x-forwarded-proto'] || req.protocol || 'http').split(',')[0].trim();
+  const host = String(req.headers['x-forwarded-host'] || req.get('host') || `127.0.0.1:${PORT}`).split(',')[0].trim();
   return `${proto}://${host}`;
 }
 
@@ -1067,14 +1205,15 @@ app.get(['/tamogatas', '/tamogatas.html'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'tamogatas.html'));
 });
 
-// SEO: robots.txt & sitemap.xml prioritizing Render primary domain
+// SEO: robots.txt & sitemap.xml for private / custom self-hosted deployments
 app.get('/robots.txt', (req, res) => {
   res.setHeader('Content-Type', 'text/plain; charset=utf-8');
   res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400');
   if (isVercelRequest(req)) {
-    return res.send('User-agent: *\nAllow: /\n');
+    return res.send('User-agent: *\nDisallow: /\n');
   }
-  res.send('User-agent: *\nAllow: /\n\nSitemap: https://nuvio-magyar-http.onrender.com/sitemap.xml\n');
+  const hostUrl = getHostUrl(req);
+  res.send(`User-agent: *\nAllow: /\n\nSitemap: ${hostUrl}/sitemap.xml\n`);
 });
 
 app.get('/sitemap.xml', (req, res) => {
@@ -1083,15 +1222,16 @@ app.get('/sitemap.xml', (req, res) => {
   if (isVercelRequest(req)) {
     res.setHeader('X-Robots-Tag', 'noindex, follow');
   }
+  const hostUrl = getHostUrl(req);
   res.send(`<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://nuvio-magyar-http.onrender.com/</loc>
+    <loc>${hostUrl}/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://nuvio-magyar-http.onrender.com/configure</loc>
+    <loc>${hostUrl}/configure</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

@@ -1,27 +1,28 @@
 # 🇭🇺 Magyar HTTP Streams — Nuvio & Stremio Addon (`v2.7.0`)
 
-[![Render Status](https://img.shields.io/badge/Render_Cloud-Online_(EU_Frankfurt)-ff7b1c?style=for-the-badge&logo=render)](https://nuvio-magyar-http.onrender.com/configure)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FPlayer798xy%2Fnuvio-magyar-http)
 [![Zero Proxy](https://img.shields.io/badge/Zero_Proxy-0_Bájt_Videó_Forgalom-brightgreen?style=for-the-badge)](#3-miért-zero-proxy-és-okos-vercel-edge-cache)
 [![Magyar Feliratok](https://img.shields.io/badge/Magyar_Feliratok-OpenSubtitles_HU-blue?style=for-the-badge)](#5-magyar-feliratok-és-webes-kapcsoló)
 [![Élő TV](https://img.shields.io/badge/Élő_TV-162_Adó_%2B_EPG-red?style=for-the-badge)](#4-élő-tv-162-magyar-csatorna--valós-idejű-epg)
 [![Katalógusok](https://img.shields.io/badge/Katalógusok-17_(11_VOD_%2B_6_Élő_TV)-orange?style=for-the-badge)](#7-katalógusok-poszter--forrás-garancia)
 [![Licenc](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![Ko-fi](https://img.shields.io/badge/Ko--fi-Közös_Szerver_Támogatás-13C3FF?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/playerxy)
+
+> ## ⛔ NYILVÁNOS SZERVER LEÁLLÍTVA / PUBLIC HOSTING DISCONTINUED
+>
+> **Magyarul:** A fejlesztő **többé nem hosztol nyilvános publikus szervert** — a korábbi központi Render / Vercel linkek véglegesen leállításra kerültek.  
+> A projekt nyílt forráskódú (**MIT licenc**): **bárki szabadon nyithat magának saját ingyenes Vercelt** az alábbi gombbal, vagy futtathatja otthon saját gépen (**Docker / Node.js / Termux**) kizárólag saját használatra!
+>
+> **English:** All public hosted instances (`onrender.com`, `vercel.app`) have been **permanently shut down**. The author no longer hosts any public server. This repository remains open-source (MIT) — anyone is free to deploy their **own private Vercel instance** or **self-host** via Docker / Node.js.
 
 Közvetlen **Direct HTTP** magyar szinkronos és feliratos film-, sorozat-, mese- és élő TV-streamek **Nuvio** és **Stremio** lejátszókhoz — **torrent (P2P), Real-Debrid előfizetés és videó proxy nélkül (`Zero Proxy`)!**
 
-- **Telepítés & Konfigurátor (Render):** 👉 **[https://nuvio-magyar-http.onrender.com](https://nuvio-magyar-http.onrender.com)** *(Manifest: `https://nuvio-magyar-http.onrender.com/manifest.json`)*
 - **Élő TV kompatibilitás:** Nuvio-ban teljesen működik (és PC-s Stremión is jó), Stremio Androidon jelenleg nem megy a sima HTTP / relatív `.ts` szegmensek miatt.
-
-> ☕ **Közös szerver támogatás (Teljesen opcionális — mindig 100% ingyenes!)**  
-> A növekvő forgalom miatt az ingyenes tárhelyek (korábban Vercel, most Render) szűk korlátai hamar betelnek. A cél, hogy közösen összeálljunk egy saját **budapesti szerverre (ServerAstra VPS — 4,99 € / ~2 000 Ft havonta, 4 TB/hó)**, hogy gond nélkül elbírja az összes felhasználót leállások nélkül, és a támogatás az extra fejlesztésekben is sokat segít. Minden csatorna és funkció mindig 100% ingyenes marad!  
-> 👉 **Ko-fi:** [https://ko-fi.com/playerxy](https://ko-fi.com/playerxy) · **QR-kód oldal TV-hez:** [https://nuvio-magyar-http.onrender.com/tamogatas](https://nuvio-magyar-http.onrender.com/tamogatas)
 
 ---
 
 ## ✨ Újdonságok a `v2.7.0` kiadásban
 
-- **📝 Magyar Feliratok (`subtitles` resource) + Ki/Be Kapcsoló:** OpenSubtitles v3 (`hun`) + TMDB→IMDb feloldás magyar `.srt` feliratokkal filmekhez és sorozatokhoz. A [webes konfigurátorban](https://nuvio-magyar-http.onrender.com/configure) **külön kapcsolóval ki- vagy bekapcsolható** (`subtitles: true / false`).
+- **📝 Magyar Feliratok (`subtitles` resource) + Ki/Be Kapcsoló:** OpenSubtitles v3 (`hun`) + TMDB→IMDb feloldás magyar `.srt` feliratokkal filmekhez és sorozatokhoz. A saját példányod `/configure` oldalán **külön kapcsolóval ki- vagy bekapcsolható** (`subtitles: true / false`).
 - **📺 Valós Idejű Élő TV Műsorújság (EPG):** A `port.hu` műsoradatai alapján a csatorna adatlapján (`/meta`) és forrásválasztójában (`/stream`) azonnal látható a **Most** és **Következő** műsor címe és időpontja.
 - **🧹 162 Ellenőrzött Élő Adó (halott csatornák & tartalékok kiszűrve):** A végleg leállt adók (`Sopron TV`, `Viasat Nature`) és a hibás tartalék szerverek eltávolításával kizárólag működő élő streamek jelennek meg.
 - **⚡ Párhuzamosított Scraperek & Okos Edge CDN Cache:** Gyorsabb keresés (`Videa`, `Indavideo`, `MeseKincstár`, `OnlineFilmek`, `Sorozatok.net`, `Meta`) és Vercel Edge (`s-maxage`) gyorsítótárazás a minimális szerverterhelésért.
@@ -29,28 +30,24 @@ Közvetlen **Direct HTTP** magyar szinkronos és feliratos film-, sorozat-, mese
 
 ---
 
-## 🚀 1. Azonnali Telepítés (Elsődleges Render Szerver — EU Frankfurt)
+## 🚀 1. Saját Ingyenes Vercel Indítása (1 kattintás) — vagy Self-Host
 
-A kiegészítő azonnal használható a publikus európai (**Frankfurt EU Central**) Render szerverről *(a korábbi Vercel szerverről érdemes átállni erre)*:
+Mivel publikus szerver már nincs, **30 másodperc alatt csinálhatsz magadnak saját privát Vercelt** ingyenesen:
 
-- ⚙️ **Mobilbarát Konfigurátor & Stream Tesztelő (Ajánlott):**
-  👉 **[https://nuvio-magyar-http.onrender.com/configure](https://nuvio-magyar-http.onrender.com/configure)**
-- 🔗 **Alapértelmezett Manifest URL (Nuvio / Stremio bemásoláshoz):**
-  ```text
-  https://nuvio-magyar-http.onrender.com/manifest.json
-  ```
-- ⚡ **Stremio 1-kattintásos telepítés:**
-  ```text
-  stremio://nuvio-magyar-http.onrender.com/manifest.json
-  ```
+1. Kattints ide:  
+   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FPlayer798xy%2Fnuvio-magyar-http)
+2. Jelentkezz be a saját GitHub / Vercel fiókoddal, adj neki egy tetszőleges projektnevet, és nyomj a **Deploy** gombra.
+3. Kész is! Megkapod a saját privát címedet (pl. `https://sajat-neved.vercel.app`):
+   - **Konfigurátor:** `https://<sajat-domain>/configure`
+   - **Manifest URL:** `https://<sajat-domain>/manifest.json`
 
-> 💡 **Tipp a Konfigurációs oldalhoz (`/configure`):** A felbontásokon, forrásokon és katalógusokon felül itt kapcsolhatod ki vagy be a **Magyar Feliratokat (OpenSubtitles HU)** is — az egyedi URL azonnal generálódik és egyetlen kattintással másolható! *(Ha korábban már telepítetted az addont Nuvio-ba, frissítsd / telepítsd újra a `v2.7.0` URL-t, hogy az új `subtitles` funkció is megjelenjen.)*
+*(Ha az összes forrást el akarod érni beleértve a VOE / HDMozi / DMDAMedia streameket is, vagy otthoni NAS/Docker szerveren futtatnád, használd a lentebbi **Docker / Node.js Self-Host útmutatót**!)*
 
 ---
 
-## 🌐 2. Melyik forrás működik Vercelen és melyikhez kell Self-Host?
+## 🌐 2. Melyik forrás működik saját Vercelen és melyikhez kell Self-Host?
 
-A kiegészítő **13 magyar VOD streaming forrást** tartalmaz. Mivel a publikus **Vercel szerver** egy felhőalapú adatközpontban fut (AWS Frankfurt), és a kiegészítő **nem használ videó proxyt** (`Zero Proxy`), egyes fájlmegosztók viselkedése eltér a felhőben és otthoni interneten (**Self-Host**):
+A kiegészítő **13 magyar VOD streaming forrást** tartalmaz. Mivel a saját **Vercel szerver** egy felhőalapú adatközpontban fut, és a kiegészítő **nem használ videó proxyt** (`Zero Proxy`), egyes fájlmegosztók viselkedése eltér a felhőben és otthoni interneten (**Self-Host**):
 
 ### 📊 Teljes 13-Forrásos Kompatibilitási Táblázat
 
@@ -180,29 +177,9 @@ npm start
 
 ---
 
-## 📣 9. Közösségi Megosztás (Reddit Poszt Sablon)
+## 📣 9. Saját Vercel & Docker Megjegyzés
 
-<details>
-<summary>📋 <b>Kattints ide a Reddit poszt szövegének megnyitásához!</b></summary>
-
-```markdown
-# 🇭🇺 [Megosztás] Magyar HTTP Streams (v2.7.0) – Magyar filmek, sorozatok, feliratok és 162 Élő TV adó + EPG torrent, Debrid és proxy nélkül!
-
-Sziasztok!
-
-Elkészült a **Magyar HTTP Streams (`v2.7.0`)** addon **Nuvio** és **Stremio** lejátszókhoz — teljesen Zero Proxy módban, közvetlen HTTP (`1080p/720p MP4` és `HLS`) linkekkel!
-
-### ✨ Újdonságok és funkciók:
-- **📝 Magyar Feliratok (OpenSubtitles HU):** Automatikus magyar `.srt` feliratok filmekhez és sorozatokhoz (IMDb & TMDB), a webes konfigurátorban ki/be kapcsolható.
-- **📺 162 Élő Magyar TV Adó + Valós Idejű EPG:** RTL, TV2, MTVA (M1–M5), M4 Sport, Sport 1–2, Spíler 1–2, Arena4, Match 4, EuroSport 1, Film+, Mozi+, Spektrum, Discovery, Disney, Minimax, Nick, 68 Helyi TV — élő **Most / Következő** műsorinfóval (`port.hu`), halott csatornák nélkül.
-- **⚡ 13 Magyar VOD Forrás & Okos Edge Cache:** Videa, JobbMintATV, Filmezek, Filmvilág2, MeseKincstár, Videakid, Indavideo, MédiaKlikk, NetMozi Vercelen is azonnali direkt linkekkel (+ Self-Hoston VOE / HDMozi / DMDAMedia).
-- **📱 Mobilbarát Konfigurátor:** https://nuvio-magyar-http.onrender.com/configure
-
-### 🔗 Telepítés:
-- **Manifest URL:** `https://nuvio-magyar-http.onrender.com/manifest.json`
-- **GitHub:** https://github.com/Player798xy/nuvio-magyar-http
-```
-</details>
+A projekt szabadon klónozható és telepíthető bármilyen saját Vercel, Render, Docker vagy otthoni Node.js környezetbe privát használatra. Nyilvános központi példányt a fejlesztő nem üzemeltet.
 
 ---
 

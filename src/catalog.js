@@ -179,7 +179,7 @@ async function resolveHungarianQueryToEnglish(query) {
     clean,
     async () => {
       try {
-        const headers = { 'User-Agent': 'NuvioHungarianAddon/1.0 (https://nuvio-magyar-http.onrender.com)' };
+        const headers = { 'User-Agent': 'NuvioHungarianAddon/2.7 (https://github.com/Player798xy/nuvio-magyar-http)' };
         const searchUrl = `https://hu.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json`;
         const sRes = await fetch(searchUrl, { headers, signal: AbortSignal.timeout(2500) });
         if (!sRes.ok) return undefined;
@@ -423,7 +423,7 @@ async function searchCatalog(type, query, catalogId = null, extra = {}) {
 
     // If Live TV catalog requested (either by catalog id or by type)
     if (catalogId && (catalogId.startsWith('hu-live-') || catalogId === 'hu-live-tv' || catalogId === 'hu-live-tv-channel' || type === 'tv' || type === 'channel')) {
-      const baseHost = (extra && extra.hostUrl) || process.env.HOST_URL || 'https://nuvio-magyar-http.onrender.com';
+      const baseHost = (extra && extra.hostUrl) || process.env.HOST_URL || 'http://127.0.0.1:7000';
       return getOnlineStreamChannels(catalogId === 'hu-live-tv' ? 'all' : catalogId, trimmedQuery, baseHost).map(ch => ({
         id: ch.id,
         name: ch.name,
@@ -721,7 +721,7 @@ const LIVE_META_CACHE = createBoundedCache({ maxEntries: 180, ttlMs: LIVE_META_C
 
 async function getMeta(type, id, hostUrl = null) {
   if (!id) return null;
-  const baseHost = hostUrl || process.env.HOST_URL || 'https://nuvio-magyar-http.onrender.com';
+  const baseHost = hostUrl || process.env.HOST_URL || 'http://127.0.0.1:7000';
   const isLive = type === 'tv' || type === 'channel' || (id && (id.startsWith('onlinestream-live-') || id.startsWith('mediaklikk-live-')));
 
   if (isLive) {

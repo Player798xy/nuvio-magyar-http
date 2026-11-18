@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <meta name="theme-color" content="#050505" />
-  <link rel="canonical" href="https://nuvio-magyar-http.onrender.com/tamogatas.html" />
-  <title>Szerver Támogatás (Ko-fi) &amp; TV QR-kód — Magyar Streaming Pro</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Magyar Streaming Pro — Saját Vercel &amp; Self-Host</title>
   <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.7.0" />
   <link rel="alternate icon" type="image/png" href="/logo.png?v=2.7.0" />
   <link rel="shortcut icon" href="/favicon.ico?v=2.7.0" />
@@ -258,33 +258,33 @@
 
     <section class="support-card">
       <div>
-        <div class="badge-kofi">☕ TÁMOGATÁS · TELJESEN OPCIONÁLIS</div>
-        <h1>Segíts egy <span>közös, stabil saját szerverre</span> (~5 €/hó)!</h1>
+        <div class="badge-kofi">SAJÁT VERCEL &amp; SELF-HOST</div>
+        <h1>A nyilvános szerver <span>megszűnt</span> — telepíts sajátot ingyen!</h1>
         <p class="lead">
-          Az ingyenes tárhelyek (korábban Vercel, most Render) szűk havi korlátai miatt a növekvő magyar közösséget már nehéz kiszolgálni — ezért van szükség saját megoldásra.
+          A fejlesztő a továbbiakban nem üzemeltet központi nyilvános szervert.
         </p>
         <p class="lead">
-          A cél, hogy közösen vegyünk egy saját <strong>budapesti szervert (ServerAstra Base Compute AMD — 4,99 €/hó, 4 TB/hó forgalom, 10 Gbps)</strong>, ami gond nélkül elbírja az összes felhasználót, és a támogatás a további fejlesztésekben, extra funkciókban is sokat segít.
+          A projekt 100% nyílt forráskódú (MIT): bárki szabadon indíthat saját ingyenes <strong>Vercel</strong> példányt 1 kattintással, vagy futtathatja otthon saját gépen / <strong>Dockerrel</strong>.
         </p>
-        <div class="url-box">https://ko-fi.com/playerxy</div>
+        <div class="url-box">https://github.com/Player798xy/nuvio-magyar-http</div>
         <div class="actions">
-          <a class="btn btn-kofi" href="https://ko-fi.com/playerxy" target="_blank" rel="noopener noreferrer">☕ Tip Me (Ko-fi) →</a>
-          <button class="btn btn-ghost" type="button" onclick="copyKofiUrl()">Ko-fi link másolása</button>
+          <a class="btn btn-kofi" href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FPlayer798xy%2Fnuvio-magyar-http" target="_blank" rel="noopener noreferrer">▲ Saját Vercel indítása →</a>
+          <a class="btn btn-ghost" href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener noreferrer">GitHub &amp; Docker Útmutató →</a>
         </div>
       </div>
 
       <div class="qr-panel">
         <div class="qr-frame" id="qrFrame">QR</div>
-        <div class="qr-note"><strong>TV-n vagy másik képernyőn nézed?</strong><br>Olvasd be a telefonod kamerájával — nem kell címet begépelned.</div>
+        <div class="qr-note"><strong>GitHub repó QR-kód</strong><br>Olvasd be telefonnal a saját Vercel / Docker telepítési útmutatóhoz.</div>
       </div>
     </section>
 
     <section class="steps">
-      <h2>Mire megy a támogatás?</h2>
+      <h2>Telepítési lehetőségek</h2>
       <ul>
-        <li><strong>Közös budapesti szerver (4,99 €/hó — ServerAstra):</strong> AMD Epyc 3.2 GHz, 1 GB ECC RAM, 20 GB NVMe, 10 Gbps kapcsolat és havi 4 TB forgalom — hogy kitartson a szerver, elbírja az összes felhasználót, és ne kelljen linket cserélni.</li>
-        <li><strong>Extra fejlesztések és karbantartás:</strong> az új források, élő TV és hibajavítások fejlesztésében is sokat segít (beleértve a saját HTTPS élő TV proxy lehetőségét Androidra és webre).</li>
-        <li><strong>Teljesen opcionális — mindig minden ingyenes lesz:</strong> semmi nincs fizetőfal mögött; minden forrás, csatorna és <strong>minden opció örökre 100% ingyenes marad</strong>!</li>
+        <li><strong>Saját ingyenes Vercel (30 másodperc):</strong> a fenti gombbal saját privát URL-t kapsz (`https://sajat-neved.vercel.app`), külső szerver nélkül.</li>
+        <li><strong>Docker &amp; Node.js Self-Host:</strong> a repóban van hivatalos `Dockerfile` és `docker-compose.yml` otthoni PC-re, NAS-ra vagy Raspberry Pi-re is.</li>
+        <li><strong>Teljesen nyílt forráskódú (MIT):</strong> bárki szabadon használhatja saját példányon.</li>
       </ul>
     </section>
   </div>
@@ -293,41 +293,9 @@
 
   <script src="/qr.js"></script>
   <script>
-    const KOFI_URL = 'https://ko-fi.com/playerxy';
-
-    function showToast(html) {
-      const el = document.getElementById('toast');
-      el.innerHTML = html;
-      el.classList.add('show');
-      clearTimeout(window._t);
-      window._t = setTimeout(() => el.classList.remove('show'), 3400);
-    }
-
-    async function copyKofiUrl() {
-      let ok = false;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        try {
-          await navigator.clipboard.writeText(KOFI_URL);
-          ok = true;
-        } catch (_) {}
-      }
-      if (!ok) {
-        try {
-          const ta = document.createElement('textarea');
-          ta.value = KOFI_URL;
-          ta.style.position = 'fixed';
-          ta.style.left = '-9999px';
-          document.body.appendChild(ta);
-          ta.select();
-          ok = Boolean(document.execCommand('copy'));
-          document.body.removeChild(ta);
-        } catch (_) {}
-      }
-      showToast(ok ? '✅ Ko-fi link kimásolva a vágólapra!' : 'Másold ki: https://ko-fi.com/playerxy');
-    }
-
+    const REPO_URL = 'https://github.com/Player798xy/nuvio-magyar-http';
     if (window.NuvioQR) {
-      document.getElementById('qrFrame').innerHTML = window.NuvioQR.toSvg(KOFI_URL, { margin: 3 });
+      document.getElementById('qrFrame').innerHTML = window.NuvioQR.toSvg(REPO_URL, { margin: 3 });
     }
   </script>
   <!-- Cloudflare Web Analytics -->

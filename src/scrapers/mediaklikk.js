@@ -7,7 +7,7 @@
 
 // Official MTVA Live TV Channels with high-definition static branding posters and logos
 const { createBoundedMap } = require('../cache');
-const HOST_URL = process.env.HOST_URL || 'https://nuvio-magyar-http.vercel.app';
+const HOST_URL = process.env.HOST_URL || 'http://127.0.0.1:7000';
 
 const LIVE_CHANNELS = [
   {

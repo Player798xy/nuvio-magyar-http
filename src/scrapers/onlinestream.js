@@ -8,7 +8,7 @@ const fetch = globalThis.fetch;
 const { getLiveChannelStreams, buildLiveStreamBehaviorHints, LIVE_CHANNELS: MEDIAKLIKK_LIVE_CHANNELS } = require('./mediaklikk');
 const { createBoundedCache } = require('../cache');
 
-const HOST_URL = process.env.HOST_URL || 'https://nuvio-magyar-http.onrender.com';
+const HOST_URL = process.env.HOST_URL || 'http://127.0.0.1:7000';
 
 // Bounded In-Memory Live Stream Cache with inflight dedup:
 // Static direct .m3u8 servers cache 30 min; redirected/tokenized servers cache 12 min

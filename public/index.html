@@ -5,13 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <meta name="theme-color" content="#050505" />
   <title>Magyar Streaming Pro — Nuvio & Stremio HTTP Addon (Élő TV + Magyar Filmek)</title>
-  <meta name="description" content="Magyar Streaming Pro — Ingyenes Nuvio és Stremio HTTP Addon: 162 magyar Élő TV csatorna EPG műsorújsággal, magyar szinkronos filmek, sorozatok, mesék és magyar feliratok proxy nélkül." />
-  <link rel="canonical" href="https://nuvio-magyar-http.onrender.com/" />
+  <meta name="description" content="Magyar Streaming Pro — Nyílt forráskódú Nuvio és Stremio HTTP Addon saját Vercel vagy Self-Host telepítéshez: 162 magyar Élő TV csatorna EPG-vel, magyar filmek, sorozatok és feliratok." />
+  <meta name="robots" content="noindex, nofollow" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Magyar Streaming Pro — Nuvio & Stremio HTTP Addon" />
+  <meta property="og:title" content="Magyar Streaming Pro — Self-Host Nuvio & Stremio HTTP Addon" />
   <meta property="og:description" content="162 magyar Élő TV adó EPG-vel, magyar szinkronos filmek, sorozatok és OpenSubtitles HU feliratok közvetlen HTTP streamekkel." />
-  <meta property="og:url" content="https://nuvio-magyar-http.onrender.com/" />
-  <meta property="og:image" content="https://nuvio-magyar-http.onrender.com/logo.png?v=2.7.0" />
   <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.7.0" />
   <link rel="alternate icon" type="image/png" href="/logo.png?v=2.7.0" />
   <link rel="shortcut icon" href="/favicon.ico?v=2.7.0" />
@@ -2045,22 +2043,20 @@
       </nav>
 
       <div class="head-right">
-        <a href="https://ko-fi.com/playerxy" target="_blank" rel="noopener noreferrer" class="pill-btn pill-kofi">☕ Támogatás</a>
         <a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener" class="pill-btn pill-gh">GitHub ↗</a>
       </div>
     </div>
   </header>
 
   <main class="wrap">
-    <!-- VERCEL-ONLY YELLOW MIGRATION CARD (TV QR opens via button or Nuvio/Stremio link) -->
+    <!-- MIGRATION CARD (only shown if instance sets MIGRATION_NOTICE_URL) -->
     <section class="migration-banner" id="vercelMigrationBanner" style="display:none" aria-live="polite">
-      <div class="migration-pill">🟨 ÚJ SZERVER ELÉRHETŐ — CSAK VERCEL FELHASZNÁLÓKNAK</div>
-      <h2>Válts az új, korlátlan <span>Render linkre</span>!</h2>
+      <div class="migration-pill">🟨 ÚJ SZERVER ELÉRHETŐ</div>
+      <h2>Válts az új <span>szerver linkre</span>!</h2>
       <p>
-        Ez a Vercel szerver a nagy forgalom miatt hamarosan eléri a havi ingyenes CPU-keretet.
-        Az alábbi gombokkal 1 kattintással átviheted a jelenlegi beállításaidat az új Render szerverre (vagy nyisd meg a QR oldalt TV-hez).
+        Az alábbi gombokkal 1 kattintással átviheted a jelenlegi beállításaidat az új szerverre.
       </p>
-      <div class="migration-target-url" id="migrationManifestUrl">https://nuvio-magyar-http.onrender.com/manifest.json</div>
+      <div class="migration-target-url" id="migrationManifestUrl"></div>
       <div class="migration-actions">
         <a class="btn-action btn-stremio" id="migrationStremioBtn" href="#">🚀 Új Stremio →</a>
         <button type="button" class="btn-action btn-nuvio" onclick="installMigrationNuvio()">⚡ Új Nuvio →</button>
@@ -2077,7 +2073,7 @@
       </div>
       <p class="lede">
         Magyar szinkronos filmek, sorozatok, feliratok és <strong>162 Élő TV csatorna EPG-vel</strong> — torrent, Debrid és proxy nélkül.
-        Állítsd be lent amire szükséged van, vagy telepítsd rögtön az alapértelmezett linket:
+        Állítsd be lent amire szükséged van, vagy telepítsd rögtön az alábbi linkkel:
       </p>
 
       <div class="manifest-box">
@@ -2103,21 +2099,6 @@
 
       <div class="compat-note">
         <strong>Élő TV tipp:</strong> Nuvio-ban teljesen működik (PC-s Stremión is), Androidos Stremión a sima HTTP adások miatt nem indul.
-      </div>
-    </section>
-
-    <!-- COMPACT KO-FI SERVER SUPPORT CARD -->
-    <section class="support-banner" id="serverSupportBanner" aria-label="Szerver támogatás">
-      <div class="support-pill">☕ KÖZÖS SZERVER · TELJESEN OPCIONÁLIS · MINDIG INGYENES</div>
-      <h2>Segíts egy <span>közös, stabil budapesti szerverre</span> (~5 €/hó)</h2>
-      <p>
-        Az ingyenes tárhelyeket már szűken bírja a forgalom. Ha közösen összejön havi <strong>4,99 € (~2 000 Ft)</strong> egy saját budapesti VPS-re (ServerAstra, 4 TB/hó), gond nélkül elbírja az összes felhasználót és segít az extra fejlesztésekben is.
-        <strong>Minden opció mindig 100% ingyenes marad!</strong>
-      </p>
-      <div class="migration-actions">
-        <a class="btn-action btn-kofi-banner" href="https://ko-fi.com/playerxy" target="_blank" rel="noopener noreferrer">☕ Tip Me (Ko-fi) →</a>
-        <button type="button" class="btn-action btn-copy" onclick="copyKofiSupportLink()">Link másolása</button>
-        <a class="btn-action btn-copy" href="/tamogatas.html" target="_blank" rel="noopener">QR-kód (TV-hez) →</a>
       </div>
     </section>
 
@@ -2664,8 +2645,8 @@
     </section>
 
     <footer class="footer">
-      <span>Magyar Streaming Pro · Nem hosztol médiafájlokat, kizárólag nyilvános linkeket indexel.</span>
-      <span><a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener">GitHub</a> · <a href="https://ko-fi.com/playerxy" target="_blank" rel="noopener">☕ Ko-fi</a></span>
+      <span>Magyar Streaming Pro · Self-Host &amp; Saját Vercel kiadás (nem hosztol médiafájlokat).</span>
+      <span><a href="https://github.com/Player798xy/nuvio-magyar-http" target="_blank" rel="noopener">GitHub</a></span>
     </footer>
   </main>
 
@@ -2705,14 +2686,14 @@
     let activeResTab = 'all';
     let currentConfigSlug = '';
     let migrationNoticeActive = false;
-    let migrationTargetOrigin = 'https://nuvio-magyar-http.onrender.com';
+    let migrationTargetOrigin = '';
 
     function getMigrationUrls() {
-      const targetOrigin = (migrationTargetOrigin || 'https://nuvio-magyar-http.onrender.com').replace(/\/+$/, '');
+      const targetOrigin = (migrationTargetOrigin || '').replace(/\/+$/, '');
       const prefix = currentConfigSlug ? `/${currentConfigSlug}` : '';
       return {
-        configureUrl: `${targetOrigin}${prefix}/configure`,
-        manifestUrl: `${targetOrigin}${prefix}/manifest.json`,
+        configureUrl: targetOrigin ? `${targetOrigin}${prefix}/configure` : `${origin}${prefix}/configure`,
+        manifestUrl: targetOrigin ? `${targetOrigin}${prefix}/manifest.json` : `${origin}${prefix}/manifest.json`,
         qrPageUrl: `${origin}/uj-link.html${currentConfigSlug ? `?c=${encodeURIComponent(currentConfigSlug)}` : ''}`
       };
     }
@@ -3495,13 +3476,6 @@
           updateMigrationBannerUi();
         }
       } catch (_) {}
-    }
-
-    async function copyKofiSupportLink() {
-      const ok = await copyTextToClipboard('https://ko-fi.com/playerxy');
-      showToast(ok
-        ? '☕ <strong>Ko-fi link kimásolva!</strong><br>Köszönjük, ha támogatod a saját szervert ❤️'
-        : '☕ Link: https://ko-fi.com/playerxy', 3800);
     }
 
     hydrateConfigFromUrl();

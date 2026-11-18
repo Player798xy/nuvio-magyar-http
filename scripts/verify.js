@@ -142,96 +142,87 @@ async function runVerification() {
       fail(`In-memory VOD cache miss or mismatch (${cachedMs}ms, ${duneCachedJson.streams?.length} vs ${duneJson.streams?.length})`);
     }
 
-    // 9. Vercel-Only Migration Banner, Universal Ko-fi Support Notice & QR Code Static Pages
+    // 9. Public Shutdown Lock on Author Legacy Hosts vs Full Functionality on Private/Own Vercel & Self-Host
     const { handleStreamRequest, getRuntimeNoticeMeta } = require('../src/addon');
-    const [qrJsRes, ujLinkRes, supportPageRes, runtimeRes, previewStreamRes] = await Promise.all([
+    const [
+      qrJsRes,
+      ujLinkRes,
+      runtimeRes,
+      legacyRenderHomeRes,
+      legacyVercelHomeRes,
+      legacyPreviewHomeRes,
+      legacyManifestRes,
+      legacyCatalogRes,
+      legacyStreamRes,
+      legacyHealthRes,
+      ownVercelHomeRes,
+      ownVercelStreamRes
+    ] = await Promise.all([
       fetch(`${base}/qr.js`),
       fetch(`${base}/uj-link`),
-      fetch(`${base}/tamogatas`),
       fetch(`${base}/api/runtime-info`),
-      fetch(`${base}/stream/movie/tt15239678.json?previewMigration=1`).then((r) => r.json())
+      fetch(`${base}/`, { headers: { 'x-forwarded-host': 'nuvio-magyar-http.onrender.com' } }),
+      fetch(`${base}/`, { headers: { 'x-forwarded-host': 'nuvio-magyar-http.vercel.app' } }),
+      fetch(`${base}/`, { headers: { 'x-forwarded-host': 'nuvio-magyar-http-git-main-test.vercel.app' } }),
+      fetch(`${base}/manifest.json`, { headers: { 'x-forwarded-host': 'nuvio-magyar-http.onrender.com' } }).then((r) => r.json()),
+      fetch(`${base}/catalog/movie/hu-live-tv.json`, { headers: { 'x-forwarded-host': 'nuvio-magyar-http.onrender.com' } }),
+      fetch(`${base}/stream/movie/tt15239678.json`, { headers: { 'x-forwarded-host': 'nuvio-magyar-http.onrender.com' } }).then((r) => r.json()),
+      fetch(`${base}/api/health`, { headers: { 'x-forwarded-host': 'nuvio-magyar-http.onrender.com' } }).then((r) => r.json()),
+      fetch(`${base}/`, { headers: { 'x-forwarded-host': 'my-private-fork.vercel.app' } }),
+      fetch(`${base}/stream/movie/onlinestream-live-5903.json`, { headers: { 'x-forwarded-host': 'my-private-fork.vercel.app' } }).then((r) => r.json())
     ]);
     if (qrJsRes.status !== 200) fail(`/qr.js returned HTTP ${qrJsRes.status}`);
     if (ujLinkRes.status !== 200) fail(`/uj-link returned HTTP ${ujLinkRes.status}`);
-    if (supportPageRes.status !== 200) fail(`/tamogatas returned HTTP ${supportPageRes.status}`);
     const runtimeJson = await runtimeRes.json();
-    if (runtimeJson.showMigrationBanner !== false && !process.env.MIGRATION_NOTICE_URL) {
-      fail('Default runtime-info should keep showMigrationBanner=false until MIGRATION_NOTICE_URL is set');
+    if (runtimeJson.showMigrationBanner !== false) {
+      fail('Default runtime-info should keep showMigrationBanner=false');
     }
-    if (!previewStreamRes.streams?.[0]?.name?.includes('🟨') || !previewStreamRes.streams?.[0]?.externalUrl?.includes('/uj-link.html')) {
-      fail('Preview migration stream did not prepend yellow notice at index 0');
+    if (legacyRenderHomeRes.status !== 410 || legacyVercelHomeRes.status !== 410 || legacyPreviewHomeRes.status !== 410) {
+      fail(`Legacy author public hosts must return 410 Gone, got ${legacyRenderHomeRes.status}/${legacyVercelHomeRes.status}/${legacyPreviewHomeRes.status}`);
     }
-    if (previewStreamRes.streams[0].description) {
-      fail('Migration notice stream must not include description alongside title');
+    const legacyHomeHtml = await legacyRenderHomeRes.text();
+    if (!legacyHomeHtml.includes('Nyilvános szerver') || !legacyHomeHtml.includes('https://github.com/Player798xy/nuvio-magyar-http')) {
+      fail('Legacy shutdown HTML missing discontinuation notice and GitHub link');
     }
+    if (!legacyManifestRes?.name?.includes('leállítva') || legacyManifestRes?.catalogs?.length !== 0) {
+      fail('Legacy public manifest must be discontinued with 0 catalogs');
+    }
+    if (legacyCatalogRes.status !== 410) fail(`Legacy public catalog must return 410, got ${legacyCatalogRes.status}`);
+    if (legacyStreamRes.streams?.length !== 1 || !legacyStreamRes.streams[0].name?.includes('⛔') || !legacyStreamRes.streams[0].externalUrl?.includes('github.com')) {
+      fail('Legacy public stream endpoint must return only the discontinued notice card');
+    }
+    if (legacyHealthRes.status !== 'discontinued' || legacyHealthRes.publicHosting !== false) {
+      fail(`Legacy /api/health should report discontinued, got ${JSON.stringify(legacyHealthRes)}`);
+    }
+    if (ownVercelHomeRes.status !== 200) fail(`Private/own Vercel host must remain 200 OK, got ${ownVercelHomeRes.status}`);
+    if (!ownVercelStreamRes.streams?.length || ownVercelStreamRes.streams.some((s) => s.externalUrl || s.name?.includes('⛔') || s.name?.includes('☕'))) {
+      fail('Private/own Vercel fork must return clean playable streams without shutdown or Ko-fi rows');
+    }
+    const localVod = await handleStreamRequest('movie', 'tt15239678', { hostUrl: 'http://127.0.0.1:7000' });
+    const localMeta = getRuntimeNoticeMeta({ hostUrl: 'http://127.0.0.1:7000' });
+    if (localMeta.showMigrationBanner || !localVod.streams?.[0]?.url) fail('Self-host local stream check failed');
+    console.log('✅ 9. Author Public Host Shutdown Lock (410) & Private/Own Vercel Full Support OK');
 
-    // Simulate Vercel vs Render env isolation
-    const prevEnv = {
-      VERCEL: process.env.VERCEL,
-      RENDER: process.env.RENDER,
-      MIGRATION_NOTICE_URL: process.env.MIGRATION_NOTICE_URL
-    };
-    try {
-      delete process.env.RENDER;
-      process.env.VERCEL = '1';
-      process.env.MIGRATION_NOTICE_URL = 'https://nuvio-magyar-http.onrender.com';
-      const vercelVod = await handleStreamRequest('movie', 'tt15239678', { hostUrl: 'https://nuvio-magyar-http.vercel.app' });
-      const vercelLive = await handleStreamRequest('movie', 'onlinestream-live-5903', { hostUrl: 'https://nuvio-magyar-http.vercel.app' });
-      const vercelMeta = getRuntimeNoticeMeta({ hostUrl: 'https://nuvio-magyar-http.vercel.app' });
-      if (!vercelMeta.showMigrationBanner || vercelMeta.platform !== 'vercel') fail('Vercel runtime meta failed');
-      if (!vercelVod.streams?.[0]?.name?.includes('🟨')) fail('Vercel VOD stream missing yellow banner at top');
-      if (!vercelLive.streams?.[0]?.name?.includes('🟨')) fail('Vercel Live TV stream missing yellow banner at top');
-
-      delete process.env.VERCEL;
-      process.env.RENDER = 'true';
-      const renderVod = await handleStreamRequest('movie', 'tt15239678', { hostUrl: 'https://nuvio-magyar-http.onrender.com' });
-      const renderLive = await handleStreamRequest('movie', 'onlinestream-live-5903', { hostUrl: 'https://nuvio-magyar-http.onrender.com' });
-      const renderMeta = getRuntimeNoticeMeta({ hostUrl: 'https://nuvio-magyar-http.onrender.com' });
-      if (renderMeta.showMigrationBanner || renderMeta.platform !== 'render') fail('Render runtime meta leaked migration banner');
-      if (renderVod.streams?.some((s) => s.externalUrl || s.name?.includes('☕'))) {
-        fail('Render VOD streams must NOT contain Ko-fi/externalUrl notice rows inside Nuvio/Stremio');
-      }
-      if (!renderVod.streams?.[0]?.url || !renderVod.streams?.[0]?.behaviorHints?.bingeGroup) {
-        fail('Render VOD streams[0] must be a playable video stream with bingeGroup');
-      }
-      if (renderLive.streams?.some((s) => s.externalUrl || s.name?.includes('☕'))) {
-        fail('Render Live TV streams must NOT contain Ko-fi/externalUrl notice rows inside Nuvio/Stremio');
-      }
-      if (!renderLive.streams?.[0]?.url) {
-        fail('Render Live TV streams[0] must be a playable live stream');
-      }
-    } finally {
-      if (prevEnv.VERCEL === undefined) delete process.env.VERCEL; else process.env.VERCEL = prevEnv.VERCEL;
-      if (prevEnv.RENDER === undefined) delete process.env.RENDER; else process.env.RENDER = prevEnv.RENDER;
-      if (prevEnv.MIGRATION_NOTICE_URL === undefined) delete process.env.MIGRATION_NOTICE_URL; else process.env.MIGRATION_NOTICE_URL = prevEnv.MIGRATION_NOTICE_URL;
-    }
-    console.log('✅ 9. Vercel-Only Yellow Notice, Clean Stream Lists (No In-App Ko-fi Row), /qr.js, /uj-link & /tamogatas OK');
-
-    // 10. SEO & Canonical Verification (Render primary vs Vercel noindex)
-    const [homeHtml, robotsRenderRes, sitemapRes, vercelRobotsTest] = await Promise.all([
+    // 10. Clean Self-Host HTML & SEO Headers (no hardcoded author URLs or Ko-fi banners)
+    const [homeHtml, robotsSelfRes, sitemapRes] = await Promise.all([
       fetch(`${base}/`).then((r) => r.text()),
       fetch(`${base}/robots.txt`),
-      fetch(`${base}/sitemap.xml`).then((r) => r.text()),
-      fetch(`${base}/`, { headers: { 'x-forwarded-host': 'nuvio-magyar-http.vercel.app' } })
+      fetch(`${base}/sitemap.xml`).then((r) => r.text())
     ]);
-    if (!homeHtml.includes('rel="canonical" href="https://nuvio-magyar-http.onrender.com/"')) {
-      fail('Homepage missing canonical link pointing to Render');
+    if (homeHtml.includes('nuvio-magyar-http.onrender.com') || homeHtml.includes('ko-fi.com') || homeHtml.includes('serverSupportBanner')) {
+      fail('Self-host homepage still references deprecated author Render URL or Ko-fi server banner');
     }
     if (homeHtml.includes('supportQrFrame') || homeHtml.includes('migrationQrFrame')) {
-      fail('Homepage must NOT embed inline QR frames (only dedicated /tamogatas.html and /uj-link.html show TV QR)');
+      fail('Homepage must NOT embed inline QR frames');
     }
-    if (vercelRobotsTest.headers.get('x-robots-tag') !== 'noindex, follow') {
-      fail(`Vercel forwarded host missing X-Robots-Tag noindex header, got "${vercelRobotsTest.headers.get('x-robots-tag')}"`);
+    if (ownVercelHomeRes.headers.get('x-robots-tag') !== 'noindex, follow') {
+      fail(`Private Vercel fork missing X-Robots-Tag noindex header, got "${ownVercelHomeRes.headers.get('x-robots-tag')}"`);
     }
-    const renderHomeRes = await fetch(`${base}/`, { headers: { 'x-forwarded-host': 'nuvio-magyar-http.onrender.com' } });
-    if (renderHomeRes.headers.get('x-robots-tag')) {
-      fail(`Render host must not emit X-Robots-Tag noindex header, got "${renderHomeRes.headers.get('x-robots-tag')}"`);
+    const robotsTxt = await robotsSelfRes.text();
+    if (!robotsTxt.includes('/sitemap.xml') || !sitemapRes.includes('/configure')) {
+      fail('robots.txt or sitemap.xml failed to render dynamic host URL');
     }
-    const robotsTxt = await robotsRenderRes.text();
-    if (!robotsTxt.includes('Sitemap: https://nuvio-magyar-http.onrender.com/sitemap.xml') || !sitemapRes.includes('https://nuvio-magyar-http.onrender.com/configure')) {
-      fail('robots.txt or sitemap.xml missing Render canonical URL');
-    }
-    console.log('✅ 10. SEO & Canonical Verification (Render indexed + Vercel noindex) OK');
+    console.log('✅ 10. Clean Self-Host Configurator HTML & Dynamic SEO Verification OK');
 
     // 11. Private Stats Endpoint & Bot Filtering
     const beforeHealthStats = await fetch(`${base}/api/stats?format=json`, {

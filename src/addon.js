@@ -61,7 +61,7 @@ const DEFAULT_CONFIG = {
   maxResults: 25
 };
 
-const DEFAULT_RENDER_MIGRATION_URL = 'https://nuvio-magyar-http.onrender.com';
+const DEFAULT_RENDER_MIGRATION_URL = '';
 const DEFAULT_CDN_PUBLIC_BASE = 'https://cdn.jsdelivr.net/gh/Player798xy/nuvio-magyar-http@main/public';
 const VOD_STREAM_CACHE = new Map();
 const INFLIGHT_VOD_SCRAPES = new Map();
@@ -126,16 +126,16 @@ function normalizeMigrationUrl(raw) {
 function getMigrationTargetUrl(config = {}) {
   const explicit = normalizeMigrationUrl(config.migrationTargetUrl || process.env.MIGRATION_NOTICE_URL || '');
   if (explicit) return explicit;
-  return config.previewMigration ? DEFAULT_RENDER_MIGRATION_URL : '';
+  return '';
 }
 
 function shouldShowVercelMigrationNotice(config = {}) {
   if (isRenderRuntime()) return false;
   const hostUrl = String(config.hostUrl || '').toLowerCase();
   if (hostUrl.includes('.onrender.com')) return false;
-  if (config.previewMigration) return true;
   const targetUrl = getMigrationTargetUrl(config);
   if (!targetUrl) return false;
+  if (config.previewMigration) return true;
   return Boolean(isVercelRuntime() || hostUrl.includes('.vercel.app'));
 }
 
@@ -143,8 +143,8 @@ function getRuntimeNoticeMeta(config = {}) {
   const hostUrl = String(config.hostUrl || '');
   const showMigrationBanner = shouldShowVercelMigrationNotice(config);
   const migrationTargetUrl = showMigrationBanner
-    ? (getMigrationTargetUrl(config) || DEFAULT_RENDER_MIGRATION_URL)
-    : (normalizeMigrationUrl(process.env.MIGRATION_NOTICE_URL) || DEFAULT_RENDER_MIGRATION_URL);
+    ? getMigrationTargetUrl(config)
+    : normalizeMigrationUrl(process.env.MIGRATION_NOTICE_URL);
   const platform = isRenderRuntime() || hostUrl.toLowerCase().includes('.onrender.com')
     ? 'render'
     : ((isVercelRuntime() || hostUrl.toLowerCase().includes('.vercel.app')) ? 'vercel' : 'local');
@@ -153,16 +153,16 @@ function getRuntimeNoticeMeta(config = {}) {
     platform,
     showMigrationBanner,
     migrationTargetUrl,
-    defaultRenderUrl: DEFAULT_RENDER_MIGRATION_URL
+    defaultRenderUrl: ''
   };
 }
 
 function buildVercelMigrationNoticeStream(config = {}) {
-  const targetOrigin = getMigrationTargetUrl(config) || DEFAULT_RENDER_MIGRATION_URL;
+  const targetOrigin = getMigrationTargetUrl(config);
   const targetHost = targetOrigin.replace(/^https?:\/\//i, '');
-  const vercelOrigin = String(config.hostUrl || 'https://nuvio-magyar-http.vercel.app').replace(/\/+$/, '');
+  const vercelOrigin = String(config.hostUrl || 'http://127.0.0.1:7000').replace(/\/+$/, '');
   const params = new URLSearchParams();
-  if (targetOrigin !== DEFAULT_RENDER_MIGRATION_URL) {
+  if (targetOrigin) {
     params.set('target', targetOrigin);
   }
   if (config.configSlug) {
@@ -336,7 +336,7 @@ function getManifest(config = {}) {
     name = `Magyar Streaming Pro [${badges.join(' • ')}]`;
   }
 
-  const hostUrl = config.hostUrl || process.env.HOST_URL || 'https://nuvio-magyar-http.vercel.app';
+  const hostUrl = config.hostUrl || process.env.HOST_URL || 'http://127.0.0.1:7000';
 
   const supportedIdPrefixes = [
     'tt',
