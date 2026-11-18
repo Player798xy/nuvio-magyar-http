@@ -188,27 +188,24 @@ async function runVerification() {
       const renderLive = await handleStreamRequest('movie', 'onlinestream-live-5903', { hostUrl: 'https://nuvio-magyar-http.onrender.com' });
       const renderMeta = getRuntimeNoticeMeta({ hostUrl: 'https://nuvio-magyar-http.onrender.com' });
       if (renderMeta.showMigrationBanner || renderMeta.platform !== 'render') fail('Render runtime meta leaked migration banner');
-      if (!renderVod.streams?.[0]?.name?.includes('☕') || !renderVod.streams?.[0]?.externalUrl?.includes('/tamogatas.html')) {
-        fail('Render VOD streams[0] missing top standout Ko-fi TV QR notice');
+      if (renderVod.streams?.some((s) => s.externalUrl || s.name?.includes('☕'))) {
+        fail('Render VOD streams must NOT contain Ko-fi/externalUrl notice rows inside Nuvio/Stremio');
       }
-      if (!renderVod.streams?.[0]?.title?.toLowerCase().includes('opcionális') || !renderVod.streams?.[0]?.title?.toLowerCase().includes('ingyenes')) {
-        fail('Render VOD streams[0] must clearly state optional + always free');
+      if (!renderVod.streams?.[0]?.url || !renderVod.streams?.[0]?.behaviorHints?.bingeGroup) {
+        fail('Render VOD streams[0] must be a playable video stream with bingeGroup');
       }
-      if (!renderVod.streams?.[1]?.url || !renderVod.streams?.[1]?.behaviorHints?.bingeGroup) {
-        fail('Render VOD streams[1] must remain a playable video stream with bingeGroup');
+      if (renderLive.streams?.some((s) => s.externalUrl || s.name?.includes('☕'))) {
+        fail('Render Live TV streams must NOT contain Ko-fi/externalUrl notice rows inside Nuvio/Stremio');
       }
-      if (!renderLive.streams?.[0]?.name?.includes('☕') || !renderLive.streams?.[0]?.externalUrl?.includes('/tamogatas.html')) {
-        fail('Render Live TV streams[0] missing top standout Ko-fi TV QR notice');
-      }
-      if (!renderLive.streams?.[1]?.url) {
-        fail('Render Live TV streams[1] must remain a playable live stream');
+      if (!renderLive.streams?.[0]?.url) {
+        fail('Render Live TV streams[0] must be a playable live stream');
       }
     } finally {
       if (prevEnv.VERCEL === undefined) delete process.env.VERCEL; else process.env.VERCEL = prevEnv.VERCEL;
       if (prevEnv.RENDER === undefined) delete process.env.RENDER; else process.env.RENDER = prevEnv.RENDER;
       if (prevEnv.MIGRATION_NOTICE_URL === undefined) delete process.env.MIGRATION_NOTICE_URL; else process.env.MIGRATION_NOTICE_URL = prevEnv.MIGRATION_NOTICE_URL;
     }
-    console.log('✅ 9. Vercel-Only Yellow Notice, Universal Ko-fi Notice, /qr.js, /uj-link & /tamogatas OK');
+    console.log('✅ 9. Vercel-Only Yellow Notice, Clean Stream Lists (No In-App Ko-fi Row), /qr.js, /uj-link & /tamogatas OK');
 
     // 10. SEO & Canonical Verification (Render primary vs Vercel noindex)
     const [homeHtml, robotsRenderRes, sitemapRes, vercelRobotsTest] = await Promise.all([

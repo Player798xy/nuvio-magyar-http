@@ -187,32 +187,13 @@ function buildVercelMigrationNoticeStream(config = {}) {
   };
 }
 
-function buildSupportNoticeStream(config = {}) {
-  const hostOrigin = String(config.hostUrl || DEFAULT_RENDER_MIGRATION_URL).replace(/\/+$/, '');
-  const supportPageUrl = `${hostOrigin}/tamogatas.html`;
-  const shortSupportPath = `${hostOrigin.replace(/^https?:\/\//i, '')}/tamogatas`;
-
-  return {
-    name: '☕ Támogatás\nMindig ingyenes',
-    title: [
-      'Teljesen opcionális — mindig minden opció 100% ingyenes marad!',
-      'Cél: közös saját szerver (4,99 €/hó), hogy bírja az összes felhasználót, és segít a további fejlesztésekben is.',
-      `Támogatáshoz kattints ide (böngészőben nyílik): ${shortSupportPath} · Videók lejjebb`
-    ].join('\n'),
-    externalUrl: supportPageUrl,
-    behaviorHints: {
-      notWebReady: true
-    }
-  };
-}
-
 function prependVercelNoticeIfNeeded(streams, config = {}) {
   if (!Array.isArray(streams) || streams.length === 0) return [];
   const cloned = streams.map(s => ({ ...s }));
   if (shouldShowVercelMigrationNotice(config)) {
     return [buildVercelMigrationNoticeStream(config), ...cloned];
   }
-  return [buildSupportNoticeStream(config), ...cloned];
+  return cloned;
 }
 
 function getVodCacheKey(type, id, activeScrapers, config) {
