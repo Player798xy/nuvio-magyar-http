@@ -194,16 +194,13 @@ function buildSupportNoticeStream(config = {}) {
 
   return {
     name: [
-      '🟦☕ TÁMOGATÁS',
-      '🆓 MINDIG INGYENES',
-      '👇 FORRÁSOK ALUL'
+      '💠☕ TÁMOGATÁS',
+      '🆓 MINDIG INGYENES'
     ].join('\n'),
     title: [
-      '🔷━━【 📢 TÁMOGATÁS · TELJESEN OPCIONÁLIS 】━━🔷',
-      '☕ Cél: Budapesti ServerAstra VPS (4,99 €/hó · 4 TB · 10 Gbps) az ingyenes hosztok szűk korlátai miatt.',
-      '💯 GARANCIA: Mindig minden opció, film és csatorna 100% ingyenes lesz — fizetés nélkül is teljes az addon!',
-      `📱 TV-n QR-kód telefonhoz: ${shortSupportPath} · ko-fi.com/playerxy`,
-      '👇 LEJÁTSZÁS: Válassz bármelyik lenti videóforrást (semmi nincs lezárva ❤️)'
+      '🔷【 OPCIONÁLIS · MINDIG MINDEN OPCIÓ INGYENES 】🔷',
+      '☕ Cél: BP VPS (4,99 €/hó · 4 TB) → Android & Web élő TV!',
+      `📱 TV QR & infó: ${shortSupportPath}  ·  👇 Videók lent`
     ].join('\n'),
     externalUrl: supportPageUrl,
     behaviorHints: {
