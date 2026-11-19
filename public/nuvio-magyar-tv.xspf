@@ -1,0 +1,1304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<playlist version="1" xmlns="http://xspf.org/ns/0/">
+  <title>Nuvio Magyar TV - Élő TV Csatornák (162 Adó)</title>
+  <creator>Nuvio Magyar Streaming Pro</creator>
+  <info>https://nuvio-magyar-http.onrender.com</info>
+  <trackList>
+    <track>
+      <title>RTL</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_rtl_klub_hungary_1200_atk/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6141.png</image>
+      <annotation>Magyarország vezető kereskedelmi tévécsatornája: Híradó, saját gyártású sikersorozatok, show-műsorok és premier mozifilmek.</annotation>
+    </track>
+    <track>
+      <title>TV2</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_tv_2_hungary_1200_atk/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6143.png</image>
+      <annotation>Országos kereskedelmi adó: Tények hírműsor, nagyszabású családi show-műsorok, vetélkedők és szinkronizált sikerfilmek.</annotation>
+    </track>
+    <track>
+      <title>M1</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_m_1_hungary_1200_atk/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5901.png</image>
+      <annotation>24 órás élő nemzeti hírcsatorna: folyamatos hazai és nemzetközi hírfolyam, szakértői elemzések és tudósítások.</annotation>
+    </track>
+    <track>
+      <title>Duna</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/duna_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5905.png</image>
+      <annotation>A nemzeti főadó: minőségi kulturális magazinok, magyar filmklasszikusok, vallási műsorok és családi szórakozás.</annotation>
+    </track>
+    <track>
+      <title>Super TV2</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_super_tv2_hungary_1200_atk/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6723.png</image>
+      <annotation>A TV2 Csoport szórakoztató televíziója: népszerű amerikai és török drámasorozatok, vetélkedők, vígjátékok és filmek.</annotation>
+    </track>
+    <track>
+      <title>RTL Kettő</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_rtl2_hungary_1200_atk/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6142.png</image>
+      <annotation>Fiatalos szórakoztató csatorna: népszerű vígjátéksorozatok, valóságshow-k és szórakoztató műsorok.</annotation>
+    </track>
+    <track>
+      <title>RTL Három</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_rtl_plus_hungary_1200_atk/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6147.png</image>
+      <annotation>Prémium filmcsatorna és európai labdarúgás: kasszasikerek, akciófilmek és UEFA labdarúgó-mérkőzések.</annotation>
+    </track>
+    <track>
+      <title>Viasat 3</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/viasat3/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5911.png</image>
+      <annotation>Szórakoztató kereskedelmi adó: népszerű amerikai vígjátéksorozatok, bűnügyi szériák és családi filmek.</annotation>
+    </track>
+    <track>
+      <title>ATV</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.atv.hu/atvlive/atvstream_2_aac/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/4739.png</image>
+      <annotation>Magyarország első magán hír- és közéleti televíziója: Egyenes Beszéd, Heti Napló, Fórum és hírösszefoglalók.</annotation>
+    </track>
+    <track>
+      <title>Hír TV</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/4740.png</image>
+      <annotation>24 órás élő konzervatív hírcsatorna: Napi Aktuális, Vezércikk, Sajtóklub és politikai elemzések.</annotation>
+    </track>
+    <track>
+      <title>Prime</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/prime/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6704.png</image>
+      <annotation>Könnyed szórakozás az egész családnak: szitkomok, népszerű családi sorozatok és vígjátékok.</annotation>
+    </track>
+    <track>
+      <title>TV4</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_tv_4_hun_atk_1200/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6184.png</image>
+      <annotation>Klasszikus és modern krimisorozatok, romantikus filmek és európai televíziós drámák gyűjteménye.</annotation>
+    </track>
+    <track>
+      <title>Viasat 6</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/viasat6/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6236.png</image>
+      <annotation>Akciódús és lendületes televízió férfiaknak: scifik, animációk, autós magazinok és kultikus sorozatok.</annotation>
+    </track>
+    <track>
+      <title>RTL Gold</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://budapest-cache-1.antik.sk/live/test_film_plus_2_hungary_1200_atk/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6148.png</image>
+      <annotation>Az RTL klasszikus archívuma és közkedvelt sorozatai: Barátok közt, Éjjel-Nappal Budapest és retró műsorok.</annotation>
+    </track>
+    <track>
+      <title>M2 / Petőfi TV</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/m2_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5902.png</image>
+      <annotation>Napközben színvonalas gyermek- és ifjúsági műsorok, este Petőfi TV fiatalos zenei és kulturális tartalmakkal.</annotation>
+    </track>
+    <track>
+      <title>Duna World / M4 Sport+</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/duna_world_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5906.png</image>
+      <annotation>A határon túli magyarság kulturális televíziója, esténként az M4 Sport+ élő mérkőzésközvetítéseivel.</annotation>
+    </track>
+    <track>
+      <title>M5</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_m_5_hun_atk_1200/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5904.png</image>
+      <annotation>A közszolgálati kultúrcsatorna: színházi közvetítések, opera, koncertek, irodalmi műsorok és oktatási dokumentumfilmek.</annotation>
+    </track>
+    <track>
+      <title>Viasat 2</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/viasat2/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/8716.png</image>
+      <annotation>Nőknek és családoknak szóló szórakoztató műsorok, romantikus filmek, kosztümös drámák és gasztromagazinok.</annotation>
+    </track>
+    <track>
+      <title>Euronews</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://141.94.193.53:80/EuroNews_HD/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5855.png</image>
+      <annotation>Nemzetközi független hírtelevízió magyar nyelvű adása: európai hírek, gazdaság, tudomány és világpolitika.</annotation>
+    </track>
+    <track>
+      <title>Pannon RTV</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream2.nmih.hu:4102/live.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/4695.png</image>
+      <annotation>A vajdasági magyarság regionális televíziója: Közügyek, híradó, magazinműsorok és kulturális tudósítások.</annotation>
+    </track>
+    <track>
+      <title>RTV-1 Vajdaság</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://212.200.230.50:1935/RTV/rtv2/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9073.png</image>
+      <annotation>A Vajdasági Rádió és Televízió 1-es csatornája: hír- és közéleti műsorok.</annotation>
+    </track>
+    <track>
+      <title>RTV-2 Vajdaság</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://212.200.230.50:1935/RTV/rtv2/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/8999.png</image>
+      <annotation>A Vajdasági Rádió és Televízió 2-es csatornája: nemzetiségi és kulturális műsorok.</annotation>
+    </track>
+    <track>
+      <title>Budapest Európa Televízió</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/freerelay/bpetv.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/1819.png</image>
+      <annotation>Fővárosi és európai kulturális, életmód- és beszélgetős műsorok, független magazinok.</annotation>
+    </track>
+    <track>
+      <title>Apostol TV</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://live.apostoltv.hu/live/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5927.png</image>
+      <annotation>Katolikus televízió: szentmisék, imádságok, lelkiségi előadások és egyházi hírek.</annotation>
+    </track>
+    <track>
+      <title>EWTN</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://hls.iptvservice.eu/hls/ewtn-hd.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/4798.png</image>
+      <annotation>Globális katolikus televíziós hálózat: szentmisék, pápai közvetítések és hitoktatás.</annotation>
+    </track>
+    <track>
+      <title>Film+</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/film_plus_hun_atk/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6150.png</image>
+      <annotation>Magyarország legnépszerűbb filmcsatornája: hollywoodi kasszasikerek, akciófilmek, thrillerek és látványos kalandok non-stop.</annotation>
+    </track>
+    <track>
+      <title>Mozi+</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/mozi_plusz/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6152.png</image>
+      <annotation>A sikerfilmek otthona: prémium hollywoodi alkotások, fantasztikus filmek és családi vígjátékok a TV2 kínálatából.</annotation>
+    </track>
+    <track>
+      <title>Cool TV</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://141.94.193.53:80/Cool_HD/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6146.png</image>
+      <annotation>Kultikus amerikai sorozatok, vígjátékok és akció-krimik a nap 24 órájában: Cobra 11, Dr. Csont és sikerfilmek.</annotation>
+    </track>
+    <track>
+      <title>AMC</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://141.94.193.53:80/AMC_HD/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6652.png</image>
+      <annotation>Világhírű drámasorozatok, exkluzív saját gyártású szériák és díjnyertes mozik: The Walking Dead, Better Call Saul.</annotation>
+    </track>
+    <track>
+      <title>Moziverzum</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/moziverzum/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6720.png</image>
+      <annotation>A TV2 prémium filmcsatornája: a legnagyobb amerikai stúdiók sikerfilmjei szünet nélküli filmes élménnyel.</annotation>
+    </track>
+    <track>
+      <title>HBO</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://141.94.193.53:80/HBO_HD/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7069.png</image>
+      <annotation>A világ vezető prémium film- és sorozatcsatornája: a legújabb mozisikerek és díjnyertes HBO Original produkciók.</annotation>
+    </track>
+    <track>
+      <title>HBO 2</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://141.94.193.53:80/HBO_HD/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7158.png</image>
+      <annotation>Vígjátékok, családi filmek és romantikus történetek prémium minőségben, reklámmentesen az HBO családjából.</annotation>
+    </track>
+    <track>
+      <title>HBO 3</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://141.94.193.53:80/HBO3_HD/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7159.png</image>
+      <annotation>Akciófilmek, kultikus drámák, scifik és feszültséggel teli thrillerek igényes nézőknek reklám nélkül.</annotation>
+    </track>
+    <track>
+      <title>Film4</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/film4_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6254.png</image>
+      <annotation>Európai és hollywoodi mozifilmek, igényes drámák és izgalmas bűnügyi történetek a nap 24 órájában.</annotation>
+    </track>
+    <track>
+      <title>TV2 Comedy</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/tv2_comedy/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7060.png</image>
+      <annotation>Non-stop humor és nevetés: a legviccesebb vígjátéksorozatok, szitkomok, stand-up fellépések és komédiák.</annotation>
+    </track>
+    <track>
+      <title>Sorozat+</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_sorozat_hungary_1200_atk/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6149.png</image>
+      <annotation>A televíziós sorozatok rajongóinak: kosztümös drámák, telenovellák, orvosi és bűnügyi sorozatok folytonos élménye.</annotation>
+    </track>
+    <track>
+      <title>Film Café</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/film_cafe/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7074.png</image>
+      <annotation>Klasszikus romantikus filmek, családi mozik, adaptációk és könnyed hétvégi filmek gazdag választéka.</annotation>
+    </track>
+    <track>
+      <title>AXN Black</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://141.94.193.53:80/axn_black/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7154.png</image>
+      <annotation>Pörgős akciósorozatok, krimik és misztikus szériák az adrenalinfüggőknek: NCIS, Gyilkos elmék és FBI epizódok.</annotation>
+    </track>
+    <track>
+      <title>Galaxy 4</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://budapest-cache-1.antik.sk/live/test_galaxy_4_atk_1200/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7422.png</image>
+      <annotation>Bűnügyi és nyomozós sorozatok, oknyomozó történetek és rejtélyek: Agatha Christie és Sherlock kalandjai.</annotation>
+    </track>
+    <track>
+      <title>Max4</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://141.94.193.53/MAX4_HD/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/8714.png</image>
+      <annotation>Könnyed életmód, családi filmek és nemzetközi sikersorozatok a 4-es csatornacsaládból.</annotation>
+    </track>
+    <track>
+      <title>Izaura TV</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/izaura/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6163.png</image>
+      <annotation>A romantika és a szenvedély világa: dél-amerikai, spanyol és török sikertelenovellák a nap 24 órájában.</annotation>
+    </track>
+    <track>
+      <title>Jocky TV</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/jocky/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6701.png</image>
+      <annotation>Klasszikus kedvencek és retró sikerszériák: Columbo, Gyilkos sorok, Walker, a texasi kopó és Bud Spencer filmek.</annotation>
+    </track>
+    <track>
+      <title>Magyar Mozi TV</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/mozi/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/8489.png</image>
+      <annotation>A magyar filmművészet otthona: felejthetetlen hazai klasszikusok, új generációs magyar mozik és dokumentumfilmek.</annotation>
+    </track>
+    <track>
+      <title>Moziklub</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/moziklub_atk/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9310.png</image>
+      <annotation>Hollywoodi és európai sikerfilmek, romantikus történetek és drámák az RTL digitális klubjából.</annotation>
+    </track>
+    <track>
+      <title>Sorozatklub</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/sorozatklub_atk/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9312.png</image>
+      <annotation>Keresett magyar és külföldi sorozatok, telenovellák és szórakoztató folytatásos epizódok egy helyen.</annotation>
+    </track>
+    <track>
+      <title>Classics TV Magyarország</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://s01.diazol.hu:9152/live.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9745.png</image>
+      <annotation>Az örökzöld filmművészet gyöngyszemei, fekete-fehér és színes európai klasszikusok válogatása.</annotation>
+    </track>
+    <track>
+      <title>National Geographic</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/ngc_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5936.png</image>
+      <annotation>A világ legelismertebb tudományos csatornája: lenyűgöző felfedezések, űrkutatás, régészet és technológia.</annotation>
+    </track>
+    <track>
+      <title>National Geographic Wild</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/ngw_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5937.png</image>
+      <annotation>A vadvilág csodái a legközelebbről: lélegzetelállító természetfilmek, ragadozók és egzotikus élőhelyek.</annotation>
+    </track>
+    <track>
+      <title>Spektrum</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/spektrum_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6749.png</image>
+      <annotation>Közép-Európa vezető ismeretterjesztő televíziója: történelem, kultúra, tudomány és magyar felfedezők.</annotation>
+    </track>
+    <track>
+      <title>History</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/history_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7325.png</image>
+      <annotation>A történelem titkai: világháborúk, ősi civilizációk, rejtélyek és modern mérnöki csodák.</annotation>
+    </track>
+    <track>
+      <title>Spektrum Home</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/spektrum_home_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6589.png</image>
+      <annotation>Otthonteremtés, lakberendezés, kertépítés, gasztronómia és zöld életmód praktikus ötletekkel.</annotation>
+    </track>
+    <track>
+      <title>Ozone TV</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/ozone/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/8124.png</image>
+      <annotation>Környezetvédelem, klímatudatosság, zöld innovációk és a Föld jövőjét formáló tudományos kutatások.</annotation>
+    </track>
+    <track>
+      <title>M4 Sport</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/uatlmvixrr/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5903.png</image>
+      <annotation>A nemzeti sportcsatorna: labdarúgó NB I, Bajnokok Ligája, válogatott meccsek, Forma-1 és olimpiai közvetítések.</annotation>
+    </track>
+    <track>
+      <title>Spíler 1 TV</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/spiler1/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6721.png</image>
+      <annotation>Élő angol Premier League rangadók, MotoGP és európai top-bajnokságok a TV2 sportcsatornáján.</annotation>
+    </track>
+    <track>
+      <title>Spíler 2 TV</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/spiler2/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6722.png</image>
+      <annotation>Bajnokok Ligája meccsek, európai csúcsfutball és technikai sportok kiemelkedő felbontásban.</annotation>
+    </track>
+    <track>
+      <title>Sport 1</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/sport1_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6718.png</image>
+      <annotation>Nemzetközi labdarúgás, kézilabda Bajnokok Ligája, kosárlabda NBA és darts közvetítések élőben.</annotation>
+    </track>
+    <track>
+      <title>Sport 2</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/sport2_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6719.png</image>
+      <annotation>Európai futballkupák, kézilabda és küzdősportok élő közvetítése a Sport TV szakértő csapatával.</annotation>
+    </track>
+    <track>
+      <title>Arena4</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/arena4/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7084.png</image>
+      <annotation>NFL amerikai foci, BundesLiga, Serie A és motocross közvetítések a legmagasabb színvonalon.</annotation>
+    </track>
+    <track>
+      <title>Match 4</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://141.94.193.53/Match4_HD/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/8271.png</image>
+      <annotation>Angol másodosztály (Championship), NASCAR, IndyCar és nemzetközi sportesemények élőben.</annotation>
+    </track>
+    <track>
+      <title>TV Paprika</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/parpika_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6748.png</image>
+      <annotation>Közép-Európa gasztronómiai csatornája: Jamie Oliver, Gordon Ramsay és kiváló hazai mesterszakácsok receptjei.</annotation>
+    </track>
+    <track>
+      <title>TV2 Séf</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_lichi_tv_atk_tv/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7087.png</image>
+      <annotation>Sütés-főzés egyszerűen és kreatívan: látványos gasztro-vetélkedők, receptötletek és kulináris utazások.</annotation>
+    </track>
+    <track>
+      <title>TLC</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/tlc_hungary/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6751.png</image>
+      <annotation>Érdekes életek, különleges emberi történetek, esküvői magazinok, lakásfelújítás és családi szórakozás.</annotation>
+    </track>
+    <track>
+      <title>Life TV</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/lifetv/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6603.png</image>
+      <annotation>Életmód, egészségmegőrzés, szépségápolás, utazás és inspiráló beszélgetések a mindennapokhoz.</annotation>
+    </track>
+    <track>
+      <title>FEM3</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_fem3_atktv/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6455.png</image>
+      <annotation>Női szórakoztató csatorna: talk show-k, romantikus szériák, divat, életmód- és gasztromagazinok.</annotation>
+    </track>
+    <track>
+      <title>RTL Otthon</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/rtl_otthon_atk/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9311.png</image>
+      <annotation>Otthoni praktikák, barkácsolás, kertápolás és lakásfelújítás praktikus és inspiráló tippekkel.</annotation>
+    </track>
+    <track>
+      <title>Sláger TV</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_slager_tv_hungary_1200_atk/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6159.png</image>
+      <annotation>A legjobb hazai és nemzetközi slágerek: retró klipek, slágerlisták és vidám zenés műsorok.</annotation>
+    </track>
+    <track>
+      <title>Muzsika TV</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_muzsika_hungary_1200_atk/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6151.png</image>
+      <annotation>Mulató zene, magyar nóta és népzene: hazai előadók, lakodalmas slágerek és jó hangulatú kívánságműsorok.</annotation>
+    </track>
+    <track>
+      <title>Zenebutik</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/zenebutik/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6162.png</image>
+      <annotation>Magyar slágerzene, mulatós műsorok, klippremierek és zenei beszélgetések a TV2 Csoporttól.</annotation>
+    </track>
+    <track>
+      <title>Lóverseny közvetítés</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://87.229.103.60:1935/liverelay/loverseny2.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5939.png</image>
+      <annotation>Élő galopp- és ügetőfutamok közvetítése a Kincsem Parkból, szakkommentárok és esélylatolgatások.</annotation>
+    </track>
+    <track>
+      <title>Minimax</title>
+      <creator>🧸 Élő TV: Rajzfilm &amp; Gyerek</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/minimax_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7079.png</image>
+      <annotation>Erőszakmentes, fejlesztő rajzfilmek és kedves mesék óvodásoknak és kisiskolásoknak.</annotation>
+    </track>
+    <track>
+      <title>Nickelodeon</title>
+      <creator>🧸 Élő TV: Rajzfilm &amp; Gyerek</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/test_nickelodeon_hu_1200_atk/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6764.png</image>
+      <annotation>SpongyaBob, A Mancs őrjárat, Veszélyes Henry és a legnépszerűbb vidám gyereksorozatok.</annotation>
+    </track>
+    <track>
+      <title>Nick Jr</title>
+      <creator>🧸 Élő TV: Rajzfilm &amp; Gyerek</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/nick_junior_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6765.png</image>
+      <annotation>Kifejezetten a legkisebbeknek szóló, játékos és tanulást segítő kedves animációk.</annotation>
+    </track>
+    <track>
+      <title>Nicktoons</title>
+      <creator>🧸 Élő TV: Rajzfilm &amp; Gyerek</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/nicktoons_hungary/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6705.png</image>
+      <annotation>Non-stop vicces rajzfilmek, akció-animációk és pörgős mesék a nap 24 órájában.</annotation>
+    </track>
+    <track>
+      <title>TV2 Kids</title>
+      <creator>🧸 Élő TV: Rajzfilm &amp; Gyerek</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/tv2_kids/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6707.png</image>
+      <annotation>Klasszikus és modern európai mesék, családi rajzfilmsorozatok a legkisebbeknek.</annotation>
+    </track>
+    <track>
+      <title>JimJam</title>
+      <creator>🧸 Élő TV: Rajzfilm &amp; Gyerek</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/jim_jam_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7080.png</image>
+      <annotation>Biztonságos és bájos mesék kicsiknek: Bob, a mester, Thomas és barátai, Sam, a tűzoltó.</annotation>
+    </track>
+    <track>
+      <title>Kölyökklub</title>
+      <creator>🧸 Élő TV: Rajzfilm &amp; Gyerek</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/kolyokklub_atk/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9309.png</image>
+      <annotation>Kedvenc rajzfilmek, ifjúsági animációk és játékos történetek.</annotation>
+    </track>
+    <track>
+      <title>Debrecen TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay44_1/livestream002.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/4247.png</image>
+      <annotation>Debrecen és a hajdúsági térség hírei, közéleti és kulturális műsorai, magazinok és helyi közvetítések.</annotation>
+    </track>
+    <track>
+      <title>Fehérvár TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/freerelay/fehervartv.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/1815.png</image>
+      <annotation>Székesfehérvár és Fejér vármegye hírei, kulturális, közéleti és sportműsorai.</annotation>
+    </track>
+    <track>
+      <title>Nyíregyházi TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://nytvlive.hu:443/nytv/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/1853.png</image>
+      <annotation>Nyíregyháza és Szabolcs-Szatmár-Bereg vármegye helyi hírfolyama, magazinjai és rendezvényei.</annotation>
+    </track>
+    <track>
+      <title>Kecskeméti TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://rtmp1.40e.hu:8000/live/ktv.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/1901.png</image>
+      <annotation>Kecskemét és a hírös város környékének híradója, közéleti magazinműsorai.</annotation>
+    </track>
+    <track>
+      <title>Zalaegerszegi TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/freerelay/zegtv.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/1829.png</image>
+      <annotation>Zalaegerszeg és a zalai dombság híradása, városi tudósítások és kulturális műsorok.</annotation>
+    </track>
+    <track>
+      <title>Kapos TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront63.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5137.png</image>
+      <annotation>Kaposvár és a somogyi régió eseményei, helyi híradó és közösségi programok.</annotation>
+    </track>
+    <track>
+      <title>TV Eger</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://stream.tveger.hu:8010/live.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/1035.png</image>
+      <annotation>Eger és a hevesi térség hírei, borászat, történelem és kulturális események.</annotation>
+    </track>
+    <track>
+      <title>Szolnok TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/4788.png</image>
+      <annotation>Szolnok és a Jászkunság hírei, regionális magazinok és eseményközvetítések.</annotation>
+    </track>
+    <track>
+      <title>Gyöngyösi TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE043.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/1821.png</image>
+      <annotation>Gyöngyös és a Mátraalja televíziója: hírek, szüreti programok és közélet.</annotation>
+    </track>
+    <track>
+      <title>7.tv (Békéscsaba)</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.y5.hu/stream/stream_bekescsaba/stream.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5425.png</image>
+      <annotation>Békés vármegye és Békéscsaba hírtelevíziója: helyi riportok, gazdaság és kultúra.</annotation>
+    </track>
+    <track>
+      <title>Bajai TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront41.lexanetwork.com:1344/relay01/livestream002.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/3858.png</image>
+      <annotation>Baja és a bácskai Duna-part hírei, halászlé fesztivál és helyi közösségi élet.</annotation>
+    </track>
+    <track>
+      <title>Kanizsa TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/freerelay/kanizsavtv.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/1811.png</image>
+      <annotation>Nagykanizsa és a dél-zalai térség híradója, gazdasági és kulturális magazinja.</annotation>
+    </track>
+    <track>
+      <title>TV Keszthely</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/freerelay/keszthelyivtv.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/1812.png</image>
+      <annotation>Keszthely és a Nyugat-Balaton hírei, kastélyprogramok és balatoni események.</annotation>
+    </track>
+    <track>
+      <title>Komáromi TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay01/HDE017.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/4590.png</image>
+      <annotation>Komárom és a Duna-menti kistérség önkormányzati hírei, kulturális és sportműsorai.</annotation>
+    </track>
+    <track>
+      <title>Móri Városi TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/freerelay/morvtv.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/4650.png</image>
+      <annotation>Mór és a Vértesaljai borvidék helyi eseményei, kulturális rendezvényei.</annotation>
+    </track>
+    <track>
+      <title>Karcag TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront41.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/4662.png</image>
+      <annotation>Karcag és a Nagykunság hírei, hagyományőrzés, mezőgazdaság és helyi közélet.</annotation>
+    </track>
+    <track>
+      <title>Halom TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://212.92.13.108:8080/live/livestream1.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/4699.png</image>
+      <annotation>Százhalombatta és Pest vármegye déli agglomerációjának hírtelevíziója.</annotation>
+    </track>
+    <track>
+      <title>Ózdi TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://stream.nmih.hu:7980/live.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/4738.png</image>
+      <annotation>Ózd és a borsodi iparvidék híradója, közéleti és kulturális magazinja.</annotation>
+    </track>
+    <track>
+      <title>XVTV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay01/HDE051.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/4792.png</image>
+      <annotation>Budapest XV. kerületének (Rákospalota, Pestújhely, Újpalota) közösségi hírei.</annotation>
+    </track>
+    <track>
+      <title>Jászsági Térségi TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay01/broadcast007.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/4794.png</image>
+      <annotation>Jászberény és a Jászság térségi televíziója: helyi gazdaság, kultúra és híradó.</annotation>
+    </track>
+    <track>
+      <title>Líceum TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://193.225.32.62:8890/live.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5026.png</image>
+      <annotation>Eszterházy Károly Katolikus Egyetem televíziója: tudomány, művészet és oktatás.</annotation>
+    </track>
+    <track>
+      <title>TV13</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://tv13.medialivecdn.hu:443/tv13/3e4c201d9e403330d294e24760e49164.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5462.png</image>
+      <annotation>Budapest XIII. kerületének (Angyalföld, Újlipótváros) helyi közéleti és kulturális magazinja.</annotation>
+    </track>
+    <track>
+      <title>Vásárhelyi TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.vasarhelyitelevizio.hu/stream/stream.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5656.png</image>
+      <annotation>Hódmezővásárhely és a Dél-Alföld hírei, mezőgazdasági és kulturális programjai.</annotation>
+    </track>
+    <track>
+      <title>TelePaks</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay02/livestream004.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5838.png</image>
+      <annotation>Paks és a Duna-menti térség híradója, atomenergetikai és városi magazinja.</annotation>
+    </track>
+    <track>
+      <title>Balaton TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.iptvservice.eu/hls/balatontv.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/5913.png</image>
+      <annotation>A Balaton térségének regionális hírtelevíziója: turizmus, rendezvények és strandélet.</annotation>
+    </track>
+    <track>
+      <title>ESTV (Vác)</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay01/HDE032.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6144.png</image>
+      <annotation>Vác és a Dunakanyar térségi televíziója: hírek, kultúra és közélet.</annotation>
+    </track>
+    <track>
+      <title>Alföld TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront41.lexanetwork.com:1344/relay01/livestream006.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6491.png</image>
+      <annotation>A Dél-Alföld regionális televíziója: hírek, agrárium és kulturális tudósítások.</annotation>
+    </track>
+    <track>
+      <title>Oroszlányi TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay01/broadcast002.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6638.png</image>
+      <annotation>Oroszlány és a bányászati hagyományokkal bíró kistérség helyi hírei.</annotation>
+    </track>
+    <track>
+      <title>Móra-Net TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.moranettv.hu/live/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/6676.png</image>
+      <annotation>Mórahalom és a Homokhátság kistérségi televíziója: gyógyturizmus és kultúra.</annotation>
+    </track>
+    <track>
+      <title>Bicskei TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay02/broadcast003.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7371.png</image>
+      <annotation>Bicske és a Szent László-völgy helyi eseményei, önkormányzati híradója.</annotation>
+    </track>
+    <track>
+      <title>Hévízi TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/7374.png</image>
+      <annotation>Hévíz és a termáltó környékének hírei, gyógyturizmus és wellness magazin.</annotation>
+    </track>
+    <track>
+      <title>Sixo TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay01/HDE038.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9068.png</image>
+      <annotation>Sikondai és baranyai térségi televízió: helyi közösségi események és programok.</annotation>
+    </track>
+    <track>
+      <title>Gran TV (Esztergom)</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.medialive.hu/gran/grantvlive/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9081.png</image>
+      <annotation>Esztergom és a Pilis-Dunakanyar régió hírei, egyházi és kulturális közvetítések.</annotation>
+    </track>
+    <track>
+      <title>Cegléd TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay01/HDE031.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9332.png</image>
+      <annotation>Cegléd és a Dél-Pest vármegyei térség hírei, hagyományai és önkormányzati tájékoztatója.</annotation>
+    </track>
+    <track>
+      <title>City TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://citytv.hu/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/1802.png</image>
+      <annotation>Budapest Belváros-Lipótváros (V. kerület) önkormányzati és kulturális televíziója.</annotation>
+    </track>
+    <track>
+      <title>16tv Budapest</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/freerelay/16tv.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9800.png</image>
+      <annotation>16tv Budapest helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>ATV Spirit</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://streamservers.atv.hu/atvliveedge/_definst_/atvstream_2_aac/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9801.png</image>
+      <annotation>Az ATV testvércsatornája: könnyedebb közélet, magazinműsorok és talk-show-k.</annotation>
+    </track>
+    <track>
+      <title>AXN Spin</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://polska.hach.workers.dev/14847.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9802.png</image>
+      <annotation>Fiataloknak szóló akció, fantasy és anime sorozatok.</annotation>
+    </track>
+    <track>
+      <title>Animal Planet</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/animal_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9803.png</image>
+      <annotation>Vadállatok, természet és állatvilág testközelből.</annotation>
+    </track>
+    <track>
+      <title>BTV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/freerelay/babolnatv.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9804.png</image>
+      <annotation>BTV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Berente TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.streaming4u.hu/BerenteTV/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9805.png</image>
+      <annotation>Berente TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Csurgo TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cstv.medialivecdn.hu/csurgotv/27725804dc13aa23b3970414524d2dbf.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9806.png</image>
+      <annotation>Csurgo TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>DSTV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://79.120.178.90:1935/dstv/dstvlive/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9807.png</image>
+      <annotation>DSTV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>DTV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://cloudfront44.lexanetwork.com:1732/hlsrelay003/hls/livestream.sdp.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9808.png</image>
+      <annotation>DTV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Daru TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://5cd03f21c7193.streamlock.net/darutv/darutvlive/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9809.png</image>
+      <annotation>Daru TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Dikh TV</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/dikh/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9810.png</image>
+      <annotation>A roma kultúra, zene és szórakoztató műsorok országos csatornája.</annotation>
+    </track>
+    <track>
+      <title>Discovery Channel</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/discovery_hungary/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9811.png</image>
+      <annotation>A világ legnépszerűbb tudományos és felfedező csatornája.</annotation>
+    </track>
+    <track>
+      <title>Disney Channel</title>
+      <creator>🧸 Élő TV: Rajzfilm &amp; Gyerek</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://193.33.39.108:9019/play/a00n</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9812.png</image>
+      <annotation>A Disney animációs és ifjúsági sikersorozatai gyerekeknek és családoknak.</annotation>
+    </track>
+    <track>
+      <title>EWTN/Bonum TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://dash2.antik.sk/live/ewtn_bonum/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9813.png</image>
+      <annotation>EWTN/Bonum TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Egyker TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://iptv01.eurocable.co.hu/EC-EGYKERTVHD/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9814.png</image>
+      <annotation>Egyker TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>EuroSport1</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://141.94.193.53:80/Eurosport_1_HD/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9815.png</image>
+      <annotation>Élő nemzetközi élsport: tenisz Grand Slamek, kerékpár körversenyek, téli sportok.</annotation>
+    </track>
+    <track>
+      <title>FIX TV</title>
+      <creator>🔴 Élő TV: Országos &amp; Kereskedelmi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://fixhd.tv:8082/fix/1080i/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9816.png</image>
+      <annotation>Technológiai hírek, informatika és kulturális magazinok.</annotation>
+    </track>
+    <track>
+      <title>Film Mania</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://205.237.104.26:8080/stream/340/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9817.png</image>
+      <annotation>Örökzöld hollywoodi klasszikusok és legendás mozifilmek.</annotation>
+    </track>
+    <track>
+      <title>Food Network</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/fn_hungary/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9818.png</image>
+      <annotation>Gasztronómia, világhírű séfek és kulináris élmények.</annotation>
+    </track>
+    <track>
+      <title>Globo TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.streaming4u.hu/GloboTV/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9819.png</image>
+      <annotation>Globo TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Golya TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.streaming4u.hu/GolyaTV/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9820.png</image>
+      <annotation>Golya TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>HGTV</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/hgtv_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9821.png</image>
+      <annotation>Otthonteremtés, lakberendezés és házfelújítás.</annotation>
+    </track>
+    <track>
+      <title>Hangulat TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://iptv01.eurocable.co.hu/EC-HANGULATTV/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9822.png</image>
+      <annotation>Hangulat TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Hegyvidek TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://iptv02.eurocable.co.hu:15400/EC-HEGYVIDEKTV-FTA/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9823.png</image>
+      <annotation>Hegyvidek TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Investigation Discovery</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/id_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9824.png</image>
+      <annotation>Valódi bűnügyi történetek és nyomozások.</annotation>
+    </track>
+    <track>
+      <title>Kiskoros TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://5cd03f21c7193.streamlock.net/kiskorostv/korostvlive/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9825.png</image>
+      <annotation>Kiskoros TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Komlos TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.streaming4u.hu/KomlosTV/tracks-v1a1/mono.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9826.png</image>
+      <annotation>Komlos TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Makoi Varosi Televizio</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://makomedia.mikrohalo.hu/hls/makotv.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9827.png</image>
+      <annotation>Makoi Varosi Televizio helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Mezokovesdi Televizio</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/freerelay/mezokovesdvtv.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9828.png</image>
+      <annotation>Mezokovesdi Televizio helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Oxygen Music</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://oxygenmusic.hu:2443/hls/oxygenmusic.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9829.png</image>
+      <annotation>Oxygen Music helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>PVTV</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://78.47.126.198:5080/LiveApp/streams/902003217052313577741820.m3u8?token=null</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9830.png</image>
+      <annotation>Horgász és vadász közvetítések a természet szerelmeseinek.</annotation>
+    </track>
+    <track>
+      <title>PilisTV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.streaming4u.hu/PilisTV/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9831.png</image>
+      <annotation>PilisTV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>RTL Klub</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://141.94.193.53:80/RTL_HD/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9832.png</image>
+      <annotation>RTL Klub helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Rakosmente TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://rakosmentetv.hu:8080/hls/rmtv.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9833.png</image>
+      <annotation>Rakosmente TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>RegioPlusz TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.streaming4u.hu/RegioPluszTV/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9834.png</image>
+      <annotation>RegioPlusz TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Soltvadkerti Televizio</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://79.120.178.90:1935/soltvadkerttv/soltvlive/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9835.png</image>
+      <annotation>Soltvadkerti Televizio helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Story4</title>
+      <creator>🎬 Élő TV: Film &amp; Sorozat</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/story_4_cze_atk/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9836.png</image>
+      <annotation>Klasszikus és modern európai és amerikai drámák, krimik és romantikus sorozatok.</annotation>
+    </track>
+    <track>
+      <title>Szecseny TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://iptv.eurocable.co.hu/EC-SZECSENYTVHD/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9837.png</image>
+      <annotation>Szecseny TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>TV Budakalasz</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.streaming4u.hu/TVBudakalasz/tracks-v1a1/mono.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9838.png</image>
+      <annotation>TV Budakalasz helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>TV Szentendre</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.streaming4u.hu/TVSzentendre/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9839.png</image>
+      <annotation>TV Szentendre helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Tatai TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/relay01/broadcast006.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9840.png</image>
+      <annotation>Tatai TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>The Fishing &amp; Hunting Channel</title>
+      <creator>⚽ Élő TV: Sport, Zene &amp; Életmód</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/fishing_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9841.png</image>
+      <annotation>Horgászat, vadászat és természetjárás Európa vizein.</annotation>
+    </track>
+    <track>
+      <title>Tisza TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://www.tiszatv.hu/onlinetv/tiszatv_1.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9842.png</image>
+      <annotation>Tisza TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Travel Channel</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://88.212.7.14/live/travel_hun/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9843.png</image>
+      <annotation>Utazások, egzotikus kultúrák és rejtett úti célok.</annotation>
+    </track>
+    <track>
+      <title>Trimedio TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.streaming4u.hu/TriMedioTV/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9844.png</image>
+      <annotation>Trimedio TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>VTV Fuzesabony</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://stream.nmih.hu:7962/live.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9845.png</image>
+      <annotation>VTV Fuzesabony helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Viasat Explore</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://205.237.104.26:8080/stream/345/index.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9846.png</image>
+      <annotation>Extrém kalandok, felfedezések és emberi teljesítmények.</annotation>
+    </track>
+    <track>
+      <title>Viasat History</title>
+      <creator>🌍 Élő TV: Ismeretterjesztő &amp; Doksi</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://193.33.39.108:9007/play/a00p</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9847.png</image>
+      <annotation>Történelmi dokumentumfilmek az ókortól a modern korig.</annotation>
+    </track>
+    <track>
+      <title>Volgyhid TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://5cd03f21c7193.streamlock.net/volgyhidtv/mediakft/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9849.png</image>
+      <annotation>Volgyhid TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Williams TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>http://79.120.178.90:1935/williams/williamstv/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9850.png</image>
+      <annotation>Williams TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+    <track>
+      <title>Zuglo TV</title>
+      <creator>📍 Élő TV: Helyi &amp; Városi TV-k</creator>
+      <album>Nuvio Magyar TV</album>
+      <location>https://cloudfront44.lexanetwork.com:1344/freerelay/zuglotv.sdp/playlist.m3u8</location>
+      <image>https://nuvio-magyar-http.onrender.com/tv-logos/9851.png</image>
+      <annotation>Zuglo TV helyi és körzeti televízió élő adása.</annotation>
+    </track>
+  </trackList>
+</playlist>

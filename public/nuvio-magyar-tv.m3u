@@ -1,0 +1,325 @@
+#EXTM3U name="Nuvio Magyar TV"
+#EXTINF:-1 tvg-id="6141" tvg-name="RTL" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6141.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",RTL
+http://88.212.7.14/live/test_rtl_klub_hungary_1200_atk/playlist.m3u8
+#EXTINF:-1 tvg-id="6143" tvg-name="TV2" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6143.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",TV2
+http://88.212.7.14/live/test_tv_2_hungary_1200_atk/playlist.m3u8
+#EXTINF:-1 tvg-id="5901" tvg-name="M1" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5901.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",M1
+http://88.212.7.14/live/test_m_1_hungary_1200_atk/playlist.m3u8
+#EXTINF:-1 tvg-id="5905" tvg-name="Duna" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5905.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",Duna
+http://88.212.7.14/live/duna_hun/index.m3u8
+#EXTINF:-1 tvg-id="6723" tvg-name="Super TV2" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6723.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",Super TV2
+http://88.212.7.14/live/test_super_tv2_hungary_1200_atk/playlist.m3u8
+#EXTINF:-1 tvg-id="6142" tvg-name="RTL Kettő" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6142.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",RTL Kettő
+http://88.212.7.14/live/test_rtl2_hungary_1200_atk/playlist.m3u8
+#EXTINF:-1 tvg-id="6147" tvg-name="RTL Három" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6147.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",RTL Három
+http://88.212.7.14/live/test_rtl_plus_hungary_1200_atk/playlist.m3u8
+#EXTINF:-1 tvg-id="5911" tvg-name="Viasat 3" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5911.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",Viasat 3
+http://88.212.7.14/live/viasat3/index.m3u8
+#EXTINF:-1 tvg-id="4739" tvg-name="ATV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/4739.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",ATV
+https://stream.atv.hu/atvlive/atvstream_2_aac/playlist.m3u8
+#EXTINF:-1 tvg-id="4740" tvg-name="Hír TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/4740.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",Hír TV
+https://videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8
+#EXTINF:-1 tvg-id="6704" tvg-name="Prime" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6704.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",Prime
+http://88.212.7.14/live/prime/index.m3u8
+#EXTINF:-1 tvg-id="6184" tvg-name="TV4" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6184.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",TV4
+http://88.212.7.14/live/test_tv_4_hun_atk_1200/playlist.m3u8
+#EXTINF:-1 tvg-id="6236" tvg-name="Viasat 6" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6236.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",Viasat 6
+http://88.212.7.14/live/viasat6/index.m3u8
+#EXTINF:-1 tvg-id="6148" tvg-name="RTL Gold" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6148.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",RTL Gold
+https://budapest-cache-1.antik.sk/live/test_film_plus_2_hungary_1200_atk/playlist.m3u8
+#EXTINF:-1 tvg-id="5902" tvg-name="M2 / Petőfi TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5902.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",M2 / Petőfi TV
+http://88.212.7.14/live/m2_hun/index.m3u8
+#EXTINF:-1 tvg-id="5906" tvg-name="Duna World / M4 Sport+" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5906.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",Duna World / M4 Sport+
+http://88.212.7.14/live/duna_world_hun/index.m3u8
+#EXTINF:-1 tvg-id="5904" tvg-name="M5" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5904.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",M5
+http://88.212.7.14/live/test_m_5_hun_atk_1200/playlist.m3u8
+#EXTINF:-1 tvg-id="8716" tvg-name="Viasat 2" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/8716.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",Viasat 2
+http://88.212.7.14/live/viasat2/index.m3u8
+#EXTINF:-1 tvg-id="5855" tvg-name="Euronews" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5855.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",Euronews
+http://141.94.193.53:80/EuroNews_HD/index.m3u8
+#EXTINF:-1 tvg-id="4695" tvg-name="Pannon RTV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/4695.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",Pannon RTV
+https://stream2.nmih.hu:4102/live.m3u8
+#EXTINF:-1 tvg-id="9073" tvg-name="RTV-1 Vajdaság" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9073.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",RTV-1 Vajdaság
+http://212.200.230.50:1935/RTV/rtv2/playlist.m3u8
+#EXTINF:-1 tvg-id="8999" tvg-name="RTV-2 Vajdaság" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/8999.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",RTV-2 Vajdaság
+http://212.200.230.50:1935/RTV/rtv2/playlist.m3u8
+#EXTINF:-1 tvg-id="1819" tvg-name="Budapest Európa Televízió" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/1819.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",Budapest Európa Televízió
+https://cloudfront44.lexanetwork.com:1344/freerelay/bpetv.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="5927" tvg-name="Apostol TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5927.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",Apostol TV
+https://live.apostoltv.hu/live/playlist.m3u8
+#EXTINF:-1 tvg-id="4798" tvg-name="EWTN" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/4798.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",EWTN
+https://hls.iptvservice.eu/hls/ewtn-hd.m3u8
+#EXTINF:-1 tvg-id="6150" tvg-name="Film+" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6150.png" group-title="🎬 Élő TV: Film & Sorozat",Film+
+http://88.212.7.14/live/film_plus_hun_atk/index.m3u8
+#EXTINF:-1 tvg-id="6152" tvg-name="Mozi+" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6152.png" group-title="🎬 Élő TV: Film & Sorozat",Mozi+
+http://88.212.7.14/live/mozi_plusz/index.m3u8
+#EXTINF:-1 tvg-id="6146" tvg-name="Cool TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6146.png" group-title="🎬 Élő TV: Film & Sorozat",Cool TV
+http://141.94.193.53:80/Cool_HD/index.m3u8
+#EXTINF:-1 tvg-id="6652" tvg-name="AMC" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6652.png" group-title="🎬 Élő TV: Film & Sorozat",AMC
+http://141.94.193.53:80/AMC_HD/index.m3u8
+#EXTINF:-1 tvg-id="6720" tvg-name="Moziverzum" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6720.png" group-title="🎬 Élő TV: Film & Sorozat",Moziverzum
+http://88.212.7.14/live/moziverzum/index.m3u8
+#EXTINF:-1 tvg-id="7069" tvg-name="HBO" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7069.png" group-title="🎬 Élő TV: Film & Sorozat",HBO
+http://141.94.193.53:80/HBO_HD/index.m3u8
+#EXTINF:-1 tvg-id="7158" tvg-name="HBO 2" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7158.png" group-title="🎬 Élő TV: Film & Sorozat",HBO 2
+http://141.94.193.53:80/HBO_HD/index.m3u8
+#EXTINF:-1 tvg-id="7159" tvg-name="HBO 3" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7159.png" group-title="🎬 Élő TV: Film & Sorozat",HBO 3
+http://141.94.193.53:80/HBO3_HD/index.m3u8
+#EXTINF:-1 tvg-id="6254" tvg-name="Film4" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6254.png" group-title="🎬 Élő TV: Film & Sorozat",Film4
+http://88.212.7.14/live/film4_hun/index.m3u8
+#EXTINF:-1 tvg-id="7060" tvg-name="TV2 Comedy" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7060.png" group-title="🎬 Élő TV: Film & Sorozat",TV2 Comedy
+http://88.212.7.14/live/tv2_comedy/index.m3u8
+#EXTINF:-1 tvg-id="6149" tvg-name="Sorozat+" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6149.png" group-title="🎬 Élő TV: Film & Sorozat",Sorozat+
+http://88.212.7.14/live/test_sorozat_hungary_1200_atk/playlist.m3u8
+#EXTINF:-1 tvg-id="7074" tvg-name="Film Café" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7074.png" group-title="🎬 Élő TV: Film & Sorozat",Film Café
+http://88.212.7.14/live/film_cafe/index.m3u8
+#EXTINF:-1 tvg-id="7154" tvg-name="AXN Black" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7154.png" group-title="🎬 Élő TV: Film & Sorozat",AXN Black
+http://141.94.193.53:80/axn_black/index.m3u8
+#EXTINF:-1 tvg-id="7422" tvg-name="Galaxy 4" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7422.png" group-title="🎬 Élő TV: Film & Sorozat",Galaxy 4
+https://budapest-cache-1.antik.sk/live/test_galaxy_4_atk_1200/playlist.m3u8
+#EXTINF:-1 tvg-id="8714" tvg-name="Max4" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/8714.png" group-title="🎬 Élő TV: Film & Sorozat",Max4
+http://141.94.193.53/MAX4_HD/index.m3u8
+#EXTINF:-1 tvg-id="6163" tvg-name="Izaura TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6163.png" group-title="🎬 Élő TV: Film & Sorozat",Izaura TV
+http://88.212.7.14/live/izaura/index.m3u8
+#EXTINF:-1 tvg-id="6701" tvg-name="Jocky TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6701.png" group-title="🎬 Élő TV: Film & Sorozat",Jocky TV
+http://88.212.7.14/live/jocky/index.m3u8
+#EXTINF:-1 tvg-id="8489" tvg-name="Magyar Mozi TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/8489.png" group-title="🎬 Élő TV: Film & Sorozat",Magyar Mozi TV
+http://88.212.7.14/live/mozi/index.m3u8
+#EXTINF:-1 tvg-id="9310" tvg-name="Moziklub" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9310.png" group-title="🎬 Élő TV: Film & Sorozat",Moziklub
+http://88.212.7.14/live/moziklub_atk/index.m3u8
+#EXTINF:-1 tvg-id="9312" tvg-name="Sorozatklub" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9312.png" group-title="🎬 Élő TV: Film & Sorozat",Sorozatklub
+http://88.212.7.14/live/sorozatklub_atk/index.m3u8
+#EXTINF:-1 tvg-id="9745" tvg-name="Classics TV Magyarország" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9745.png" group-title="🎬 Élő TV: Film & Sorozat",Classics TV Magyarország
+https://s01.diazol.hu:9152/live.m3u8
+#EXTINF:-1 tvg-id="5936" tvg-name="National Geographic" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5936.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",National Geographic
+http://88.212.7.14/live/ngc_hun/index.m3u8
+#EXTINF:-1 tvg-id="5937" tvg-name="National Geographic Wild" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5937.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",National Geographic Wild
+http://88.212.7.14/live/ngw_hun/index.m3u8
+#EXTINF:-1 tvg-id="6749" tvg-name="Spektrum" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6749.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",Spektrum
+http://88.212.7.14/live/spektrum_hun/index.m3u8
+#EXTINF:-1 tvg-id="7325" tvg-name="History" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7325.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",History
+http://88.212.7.14/live/history_hun/index.m3u8
+#EXTINF:-1 tvg-id="6589" tvg-name="Spektrum Home" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6589.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",Spektrum Home
+http://88.212.7.14/live/spektrum_home_hun/index.m3u8
+#EXTINF:-1 tvg-id="8124" tvg-name="Ozone TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/8124.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",Ozone TV
+http://88.212.7.14/live/ozone/index.m3u8
+#EXTINF:-1 tvg-id="5903" tvg-name="M4 Sport" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5903.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",M4 Sport
+http://88.212.7.14/live/uatlmvixrr/index.m3u8
+#EXTINF:-1 tvg-id="6721" tvg-name="Spíler 1 TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6721.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",Spíler 1 TV
+http://88.212.7.14/live/spiler1/index.m3u8
+#EXTINF:-1 tvg-id="6722" tvg-name="Spíler 2 TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6722.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",Spíler 2 TV
+http://88.212.7.14/live/spiler2/index.m3u8
+#EXTINF:-1 tvg-id="6718" tvg-name="Sport 1" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6718.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",Sport 1
+http://88.212.7.14/live/sport1_hun/index.m3u8
+#EXTINF:-1 tvg-id="6719" tvg-name="Sport 2" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6719.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",Sport 2
+http://88.212.7.14/live/sport2_hun/index.m3u8
+#EXTINF:-1 tvg-id="7084" tvg-name="Arena4" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7084.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",Arena4
+http://88.212.7.14/live/arena4/index.m3u8
+#EXTINF:-1 tvg-id="8271" tvg-name="Match 4" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/8271.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",Match 4
+http://141.94.193.53/Match4_HD/index.m3u8
+#EXTINF:-1 tvg-id="6748" tvg-name="TV Paprika" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6748.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",TV Paprika
+http://88.212.7.14/live/parpika_hun/index.m3u8
+#EXTINF:-1 tvg-id="7087" tvg-name="TV2 Séf" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7087.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",TV2 Séf
+http://88.212.7.14/live/test_lichi_tv_atk_tv/playlist.m3u8
+#EXTINF:-1 tvg-id="6751" tvg-name="TLC" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6751.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",TLC
+http://88.212.7.14/live/tlc_hungary/index.m3u8
+#EXTINF:-1 tvg-id="6603" tvg-name="Life TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6603.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",Life TV
+http://88.212.7.14/live/lifetv/index.m3u8
+#EXTINF:-1 tvg-id="6455" tvg-name="FEM3" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6455.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",FEM3
+http://88.212.7.14/live/test_fem3_atktv/playlist.m3u8
+#EXTINF:-1 tvg-id="9311" tvg-name="RTL Otthon" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9311.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",RTL Otthon
+http://88.212.7.14/live/rtl_otthon_atk/index.m3u8
+#EXTINF:-1 tvg-id="6159" tvg-name="Sláger TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6159.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",Sláger TV
+http://88.212.7.14/live/test_slager_tv_hungary_1200_atk/playlist.m3u8
+#EXTINF:-1 tvg-id="6151" tvg-name="Muzsika TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6151.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",Muzsika TV
+http://88.212.7.14/live/test_muzsika_hungary_1200_atk/playlist.m3u8
+#EXTINF:-1 tvg-id="6162" tvg-name="Zenebutik" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6162.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",Zenebutik
+http://88.212.7.14/live/zenebutik/index.m3u8
+#EXTINF:-1 tvg-id="5939" tvg-name="Lóverseny közvetítés" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5939.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",Lóverseny közvetítés
+http://87.229.103.60:1935/liverelay/loverseny2.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="7079" tvg-name="Minimax" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7079.png" group-title="🧸 Élő TV: Rajzfilm & Gyerek",Minimax
+http://88.212.7.14/live/minimax_hun/index.m3u8
+#EXTINF:-1 tvg-id="6764" tvg-name="Nickelodeon" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6764.png" group-title="🧸 Élő TV: Rajzfilm & Gyerek",Nickelodeon
+http://88.212.7.14/live/test_nickelodeon_hu_1200_atk/playlist.m3u8
+#EXTINF:-1 tvg-id="6765" tvg-name="Nick Jr" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6765.png" group-title="🧸 Élő TV: Rajzfilm & Gyerek",Nick Jr
+http://88.212.7.14/live/nick_junior_hun/index.m3u8
+#EXTINF:-1 tvg-id="6705" tvg-name="Nicktoons" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6705.png" group-title="🧸 Élő TV: Rajzfilm & Gyerek",Nicktoons
+http://88.212.7.14/live/nicktoons_hungary/index.m3u8
+#EXTINF:-1 tvg-id="6707" tvg-name="TV2 Kids" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6707.png" group-title="🧸 Élő TV: Rajzfilm & Gyerek",TV2 Kids
+http://88.212.7.14/live/tv2_kids/index.m3u8
+#EXTINF:-1 tvg-id="7080" tvg-name="JimJam" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7080.png" group-title="🧸 Élő TV: Rajzfilm & Gyerek",JimJam
+http://88.212.7.14/live/jim_jam_hun/index.m3u8
+#EXTINF:-1 tvg-id="9309" tvg-name="Kölyökklub" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9309.png" group-title="🧸 Élő TV: Rajzfilm & Gyerek",Kölyökklub
+http://88.212.7.14/live/kolyokklub_atk/index.m3u8
+#EXTINF:-1 tvg-id="4247" tvg-name="Debrecen TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/4247.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Debrecen TV
+https://cloudfront44.lexanetwork.com:1344/relay44_1/livestream002.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="1815" tvg-name="Fehérvár TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/1815.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Fehérvár TV
+https://cloudfront44.lexanetwork.com:1344/freerelay/fehervartv.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="1853" tvg-name="Nyíregyházi TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/1853.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Nyíregyházi TV
+https://nytvlive.hu:443/nytv/playlist.m3u8
+#EXTINF:-1 tvg-id="1901" tvg-name="Kecskeméti TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/1901.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Kecskeméti TV
+http://rtmp1.40e.hu:8000/live/ktv.m3u8
+#EXTINF:-1 tvg-id="1829" tvg-name="Zalaegerszegi TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/1829.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Zalaegerszegi TV
+https://cloudfront44.lexanetwork.com:1344/freerelay/zegtv.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="5137" tvg-name="Kapos TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5137.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Kapos TV
+https://cloudfront63.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="1035" tvg-name="TV Eger" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/1035.png" group-title="📍 Élő TV: Helyi & Városi TV-k",TV Eger
+http://stream.tveger.hu:8010/live.m3u8
+#EXTINF:-1 tvg-id="4788" tvg-name="Szolnok TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/4788.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Szolnok TV
+https://cloudfront44.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="1821" tvg-name="Gyöngyösi TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/1821.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Gyöngyösi TV
+https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE043.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="5425" tvg-name="7.tv (Békéscsaba)" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5425.png" group-title="📍 Élő TV: Helyi & Városi TV-k",7.tv (Békéscsaba)
+https://stream.y5.hu/stream/stream_bekescsaba/stream.m3u8
+#EXTINF:-1 tvg-id="3858" tvg-name="Bajai TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/3858.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Bajai TV
+https://cloudfront41.lexanetwork.com:1344/relay01/livestream002.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="1811" tvg-name="Kanizsa TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/1811.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Kanizsa TV
+https://cloudfront44.lexanetwork.com:1344/freerelay/kanizsavtv.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="1812" tvg-name="TV Keszthely" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/1812.png" group-title="📍 Élő TV: Helyi & Városi TV-k",TV Keszthely
+https://cloudfront44.lexanetwork.com:1344/freerelay/keszthelyivtv.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="4590" tvg-name="Komáromi TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/4590.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Komáromi TV
+https://cloudfront44.lexanetwork.com:1344/relay01/HDE017.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="4650" tvg-name="Móri Városi TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/4650.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Móri Városi TV
+https://cloudfront44.lexanetwork.com:1344/freerelay/morvtv.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="4662" tvg-name="Karcag TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/4662.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Karcag TV
+https://cloudfront41.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="4699" tvg-name="Halom TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/4699.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Halom TV
+http://212.92.13.108:8080/live/livestream1.m3u8
+#EXTINF:-1 tvg-id="4738" tvg-name="Ózdi TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/4738.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Ózdi TV
+http://stream.nmih.hu:7980/live.m3u8
+#EXTINF:-1 tvg-id="4792" tvg-name="XVTV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/4792.png" group-title="📍 Élő TV: Helyi & Városi TV-k",XVTV
+https://cloudfront44.lexanetwork.com:1344/relay01/HDE051.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="4794" tvg-name="Jászsági Térségi TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/4794.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Jászsági Térségi TV
+https://cloudfront44.lexanetwork.com:1344/relay01/broadcast007.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="5026" tvg-name="Líceum TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5026.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Líceum TV
+http://193.225.32.62:8890/live.m3u8
+#EXTINF:-1 tvg-id="5462" tvg-name="TV13" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5462.png" group-title="📍 Élő TV: Helyi & Városi TV-k",TV13
+https://tv13.medialivecdn.hu:443/tv13/3e4c201d9e403330d294e24760e49164.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="5656" tvg-name="Vásárhelyi TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5656.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Vásárhelyi TV
+https://stream.vasarhelyitelevizio.hu/stream/stream.m3u8
+#EXTINF:-1 tvg-id="5838" tvg-name="TelePaks" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5838.png" group-title="📍 Élő TV: Helyi & Városi TV-k",TelePaks
+https://cloudfront44.lexanetwork.com:1344/relay02/livestream004.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="5913" tvg-name="Balaton TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/5913.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Balaton TV
+https://stream.iptvservice.eu/hls/balatontv.m3u8
+#EXTINF:-1 tvg-id="6144" tvg-name="ESTV (Vác)" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6144.png" group-title="📍 Élő TV: Helyi & Városi TV-k",ESTV (Vác)
+https://cloudfront44.lexanetwork.com:1344/relay01/HDE032.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="6491" tvg-name="Alföld TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6491.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Alföld TV
+https://cloudfront41.lexanetwork.com:1344/relay01/livestream006.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="6638" tvg-name="Oroszlányi TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6638.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Oroszlányi TV
+https://cloudfront44.lexanetwork.com:1344/relay01/broadcast002.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="6676" tvg-name="Móra-Net TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/6676.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Móra-Net TV
+https://stream.moranettv.hu/live/index.m3u8
+#EXTINF:-1 tvg-id="7371" tvg-name="Bicskei TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7371.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Bicskei TV
+https://cloudfront44.lexanetwork.com:1344/relay02/broadcast003.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="7374" tvg-name="Hévízi TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/7374.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Hévízi TV
+https://cloudfront44.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="9068" tvg-name="Sixo TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9068.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Sixo TV
+https://cloudfront44.lexanetwork.com:1344/relay01/HDE038.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="9081" tvg-name="Gran TV (Esztergom)" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9081.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Gran TV (Esztergom)
+https://stream.medialive.hu/gran/grantvlive/playlist.m3u8
+#EXTINF:-1 tvg-id="9332" tvg-name="Cegléd TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9332.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Cegléd TV
+https://cloudfront44.lexanetwork.com:1344/relay01/HDE031.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="1802" tvg-name="City TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/1802.png" group-title="📍 Élő TV: Helyi & Városi TV-k",City TV
+https://citytv.hu/playlist.m3u8
+#EXTINF:-1 tvg-id="9800" tvg-name="16tv Budapest" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9800.png" group-title="📍 Élő TV: Helyi & Városi TV-k",16tv Budapest
+https://cloudfront44.lexanetwork.com:1344/freerelay/16tv.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="9801" tvg-name="ATV Spirit" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9801.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",ATV Spirit
+https://streamservers.atv.hu/atvliveedge/_definst_/atvstream_2_aac/playlist.m3u8
+#EXTINF:-1 tvg-id="9802" tvg-name="AXN Spin" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9802.png" group-title="🎬 Élő TV: Film & Sorozat",AXN Spin
+https://polska.hach.workers.dev/14847.m3u8
+#EXTINF:-1 tvg-id="9803" tvg-name="Animal Planet" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9803.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",Animal Planet
+http://88.212.7.14/live/animal_hun/index.m3u8
+#EXTINF:-1 tvg-id="9804" tvg-name="BTV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9804.png" group-title="📍 Élő TV: Helyi & Városi TV-k",BTV
+https://cloudfront44.lexanetwork.com:1344/freerelay/babolnatv.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="9805" tvg-name="Berente TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9805.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Berente TV
+https://stream.streaming4u.hu/BerenteTV/index.m3u8
+#EXTINF:-1 tvg-id="9806" tvg-name="Csurgo TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9806.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Csurgo TV
+https://cstv.medialivecdn.hu/csurgotv/27725804dc13aa23b3970414524d2dbf.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="9807" tvg-name="DSTV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9807.png" group-title="📍 Élő TV: Helyi & Városi TV-k",DSTV
+http://79.120.178.90:1935/dstv/dstvlive/playlist.m3u8
+#EXTINF:-1 tvg-id="9808" tvg-name="DTV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9808.png" group-title="📍 Élő TV: Helyi & Városi TV-k",DTV
+http://cloudfront44.lexanetwork.com:1732/hlsrelay003/hls/livestream.sdp.m3u8
+#EXTINF:-1 tvg-id="9809" tvg-name="Daru TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9809.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Daru TV
+https://5cd03f21c7193.streamlock.net/darutv/darutvlive/playlist.m3u8
+#EXTINF:-1 tvg-id="9810" tvg-name="Dikh TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9810.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",Dikh TV
+http://88.212.7.14/live/dikh/index.m3u8
+#EXTINF:-1 tvg-id="9811" tvg-name="Discovery Channel" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9811.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",Discovery Channel
+http://88.212.7.14/live/discovery_hungary/index.m3u8
+#EXTINF:-1 tvg-id="9812" tvg-name="Disney Channel" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9812.png" group-title="🧸 Élő TV: Rajzfilm & Gyerek",Disney Channel
+http://193.33.39.108:9019/play/a00n
+#EXTINF:-1 tvg-id="9813" tvg-name="EWTN/Bonum TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9813.png" group-title="📍 Élő TV: Helyi & Városi TV-k",EWTN/Bonum TV
+https://dash2.antik.sk/live/ewtn_bonum/index.m3u8
+#EXTINF:-1 tvg-id="9814" tvg-name="Egyker TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9814.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Egyker TV
+https://iptv01.eurocable.co.hu/EC-EGYKERTVHD/index.m3u8
+#EXTINF:-1 tvg-id="9815" tvg-name="EuroSport1" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9815.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",EuroSport1
+http://141.94.193.53:80/Eurosport_1_HD/index.m3u8
+#EXTINF:-1 tvg-id="9816" tvg-name="FIX TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9816.png" group-title="🔴 Élő TV: Országos & Kereskedelmi",FIX TV
+https://fixhd.tv:8082/fix/1080i/playlist.m3u8
+#EXTINF:-1 tvg-id="9817" tvg-name="Film Mania" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9817.png" group-title="🎬 Élő TV: Film & Sorozat",Film Mania
+http://205.237.104.26:8080/stream/340/index.m3u8
+#EXTINF:-1 tvg-id="9818" tvg-name="Food Network" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9818.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",Food Network
+http://88.212.7.14/live/fn_hungary/index.m3u8
+#EXTINF:-1 tvg-id="9819" tvg-name="Globo TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9819.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Globo TV
+https://stream.streaming4u.hu/GloboTV/index.m3u8
+#EXTINF:-1 tvg-id="9820" tvg-name="Golya TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9820.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Golya TV
+https://stream.streaming4u.hu/GolyaTV/index.m3u8
+#EXTINF:-1 tvg-id="9821" tvg-name="HGTV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9821.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",HGTV
+http://88.212.7.14/live/hgtv_hun/index.m3u8
+#EXTINF:-1 tvg-id="9822" tvg-name="Hangulat TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9822.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Hangulat TV
+https://iptv01.eurocable.co.hu/EC-HANGULATTV/index.m3u8
+#EXTINF:-1 tvg-id="9823" tvg-name="Hegyvidek TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9823.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Hegyvidek TV
+https://iptv02.eurocable.co.hu:15400/EC-HEGYVIDEKTV-FTA/index.m3u8
+#EXTINF:-1 tvg-id="9824" tvg-name="Investigation Discovery" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9824.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",Investigation Discovery
+http://88.212.7.14/live/id_hun/index.m3u8
+#EXTINF:-1 tvg-id="9825" tvg-name="Kiskoros TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9825.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Kiskoros TV
+https://5cd03f21c7193.streamlock.net/kiskorostv/korostvlive/playlist.m3u8
+#EXTINF:-1 tvg-id="9826" tvg-name="Komlos TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9826.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Komlos TV
+https://stream.streaming4u.hu/KomlosTV/tracks-v1a1/mono.m3u8
+#EXTINF:-1 tvg-id="9827" tvg-name="Makoi Varosi Televizio" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9827.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Makoi Varosi Televizio
+http://makomedia.mikrohalo.hu/hls/makotv.m3u8
+#EXTINF:-1 tvg-id="9828" tvg-name="Mezokovesdi Televizio" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9828.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Mezokovesdi Televizio
+https://cloudfront44.lexanetwork.com:1344/freerelay/mezokovesdvtv.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="9829" tvg-name="Oxygen Music" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9829.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Oxygen Music
+https://oxygenmusic.hu:2443/hls/oxygenmusic.m3u8
+#EXTINF:-1 tvg-id="9830" tvg-name="PVTV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9830.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",PVTV
+http://78.47.126.198:5080/LiveApp/streams/902003217052313577741820.m3u8?token=null
+#EXTINF:-1 tvg-id="9831" tvg-name="PilisTV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9831.png" group-title="📍 Élő TV: Helyi & Városi TV-k",PilisTV
+https://stream.streaming4u.hu/PilisTV/index.m3u8
+#EXTINF:-1 tvg-id="9832" tvg-name="RTL Klub" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9832.png" group-title="📍 Élő TV: Helyi & Városi TV-k",RTL Klub
+http://141.94.193.53:80/RTL_HD/index.m3u8
+#EXTINF:-1 tvg-id="9833" tvg-name="Rakosmente TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9833.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Rakosmente TV
+http://rakosmentetv.hu:8080/hls/rmtv.m3u8
+#EXTINF:-1 tvg-id="9834" tvg-name="RegioPlusz TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9834.png" group-title="📍 Élő TV: Helyi & Városi TV-k",RegioPlusz TV
+https://stream.streaming4u.hu/RegioPluszTV/index.m3u8
+#EXTINF:-1 tvg-id="9835" tvg-name="Soltvadkerti Televizio" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9835.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Soltvadkerti Televizio
+http://79.120.178.90:1935/soltvadkerttv/soltvlive/playlist.m3u8
+#EXTINF:-1 tvg-id="9836" tvg-name="Story4" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9836.png" group-title="🎬 Élő TV: Film & Sorozat",Story4
+http://88.212.7.14/live/story_4_cze_atk/index.m3u8
+#EXTINF:-1 tvg-id="9837" tvg-name="Szecseny TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9837.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Szecseny TV
+http://iptv.eurocable.co.hu/EC-SZECSENYTVHD/index.m3u8
+#EXTINF:-1 tvg-id="9838" tvg-name="TV Budakalasz" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9838.png" group-title="📍 Élő TV: Helyi & Városi TV-k",TV Budakalasz
+https://stream.streaming4u.hu/TVBudakalasz/tracks-v1a1/mono.m3u8
+#EXTINF:-1 tvg-id="9839" tvg-name="TV Szentendre" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9839.png" group-title="📍 Élő TV: Helyi & Városi TV-k",TV Szentendre
+https://stream.streaming4u.hu/TVSzentendre/index.m3u8
+#EXTINF:-1 tvg-id="9840" tvg-name="Tatai TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9840.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Tatai TV
+https://cloudfront44.lexanetwork.com:1344/relay01/broadcast006.sdp/playlist.m3u8
+#EXTINF:-1 tvg-id="9841" tvg-name="The Fishing & Hunting Channel" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9841.png" group-title="⚽ Élő TV: Sport, Zene & Életmód",The Fishing & Hunting Channel
+http://88.212.7.14/live/fishing_hun/index.m3u8
+#EXTINF:-1 tvg-id="9842" tvg-name="Tisza TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9842.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Tisza TV
+https://www.tiszatv.hu/onlinetv/tiszatv_1.m3u8
+#EXTINF:-1 tvg-id="9843" tvg-name="Travel Channel" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9843.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",Travel Channel
+http://88.212.7.14/live/travel_hun/index.m3u8
+#EXTINF:-1 tvg-id="9844" tvg-name="Trimedio TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9844.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Trimedio TV
+https://stream.streaming4u.hu/TriMedioTV/index.m3u8
+#EXTINF:-1 tvg-id="9845" tvg-name="VTV Fuzesabony" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9845.png" group-title="📍 Élő TV: Helyi & Városi TV-k",VTV Fuzesabony
+https://stream.nmih.hu:7962/live.m3u8
+#EXTINF:-1 tvg-id="9846" tvg-name="Viasat Explore" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9846.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",Viasat Explore
+http://205.237.104.26:8080/stream/345/index.m3u8
+#EXTINF:-1 tvg-id="9847" tvg-name="Viasat History" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9847.png" group-title="🌍 Élő TV: Ismeretterjesztő & Doksi",Viasat History
+http://193.33.39.108:9007/play/a00p
+#EXTINF:-1 tvg-id="9849" tvg-name="Volgyhid TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9849.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Volgyhid TV
+https://5cd03f21c7193.streamlock.net/volgyhidtv/mediakft/playlist.m3u8
+#EXTINF:-1 tvg-id="9850" tvg-name="Williams TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9850.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Williams TV
+http://79.120.178.90:1935/williams/williamstv/playlist.m3u8
+#EXTINF:-1 tvg-id="9851" tvg-name="Zuglo TV" tvg-logo="https://nuvio-magyar-http.onrender.com/tv-logos/9851.png" group-title="📍 Élő TV: Helyi & Városi TV-k",Zuglo TV
+https://cloudfront44.lexanetwork.com:1344/freerelay/zuglotv.sdp/playlist.m3u8

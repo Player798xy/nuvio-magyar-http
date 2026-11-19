@@ -1,0 +1,4422 @@
+{
+ "version": "2.7.0",
+ "generatedAt": "2026-11-19T15:49:24.078Z",
+ "count": 162,
+ "mirrorCount": 454,
+ "categories": [
+  {
+   "id": "hu-live-orszagos",
+   "name": "🔴 Élő TV: Országos & Kereskedelmi",
+   "description": "Fő országos kereskedelmi és közszolgálati televíziók nézettségi sorrendben: RTL, TV2, M1, Duna, Super TV2, ATV, stb.",
+   "count": 28
+  },
+  {
+   "id": "hu-live-film",
+   "name": "🎬 Élő TV: Film & Sorozat",
+   "description": "Prémium mozifilmes és sorozatcsatornák népszerűségi sorrendben: Film+, Mozi+, Cool TV, AMC, Moziverzum, HBO 1-3, stb.",
+   "count": 24
+  },
+  {
+   "id": "hu-live-doksi",
+   "name": "🌍 Élő TV: Ismeretterjesztő & Doksi",
+   "description": "Természetfilmek, történelem, tudomány és dokumentumfilmek népszerűségi sorrendben: Nat Geo, History, Spektrum, stb.",
+   "count": 14
+  },
+  {
+   "id": "hu-live-sport",
+   "name": "⚽ Élő TV: Sport, Zene & Életmód",
+   "description": "Élő sportközvetítések, zenei csatornák és életmód népszerűségi sorrendben: M4 Sport, Spíler 1-2, Sport 1-2, Arena4, TV Paprika, Sláger TV, stb.",
+   "count": 20
+  },
+  {
+   "id": "hu-live-gyerek",
+   "name": "🧸 Élő TV: Rajzfilm & Gyerek",
+   "description": "Rajzfilmek, animációk és ifjúsági műsorok népszerűségi sorrendben: Minimax, Nickelodeon, TV2 Kids, stb.",
+   "count": 8
+  },
+  {
+   "id": "hu-live-helyi",
+   "name": "📍 Élő TV: Helyi & Városi TV-k",
+   "description": "Magyar városok és térségek működő helyi televíziói fontossági sorrendben: Debrecen, Fehérvár, Nyíregyháza, stb.",
+   "count": 68
+  }
+ ],
+ "channels": [
+  {
+   "id": "onlinestream-live-6141",
+   "channelId": "6141",
+   "name": "RTL",
+   "category": "hu-live-orszagos",
+   "description": "Magyarország vezető kereskedelmi tévécsatornája: Híradó, saját gyártású sikersorozatok, show-műsorok és premier mozifilmek.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6141.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6141.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6141.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_rtl_klub_hungary_1200_atk/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/RTL.hu%3ASD%3Ahf6083936cade3711c894e3ebac6bc1b7.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/RTL_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net:443/api/s/RTL.hu%3ASD%3Ahf6083936cade3711c894e3ebac6bc1b7?via=grade",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6143",
+   "channelId": "6143",
+   "name": "TV2",
+   "category": "hu-live-orszagos",
+   "description": "Országos kereskedelmi adó: Tények hírműsor, nagyszabású családi show-műsorok, vetélkedők és szinkronizált sikerfilmek.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6143.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6143.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6143.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_tv_2_hungary_1200_atk/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TV2.hu%3ASD%3Ah66d8a8e8a3d1038652a0709d94a0f4a6.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/TV2_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TV2.hu%3Afree-tv%3Ah6cf15649b89a649541b11420bad75551.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net:443/api/s/TV2.hu%3ASD%3Ah66d8a8e8a3d1038652a0709d94a0f4a6.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5901",
+   "channelId": "5901",
+   "name": "M1",
+   "category": "hu-live-orszagos",
+   "description": "24 órás élő nemzeti hírcsatorna: folyamatos hazai és nemzetközi hírfolyam, szakértői elemzések és tudósítások.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5901.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5901.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5901.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_m_1_hungary_1200_atk/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/M1.hu%3AHD%3Ah9dc76580db845f13ee56f1d4c07ddfb2.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/M1_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/M1.hu:HD:8787.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5905",
+   "channelId": "5905",
+   "name": "Duna",
+   "category": "hu-live-orszagos",
+   "description": "A nemzeti főadó: minőségi kulturális magazinok, magyar filmklasszikusok, vallási műsorok és családi szórakozás.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5905.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5905.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5905.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/duna_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Duna.hu%3ASD%3Ah2794468769cc760fd6ce20379bf3e387.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Duna_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Duna.hu:SD:5871.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6723",
+   "channelId": "6723",
+   "name": "Super TV2",
+   "category": "hu-live-orszagos",
+   "description": "A TV2 Csoport szórakoztató televíziója: népszerű amerikai és török drámasorozatok, vetélkedők, vígjátékok és filmek.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6723.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6723.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6723.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_super_tv2_hungary_1200_atk/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/SuperTV2.hu%3ASD%3Ah1cddc78e1c15e0d949bcc69af23ea295.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/SuperTV2.hu:SD:14067.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6142",
+   "channelId": "6142",
+   "name": "RTL Kettő",
+   "category": "hu-live-orszagos",
+   "description": "Fiatalos szórakoztató csatorna: népszerű vígjátéksorozatok, valóságshow-k és szórakoztató műsorok.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6142.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6142.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6142.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_rtl2_hungary_1200_atk/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/RTLKetto.hu%3ASD%3Ahae96b92facbd116b0e876c1751205a19.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/RTLKetto.hu:SD:12556.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6147",
+   "channelId": "6147",
+   "name": "RTL Három",
+   "category": "hu-live-orszagos",
+   "description": "Prémium filmcsatorna és európai labdarúgás: kasszasikerek, akciófilmek és UEFA labdarúgó-mérkőzések.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6147.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6147.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6147.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_rtl_plus_hungary_1200_atk/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/RTLHarom.hu%3ASD%3Ah83659105fd16be26528745894acf7e43.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/RTLHarom.hu:SD:12555.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5911",
+   "channelId": "5911",
+   "name": "Viasat 3",
+   "category": "hu-live-orszagos",
+   "description": "Szórakoztató kereskedelmi adó: népszerű amerikai vígjátéksorozatok, bűnügyi szériák és családi filmek.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5911.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5911.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5911.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/viasat3/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Viasat3.hu%3ASD%3Ah163e0a8b2196394a5bb3332d45b04158.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/VIASAT3_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Viasat3.hu%3Afree-tv%3Ah8357237cdad712db14d0d07292e730bd.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Viasat3.hu:SD:16394.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-4739",
+   "channelId": "4739",
+   "name": "ATV",
+   "category": "hu-live-orszagos",
+   "description": "Magyarország első magán hír- és közéleti televíziója: Egyenes Beszéd, Heti Napló, Fórum és hírösszefoglalók.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/4739.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/4739.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/4739.png",
+   "mirrors": [
+    {
+     "url": "https://stream.atv.hu/atvlive/atvstream_2_aac/playlist.m3u8",
+     "host": "stream.atv.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ATV.hu%3ASD%3A3141.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://streamservers.atv.hu/atvlive/atvstream_1_aac/playlist.m3u8",
+     "host": "streamservers.atv.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ATV.hu%3ASD%3A3142.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://88.212.7.14/live/test_atv_hungary_1200_atk/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ATV.hu%3ASD%3Ahda66db61ab5b7a2358d4b38ec63fecb0.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/ATV_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ATV.hu%3Afree-tv%3Ah1243a5a0c9e7110c64209348b9ee22fe.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-4740",
+   "channelId": "4740",
+   "name": "Hír TV",
+   "category": "hu-live-orszagos",
+   "description": "24 órás élő konzervatív hírcsatorna: Napi Aktuális, Vezércikk, Sajtóklub és politikai elemzések.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/4740.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/4740.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/4740.png",
+   "mirrors": [
+    {
+     "url": "https://videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8",
+     "host": "videa.hu",
+     "secure": true
+    },
+    {
+     "url": "https://video11.videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8",
+     "host": "video11.videa.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/HirTV.hu%3Afree-tv%3Ah8e2bda4ddc24c0e4c944d6edeab2b43a.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6704",
+   "channelId": "6704",
+   "name": "Prime",
+   "category": "hu-live-orszagos",
+   "description": "Könnyed szórakozás az egész családnak: szitkomok, népszerű családi sorozatok és vígjátékok.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6704.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6704.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6704.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/prime/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Prime.hu%3ASD%3Ah7e56c20ff3b5e655542c1dcef8e29f35.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Prime.hu:SD:11599.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6184",
+   "channelId": "6184",
+   "name": "TV4",
+   "category": "hu-live-orszagos",
+   "description": "Klasszikus és modern krimisorozatok, romantikus filmek és európai televíziós drámák gyűjteménye.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6184.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6184.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6184.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_tv_4_hun_atk_1200/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TV4.hu%3ASD%3Ah050ff0780073cafda6eec4d6b7df7b9b.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/TV4_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TV4.hu%3Afree-tv%3Ah2468258edf06dae17ad81c1bddb70e46.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/TV4.hu:SD:15267.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6236",
+   "channelId": "6236",
+   "name": "Viasat 6",
+   "category": "hu-live-orszagos",
+   "description": "Akciódús és lendületes televízió férfiaknak: scifik, animációk, autós magazinok és kultikus sorozatok.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6236.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6236.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6236.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/viasat6/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Viasat6.hu%3ASD%3Ah217b03b18c8d7bc9abf933dbe49bfa21.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Viasat6.hu:SD:16395.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6148",
+   "channelId": "6148",
+   "name": "RTL Gold",
+   "category": "hu-live-orszagos",
+   "description": "Az RTL klasszikus archívuma és közkedvelt sorozatai: Barátok közt, Éjjel-Nappal Budapest és retró műsorok.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6148.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6148.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6148.png",
+   "mirrors": [
+    {
+     "url": "https://budapest-cache-1.antik.sk/live/test_film_plus_2_hungary_1200_atk/playlist.m3u8",
+     "host": "budapest-cache-1.antik.sk",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/RTLGold.hu%3ASD%3A12539.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://budapest-cache-1.antik.sk:443/live/test_film_plus_2_hungary_1200_atk/playlist.m3u8",
+     "host": "budapest-cache-1.antik.sk",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/RTLGold.hu:SD:12553.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5902",
+   "channelId": "5902",
+   "name": "M2 / Petőfi TV",
+   "category": "hu-live-orszagos",
+   "description": "Napközben színvonalas gyermek- és ifjúsági műsorok, este Petőfi TV fiatalos zenei és kulturális tartalmakkal.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5902.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5902.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5902.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/m2_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/M2.hu%3ASD%3Ah72bdccb4c976e4728994a4852fb92f76.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/M2.hu:SD:8792.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5906",
+   "channelId": "5906",
+   "name": "Duna World / M4 Sport+",
+   "category": "hu-live-orszagos",
+   "description": "A határon túli magyarság kulturális televíziója, esténként az M4 Sport+ élő mérkőzésközvetítéseivel.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5906.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5906.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5906.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/duna_world_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/DunaWorld.hu%3ASD%3Ahcbe499f1e107c6064f201195be32c03e.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Duna_World_M4_Sport+_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/DunaWorld.hu%3Afree-tv%3Ah7bd8c4628fe7bf9116a149e2dc7b55b1.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/DunaWorld.hu:SD:5873.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5904",
+   "channelId": "5904",
+   "name": "M5",
+   "category": "hu-live-orszagos",
+   "description": "A közszolgálati kultúrcsatorna: színházi közvetítések, opera, koncertek, irodalmi műsorok és oktatási dokumentumfilmek.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5904.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5904.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5904.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_m_5_hun_atk_1200/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/M5.hu%3ASD%3Ah81b507e77410b005d0e650546bfe938a.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/M5_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/M5.hu:SD:8798.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-8716",
+   "channelId": "8716",
+   "name": "Viasat 2",
+   "category": "hu-live-orszagos",
+   "description": "Nőknek és családoknak szóló szórakoztató műsorok, romantikus filmek, kosztümös drámák és gasztromagazinok.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/8716.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/8716.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/8716.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/viasat2/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Viasat2.hu%3ASD%3Ah7440644a2df4fb561c925c404f719e76.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Viasat2.hu:SD:16393.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5855",
+   "channelId": "5855",
+   "name": "Euronews",
+   "category": "hu-live-orszagos",
+   "description": "Nemzetközi független hírtelevízió magyar nyelvű adása: európai hírek, gazdaság, tudomány és világpolitika.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5855.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5855.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5855.png",
+   "mirrors": [
+    {
+     "url": "http://141.94.193.53:80/EuroNews_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://cdn-euronews.akamaized.net:443/live/eds/euronews-hu/25075/index.m3u8",
+     "host": "cdn-euronews.akamaized.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-4695",
+   "channelId": "4695",
+   "name": "Pannon RTV",
+   "category": "hu-live-orszagos",
+   "description": "A vajdasági magyarság regionális televíziója: Közügyek, híradó, magazinműsorok és kulturális tudósítások.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/4695.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/4695.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/4695.png",
+   "mirrors": [
+    {
+     "url": "https://stream2.nmih.hu:4102/live.m3u8",
+     "host": "stream2.nmih.hu",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9073",
+   "channelId": "9073",
+   "name": "RTV-1 Vajdaság",
+   "category": "hu-live-orszagos",
+   "description": "A Vajdasági Rádió és Televízió 1-es csatornája: hír- és közéleti műsorok.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9073.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9073.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9073.png",
+   "mirrors": [
+    {
+     "url": "http://212.200.230.50:1935/RTV/rtv2/playlist.m3u8",
+     "host": "212.200.230.50",
+     "secure": false
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-8999",
+   "channelId": "8999",
+   "name": "RTV-2 Vajdaság",
+   "category": "hu-live-orszagos",
+   "description": "A Vajdasági Rádió és Televízió 2-es csatornája: nemzetiségi és kulturális műsorok.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/8999.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/8999.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/8999.png",
+   "mirrors": [
+    {
+     "url": "http://212.200.230.50:1935/RTV/rtv2/playlist.m3u8",
+     "host": "212.200.230.50",
+     "secure": false
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-1819",
+   "channelId": "1819",
+   "name": "Budapest Európa Televízió",
+   "category": "hu-live-orszagos",
+   "description": "Fővárosi és európai kulturális, életmód- és beszélgetős műsorok, független magazinok.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/1819.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/1819.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/1819.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/bpetv.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/BudapestEuropaTelevizio.hu%3ASD%3A4028.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5927",
+   "channelId": "5927",
+   "name": "Apostol TV",
+   "category": "hu-live-orszagos",
+   "description": "Katolikus televízió: szentmisék, imádságok, lelkiségi előadások és egyházi hírek.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5927.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5927.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5927.png",
+   "mirrors": [
+    {
+     "url": "https://live.apostoltv.hu/live/playlist.m3u8",
+     "host": "live.apostoltv.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ApostolTV.hu%3ASD%3A2912.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://live.apostoltv.hu:443/live/playlist.m3u8",
+     "host": "live.apostoltv.hu",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-4798",
+   "channelId": "4798",
+   "name": "EWTN",
+   "category": "hu-live-orszagos",
+   "description": "Globális katolikus televíziós hálózat: szentmisék, pápai közvetítések és hitoktatás.",
+   "releaseInfo": "ÉLŐ • 720p HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/4798.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/4798.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/4798.png",
+   "mirrors": [
+    {
+     "url": "https://hls.iptvservice.eu/hls/ewtn-hd.m3u8",
+     "host": "hls.iptvservice.eu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/BonumTV.hu%3Afree-tv%3A211.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://hls.iptvservice.eu:443/hls/ewtn-hd.m3u8",
+     "host": "hls.iptvservice.eu",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6150",
+   "channelId": "6150",
+   "name": "Film+",
+   "category": "hu-live-film",
+   "description": "Magyarország legnépszerűbb filmcsatornája: hollywoodi kasszasikerek, akciófilmek, thrillerek és látványos kalandok non-stop.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6150.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6150.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6150.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/film_plus_hun_atk/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/FilmPlus.hu%3ASD%3Ah67e925e5063a665152fe6b957952fe27.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Film+_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/FilmPlus.hu:SD:6529.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6152",
+   "channelId": "6152",
+   "name": "Mozi+",
+   "category": "hu-live-film",
+   "description": "A sikerfilmek otthona: prémium hollywoodi alkotások, fantasztikus filmek és családi vígjátékok a TV2 kínálatából.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6152.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6152.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6152.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/mozi_plusz/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/MoziPlus.hu%3ASD%3Ahf5373b48622d5ca9168d297bbc1bb7b0.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Mozi+_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/MoziPlus.hu:SD:9444.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6146",
+   "channelId": "6146",
+   "name": "Cool TV",
+   "category": "hu-live-film",
+   "description": "Kultikus amerikai sorozatok, vígjátékok és akció-krimik a nap 24 órájában: Cobra 11, Dr. Csont és sikerfilmek.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6146.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6146.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6146.png",
+   "mirrors": [
+    {
+     "url": "http://141.94.193.53:80/Cool_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Cool.hu%3Afree-tv%3Ah906fc3e0f3728d14d9decbe4dedfa1cb.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6652",
+   "channelId": "6652",
+   "name": "AMC",
+   "category": "hu-live-film",
+   "description": "Világhírű drámasorozatok, exkluzív saját gyártású szériák és díjnyertes mozik: The Walking Dead, Better Call Saul.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6652.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6652.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6652.png",
+   "mirrors": [
+    {
+     "url": "http://141.94.193.53:80/AMC_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6720",
+   "channelId": "6720",
+   "name": "Moziverzum",
+   "category": "hu-live-film",
+   "description": "A TV2 prémium filmcsatornája: a legnagyobb amerikai stúdiók sikerfilmjei szünet nélküli filmes élménnyel.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6720.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6720.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6720.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/moziverzum/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Moziverzum.hu%3ASD%3Ahec58430ec2828174ffc7245f281b9e9c.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Moziverzum.hu:SD:9445.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7069",
+   "channelId": "7069",
+   "name": "HBO",
+   "category": "hu-live-film",
+   "description": "A világ vezető prémium film- és sorozatcsatornája: a legújabb mozisikerek és díjnyertes HBO Original produkciók.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7069.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7069.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7069.png",
+   "mirrors": [
+    {
+     "url": "http://141.94.193.53:80/HBO_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7158",
+   "channelId": "7158",
+   "name": "HBO 2",
+   "category": "hu-live-film",
+   "description": "Vígjátékok, családi filmek és romantikus történetek prémium minőségben, reklámmentesen az HBO családjából.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7158.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7158.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7158.png",
+   "mirrors": [
+    {
+     "url": "http://141.94.193.53:80/HBO_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7159",
+   "channelId": "7159",
+   "name": "HBO 3",
+   "category": "hu-live-film",
+   "description": "Akciófilmek, kultikus drámák, scifik és feszültséggel teli thrillerek igényes nézőknek reklám nélkül.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7159.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7159.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7159.png",
+   "mirrors": [
+    {
+     "url": "http://141.94.193.53:80/HBO3_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6254",
+   "channelId": "6254",
+   "name": "Film4",
+   "category": "hu-live-film",
+   "description": "Európai és hollywoodi mozifilmek, igényes drámák és izgalmas bűnügyi történetek a nap 24 órájában.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6254.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6254.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6254.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/film4_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Film4.hu%3ASD%3Ahf2d12259a66c2cea1d04274bb9b6f0c8.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Film4_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Film4.hu:SD:6487.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7060",
+   "channelId": "7060",
+   "name": "TV2 Comedy",
+   "category": "hu-live-film",
+   "description": "Non-stop humor és nevetés: a legviccesebb vígjátéksorozatok, szitkomok, stand-up fellépések és komédiák.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7060.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7060.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7060.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/tv2_comedy/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TV2Comedy.hu%3ASD%3Ahcfd38eed3fbf858d26cc665e1a29960f.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/TV2Comedy.hu:SD:15244.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6149",
+   "channelId": "6149",
+   "name": "Sorozat+",
+   "category": "hu-live-film",
+   "description": "A televíziós sorozatok rajongóinak: kosztümös drámák, telenovellák, orvosi és bűnügyi sorozatok folytonos élménye.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6149.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6149.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6149.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_sorozat_hungary_1200_atk/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/SorozatPlus.hu%3ASD%3Ah95d3cac9c594397d3324f447e9933deb.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/SorozatPlus.hu:SD:13632.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7074",
+   "channelId": "7074",
+   "name": "Film Café",
+   "category": "hu-live-film",
+   "description": "Klasszikus romantikus filmek, családi mozik, adaptációk és könnyed hétvégi filmek gazdag választéka.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7074.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7074.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7074.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/film_cafe/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/FilmCafe.hu%3AHungary%3Aha1d37b4e2be581b337ebf214c16fef08.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://atlantida1.aquax1.cfd/cofyfilm/usergendxn8lzrnd.m3u8",
+     "host": "atlantida1.aquax1.cfd",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/FilmCafe.hu%3ARomania%3A6525.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/FilmCafe.hu:Hungary:6522.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7154",
+   "channelId": "7154",
+   "name": "AXN Black",
+   "category": "hu-live-film",
+   "description": "Pörgős akciósorozatok, krimik és misztikus szériák az adrenalinfüggőknek: NCIS, Gyilkos elmék és FBI epizódok.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7154.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7154.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7154.png",
+   "mirrors": [
+    {
+     "url": "http://141.94.193.53:80/axn_black/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7422",
+   "channelId": "7422",
+   "name": "Galaxy 4",
+   "category": "hu-live-film",
+   "description": "Bűnügyi és nyomozós sorozatok, oknyomozó történetek és rejtélyek: Agatha Christie és Sherlock kalandjai.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7422.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7422.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7422.png",
+   "mirrors": [
+    {
+     "url": "https://budapest-cache-1.antik.sk/live/test_galaxy_4_atk_1200/playlist.m3u8",
+     "host": "budapest-cache-1.antik.sk",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Galaxy4.hu%3ASD%3A6808.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Galaxy4_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://budapest-cache-1.antik.sk:443/live/test_galaxy_4_atk_1200/playlist.m3u8",
+     "host": "budapest-cache-1.antik.sk",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Galaxy4.hu:SD:6806.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-8714",
+   "channelId": "8714",
+   "name": "Max4",
+   "category": "hu-live-film",
+   "description": "Könnyed életmód, családi filmek és nemzetközi sikersorozatok a 4-es csatornacsaládból.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/8714.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/8714.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/8714.png",
+   "mirrors": [
+    {
+     "url": "http://141.94.193.53/MAX4_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/MAX4.hu%3ASD%3Ah47850344b5c3103583cec6000e75c380.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/MAX4_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6163",
+   "channelId": "6163",
+   "name": "Izaura TV",
+   "category": "hu-live-film",
+   "description": "A romantika és a szenvedély világa: dél-amerikai, spanyol és török sikertelenovellák a nap 24 órájában.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6163.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6163.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6163.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/izaura/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/IzauraTV.hu%3ASD%3Ahf394f4eff0583739b8917956b9a0c90f.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Izaura_TV_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/IzauraTV.hu:SD:7838.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6701",
+   "channelId": "6701",
+   "name": "Jocky TV",
+   "category": "hu-live-film",
+   "description": "Klasszikus kedvencek és retró sikerszériák: Columbo, Gyilkos sorok, Walker, a texasi kopó és Bud Spencer filmek.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6701.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6701.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6701.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/jocky/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/JockyTV.hu%3ASD%3Ahcd80d5de357f3a9f29d9617751ae849f.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/JockyTV.hu:SD:7973.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-8489",
+   "channelId": "8489",
+   "name": "Magyar Mozi TV",
+   "category": "hu-live-film",
+   "description": "A magyar filmművészet otthona: felejthetetlen hazai klasszikusok, új generációs magyar mozik és dokumentumfilmek.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/8489.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/8489.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/8489.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/mozi/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/MagyarMoziTV.hu%3ASD%3Ah526b36b8f6367452a1a5d41b7b2f797b.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/MagyarMoziTV.hu:SD:8843.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9310",
+   "channelId": "9310",
+   "name": "Moziklub",
+   "category": "hu-live-film",
+   "description": "Hollywoodi és európai sikerfilmek, romantikus történetek és drámák az RTL digitális klubjából.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9310.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9310.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9310.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/moziklub_atk/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Moziklub.hu%3ASD%3Ah521350af8cc634df623f7e3d9bc439dd.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Moziklub.hu:SD:9443.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9312",
+   "channelId": "9312",
+   "name": "Sorozatklub",
+   "category": "hu-live-film",
+   "description": "Keresett magyar és külföldi sorozatok, telenovellák és szórakoztató folytatásos epizódok egy helyen.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9312.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9312.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9312.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/sorozatklub_atk/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Sorozatklub.hu%3ASD%3Ah31931df2089da4b07fafcbdc342af03b.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Sorozatklub.hu:SD:13631.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9745",
+   "channelId": "9745",
+   "name": "Classics TV Magyarország",
+   "category": "hu-live-film",
+   "description": "Az örökzöld filmművészet gyöngyszemei, fekete-fehér és színes európai klasszikusok válogatása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9745.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9745.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9745.png",
+   "mirrors": [
+    {
+     "url": "https://s01.diazol.hu:9152/live.m3u8",
+     "host": "s01.diazol.hu",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5936",
+   "channelId": "5936",
+   "name": "National Geographic",
+   "category": "hu-live-doksi",
+   "description": "A világ legelismertebb tudományos csatornája: lenyűgöző felfedezések, űrkutatás, régészet és technológia.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5936.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5936.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5936.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/ngc_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/NationalGeographic.hu%3ASD%3Ah3bcbfebe04224633822d43631a592a51.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/NationalGeographic.hu:SD:9787.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5937",
+   "channelId": "5937",
+   "name": "National Geographic Wild",
+   "category": "hu-live-doksi",
+   "description": "A vadvilág csodái a legközelebbről: lélegzetelállító természetfilmek, ragadozók és egzotikus élőhelyek.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5937.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5937.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5937.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/ngw_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/NationalGeographicWild.hu%3ASD%3Ah97034fbbc0683b4b03d0bd594c7188dc.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/NationalGeographicWild.hu:SD:9808.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6749",
+   "channelId": "6749",
+   "name": "Spektrum",
+   "category": "hu-live-doksi",
+   "description": "Közép-Európa vezető ismeretterjesztő televíziója: történelem, kultúra, tudomány és magyar felfedezők.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6749.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6749.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6749.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/spektrum_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Spektrum.hu%3ASD%3Ah33af341374629476073d2cca96cfc98f.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Spektrum_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Spektrum.hu:SD:13719.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7325",
+   "channelId": "7325",
+   "name": "History",
+   "category": "hu-live-doksi",
+   "description": "A történelem titkai: világháborúk, ősi civilizációk, rejtélyek és modern mérnöki csodák.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7325.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7325.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7325.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/history_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/History.hu%3ASD%3Ahcbd246de3c789c2a8dc1da3cb6dc2d30.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/History.hu:SD:7313.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6589",
+   "channelId": "6589",
+   "name": "Spektrum Home",
+   "category": "hu-live-doksi",
+   "description": "Otthonteremtés, lakberendezés, kertépítés, gasztronómia és zöld életmód praktikus ötletekkel.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6589.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6589.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6589.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/spektrum_home_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/SpektrumHome.hu%3ASD%3Ahc1c89881df5704828d83d3252fd5f6e3.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Spektrum_Home_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-8124",
+   "channelId": "8124",
+   "name": "Ozone TV",
+   "category": "hu-live-doksi",
+   "description": "Környezetvédelem, klímatudatosság, zöld innovációk és a Föld jövőjét formáló tudományos kutatások.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/8124.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/8124.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/8124.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/ozone/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/OzoneTV.hu%3ASD%3Ah963e3b64af54c2438319b94a39a4523b.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/OzoneTV.hu:SD:10728.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5903",
+   "channelId": "5903",
+   "name": "M4 Sport",
+   "category": "hu-live-sport",
+   "description": "A nemzeti sportcsatorna: labdarúgó NB I, Bajnokok Ligája, válogatott meccsek, Forma-1 és olimpiai közvetítések.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5903.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5903.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5903.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/uatlmvixrr/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/M4Sport.hu%3ASD%3Ah2c388977d6cbafd9c9614dc4fb054bed.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://88.212.7.14/live/m4_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/M4Sport.hu%3ASD%3Ah50d542259abc0eb4ae2e238160ab7624.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/M4_Sport_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/M4Sport.hu:SD:8795.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6721",
+   "channelId": "6721",
+   "name": "Spíler 1 TV",
+   "category": "hu-live-sport",
+   "description": "Élő angol Premier League rangadók, MotoGP és európai top-bajnokságok a TV2 sportcsatornáján.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6721.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6721.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6721.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/spiler1/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Spiler1.hu%3ASD%3Ah6d25ffa748753d799a7cee62b5e9a565.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Spiler1.hu:SD:13725.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6722",
+   "channelId": "6722",
+   "name": "Spíler 2 TV",
+   "category": "hu-live-sport",
+   "description": "Bajnokok Ligája meccsek, európai csúcsfutball és technikai sportok kiemelkedő felbontásban.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6722.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6722.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6722.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/spiler2/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Spiler2.hu%3ASD%3Ah178dcbce4ff3247705696430ecd5ebe7.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Spiler2.hu:SD:13726.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6718",
+   "channelId": "6718",
+   "name": "Sport 1",
+   "category": "hu-live-sport",
+   "description": "Nemzetközi labdarúgás, kézilabda Bajnokok Ligája, kosárlabda NBA és darts közvetítések élőben.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6718.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6718.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6718.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/sport1_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Sport1.hu%3ASD%3Ah1a1cbafda50b742e832be1d9798c27d5.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Sport_1_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Sport1.hu:SD:13734.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6719",
+   "channelId": "6719",
+   "name": "Sport 2",
+   "category": "hu-live-sport",
+   "description": "Európai futballkupák, kézilabda és küzdősportok élő közvetítése a Sport TV szakértő csapatával.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6719.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6719.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6719.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/sport2_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Sport2.hu%3ASD%3Ah3db8f082735c36145134ece467adae39.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Sport_2_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Sport2.hu:SD:13738.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7084",
+   "channelId": "7084",
+   "name": "Arena4",
+   "category": "hu-live-sport",
+   "description": "NFL amerikai foci, BundesLiga, Serie A és motocross közvetítések a legmagasabb színvonalon.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7084.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7084.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7084.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/arena4/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Arena4.hu%3ASD%3Ahb714938e342762caf6e3f167878e7ac8.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net:443/api/s/Arena4.hu%3ASD%3Ahb714938e342762caf6e3f167878e7ac8.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-8271",
+   "channelId": "8271",
+   "name": "Match 4",
+   "category": "hu-live-sport",
+   "description": "Angol másodosztály (Championship), NASCAR, IndyCar és nemzetközi sportesemények élőben.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/8271.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/8271.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/8271.png",
+   "mirrors": [
+    {
+     "url": "http://141.94.193.53/Match4_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Match4.hu%3ASD%3Ahc38ffc01c7ce66366bd98028553a13ea.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Match4_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6748",
+   "channelId": "6748",
+   "name": "TV Paprika",
+   "category": "hu-live-sport",
+   "description": "Közép-Európa gasztronómiai csatornája: Jamie Oliver, Gordon Ramsay és kiváló hazai mesterszakácsok receptjei.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6748.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6748.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6748.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/parpika_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TVPaprika.hu%3ASD%3Ah023b44ef6a2772d7fc32f7f5486af445.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/TV_Paprika_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7087",
+   "channelId": "7087",
+   "name": "TV2 Séf",
+   "category": "hu-live-sport",
+   "description": "Sütés-főzés egyszerűen és kreatívan: látványos gasztro-vetélkedők, receptötletek és kulináris utazások.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7087.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7087.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7087.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_lichi_tv_atk_tv/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TV2Sef.hu%3ASD%3Ah1fdf309ab4a90a871aaf5d93429ef2bd.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/TV2Sef.hu:SD:15246.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6751",
+   "channelId": "6751",
+   "name": "TLC",
+   "category": "hu-live-sport",
+   "description": "Érdekes életek, különleges emberi történetek, esküvői magazinok, lakásfelújítás és családi szórakozás.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6751.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6751.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6751.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/tlc_hungary/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TLC.hu%3ASD%3Ahf8e1737fc1316e7280f335874d18a060.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://88.212.7.14:80/live/tlc_hungary/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net:443/api/s/TLC.hu%3ASD%3Ahf8e1737fc1316e7280f335874d18a060.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6603",
+   "channelId": "6603",
+   "name": "Life TV",
+   "category": "hu-live-sport",
+   "description": "Életmód, egészségmegőrzés, szépségápolás, utazás és inspiráló beszélgetések a mindennapokhoz.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6603.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6603.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6603.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/lifetv/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/LifeTV.hu%3ASD%3Ah9a6f5e75151cbaa5c3f00c23a77ac0f7.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/LifeTV.hu:SD:8641.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6455",
+   "channelId": "6455",
+   "name": "FEM3",
+   "category": "hu-live-sport",
+   "description": "Női szórakoztató csatorna: talk show-k, romantikus szériák, divat, életmód- és gasztromagazinok.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6455.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6455.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6455.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_fem3_atktv/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/FEM3.hu%3ASD%3Ah1fa44163e2be4480d85fbf5305220b84.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/FEM3.hu:SD:6439.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9311",
+   "channelId": "9311",
+   "name": "RTL Otthon",
+   "category": "hu-live-sport",
+   "description": "Otthoni praktikák, barkácsolás, kertápolás és lakásfelújítás praktikus és inspiráló tippekkel.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9311.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9311.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9311.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/rtl_otthon_atk/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/RTLOtthon.hu%3ASD%3Ah2ee512b6493968a09a8124eef20cb172.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/RTLOtthon.hu:SD:12557.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6159",
+   "channelId": "6159",
+   "name": "Sláger TV",
+   "category": "hu-live-sport",
+   "description": "A legjobb hazai és nemzetközi slágerek: retró klipek, slágerlisták és vidám zenés műsorok.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6159.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6159.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6159.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_slager_tv_hungary_1200_atk/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/SlagerTV.hu%3ASD%3Ah70d5723da4f66db1b1fac6cbe1e20d4a.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/SlagerTV.hu:SD:13498.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6151",
+   "channelId": "6151",
+   "name": "Muzsika TV",
+   "category": "hu-live-sport",
+   "description": "Mulató zene, magyar nóta és népzene: hazai előadók, lakodalmas slágerek és jó hangulatú kívánságműsorok.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6151.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6151.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6151.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_muzsika_hungary_1200_atk/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/MuzsikaTV.hu%3ASD%3Ahd9b6c9ac18a670b3de14445051efebf0.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/MuzsikaTV.hu:SD:9659.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6162",
+   "channelId": "6162",
+   "name": "Zenebutik",
+   "category": "hu-live-sport",
+   "description": "Magyar slágerzene, mulatós műsorok, klippremierek és zenei beszélgetések a TV2 Csoporttól.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6162.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6162.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6162.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/zenebutik/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Zenebutik.hu%3ASD%3Ahc93465eb9db26da9f2f9da5073381207.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Zenebutik.hu:SD:17121.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5939",
+   "channelId": "5939",
+   "name": "Lóverseny közvetítés",
+   "category": "hu-live-sport",
+   "description": "Élő galopp- és ügetőfutamok közvetítése a Kincsem Parkból, szakkommentárok és esélylatolgatások.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5939.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5939.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5939.png",
+   "mirrors": [
+    {
+     "url": "http://87.229.103.60:1935/liverelay/loverseny2.sdp/playlist.m3u8",
+     "host": "87.229.103.60",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Loversenykozvetites.hu%3ASD%3A8729.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://cloudfront41.lexanetwork.com:1344/xrelay/loverseny2.sdp/playlist.m3u8",
+     "host": "cloudfront41.lexanetwork.com",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7079",
+   "channelId": "7079",
+   "name": "Minimax",
+   "category": "hu-live-gyerek",
+   "description": "Erőszakmentes, fejlesztő rajzfilmek és kedves mesék óvodásoknak és kisiskolásoknak.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7079.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7079.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7079.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/minimax_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Minimax.hu%3ASD%3Ah830e170de3450d133fa15a29687cd6e4.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Minimax/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Minimax.hu%3Afree-tv%3Ahdb24e9df50ac589b9481553e03338574.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Minimax.hu:SD:9212.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6764",
+   "channelId": "6764",
+   "name": "Nickelodeon",
+   "category": "hu-live-gyerek",
+   "description": "SpongyaBob, A Mancs őrjárat, Veszélyes Henry és a legnépszerűbb vidám gyereksorozatok.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6764.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6764.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6764.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/test_nickelodeon_hu_1200_atk/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Nickelodeon.hu%3ASD%3Ah8ef9c5e88e0dad1b5d23b20265abc480.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://193.33.39.108:9011/play/a017",
+     "host": "193.33.39.108",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Nickelodeon.hu%3ASD%3Ahc3fcd58f69cb8586aa75ebf9d51e2124.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Nickelodeon.hu:SD:10127.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6765",
+   "channelId": "6765",
+   "name": "Nick Jr",
+   "category": "hu-live-gyerek",
+   "description": "Kifejezetten a legkisebbeknek szóló, játékos és tanulást segítő kedves animációk.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6765.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6765.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6765.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/nick_junior_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/NickJr.hu%3ASD%3Ah53774c1119fc75f0bd2a59609975dc83.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/NickJr.hu:SD:10158.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6705",
+   "channelId": "6705",
+   "name": "Nicktoons",
+   "category": "hu-live-gyerek",
+   "description": "Non-stop vicces rajzfilmek, akció-animációk és pörgős mesék a nap 24 órájában.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6705.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6705.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6705.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/nicktoons_hungary/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Nicktoons.hu%3ASD%3Ah4f24a0f925b8ef7494dcdd8d5ce32779.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Nicktoons.hu:SD:10177.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6707",
+   "channelId": "6707",
+   "name": "TV2 Kids",
+   "category": "hu-live-gyerek",
+   "description": "Klasszikus és modern európai mesék, családi rajzfilmsorozatok a legkisebbeknek.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6707.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6707.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6707.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/tv2_kids/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TV2Kids.hu%3ASD%3Ahf5674b1740a12a61d38dae6e37329cca.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/TV2Kids.hu:SD:15245.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7080",
+   "channelId": "7080",
+   "name": "JimJam",
+   "category": "hu-live-gyerek",
+   "description": "Biztonságos és bájos mesék kicsiknek: Bob, a mester, Thomas és barátai, Sam, a tűzoltó.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7080.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7080.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7080.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/jim_jam_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/JimJam.hu%3ASD%3Ahc2f91c3b2ffd0f8a338b55dc5cde039e.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/JimJam.hu:SD:7958.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9309",
+   "channelId": "9309",
+   "name": "Kölyökklub",
+   "category": "hu-live-gyerek",
+   "description": "Kedvenc rajzfilmek, ifjúsági animációk és játékos történetek.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9309.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9309.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9309.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/kolyokklub_atk/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Kolyokklub.hu%3ASD%3Ah2f76fff8d24e1f2f0f45d49b405364af.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://gradetv.net:443/api/s/Kolyokklub.hu:SD:8335.m3u8?via=grade",
+     "host": "gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-4247",
+   "channelId": "4247",
+   "name": "Debrecen TV",
+   "category": "hu-live-helyi",
+   "description": "Debrecen és a hajdúsági térség hírei, közéleti és kulturális műsorai, magazinok és helyi közvetítések.",
+   "releaseInfo": "ÉLŐ • 720p HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/4247.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/4247.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/4247.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/livestream002.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-1815",
+   "channelId": "1815",
+   "name": "Fehérvár TV",
+   "category": "hu-live-helyi",
+   "description": "Székesfehérvár és Fejér vármegye hírei, kulturális, közéleti és sportműsorai.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/1815.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/1815.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/1815.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/fehervartv.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/FehervarTV.hu%3ASD%3A6440.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE046.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-1853",
+   "channelId": "1853",
+   "name": "Nyíregyházi TV",
+   "category": "hu-live-helyi",
+   "description": "Nyíregyháza és Szabolcs-Szatmár-Bereg vármegye helyi hírfolyama, magazinjai és rendezvényei.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/1853.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/1853.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/1853.png",
+   "mirrors": [
+    {
+     "url": "https://nytvlive.hu:443/nytv/playlist.m3u8",
+     "host": "nytvlive.hu",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-1901",
+   "channelId": "1901",
+   "name": "Kecskeméti TV",
+   "category": "hu-live-helyi",
+   "description": "Kecskemét és a hírös város környékének híradója, közéleti magazinműsorai.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/1901.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/1901.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/1901.png",
+   "mirrors": [
+    {
+     "url": "http://rtmp1.40e.hu:8000/live/ktv.m3u8",
+     "host": "rtmp1.40e.hu",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/KecskemetiTV.hu%3ASD%3A8174.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://eurobioinvest.hu:444/live/ktv.m3u8",
+     "host": "eurobioinvest.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/KecskemetiTV.hu%3ASD%3A8175.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-1829",
+   "channelId": "1829",
+   "name": "Zalaegerszegi TV",
+   "category": "hu-live-helyi",
+   "description": "Zalaegerszeg és a zalai dombság híradása, városi tudósítások és kulturális műsorok.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/1829.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/1829.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/1829.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/zegtv.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ZalaegerszegiTV.hu%3ASD%3A17045.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5137",
+   "channelId": "5137",
+   "name": "Kapos TV",
+   "category": "hu-live-helyi",
+   "description": "Kaposvár és a somogyi régió eseményei, helyi híradó és közösségi programok.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5137.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5137.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5137.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront63.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8",
+     "host": "cloudfront63.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/KaposTV.hu%3ASD%3A8130.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast004.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/KaposTV.hu%3Afree-tv%3A214.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-1035",
+   "channelId": "1035",
+   "name": "TV Eger",
+   "category": "hu-live-helyi",
+   "description": "Eger és a hevesi térség hírei, borászat, történelem és kulturális események.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/1035.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/1035.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/1035.png",
+   "mirrors": [
+    {
+     "url": "http://stream.tveger.hu:8010/live.m3u8",
+     "host": "stream.tveger.hu",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TVEger.hu%3ASD%3A15562.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://stream.tveger.hu:8012/live.m3u8",
+     "host": "stream.tveger.hu",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-4788",
+   "channelId": "4788",
+   "name": "Szolnok TV",
+   "category": "hu-live-helyi",
+   "description": "Szolnok és a Jászkunság hírei, regionális magazinok és eseményközvetítések.",
+   "releaseInfo": "ÉLŐ • 720p HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/4788.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/4788.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/4788.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/SzolnokTV.hu%3ASD%3A14189.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-1821",
+   "channelId": "1821",
+   "name": "Gyöngyösi TV",
+   "category": "hu-live-helyi",
+   "description": "Gyöngyös és a Mátraalja televíziója: hírek, szüreti programok és közélet.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/1821.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/1821.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/1821.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE043.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/GyongyosiTV.hu%3ASD%3A7140.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://cloudfront41.lexanetwork.com:1344/relay02/livestream005.sdp/playlist.m3u8",
+     "host": "cloudfront41.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/GyongyosiTV.hu%3ASD%3A7141.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5425",
+   "channelId": "5425",
+   "name": "7.tv (Békéscsaba)",
+   "category": "hu-live-helyi",
+   "description": "Békés vármegye és Békéscsaba hírtelevíziója: helyi riportok, gazdaság és kultúra.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5425.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5425.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5425.png",
+   "mirrors": [
+    {
+     "url": "https://stream.y5.hu/stream/stream_bekescsaba/stream.m3u8",
+     "host": "stream.y5.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/7TV.hu%3ASD%3A2033.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://stream.y5.hu:443/stream/stream_bekescsaba/stream.m3u8",
+     "host": "stream.y5.hu",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-3858",
+   "channelId": "3858",
+   "name": "Bajai TV",
+   "category": "hu-live-helyi",
+   "description": "Baja és a bácskai Duna-part hírei, halászlé fesztivál és helyi közösségi élet.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/3858.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/3858.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/3858.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront41.lexanetwork.com:1344/relay01/livestream002.sdp/playlist.m3u8",
+     "host": "cloudfront41.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/BajaiTV.hu%3ASD%3A3344.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-1811",
+   "channelId": "1811",
+   "name": "Kanizsa TV",
+   "category": "hu-live-helyi",
+   "description": "Nagykanizsa és a dél-zalai térség híradója, gazdasági és kulturális magazinja.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/1811.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/1811.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/1811.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/kanizsavtv.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/KanizsaTV.hu%3ASD%3A8119.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-1812",
+   "channelId": "1812",
+   "name": "TV Keszthely",
+   "category": "hu-live-helyi",
+   "description": "Keszthely és a Nyugat-Balaton hírei, kastélyprogramok és balatoni események.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/1812.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/1812.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/1812.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/keszthelyivtv.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TVKeszthely.hu%3ASD%3A15654.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-4590",
+   "channelId": "4590",
+   "name": "Komáromi TV",
+   "category": "hu-live-helyi",
+   "description": "Komárom és a Duna-menti kistérség önkormányzati hírei, kulturális és sportműsorai.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/4590.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/4590.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/4590.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE017.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/KomaromiTelevizio.hu%3ASD%3A8326.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-4650",
+   "channelId": "4650",
+   "name": "Móri Városi TV",
+   "category": "hu-live-helyi",
+   "description": "Mór és a Vértesaljai borvidék helyi eseményei, kulturális rendezvényei.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/4650.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/4650.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/4650.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/morvtv.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/VTVMor.hu%3ASD%3A16649.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE041.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-4662",
+   "channelId": "4662",
+   "name": "Karcag TV",
+   "category": "hu-live-helyi",
+   "description": "Karcag és a Nagykunság hírei, hagyományőrzés, mezőgazdaság és helyi közélet.",
+   "releaseInfo": "ÉLŐ • 720p HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/4662.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/4662.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/4662.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront41.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8",
+     "host": "cloudfront41.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/KarcagTV.hu%3ASD%3A8135.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-4699",
+   "channelId": "4699",
+   "name": "Halom TV",
+   "category": "hu-live-helyi",
+   "description": "Százhalombatta és Pest vármegye déli agglomerációjának hírtelevíziója.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/4699.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/4699.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/4699.png",
+   "mirrors": [
+    {
+     "url": "http://212.92.13.108:8080/live/livestream1.m3u8",
+     "host": "212.92.13.108",
+     "secure": false
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-4738",
+   "channelId": "4738",
+   "name": "Ózdi TV",
+   "category": "hu-live-helyi",
+   "description": "Ózd és a borsodi iparvidék híradója, közéleti és kulturális magazinja.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/4738.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/4738.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/4738.png",
+   "mirrors": [
+    {
+     "url": "http://stream.nmih.hu:7980/live.m3u8",
+     "host": "stream.nmih.hu",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/OzdiVarosiTV.hu%3ASD%3A10713.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://stream.nmih.hu:7982/live.m3u8",
+     "host": "stream.nmih.hu",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-4792",
+   "channelId": "4792",
+   "name": "XVTV",
+   "category": "hu-live-helyi",
+   "description": "Budapest XV. kerületének (Rákospalota, Pestújhely, Újpalota) közösségi hírei.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/4792.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/4792.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/4792.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE051.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/XVTV.hu%3ASD%3A16952.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-4794",
+   "channelId": "4794",
+   "name": "Jászsági Térségi TV",
+   "category": "hu-live-helyi",
+   "description": "Jászberény és a Jászság térségi televíziója: helyi gazdaság, kultúra és híradó.",
+   "releaseInfo": "ÉLŐ • 720p HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/4794.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/4794.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/4794.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast007.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/JaszsagiTersegiTV.hu%3ASD%3A7865.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://cloudfront41.lexanetwork.com:1344/relay41_1/livestream001.sdp/playlist.m3u8",
+     "host": "cloudfront41.lexanetwork.com",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5026",
+   "channelId": "5026",
+   "name": "Líceum TV",
+   "category": "hu-live-helyi",
+   "description": "Eszterházy Károly Katolikus Egyetem televíziója: tudomány, művészet és oktatás.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5026.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5026.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5026.png",
+   "mirrors": [
+    {
+     "url": "http://193.225.32.62:8890/live.m3u8",
+     "host": "193.225.32.62",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/LiceumTV.hu%3ASD%3A8612.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5462",
+   "channelId": "5462",
+   "name": "TV13",
+   "category": "hu-live-helyi",
+   "description": "Budapest XIII. kerületének (Angyalföld, Újlipótváros) helyi közéleti és kulturális magazinja.",
+   "releaseInfo": "ÉLŐ • 720p HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5462.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5462.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5462.png",
+   "mirrors": [
+    {
+     "url": "https://tv13.medialivecdn.hu:443/tv13/3e4c201d9e403330d294e24760e49164.sdp/playlist.m3u8",
+     "host": "tv13.medialivecdn.hu",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5656",
+   "channelId": "5656",
+   "name": "Vásárhelyi TV",
+   "category": "hu-live-helyi",
+   "description": "Hódmezővásárhely és a Dél-Alföld hírei, mezőgazdasági és kulturális programjai.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5656.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5656.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5656.png",
+   "mirrors": [
+    {
+     "url": "https://stream.vasarhelyitelevizio.hu/stream/stream.m3u8",
+     "host": "stream.vasarhelyitelevizio.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/VasarhelyiTelevizio.hu%3ASD%3A16312.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5838",
+   "channelId": "5838",
+   "name": "TelePaks",
+   "category": "hu-live-helyi",
+   "description": "Paks és a Duna-menti térség híradója, atomenergetikai és városi magazinja.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5838.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5838.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5838.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay02/livestream004.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TelePaks.hu%3ASD%3A14492.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-5913",
+   "channelId": "5913",
+   "name": "Balaton TV",
+   "category": "hu-live-helyi",
+   "description": "A Balaton térségének regionális hírtelevíziója: turizmus, rendezvények és strandélet.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/5913.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/5913.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/5913.png",
+   "mirrors": [
+    {
+     "url": "https://stream.iptvservice.eu/hls/balatontv.m3u8",
+     "host": "stream.iptvservice.eu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/BalatonTV.hu%3ASD%3A3351.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://stream.iptvservice.eu:443/hls/balatontv.m3u8",
+     "host": "stream.iptvservice.eu",
+     "secure": true
+    },
+    {
+     "url": "http://stream.iptvservice.eu:80/hls/balatontv.m3u8",
+     "host": "stream.iptvservice.eu",
+     "secure": false
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6144",
+   "channelId": "6144",
+   "name": "ESTV (Vác)",
+   "category": "hu-live-helyi",
+   "description": "Vác és a Dunakanyar térségi televíziója: hírek, kultúra és közélet.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6144.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6144.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6144.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE032.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ESTV.hu%3ASD%3A6191.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE040.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ESTV.hu%3ASD%3A6192.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6491",
+   "channelId": "6491",
+   "name": "Alföld TV",
+   "category": "hu-live-helyi",
+   "description": "A Dél-Alföld regionális televíziója: hírek, agrárium és kulturális tudósítások.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6491.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6491.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6491.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront41.lexanetwork.com:1344/relay01/livestream006.sdp/playlist.m3u8",
+     "host": "cloudfront41.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/AlfoldTV.hu%3ASD%3A2525.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6638",
+   "channelId": "6638",
+   "name": "Oroszlányi TV",
+   "category": "hu-live-helyi",
+   "description": "Oroszlány és a bányászati hagyományokkal bíró kistérség helyi hírei.",
+   "releaseInfo": "ÉLŐ • 720p HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6638.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6638.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6638.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast002.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/OroszlanyiVarosiTelevizio.hu%3ASD%3A10651.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-6676",
+   "channelId": "6676",
+   "name": "Móra-Net TV",
+   "category": "hu-live-helyi",
+   "description": "Mórahalom és a Homokhátság kistérségi televíziója: gyógyturizmus és kultúra.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/6676.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/6676.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/6676.png",
+   "mirrors": [
+    {
+     "url": "https://stream.moranettv.hu/live/index.m3u8",
+     "host": "stream.moranettv.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/MoraNetTV.hu%3ASD%3A9360.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://stream.moranettv.hu:443/live/index.m3u8",
+     "host": "stream.moranettv.hu",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7371",
+   "channelId": "7371",
+   "name": "Bicskei TV",
+   "category": "hu-live-helyi",
+   "description": "Bicske és a Szent László-völgy helyi eseményei, önkormányzati híradója.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7371.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7371.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7371.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay02/broadcast003.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-7374",
+   "channelId": "7374",
+   "name": "Hévízi TV",
+   "category": "hu-live-helyi",
+   "description": "Hévíz és a termáltó környékének hírei, gyógyturizmus és wellness magazin.",
+   "releaseInfo": "ÉLŐ • 1080p FHD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/7374.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/7374.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/7374.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/HeviziTV.hu%3ASD%3A7262.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9068",
+   "channelId": "9068",
+   "name": "Sixo TV",
+   "category": "hu-live-helyi",
+   "description": "Sikondai és baranyai térségi televízió: helyi közösségi események és programok.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9068.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9068.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9068.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE038.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/SIXOTV.hu%3ASD%3A13439.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay44_1/HDE038.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9081",
+   "channelId": "9081",
+   "name": "Gran TV (Esztergom)",
+   "category": "hu-live-helyi",
+   "description": "Esztergom és a Pilis-Dunakanyar régió hírei, egyházi és kulturális közvetítések.",
+   "releaseInfo": "ÉLŐ • 720p HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9081.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9081.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9081.png",
+   "mirrors": [
+    {
+     "url": "https://stream.medialive.hu/gran/grantvlive/playlist.m3u8",
+     "host": "stream.medialive.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/GranTV.hu%3ASD%3A7053.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://grantv.medialivecdn.hu:443/gran/51328567842cc1ba78b4b851ee9c46b4.sdp/playlist.m3u8",
+     "host": "grantv.medialivecdn.hu",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9332",
+   "channelId": "9332",
+   "name": "Cegléd TV",
+   "category": "hu-live-helyi",
+   "description": "Cegléd és a Dél-Pest vármegyei térség hírei, hagyományai és önkormányzati tájékoztatója.",
+   "releaseInfo": "ÉLŐ • TV",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9332.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9332.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9332.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE031.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-1802",
+   "channelId": "1802",
+   "name": "City TV",
+   "category": "hu-live-helyi",
+   "description": "Budapest Belváros-Lipótváros (V. kerület) önkormányzati és kulturális televíziója.",
+   "releaseInfo": "ÉLŐ • SD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/1802.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/1802.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/1802.png",
+   "mirrors": [
+    {
+     "url": "https://citytv.hu/playlist.m3u8",
+     "host": "citytv.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/CityTV.hu%3ASD%3A5001.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://citytv.hu:443/playlist.m3u8",
+     "host": "citytv.hu",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9800",
+   "channelId": "9800",
+   "name": "16tv Budapest",
+   "category": "hu-live-helyi",
+   "description": "16tv Budapest helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9800.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9800.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9800.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/16tv.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/16tvBudapest.hu%3ASD%3A2085.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9801",
+   "channelId": "9801",
+   "name": "ATV Spirit",
+   "category": "hu-live-orszagos",
+   "description": "Az ATV testvércsatornája: könnyedebb közélet, magazinműsorok és talk-show-k.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9801.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9801.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9801.png",
+   "mirrors": [
+    {
+     "url": "https://streamservers.atv.hu/atvliveedge/_definst_/atvstream_2_aac/playlist.m3u8",
+     "host": "streamservers.atv.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ATVSpirit.hu%3ASD%3A3164.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://88.212.7.14/live/test_atv_spirit/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ATVSpirit.hu%3ASD%3Ah8675f09aedd818eb8b91421296733a4f.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9802",
+   "channelId": "9802",
+   "name": "AXN Spin",
+   "category": "hu-live-film",
+   "description": "Fiataloknak szóló akció, fantasy és anime sorozatok.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9802.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9802.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9802.png",
+   "mirrors": [
+    {
+     "url": "https://polska.hach.workers.dev/14847.m3u8",
+     "host": "polska.hach.workers.dev",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/AXNSpin.hu%3APoland%3A3257.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://cronos.mangora1.cfd/spyn/usergencs85ja0j1rrnd.m3u8",
+     "host": "cronos.mangora1.cfd",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/AXNSpin.hu%3ASD%3A3258.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9803",
+   "channelId": "9803",
+   "name": "Animal Planet",
+   "category": "hu-live-doksi",
+   "description": "Vadállatok, természet és állatvilág testközelből.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9803.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9803.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9803.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/animal_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/AnimalPlanet.hu%3ASD%3Ahe6a49505498c493eb4a4b186ec1bd1a7.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9804",
+   "channelId": "9804",
+   "name": "BTV",
+   "category": "hu-live-helyi",
+   "description": "BTV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9804.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9804.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9804.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/babolnatv.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/BTV.hu%3ASD%3A4015.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9805",
+   "channelId": "9805",
+   "name": "Berente TV",
+   "category": "hu-live-helyi",
+   "description": "Berente TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9805.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9805.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9805.png",
+   "mirrors": [
+    {
+     "url": "https://stream.streaming4u.hu/BerenteTV/index.m3u8",
+     "host": "stream.streaming4u.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/BerenteTV.hu%3ASD%3A3685.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9806",
+   "channelId": "9806",
+   "name": "Csurgo TV",
+   "category": "hu-live-helyi",
+   "description": "Csurgo TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9806.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9806.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9806.png",
+   "mirrors": [
+    {
+     "url": "https://cstv.medialivecdn.hu/csurgotv/27725804dc13aa23b3970414524d2dbf.sdp/playlist.m3u8",
+     "host": "cstv.medialivecdn.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/CsurgoTV.hu%3ASD%3A5286.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://79.120.178.90:1935/csurgotv/csurgolive/playlist.m3u8",
+     "host": "79.120.178.90",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/CsurgoTV.hu%3ASD%3A5287.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://5cd03f21c7193.streamlock.net/csurgotv/csurgolive/playlist.m3u8",
+     "host": "5cd03f21c7193.streamlock.net",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/CsurgoTV.hu%3ASD%3A5288.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9807",
+   "channelId": "9807",
+   "name": "DSTV",
+   "category": "hu-live-helyi",
+   "description": "DSTV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9807.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9807.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9807.png",
+   "mirrors": [
+    {
+     "url": "http://79.120.178.90:1935/dstv/dstvlive/playlist.m3u8",
+     "host": "79.120.178.90",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/DSTV.hu%3ASD%3A5839.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9808",
+   "channelId": "9808",
+   "name": "DTV",
+   "category": "hu-live-helyi",
+   "description": "DTV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9808.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9808.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9808.png",
+   "mirrors": [
+    {
+     "url": "http://cloudfront44.lexanetwork.com:1732/hlsrelay003/hls/livestream.sdp.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/DTV.hu%3ASD%3A5841.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9809",
+   "channelId": "9809",
+   "name": "Daru TV",
+   "category": "hu-live-helyi",
+   "description": "Daru TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9809.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9809.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9809.png",
+   "mirrors": [
+    {
+     "url": "https://5cd03f21c7193.streamlock.net/darutv/darutvlive/playlist.m3u8",
+     "host": "5cd03f21c7193.streamlock.net",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/DaruTV.hu%3ASD%3A5408.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9810",
+   "channelId": "9810",
+   "name": "Dikh TV",
+   "category": "hu-live-orszagos",
+   "description": "A roma kultúra, zene és szórakoztató műsorok országos csatornája.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9810.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9810.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9810.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/dikh/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/DikhTV.hu%3ASD%3Ah42c38bf4cd3312eecda6ca1252dcb9df.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9811",
+   "channelId": "9811",
+   "name": "Discovery Channel",
+   "category": "hu-live-doksi",
+   "description": "A világ legnépszerűbb tudományos és felfedező csatornája.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9811.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9811.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9811.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/discovery_hungary/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/DiscoveryChannel.hu%3ASD%3Ahcb466bb867301bd6546a396b2133e133.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9812",
+   "channelId": "9812",
+   "name": "Disney Channel",
+   "category": "hu-live-gyerek",
+   "description": "A Disney animációs és ifjúsági sikersorozatai gyerekeknek és családoknak.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9812.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9812.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9812.png",
+   "mirrors": [
+    {
+     "url": "http://193.33.39.108:9019/play/a00n",
+     "host": "193.33.39.108",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/DisneyChannel.hu%3ASD%3Ahe17cdd0d579805c208ab84ae0663738c.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://88.212.7.14/live/disney_channel_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/DisneyChannel.hu%3ASD%3Ahe678b067b6f5e5fccb9a70f2692cb1bd.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9813",
+   "channelId": "9813",
+   "name": "EWTN/Bonum TV",
+   "category": "hu-live-helyi",
+   "description": "EWTN/Bonum TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9813.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9813.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9813.png",
+   "mirrors": [
+    {
+     "url": "https://dash2.antik.sk/live/ewtn_bonum/index.m3u8",
+     "host": "dash2.antik.sk",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/EWTNBonumTV.hu%3ASD%3A6316.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9814",
+   "channelId": "9814",
+   "name": "Egyker TV",
+   "category": "hu-live-helyi",
+   "description": "Egyker TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9814.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9814.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9814.png",
+   "mirrors": [
+    {
+     "url": "https://iptv01.eurocable.co.hu/EC-EGYKERTVHD/index.m3u8",
+     "host": "iptv01.eurocable.co.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/EgykerTV.hu%3ASD%3A5974.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9815",
+   "channelId": "9815",
+   "name": "EuroSport1",
+   "category": "hu-live-sport",
+   "description": "Élő nemzetközi élsport: tenisz Grand Slamek, kerékpár körversenyek, téli sportok.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9815.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9815.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9815.png",
+   "mirrors": [
+    {
+     "url": "http://141.94.193.53:80/Eurosport_1_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Eurosport1.hu%3Afree-tv%3Ahad6db7a7690bf1ac6b9ff88215f7518e.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9816",
+   "channelId": "9816",
+   "name": "FIX TV",
+   "category": "hu-live-orszagos",
+   "description": "Technológiai hírek, informatika és kulturális magazinok.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9816.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9816.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9816.png",
+   "mirrors": [
+    {
+     "url": "https://fixhd.tv:8082/fix/1080i/playlist.m3u8",
+     "host": "fixhd.tv",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/FIXTV.hu%3ASD%3A6561.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9817",
+   "channelId": "9817",
+   "name": "Film Mania",
+   "category": "hu-live-film",
+   "description": "Örökzöld hollywoodi klasszikusok és legendás mozifilmek.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9817.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9817.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9817.png",
+   "mirrors": [
+    {
+     "url": "http://205.237.104.26:8080/stream/340/index.m3u8",
+     "host": "205.237.104.26",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/FilmMania.hu%3ASD%3Ah7ae0df6fa220ceba59c0965792b3bfbd.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9818",
+   "channelId": "9818",
+   "name": "Food Network",
+   "category": "hu-live-doksi",
+   "description": "Gasztronómia, világhírű séfek és kulináris élmények.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9818.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9818.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9818.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/fn_hungary/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/FoodNetwork.hu%3ASD%3Ah3e5d3b4360fba079948c3626841e35ba.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9819",
+   "channelId": "9819",
+   "name": "Globo TV",
+   "category": "hu-live-helyi",
+   "description": "Globo TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9819.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9819.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9819.png",
+   "mirrors": [
+    {
+     "url": "https://stream.streaming4u.hu/GloboTV/index.m3u8",
+     "host": "stream.streaming4u.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/GloboTV.hu%3ASD%3A6950.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9820",
+   "channelId": "9820",
+   "name": "Golya TV",
+   "category": "hu-live-helyi",
+   "description": "Golya TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9820.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9820.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9820.png",
+   "mirrors": [
+    {
+     "url": "https://stream.streaming4u.hu/GolyaTV/index.m3u8",
+     "host": "stream.streaming4u.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/GolyaTV.hu%3ASD%3A7015.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9821",
+   "channelId": "9821",
+   "name": "HGTV",
+   "category": "hu-live-doksi",
+   "description": "Otthonteremtés, lakberendezés és házfelújítás.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9821.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9821.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9821.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/hgtv_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/HGTV.hu%3ASD%3Ahbfb42720c447580dbea923563adb760c.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9822",
+   "channelId": "9822",
+   "name": "Hangulat TV",
+   "category": "hu-live-helyi",
+   "description": "Hangulat TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9822.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9822.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9822.png",
+   "mirrors": [
+    {
+     "url": "https://iptv01.eurocable.co.hu/EC-HANGULATTV/index.m3u8",
+     "host": "iptv01.eurocable.co.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/HangulatTV.hu%3ASD%3A7179.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9823",
+   "channelId": "9823",
+   "name": "Hegyvidek TV",
+   "category": "hu-live-helyi",
+   "description": "Hegyvidek TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9823.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9823.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9823.png",
+   "mirrors": [
+    {
+     "url": "https://iptv02.eurocable.co.hu:15400/EC-HEGYVIDEKTV-FTA/index.m3u8",
+     "host": "iptv02.eurocable.co.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/HegyvidekTV.hu%3ASD%3A7236.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "https://tv.hegyvidek.hu/stream_mpeg.flv",
+     "host": "tv.hegyvidek.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/HegyvidekTV.hu%3ASD%3A7237.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9824",
+   "channelId": "9824",
+   "name": "Investigation Discovery",
+   "category": "hu-live-doksi",
+   "description": "Valódi bűnügyi történetek és nyomozások.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9824.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9824.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9824.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/id_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/InvestigationDiscovery.hu%3ASD%3Ahf8ff88717816b388afe55c6542f785e8.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9825",
+   "channelId": "9825",
+   "name": "Kiskoros TV",
+   "category": "hu-live-helyi",
+   "description": "Kiskoros TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9825.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9825.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9825.png",
+   "mirrors": [
+    {
+     "url": "https://5cd03f21c7193.streamlock.net/kiskorostv/korostvlive/playlist.m3u8",
+     "host": "5cd03f21c7193.streamlock.net",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/KiskorosTV.hu%3ASD%3A8278.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9826",
+   "channelId": "9826",
+   "name": "Komlos TV",
+   "category": "hu-live-helyi",
+   "description": "Komlos TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9826.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9826.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9826.png",
+   "mirrors": [
+    {
+     "url": "https://stream.streaming4u.hu/KomlosTV/tracks-v1a1/mono.m3u8",
+     "host": "stream.streaming4u.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/KomlosTV.hu%3ASD%3A8329.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9827",
+   "channelId": "9827",
+   "name": "Makoi Varosi Televizio",
+   "category": "hu-live-helyi",
+   "description": "Makoi Varosi Televizio helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9827.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9827.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9827.png",
+   "mirrors": [
+    {
+     "url": "http://makomedia.mikrohalo.hu/hls/makotv.m3u8",
+     "host": "makomedia.mikrohalo.hu",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/MakoiVarosiTelevizio.hu%3ASD%3A8858.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9828",
+   "channelId": "9828",
+   "name": "Mezokovesdi Televizio",
+   "category": "hu-live-helyi",
+   "description": "Mezokovesdi Televizio helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9828.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9828.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9828.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/mezokovesdvtv.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/MezokovesdiTelevizio.hu%3ASD%3A9152.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9829",
+   "channelId": "9829",
+   "name": "Oxygen Music",
+   "category": "hu-live-helyi",
+   "description": "Oxygen Music helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9829.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9829.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9829.png",
+   "mirrors": [
+    {
+     "url": "https://oxygenmusic.hu:2443/hls/oxygenmusic.m3u8",
+     "host": "oxygenmusic.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/OxygenMusic.hu%3AHD%3A10709.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9830",
+   "channelId": "9830",
+   "name": "PVTV",
+   "category": "hu-live-sport",
+   "description": "Horgász és vadász közvetítések a természet szerelmeseinek.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9830.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9830.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9830.png",
+   "mirrors": [
+    {
+     "url": "http://78.47.126.198:5080/LiveApp/streams/902003217052313577741820.m3u8?token=null",
+     "host": "78.47.126.198",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/PVTV.hu%3ASD%3A11710.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://91.147.248.75:5080/LiveApp/streams/nvUds5LHykQyOVXZ1706907141950.m3u8",
+     "host": "91.147.248.75",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/PVTV.hu%3Afree-tv%3A215.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9831",
+   "channelId": "9831",
+   "name": "PilisTV",
+   "category": "hu-live-helyi",
+   "description": "PilisTV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9831.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9831.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9831.png",
+   "mirrors": [
+    {
+     "url": "https://stream.streaming4u.hu/PilisTV/index.m3u8",
+     "host": "stream.streaming4u.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/PilisTV.hu%3ASD%3A10955.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9832",
+   "channelId": "9832",
+   "name": "RTL Klub",
+   "category": "hu-live-helyi",
+   "description": "RTL Klub helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9832.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9832.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9832.png",
+   "mirrors": [
+    {
+     "url": "http://141.94.193.53:80/RTL_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/RTLKlub.hu%3Afree-tv%3Ahb6282b6588e8583806e959bb0a3682f9.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9833",
+   "channelId": "9833",
+   "name": "Rakosmente TV",
+   "category": "hu-live-helyi",
+   "description": "Rakosmente TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9833.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9833.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9833.png",
+   "mirrors": [
+    {
+     "url": "http://rakosmentetv.hu:8080/hls/rmtv.m3u8",
+     "host": "rakosmentetv.hu",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/RakosmenteTV.hu%3ASD%3A12009.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9834",
+   "channelId": "9834",
+   "name": "RegioPlusz TV",
+   "category": "hu-live-helyi",
+   "description": "RegioPlusz TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9834.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9834.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9834.png",
+   "mirrors": [
+    {
+     "url": "https://stream.streaming4u.hu/RegioPluszTV/index.m3u8",
+     "host": "stream.streaming4u.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/RegioPluszTV.hu%3ASD%3A12254.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9835",
+   "channelId": "9835",
+   "name": "Soltvadkerti Televizio",
+   "category": "hu-live-helyi",
+   "description": "Soltvadkerti Televizio helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9835.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9835.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9835.png",
+   "mirrors": [
+    {
+     "url": "http://79.120.178.90:1935/soltvadkerttv/soltvlive/playlist.m3u8",
+     "host": "79.120.178.90",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/SoltvadkertiTelevizio.hu%3ASD%3A13552.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9836",
+   "channelId": "9836",
+   "name": "Story4",
+   "category": "hu-live-film",
+   "description": "Klasszikus és modern európai és amerikai drámák, krimik és romantikus sorozatok.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9836.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9836.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9836.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/story_4_cze_atk/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Story4.hu%3ACzechia%3Ah11b2c24005345581f5f21cc67734bce6.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://88.212.7.14/live/test_story_4_atk_1200/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Story4.hu%3ASD%3Ahe8fbdc324bc3a1ce3730a6ea7e9cd022.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Story4_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/Story4.hu%3Afree-tv%3Ah8f73517d5b38f14e758ac74d32ce23c4.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9837",
+   "channelId": "9837",
+   "name": "Szecseny TV",
+   "category": "hu-live-helyi",
+   "description": "Szecseny TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9837.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9837.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9837.png",
+   "mirrors": [
+    {
+     "url": "http://iptv.eurocable.co.hu/EC-SZECSENYTVHD/index.m3u8",
+     "host": "iptv.eurocable.co.hu",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/SzecsenyTV.hu%3ASD%3A14188.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9838",
+   "channelId": "9838",
+   "name": "TV Budakalasz",
+   "category": "hu-live-helyi",
+   "description": "TV Budakalasz helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9838.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9838.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9838.png",
+   "mirrors": [
+    {
+     "url": "https://stream.streaming4u.hu/TVBudakalasz/tracks-v1a1/mono.m3u8",
+     "host": "stream.streaming4u.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TVBudakalasz.hu%3ASD%3A15448.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9839",
+   "channelId": "9839",
+   "name": "TV Szentendre",
+   "category": "hu-live-helyi",
+   "description": "TV Szentendre helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9839.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9839.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9839.png",
+   "mirrors": [
+    {
+     "url": "https://stream.streaming4u.hu/TVSzentendre/index.m3u8",
+     "host": "stream.streaming4u.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TVSzentendre.hu%3ASD%3A16023.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9840",
+   "channelId": "9840",
+   "name": "Tatai TV",
+   "category": "hu-live-helyi",
+   "description": "Tatai TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9840.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9840.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9840.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast006.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TataiTV.hu%3ASD%3A14257.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9841",
+   "channelId": "9841",
+   "name": "The Fishing & Hunting Channel",
+   "category": "hu-live-sport",
+   "description": "Horgászat, vadászat és természetjárás Európa vizein.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9841.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9841.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9841.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/fishing_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TheFishingHuntingChannel.hu%3AHD%3Ahf84ad0a896e80f58a358b00022008225.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://88.212.7.14/live/test_fishing_hunting/playlist.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TheFishingHuntingChannel.hu%3ASD%3Ah4efffedb7dc6a3233017e19ba48e883e.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9842",
+   "channelId": "9842",
+   "name": "Tisza TV",
+   "category": "hu-live-helyi",
+   "description": "Tisza TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9842.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9842.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9842.png",
+   "mirrors": [
+    {
+     "url": "https://www.tiszatv.hu/onlinetv/tiszatv_1.m3u8",
+     "host": "www.tiszatv.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TiszaTV.hu%3ASD%3A14897.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9843",
+   "channelId": "9843",
+   "name": "Travel Channel",
+   "category": "hu-live-doksi",
+   "description": "Utazások, egzotikus kultúrák és rejtett úti célok.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9843.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9843.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9843.png",
+   "mirrors": [
+    {
+     "url": "http://88.212.7.14/live/travel_hun/index.m3u8",
+     "host": "88.212.7.14",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TravelChannel.hu%3ASD%3Ah858076ba5e3fbe4a0ba82d1ae0d8ca35.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9844",
+   "channelId": "9844",
+   "name": "Trimedio TV",
+   "category": "hu-live-helyi",
+   "description": "Trimedio TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9844.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9844.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9844.png",
+   "mirrors": [
+    {
+     "url": "https://stream.streaming4u.hu/TriMedioTV/index.m3u8",
+     "host": "stream.streaming4u.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/TrimedioTV.hu%3ASD%3A15142.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9845",
+   "channelId": "9845",
+   "name": "VTV Fuzesabony",
+   "category": "hu-live-helyi",
+   "description": "VTV Fuzesabony helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9845.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9845.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9845.png",
+   "mirrors": [
+    {
+     "url": "https://stream.nmih.hu:7962/live.m3u8",
+     "host": "stream.nmih.hu",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/VTVFuzesabony.hu%3ASD%3A16648.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9846",
+   "channelId": "9846",
+   "name": "Viasat Explore",
+   "category": "hu-live-doksi",
+   "description": "Extrém kalandok, felfedezések és emberi teljesítmények.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9846.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9846.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9846.png",
+   "mirrors": [
+    {
+     "url": "http://205.237.104.26:8080/stream/345/index.m3u8",
+     "host": "205.237.104.26",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ViasatExplore.hu%3ASD%3Ahb888983c2129932b708a8fbd15cd1278.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Viasat_Explore_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ViasatExplore.hu%3Afree-tv%3Aha2ebb27881b523295e80e10c206c2c24.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9847",
+   "channelId": "9847",
+   "name": "Viasat History",
+   "category": "hu-live-doksi",
+   "description": "Történelmi dokumentumfilmek az ókortól a modern korig.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9847.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9847.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9847.png",
+   "mirrors": [
+    {
+     "url": "http://193.33.39.108:9007/play/a00p",
+     "host": "193.33.39.108",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ViasatHistory.hu%3ASD%3Ahcb8b709dc9485e99b0e663a785933661.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    },
+    {
+     "url": "http://141.94.193.53:80/Viasat_History_HD/index.m3u8",
+     "host": "141.94.193.53",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ViasatHistory.hu%3Afree-tv%3Aha5b2629c4198a79a810eac053d5c0f7b.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9849",
+   "channelId": "9849",
+   "name": "Volgyhid TV",
+   "category": "hu-live-helyi",
+   "description": "Volgyhid TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9849.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9849.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9849.png",
+   "mirrors": [
+    {
+     "url": "https://5cd03f21c7193.streamlock.net/volgyhidtv/mediakft/playlist.m3u8",
+     "host": "5cd03f21c7193.streamlock.net",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/VolgyhidTV.hu%3ASD%3A16549.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9850",
+   "channelId": "9850",
+   "name": "Williams TV",
+   "category": "hu-live-helyi",
+   "description": "Williams TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9850.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9850.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9850.png",
+   "mirrors": [
+    {
+     "url": "http://79.120.178.90:1935/williams/williamstv/playlist.m3u8",
+     "host": "79.120.178.90",
+     "secure": false
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/WilliamsTV.hu%3ASD%3A16777.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  },
+  {
+   "id": "onlinestream-live-9851",
+   "channelId": "9851",
+   "name": "Zuglo TV",
+   "category": "hu-live-helyi",
+   "description": "Zuglo TV helyi és körzeti televízió élő adása.",
+   "releaseInfo": "ÉLŐ • HD",
+   "logo": "https://nuvio-magyar-http.onrender.com/tv-logo/9851.png",
+   "poster": "https://nuvio-magyar-http.onrender.com/tv-poster/9851.png",
+   "background": "https://nuvio-magyar-http.onrender.com/tv-background/9851.png",
+   "mirrors": [
+    {
+     "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/zuglotv.sdp/playlist.m3u8",
+     "host": "cloudfront44.lexanetwork.com",
+     "secure": true
+    },
+    {
+     "url": "https://m3m8.gradetv.net/api/s/ZugloTV.hu%3ASD%3A17198.m3u8",
+     "host": "m3m8.gradetv.net",
+     "secure": true
+    }
+   ]
+  }
+ ]
+}

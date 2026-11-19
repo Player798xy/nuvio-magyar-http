@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node --max-old-space-size=220 --max-semi-space-size=8 server.js",
     "dev": "node --watch server.js",
-    "test": "node scripts/verify.js"
+    "test": "node scripts/verify.js",
+    "playlists": "node scripts/generate_playlists.js",
+    "channels": "node scripts/generate_tv_channels.js",
+    "assets": "node scripts/generate_playlists.js && node scripts/generate_tv_channels.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
