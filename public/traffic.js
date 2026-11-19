@@ -3,6 +3,7 @@
 (() => {
   'use strict';
 
+  const BASE_PREFIX = window.__BASE_PREFIX || '';
   const $ = (id) => document.getElementById(id);
 
   const CLASS_ORDER = ['relay', 'epg', 'playlist', 'api', 'static', 'other'];
@@ -363,7 +364,7 @@
 
   async function load() {
     try {
-      const url = '/api/tv/traffic' + (authKey ? `?key=${encodeURIComponent(authKey)}` : '');
+      const url = BASE_PREFIX + '/api/tv/traffic' + (authKey ? `?key=${encodeURIComponent(authKey)}` : '');
       const response = await fetch(url, { cache: 'no-store' });
       if (response.status === 401) throw new Error('Jogosulatlan (STATS_KEY szükséges)');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);

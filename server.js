@@ -760,13 +760,11 @@ app.get(['/playlist.m3u', '/playlist.m3u8', '/playlist-all.m3u', '/playlist-all.
 
 // 7b4. Live TV viewer & stream health API
 app.get('/traffic', (req, res) => {
-  res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=120');
-  res.sendFile(path.join(__dirname, 'public', 'traffic.html'));
+  return sendAppHtml(req, res, 'traffic.html');
 });
 
 app.get('/profile', (req, res) => {
-  res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=120');
-  res.sendFile(path.join(__dirname, 'public', 'profile.html'));
+  return sendAppHtml(req, res, 'profile.html');
 });
 
 app.get('/api/profile/options', (req, res) => {
@@ -790,8 +788,7 @@ app.get('/api/tv/traffic', (req, res) => {
 });
 app.get(['/tv', '/tv/'], (req, res) => {
   maybeSyncIfStale();
-  res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=3600');
-  res.sendFile(path.join(__dirname, 'public', 'tv.html'));
+  return sendAppHtml(req, res, 'tv.html');
 });
 
 app.get('/api/tv/channels', (req, res) => {
@@ -1542,6 +1539,35 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+const appHtmlCache = new Map();
+
+/**
+ * Serves one of the new app pages. Under the optional ACCESS_KEY prefix the
+ * absolute asset URLs must be rewritten and the client JS needs to know the
+ * prefix so its API calls hit /p/<key>/api/....
+ */
+function sendAppHtml(req, res, fileName) {
+  let html = appHtmlCache.get(fileName);
+  if (!html) {
+    html = fs.readFileSync(path.join(__dirname, 'public', fileName), 'utf8');
+    appHtmlCache.set(fileName, html);
+  }
+
+  const prefix = req._privatePrefix || '';
+  if (prefix) {
+    html = html.replace(
+      /(href|src)="\/(tv-app\.css|tv-app\.js|traffic\.css|traffic\.js|profile\.css|profile\.js|logo\.svg|logo\.png|favicon\.ico)/g,
+      `$1="${prefix}/$2`
+    );
+    res.setHeader('Cache-Control', 'private, no-store');
+  } else {
+    res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=300');
+  }
+
+  html = html.replace('<head>', `<head>\n  <script>window.__BASE_PREFIX=${JSON.stringify(prefix)};</script>`);
+  return res.type('html').send(html);
+}
 
 let cachedIndexHtml = null;
 function sendConfiguratorHtml(req, res) {

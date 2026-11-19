@@ -3,6 +3,7 @@
 (() => {
   'use strict';
 
+  const BASE_PREFIX = window.__BASE_PREFIX || '';
   const $ = (id) => document.getElementById(id);
 
   const state = {
@@ -20,7 +21,7 @@
     shareBtn: $('shareBtn'), resetBtn: $('resetBtn'), toastWrap: $('toastWrap')
   };
 
-  const base = location.origin;
+  const base = location.origin + BASE_PREFIX;
   const SAVED_KEY = 'tv.profiles';
 
   /* ---------------- helpers ---------------- */
@@ -254,7 +255,7 @@
 
   async function init() {
     try {
-      const response = await fetch('/api/profile/options', { cache: 'no-store' });
+      const response = await fetch(BASE_PREFIX + '/api/profile/options', { cache: 'no-store' });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
 

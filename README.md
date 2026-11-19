@@ -187,6 +187,14 @@ https://example.com/live.m3u8
 - **Git snapshot:** `npm run assets` (vagy `npm run channels`) a helyi csatornákat is beleírja a `public/tv-channels.json`-ba, így a Git-alapú néző is látja
 - **Render:** a fájl a repóban van, ezért commit + push után a deploy is megkapja; környezeti változóval más útvonal is megadható: `LOCAL_CHANNELS_FILE=/path/a.json,/path/b.m3u`
 
+### 🔐 Opcionális `ACCESS_KEY` (privát prefix)
+
+Ha a szerveren be van állítva az `ACCESS_KEY` env (pl. `ACCESS_KEY=sajat-kulcs`), minden végpont a **`/p/<kulcs>/`** prefix alá kerül (az upstream új funkciója). Az új oldalak és a lejátszási listák is prefix-tudatosak:
+
+- `/p/<kulcs>/tv`, `/p/<kulcs>/traffic`, `/p/<kulcs>/profile` — az asset- és API-hívások automatikusan a prefixre íródnak
+- `/p/<kulcs>/tv.m3u`, `/p/<kulcs>/xmltv.php`, `/p/<kulcs>/pf/<kategóriák>/…` — a generált URL-ek is tartalmazzák a prefixet
+- `GET /api/health` prefix nélkül is elérhető (health checkhez)
+
 ### 🧩 Profil készítő (`/profile`) — saját csatornalista + EPG
 
 Élő TV kategóriák és VOD források ki-/bekapcsolása, majd a kijelölésből generált, **állapotmentes (URL-be kódolt) profil**:

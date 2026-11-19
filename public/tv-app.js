@@ -6,10 +6,12 @@
 (() => {
   'use strict';
 
+  const BASE_PREFIX = window.__BASE_PREFIX || '';
+
   const GIT_SOURCES = [
     { id: 'github', name: 'GitHub', url: 'https://raw.githubusercontent.com/Player798xy/nuvio-magyar-http/main/public/tv-channels.json' },
     { id: 'jsdelivr', name: 'jsDelivr', url: 'https://cdn.jsdelivr.net/gh/Player798xy/nuvio-magyar-http@main/public/tv-channels.json' },
-    { id: 'local', name: 'Szerver', url: '/api/tv/channels' }
+    { id: 'local', name: 'Szerver', url: `${BASE_PREFIX}/api/tv/channels` }
   ];
 
   const STALL_TIMEOUT_MS = 12000;
@@ -122,7 +124,7 @@
   }
 
   function relayUrl(url) {
-    return `/api/tv/relay.m3u8?url=${encodeURIComponent(url)}`;
+    return `${BASE_PREFIX}/api/tv/relay.m3u8?url=${encodeURIComponent(url)}`;
   }
 
   /* ---------------- channel list ---------------- */
@@ -569,7 +571,7 @@
 
   async function runChannelHealth(channel, { silent = true } = {}) {
     try {
-      const data = await fetchJson(`/api/tv/health/${encodeURIComponent(channel.channelId)}?fresh=1`, 45000);
+      const data = await fetchJson(`${BASE_PREFIX}/api/tv/health/${encodeURIComponent(channel.channelId)}?fresh=1`, 45000);
       state.deepHealth.set(channel.id, data);
 
       for (const mirror of data.mirrors || []) {
@@ -644,7 +646,7 @@
     }
 
     try {
-      const payload = await fetchJson(`/api/tv/epg/${encodeURIComponent(channel.channelId)}${force ? '?fresh=1' : ''}`, 15000);
+      const payload = await fetchJson(`${BASE_PREFIX}/api/tv/epg/${encodeURIComponent(channel.channelId)}${force ? '?fresh=1' : ''}`, 15000);
       state.epg.set(channel.channelId, payload);
       if (state.current && state.current.channelId === channel.channelId) renderEpgBar(payload);
     } catch (error) {
@@ -681,7 +683,7 @@
     el.epgProgressBar.classList.add('on');
 
     try {
-      const data = await fetchJson(`/api/tv/epg?category=${encodeURIComponent(category)}${force ? '&fresh=1' : ''}`, 45000);
+      const data = await fetchJson(`${BASE_PREFIX}/api/tv/epg?category=${encodeURIComponent(category)}${force ? '&fresh=1' : ''}`, 45000);
       state.epgCategory = category;
       el.epgStamp.textContent = `${data.withEpg}/${data.total} csatorna műsorral · ${fmtTime(data.generatedAt)}`;
 
@@ -768,7 +770,7 @@
       el.epgProgressBar.classList.add('on');
 
       try {
-        const data = await fetchJson(`/api/tv/epg/grid?category=${encodeURIComponent(category)}&hours=12${force ? '&fresh=1' : ''}`, 60000);
+        const data = await fetchJson(`${BASE_PREFIX}/api/tv/epg/grid?category=${encodeURIComponent(category)}&hours=12${force ? '&fresh=1' : ''}`, 60000);
         renderEpgGrid(data);
         el.epgStamp.textContent = `${data.withData}/${data.total} csatorna · ${fmtTime(data.generatedAt)}`;
         requestAnimationFrame(() => {
