@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#050505" />
+  <title>Profil készítő — Magyar TV</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.7.0" />
+  <link rel="alternate icon" type="image/png" href="/logo.png?v=2.7.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/profile.css?v=1.0.0" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/tv">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      MAGYAR<span>TV</span>
+    </a>
+    <span class="sep">/</span>
+    <span class="page-title">Profil készítő</span>
+    <a class="btn back" href="/tv">← Vissza a nézőhöz</a>
+  </header>
+
+  <main class="wrap">
+    <div class="layout">
+      <section class="left">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h1>Élő TV kategóriák</h1>
+              <p>Csak a kijelölt kategóriák csatornái kerülnek a listába és a műsorújságba.</p>
+            </div>
+            <div class="mini-actions">
+              <button type="button" data-act="all-cats">Mind</button>
+              <button type="button" data-act="none-cats">Egyik sem</button>
+            </div>
+          </div>
+          <div class="opt-list" id="catList"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h1>VOD források</h1>
+              <p>Ezekből a forrásokból keres a Nuvio/Stremio addon (film, sorozat, mese).</p>
+            </div>
+            <div class="mini-actions">
+              <button type="button" data-act="all-src">Mind</button>
+              <button type="button" data-act="none-src">Egyik sem</button>
+            </div>
+          </div>
+          <div class="opt-list" id="srcList"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h1>Mentett profilok</h1>
+              <p>Csak ebben a böngészőben tárolva (localStorage) — a profil maga az URL-ben van.</p>
+            </div>
+            <div class="mini-actions">
+              <button type="button" id="resetBtn">Alaphelyzet</button>
+            </div>
+          </div>
+          <div class="save-row">
+            <input id="profileName" type="text" maxlength="40" placeholder="Profil neve (pl. Nappali TV)" />
+            <button class="btn primary" id="saveProfile" type="button">Mentés</button>
+          </div>
+          <div class="saved-list" id="savedList"></div>
+        </div>
+      </section>
+
+      <aside class="right">
+        <div class="card sticky">
+          <h1>Profil URL-ek</h1>
+          <p class="preview" id="preview">–</p>
+
+          <div class="url-list" id="urlList"></div>
+
+          <div class="share-row">
+            <button class="btn primary" id="shareBtn" type="button">🔗 Profil link másolása</button>
+            <span class="hint">A link megnyitásakor ugyanez a kijelölés töltődik be.</span>
+          </div>
+
+          <div class="note">
+            <b>TiviMate:</b> az <span class="mono">M3U · auto tükör</span> listát és az <span class="mono">EPG · XMLTV</span> címet add hozzá.
+            Az <span class="mono">Xtream host</span> mezőbe a profilált host cím kerül, így az Xtream account is csak a kijelölt csatornákat látja.
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
+
+  <script src="/profile.js?v=1.0.0" defer></script>
+</body>
+</html>

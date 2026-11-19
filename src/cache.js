@@ -78,11 +78,17 @@ function createBoundedCache({ maxEntries = 300, ttlMs = 60 * 60 * 1000 } = {}) {
     }
   }
 
+  function clear() {
+    store.clear();
+    inflight.clear();
+  }
+
   return {
     get,
     has,
     set,
     delete: del,
+    clear,
     getOrLoad,
     size: () => store.size
   };

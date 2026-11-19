@@ -225,6 +225,18 @@ async function fetchChannelSchedule(portId) {
 }
 
 /**
+ * Returns the full cached daily schedule of a channel (used by the XMLTV builder
+ * and the /tv programme guide). Same 6h cache as getChannelEpg, no extra calls.
+ */
+async function getChannelSchedule(channelName, channelId = '') {
+  const portId = await resolvePortChannelId(channelName, channelId);
+  if (!portId) return null;
+  const programs = await fetchChannelSchedule(portId);
+  if (!programs || !programs.length) return null;
+  return { portId, programs };
+}
+
+/**
  * Returns the currently airing show (`now`) and upcoming shows (`upcoming`) for a channel.
  */
 async function getChannelEpg(channelName, channelId = '') {
@@ -289,6 +301,7 @@ function formatEpgMetaText(epg) {
 
 module.exports = {
   getChannelEpg,
+  getChannelSchedule,
   formatEpgStreamBanner,
   formatEpgMetaText,
   resolvePortChannelId

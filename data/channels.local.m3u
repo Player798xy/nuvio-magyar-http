@@ -1,0 +1,4 @@
+#EXTM3U
+# Saját csatornák – példa formátum (a # utáni sorok megjegyzések):
+# EXTINF:-1 tvg-id="sajat-tv" tvg-logo="https://example.com/logo.png" group-title="Saját",Saját TV
+# https://example.com/live.m3u8

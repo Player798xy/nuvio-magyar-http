@@ -7052,9 +7052,29 @@ async function getOnlineStreamStreams(channelIdOrKey, clientIp = null, hostUrl =
   return results;
 }
 
+/**
+ * Hot-swaps the live TV catalog at runtime (Git auto-sync).
+ * Both arrays are mutated in place so every module that captured a reference
+ * at require-time (server, addon, catalogs, health, playlists, xtream) sees the
+ * new channels immediately, without a restart.
+ */
+function applyRuntimeCatalog(channels, categories) {
+  if (!Array.isArray(channels) || !channels.length) return false;
+
+  if (Array.isArray(categories) && categories.length) {
+    ONLINESTREAM_CATEGORIES.length = 0;
+    ONLINESTREAM_CATEGORIES.push(...categories);
+  }
+
+  ALL_CHANNELS.length = 0;
+  ALL_CHANNELS.push(...channels);
+  return true;
+}
+
 module.exports = {
   ONLINESTREAM_CATEGORIES,
   ALL_CHANNELS,
+  applyRuntimeCatalog,
   getOnlineStreamChannels,
   getOnlineStreamMeta,
   getOnlineStreamStreams

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#050505" />
+  <title>Szerver forgalom — Magyar TV</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg?v=2.7.0" />
+  <link rel="alternate icon" type="image/png" href="/logo.png?v=2.7.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/traffic.css?v=1.0.1" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/tv">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      MAGYAR<span>TV</span>
+    </a>
+    <span class="sep" aria-hidden="true">/</span>
+    <span class="page-title">Szerver forgalom</span>
+
+    <span class="live-pill" id="livePill"><i></i> ÉLŐ</span>
+
+    <label class="refresh">
+      <span>frissítés</span>
+      <select id="refreshRate">
+        <option value="2000" selected>2 s</option>
+        <option value="5000">5 s</option>
+        <option value="10000">10 s</option>
+        <option value="30000">30 s</option>
+      </select>
+    </label>
+
+    <a class="btn" href="/tv">← Vissza a nézőhöz</a>
+  </header>
+
+  <main class="wrap">
+    <section class="tiles">
+      <div class="tile">
+        <div class="k">Most</div>
+        <div class="v" id="tileNow">–</div>
+        <div class="s" id="tileNowSub">5 mp átlag</div>
+      </div>
+      <div class="tile">
+        <div class="k">Ma</div>
+        <div class="v" id="tileToday">–</div>
+        <div class="s" id="tileTodaySub">–</div>
+      </div>
+      <div class="tile">
+        <div class="k">Indulás óta</div>
+        <div class="v" id="tileBoot">–</div>
+        <div class="s" id="tileBootSub">–</div>
+      </div>
+      <div class="tile">
+        <div class="k">Csúcs</div>
+        <div class="v" id="tilePeak">–</div>
+        <div class="s" id="tilePeakSub">–</div>
+      </div>
+    </section>
+
+    <section class="chart-card">
+      <div class="chart-head">
+        <div>
+          <h1>Kimenő forgalom</h1>
+          <p id="chartSub">–</p>
+        </div>
+        <div class="seg" id="rangeToggle" role="group" aria-label="Időtáv">
+          <button class="on" data-range="2m">2 perc</button>
+          <button data-range="1h">60 perc</button>
+          <button data-range="24h">24 óra</button>
+        </div>
+      </div>
+
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="chart" height="320"></canvas>
+        <div class="tooltip" id="tooltip" hidden></div>
+        <div class="chart-empty" id="chartEmpty" hidden>Ebben az időszakban nincs mérhető forgalom.</div>
+      </div>
+
+      <div class="legend" id="legend"></div>
+
+      <div class="relay-note" id="relayNote" hidden>
+        ⚠ <b>Relay forgalom aktív:</b> <span id="relayNoteValue">–</span> — a videó a szerveren keresztül megy. Kapcsold ki a Relay módot a nézőben, ha kímélni akarod a sávszélességet.
+      </div>
+    </section>
+
+    <section class="class-card">
+      <div class="table-head">
+        <h2>Megbontás (ma)</h2>
+        <span class="mono muted" id="classTotal">–</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Osztály</th>
+            <th>Forgalom</th>
+            <th>Részesedés</th>
+            <th>Kérések</th>
+          </tr>
+        </thead>
+        <tbody id="classBody">
+          <tr><td colspan="4" class="muted">Betöltés…</td></tr>
+        </tbody>
+      </table>
+      <p class="footnote">
+        A videó alapból <b>közvetlenül a CDN-ekről</b> megy (Zero Proxy) — a szerveren csak a lejátszási lista, az EPG és az API forgalma jelenik meg.
+        Relay módban viszont minden szegmens itt halad át.
+      </p>
+    </section>
+  </main>
+
+  <script src="/traffic.js?v=1.0.1" defer></script>
+</body>
+</html>

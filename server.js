@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('node:crypto');
+const { Readable } = require('node:stream');
 const pkg = require('./package.json');
 const { createBoundedCache } = require('./src/cache');
 const {
@@ -22,6 +23,15 @@ const { searchCatalog, getMeta, HUNGARIAN_CLASSIC_SERIES_IDS } = require('./src/
 const { getWeeklyRotationSeed } = require('./src/catalogs');
 const { getMediaMeta, getSeriesEpisodes } = require('./src/utils/meta');
 const { getLiveHlsStream, getRewrittenMasterPlaylist } = require('./src/scrapers/mediaklikk');
+const { buildM3u, buildAutoMirrorM3u, buildXspf } = require('./src/playlists');
+const { buildChannelPayload } = require('./src/tv_channels');
+const { checkCatalog, checkChannelMirrors, probeMirror, resolveBestMirror } = require('./src/tv_health');
+const { getRelayedPlaylist, isPublicHttpUrl, UPSTREAM_HEADERS } = require('./src/tv_relay');
+const { handlePlayerApi } = require('./src/xtream');
+const { getChannelEpgPayload, getCategoryEpg, getScheduleGrid, getXmltvDocument, getXmltvStatus } = require('./src/tv_epg');
+const { startAutoSync, syncNow, maybeSyncIfStale, getSyncStatus } = require('./src/tv_catalog_sync');
+const { trafficMiddleware, getTrafficSnapshot } = require('./src/traffic');
+const { parseCategories } = require('./src/tv_profiles');
 const {
   recordRequestMetric,
   isAuthorizedStatsRequest,
@@ -117,6 +127,15 @@ function buildPublicShutdownHtml() {
 </body>
 </html>`;
 }
+
+// Count real response bytes for the /traffic dashboard (works for relay streaming too)
+app.use(trafficMiddleware);
+
+function requestCategoryFilter(req) {
+  const raw = req.profileCategories !== undefined ? req.profileCategories : req.query.cats;
+  return parseCategories(raw);
+}
+
 
 function isVercelRequest(req) {
   if (process.env.RENDER || process.env.RENDER_EXTERNAL_URL || process.env.RENDER_SERVICE_ID) return false;
@@ -232,6 +251,22 @@ app.use((req, res, next) => {
   });
   next();
 });
+
+// Stateless profiles: /pf/<category ids>/<endpoint> works like the endpoint with ?cats=...
+// Runs after the optional ACCESS_KEY prefix rewriter, so /p/<key>/pf/<cats>/... also works.
+app.use((req, res, next) => {
+  const match = String(req.path || '').match(/^\/pf\/([^/]+)(\/.*)?$/);
+  if (!match) return next();
+  try { req.profileCategories = decodeURIComponent(match[1]); } catch (e) { req.profileCategories = match[1]; }
+  const rest = match[2] || '/';
+  const queryIndex = req.url.indexOf('?');
+  req.url = rest + (queryIndex >= 0 ? req.url.slice(queryIndex) : '');
+  next();
+});
+
+// Prefix-aware support/QR pages (must be registered before express.static)
+app.get(['/uj-link', '/uj-link.html'], (req, res) => sendAppHtml(req, res, 'uj-link.html'));
+app.get(['/tamogatas', '/tamogatas.html'], (req, res) => sendAppHtml(req, res, 'tamogatas.html'));
 
 // Serve static landing & configuration page + logos + channel icons (index: false lets private prefix rewriter handle /)
 app.use(express.static(path.join(__dirname, 'public'), {
@@ -680,96 +715,289 @@ app.all(['/proxy/hls.m3u8', '/proxy/hls'], (req, res) => {
 });
 
 // 7b2. XSPF Playlist Endpoint for VLC Media Player and Kodi
+// ?mirrors=1 -> minden tükör URL külön track-ként (alapból 1 stream / csatorna)
+function isMirrorsRequest(req) {
+  const value = String(req.query.mirrors ?? req.query.all ?? '').trim().toLowerCase();
+  return value === '1' || value === 'true' || value === 'yes' || value === 'all';
+}
+
+function isFalseQuery(value) {
+  const clean = String(value ?? '').trim().toLowerCase();
+  return clean === '0' || clean === 'false' || clean === 'no' || clean === 'off';
+}
+
+function isTruthyQuery(value) {
+  const clean = String(value ?? '').trim().toLowerCase();
+  return clean === '1' || clean === 'true' || clean === 'yes' || clean === 'all' || clean === 'fresh';
+}
+
 app.get(['/playlist.xspf', '/tv.xspf'], async (req, res) => {
-  res.setHeader('Content-Type', 'application/xspf+xml; charset=utf-8');
-  res.setHeader('Content-Disposition', 'inline; filename="nuvio-magyar-tv.xspf"');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-
   const hostUrl = getHostUrl(req);
-  const { ALL_CHANNELS, ONLINESTREAM_CATEGORIES } = require('./src/scrapers/onlinestream');
-  const catMap = new Map(ONLINESTREAM_CATEGORIES.map(c => [c.id, c.name]));
+  const allMirrors = isMirrorsRequest(req);
+  const cdnBase = getCdnPublicBaseUrl();
+  const xml = buildXspf({
+    allMirrors,
+    categoryFilter: requestCategoryFilter(req),
+    logoUrlFor: (channelId) => rewriteStaticAssetUrl(`${hostUrl}/tv-logos/${channelId}.png`, cdnBase)
+  }, { hostUrl });
 
-  const escapeXml = (unsafe) => (unsafe || '').replace(/[<>&'"]/g, c => {
-    switch (c) {
-      case '<': return '&lt;';
-      case '>': return '&gt;';
-      case '&': return '&amp;';
-      case '\'': return '&apos;';
-      case '"': return '&quot;';
-    }
-  });
-
-  const tracks = [];
-  for (const ch of ALL_CHANNELS) {
-    const catName = catMap.get(ch.category) || 'Magyar TV';
-    let targetStream = '';
-
-    if (ch.channelId === '4740') {
-      targetStream = 'https://videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8';
-    } else if (ch.streams && ch.streams.length > 0) {
-      targetStream = ch.streams[0].url || ch.streams[0].playerUrl;
-    }
-
-    if (!targetStream && ch.mtvaKey) {
-      targetStream = `${hostUrl}/api/live/mtv1live.m3u8`;
-    }
-
-    if (targetStream) {
-      const logoUrl = rewriteStaticAssetUrl(`${hostUrl}/tv-logos/${ch.channelId}.png`, getCdnPublicBaseUrl());
-      tracks.push(`    <track>
-      <title>${escapeXml(ch.name)}</title>
-      <creator>${escapeXml(catName)}</creator>
-      <album>Nuvio Magyar TV</album>
-      <location>${escapeXml(targetStream)}</location>
-      <image>${escapeXml(logoUrl)}</image>
-      <annotation>${escapeXml(ch.description)}</annotation>
-    </track>`);
-    }
-  }
-
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<playlist version="1" xmlns="http://xspf.org/ns/0/">
-  <title>Nuvio Magyar TV - Élő TV Csatornák (112 Adó)</title>
-  <creator>Nuvio Magyar Streaming Pro</creator>
-  <info>${hostUrl}</info>
-  <trackList>
-${tracks.join('\n')}
-  </trackList>
-</playlist>`;
-
+  res.setHeader('Content-Type', 'application/xspf+xml; charset=utf-8');
+  res.setHeader('Content-Disposition', `inline; filename="nuvio-magyar-tv${allMirrors ? '-all-mirrors' : ''}.xspf"`);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
   res.send(xml);
 });
 
-// 7b3. M3U / M3U8 Playlist Endpoint for IPTV Players
-app.get(['/playlist.m3u', '/playlist.m3u8', '/tv.m3u', '/tv.m3u8'], async (req, res) => {
+// 7b3. M3U / M3U8 Playlist Endpoints for IPTV Players
+// ?mirrors=1 (vagy /playlist-all.m3u) -> minden tükör URL, alapból 1 stream / csatorna
+app.get(['/playlist.m3u', '/playlist.m3u8', '/playlist-all.m3u', '/playlist-all.m3u8', '/tv-all.m3u', '/tv-all.m3u8'], async (req, res) => {
+  const hostUrl = getHostUrl(req);
+  const allMirrors = isMirrorsRequest(req) || /-all\.m3u8?$/i.test(req.path);
+  const cdnBase = getCdnPublicBaseUrl();
+  const body = buildM3u({
+    allMirrors,
+    categoryFilter: requestCategoryFilter(req),
+    allGroup: !isFalseQuery(req.query.allgroup),
+    logoUrlFor: (channelId) => rewriteStaticAssetUrl(`${hostUrl}/tv-logos/${channelId}.png`, cdnBase)
+  });
+
+  res.setHeader('Content-Type', 'application/vnd.apple.mpegurl; charset=utf-8');
+  res.setHeader('Content-Disposition', `inline; filename="nuvio-magyar-tv${allMirrors ? '-all-mirrors' : ''}.m3u"`);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  res.send(body);
+});
+
+// 7b4. Live TV viewer & stream health API
+app.get('/traffic', (req, res) => {
+  return sendAppHtml(req, res, 'traffic.html');
+});
+
+app.get('/profile', (req, res) => {
+  return sendAppHtml(req, res, 'profile.html');
+});
+
+app.get('/api/profile/options', (req, res) => {
+  const payload = buildChannelPayload({ hostUrl: getHostUrl(req) });
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=600');
+  res.json({
+    categories: payload.categories.map(category => ({ id: category.id, name: category.name, count: category.count })),
+    sources: ALL_SCRAPERS
+      .filter(scraper => !scraper.id.startsWith('onlinestream'))
+      .map(scraper => ({ id: scraper.id, name: scraper.name })),
+    totalChannels: payload.count
+  });
+});
+
+app.get('/api/tv/traffic', (req, res) => {
+  if (!isAuthorizedStatsRequest(req)) {
+    return res.status(401).json({ error: 'unauthorized' });
+  }
+  res.setHeader('Cache-Control', 'no-store');
+  res.json(getTrafficSnapshot());
+});
+app.get(['/tv', '/tv/'], (req, res) => {
+  maybeSyncIfStale();
+  return sendAppHtml(req, res, 'tv.html');
+});
+
+app.get('/api/tv/channels', (req, res) => {
+  maybeSyncIfStale();
+  res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=3600');
+  res.json({ ...buildChannelPayload({ hostUrl: getHostUrl(req), categoryFilter: requestCategoryFilter(req) }), sync: getSyncStatus() });
+});
+
+// Git catalog sync status + manual trigger (?force=1)
+app.get('/api/tv/sync', async (req, res) => {
+  if (isTruthyQuery(req.query.force)) {
+    await syncNow({ force: true });
+  } else {
+    maybeSyncIfStale();
+  }
+  res.setHeader('Cache-Control', 'no-store');
+  res.json(getSyncStatus());
+});
+
+app.get('/api/tv/health/:channelId', async (req, res) => {
+  try {
+    const payload = await checkChannelMirrors(req.params.channelId, { fresh: isTruthyQuery(req.query.fresh) });
+    if (!payload) return res.status(404).json({ error: 'unknown channel' });
+    res.setHeader('Cache-Control', 'public, max-age=15, s-maxage=45, stale-while-revalidate=120');
+    res.json(payload);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// On-demand diagnostic for any pasted HLS URL (URL checker tab).
+app.get('/api/tv/check', async (req, res) => {
+  const targetUrl = String(req.query.url || '').trim();
+  if (!isPublicHttpUrl(targetUrl)) return res.status(400).json({ error: 'missing or non-public url' });
+  try {
+    const result = await probeMirror(targetUrl, { includeSegment: true, fresh: true });
+    res.setHeader('Cache-Control', 'no-store');
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Opt-in relay for CORS-locked / http-only mirrors on the https deployment.
+app.get('/api/tv/relay.m3u8', async (req, res) => {
+  try {
+    const body = await getRelayedPlaylist(String(req.query.url || '').trim());
+    res.setHeader('Content-Type', 'application/vnd.apple.mpegurl; charset=utf-8');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'no-store');
+    res.send(body);
+  } catch (err) {
+    res.status(err.statusCode || 502).send(`#EXTM3U\n#EXT-X-ERROR:${String(err.message || 'relay failed').replace(/\s+/g, ' ')}\n`);
+  }
+});
+
+app.get('/api/tv/relay/segment', async (req, res) => {
+  const targetUrl = String(req.query.url || '').trim();
+  if (!isPublicHttpUrl(targetUrl)) return res.status(400).send('invalid url');
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 20000);
+  res.on('close', () => controller.abort());
+
+  try {
+    const headers = { ...UPSTREAM_HEADERS };
+    if (req.headers.range) headers.Range = req.headers.range;
+    const upstream = await fetch(targetUrl, { headers, redirect: 'follow', signal: controller.signal });
+
+    res.status(upstream.status);
+    for (const header of ['content-type', 'content-length', 'content-range', 'accept-ranges', 'last-modified', 'etag']) {
+      const value = upstream.headers.get(header);
+      if (value) res.setHeader(header, value);
+    }
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'public, max-age=10');
+    clearTimeout(timer);
+
+    if (!upstream.body) return res.end();
+    Readable.fromWeb(upstream.body).pipe(res);
+  } catch (err) {
+    clearTimeout(timer);
+    if (!res.headersSent) res.status(502).send(`relay error: ${err.message}`);
+    else res.end();
+  }
+});
+
+
+// 7b5. Auto-mirror IPTV playlist: one stable URL per channel, resolved to the
+// best live mirror on every request, so a dead host never breaks the entry.
+app.get(['/tv.m3u', '/tv.m3u8', '/get.php'], async (req, res) => {
+  const hostUrl = getHostUrl(req);
+  const cdnBase = getCdnPublicBaseUrl();
+  const body = buildAutoMirrorM3u({
+    hostUrl,
+    categoryFilter: requestCategoryFilter(req),
+    allGroup: !isFalseQuery(req.query.allgroup),
+    logoUrlFor: (channelId) => rewriteStaticAssetUrl(`${hostUrl}/tv-logos/${channelId}.png`, cdnBase)
+  });
+
   res.setHeader('Content-Type', 'application/vnd.apple.mpegurl; charset=utf-8');
   res.setHeader('Content-Disposition', 'inline; filename="nuvio-magyar-tv.m3u"');
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400');
+  res.send(body);
+});
 
-  const hostUrl = getHostUrl(req);
-  const { ALL_CHANNELS, ONLINESTREAM_CATEGORIES } = require('./src/scrapers/onlinestream');
-  const catMap = new Map(ONLINESTREAM_CATEGORIES.map(c => [c.id, c.name]));
-
-  const lines = ['#EXTM3U name="Nuvio Magyar TV"'];
-
-  for (const ch of ALL_CHANNELS) {
-    const catName = catMap.get(ch.category) || 'Magyar TV';
-    let targetStream = '';
-
-    if (ch.channelId === '4740') {
-      targetStream = 'https://videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8';
-    } else if (ch.streams && ch.streams.length > 0) {
-      targetStream = ch.streams[0].url || ch.streams[0].playerUrl;
+// 7b6. Mirror resolver used by the auto-mirror playlist and Xtream clients.
+app.get('/api/tv/live/:channelId', async (req, res) => {
+  const channelId = String(req.params.channelId || '').replace(/\.(m3u8?|ts)$/i, '');
+  try {
+    const resolved = await resolveBestMirror(channelId);
+    if (!resolved) {
+      return res.status(404).send('#EXTM3U\n#EXT-X-ERROR: unknown channel\n');
     }
-
-    if (targetStream) {
-      const logoUrl = rewriteStaticAssetUrl(`${hostUrl}/tv-logos/${ch.channelId}.png`, getCdnPublicBaseUrl());
-      lines.push(`#EXTINF:-1 tvg-id="${ch.channelId}" tvg-name="${ch.name}" tvg-logo="${logoUrl}" group-title="${catName}",${ch.name}`);
-      lines.push(targetStream);
-    }
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('X-Stream-Host', resolved.host || '');
+    res.setHeader('X-Stream-Online', resolved.online ? '1' : '0');
+    return res.redirect(302, resolved.url);
+  } catch (err) {
+    return res.status(502).send(`#EXTM3U\n#EXT-X-ERROR:${String(err.message || 'resolver failed').replace(/\s+/g, ' ')}\n`);
   }
+});
 
-  res.send(lines.join('\n'));
+
+// 7b8. EPG API for the /tv viewer (port.hu, cached per channel/category).
+app.get('/api/tv/epg/status', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  res.json(getXmltvStatus());
+});
+
+app.get('/api/tv/epg/grid', async (req, res) => {
+  try {
+    const payload = await getScheduleGrid(
+      String(req.query.category || '').trim(),
+      { hours: Number(req.query.hours) || 12, fresh: isTruthyQuery(req.query.fresh) }
+    );
+    if (!payload) return res.status(404).json({ error: 'unknown category' });
+    res.setHeader('Cache-Control', 'public, max-age=120, s-maxage=300, stale-while-revalidate=600');
+    res.json(payload);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/tv/epg/:channelId', async (req, res) => {
+  try {
+    const payload = await getChannelEpgPayload(req.params.channelId, { fresh: isTruthyQuery(req.query.fresh) });
+    if (!payload) return res.status(404).json({ error: 'unknown channel' });
+    res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=120, stale-while-revalidate=300');
+    res.json(payload);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 7b9. Category-wide "now playing" list for the programme guide tab.
+app.get('/api/tv/epg', async (req, res) => {
+  try {
+    const payload = await getCategoryEpg(String(req.query.category || '').trim(), { fresh: isTruthyQuery(req.query.fresh) });
+    if (!payload) return res.status(404).json({ error: 'unknown category' });
+    res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=180, stale-while-revalidate=600');
+    res.json(payload);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 7b7. Minimal Xtream Codes API (TiviMate: add as Xtream account, any user/pass).
+app.get('/player_api.php', (req, res) => {
+  const hostUrl = getHostUrl(req);
+  const action = String(req.query.action || '');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', action ? 'public, max-age=30, s-maxage=60' : 'no-store');
+  res.json(handlePlayerApi(action, req.query, hostUrl, requestCategoryFilter(req)));
+});
+
+app.get('/xmltv.php', (req, res) => {
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'public, max-age=600, s-maxage=3600, stale-while-revalidate=21600');
+  res.send(getXmltvDocument(requestCategoryFilter(req)));
+});
+
+// Xtream live stream path: /live/<user>/<pass>/<streamId>(.m3u8|.ts)
+app.get('/live/:username/:password/:streamId', async (req, res) => {
+  const channelId = String(req.params.streamId || '').replace(/\.(m3u8?|ts)$/i, '');
+  try {
+    const resolved = await resolveBestMirror(channelId);
+    if (!resolved) {
+      return res.status(404).send('#EXTM3U\n#EXT-X-ERROR: unknown channel\n');
+    }
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'no-store');
+    return res.redirect(302, resolved.url);
+  } catch (err) {
+    return res.status(502).send(`#EXTM3U\n#EXT-X-ERROR:${String(err.message || 'resolver failed').replace(/\s+/g, ' ')}\n`);
+  }
 });
 
 // 7c. High-Resolution Dynamic TV Artwork (600x900 PNG Poster, 1280x720 PNG Backdrop, 500x500 PNG Logo)
@@ -1323,6 +1551,43 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+const appHtmlCache = new Map();
+
+/**
+ * Serves one of the new app pages. Under the optional ACCESS_KEY prefix the
+ * absolute asset URLs must be rewritten and the client JS needs to know the
+ * prefix so its API calls hit /p/<key>/api/....
+ */
+function sendAppHtml(req, res, fileName) {
+  let html = appHtmlCache.get(fileName);
+  if (!html) {
+    html = fs.readFileSync(path.join(__dirname, 'public', fileName), 'utf8');
+    appHtmlCache.set(fileName, html);
+  }
+
+  const prefix = req._privatePrefix || '';
+  if (prefix) {
+    html = applyPrivatePrefix(html, prefix);
+    res.setHeader('Cache-Control', 'private, no-store');
+  } else {
+    res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=300');
+  }
+
+  html = html.replace('<head>', `<head>\n  <script>window.__BASE_PREFIX=${JSON.stringify(prefix)};</script>`);
+  return res.type('html').send(html);
+}
+
+/**
+ * Rewrites every root-relative href/src (and CSS url(/...)) to the optional
+ * ACCESS_KEY prefix, so all internal links keep working behind /p/<key>/.
+ */
+function applyPrivatePrefix(html, prefix) {
+  if (!prefix) return html;
+  let out = String(html).replace(/(href|src|action)="\/(?!\/)/g, `$1="${prefix}/`);
+  out = out.replace(/url\((['"]?)\//g, `url($1${prefix}/`);
+  return out;
+}
+
 let cachedIndexHtml = null;
 function sendConfiguratorHtml(req, res) {
   if (!cachedIndexHtml) {
@@ -1334,10 +1599,8 @@ function sendConfiguratorHtml(req, res) {
     return res.type('html').send(cachedIndexHtml);
   }
   res.setHeader('Cache-Control', 'private, no-store');
-  const rewritten = cachedIndexHtml.replace(
-    /(href|src)="\/(logo\.svg|logo\.png|favicon\.ico|configure|playlist\.xspf|playlist\.m3u|live_stream_speed_benchmark\.xlsx|live_tv_1080p_audit\.xlsx)/g,
-    `$1="${prefix}/$2`
-  );
+  const rewritten = applyPrivatePrefix(cachedIndexHtml, prefix)
+    .replace('<head>', `<head>\n  <script>window.__BASE_PREFIX=${JSON.stringify(prefix)};</script>`);
   return res.type('html').send(rewritten);
 }
 
@@ -1360,6 +1623,8 @@ if (require.main === module) {
     console.log(`⚙️ Configurator: http://localhost:${PORT}/configure`);
     console.log(`======================================================\n`);
   });
+
+  startAutoSync();
 
   const shutdown = (signal) => {
     console.log(`\n[Server] ${signal} received, closing HTTP server...`);
