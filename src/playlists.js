@@ -85,8 +85,23 @@ function getPlaylistEntries({ allMirrors = false, logoBase = DEFAULT_LOGO_BASE, 
 /**
  * VLC / Kodi / TiviMate / IPTV Smarters compatible M3U playlist.
  */
+
+/**
+ * Duplicates playlist entries into a synthetic "Összes" group (default on for
+ * M3U outputs). Players without their own all-channels view (TiviMate M3U mode)
+ * then get one group that lists every channel, while the per-category groups
+ * stay intact. Disable with ?allgroup=0.
+ */
+function withAllGroup(entries, allGroup) {
+  if (allGroup === false) return entries;
+  return [
+    ...entries,
+    ...entries.map(entry => ({ ...entry, category: 'Összes', allGroup: true }))
+  ];
+}
+
 function buildM3u(options = {}) {
-  const entries = getPlaylistEntries(options);
+  const entries = withAllGroup(getPlaylistEntries(options), options.allGroup);
   const lines = ['#EXTM3U name="Nuvio Magyar TV"'];
 
   for (const entry of entries) {
@@ -133,9 +148,12 @@ ${tracks.join('\n')}
  * Every channel gets ONE stable URL that our server resolves to the best live
  * mirror on each request, so the same entry keeps working when a host dies.
  */
-function buildAutoMirrorM3u({ hostUrl = 'https://nuvio-magyar-http.onrender.com', logoBase, logoUrlFor, categoryFilter = null } = {}) {
+function buildAutoMirrorM3u({ hostUrl = 'https://nuvio-magyar-http.onrender.com', logoBase, logoUrlFor, categoryFilter = null, allGroup = true } = {}) {
   const base = String(hostUrl || '').replace(/\/+$/, '');
-  const entries = getPlaylistEntries({ allMirrors: false, logoBase, logoUrlFor, categoryFilter });
+  const entries = withAllGroup(
+    getPlaylistEntries({ allMirrors: false, logoBase, logoUrlFor, categoryFilter }),
+    allGroup
+  );
   const lines = ['#EXTM3U name="Nuvio Magyar TV"'];
 
   for (const entry of entries) {

@@ -39,23 +39,27 @@ function parseHost(hostUrl) {
 }
 
 function getLiveCategories(categoryFilter = null) {
-  return getPayload().categories
+  const categories = getPayload().categories
     .filter(category => !categoryFilter || categoryFilter.has(category.id))
     .map(category => ({
       category_id: CATEGORY_INDEX.get(category.id) || '1',
       category_name: category.name,
       parent_id: 0
     }));
+
+  // Synthetic "All" group first, so Xtream clients (TiviMate) get an all-channels view.
+  return [{ category_id: '0', category_name: 'Összes', parent_id: 0 }, ...categories];
 }
 
 function getLiveStreams(categoryId = '', hostUrl = '', categoryFilter = null) {
   const payload = getPayload();
   const wanted = String(categoryId || '').trim();
+  const wantsAll = !wanted || wanted === '0' || /^(all|mind)$/i.test(wanted);
   const host = String(hostUrl || PUBLIC_HOST).replace(/\/+$/, '');
 
   return payload.channels
     .filter(channel => !categoryFilter || categoryFilter.has(channel.category))
-    .filter(channel => !wanted || CATEGORY_INDEX.get(channel.category) === wanted)
+    .filter(channel => wantsAll || CATEGORY_INDEX.get(channel.category) === wanted)
     .map((channel, index) => ({
       num: index + 1,
       name: channel.name,

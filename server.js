@@ -264,6 +264,10 @@ app.use((req, res, next) => {
   next();
 });
 
+// Prefix-aware support/QR pages (must be registered before express.static)
+app.get(['/uj-link', '/uj-link.html'], (req, res) => sendAppHtml(req, res, 'uj-link.html'));
+app.get(['/tamogatas', '/tamogatas.html'], (req, res) => sendAppHtml(req, res, 'tamogatas.html'));
+
 // Serve static landing & configuration page + logos + channel icons (index: false lets private prefix rewriter handle /)
 app.use(express.static(path.join(__dirname, 'public'), {
   index: false,
@@ -717,6 +721,11 @@ function isMirrorsRequest(req) {
   return value === '1' || value === 'true' || value === 'yes' || value === 'all';
 }
 
+function isFalseQuery(value) {
+  const clean = String(value ?? '').trim().toLowerCase();
+  return clean === '0' || clean === 'false' || clean === 'no' || clean === 'off';
+}
+
 function isTruthyQuery(value) {
   const clean = String(value ?? '').trim().toLowerCase();
   return clean === '1' || clean === 'true' || clean === 'yes' || clean === 'all' || clean === 'fresh';
@@ -748,6 +757,7 @@ app.get(['/playlist.m3u', '/playlist.m3u8', '/playlist-all.m3u', '/playlist-all.
   const body = buildM3u({
     allMirrors,
     categoryFilter: requestCategoryFilter(req),
+    allGroup: !isFalseQuery(req.query.allgroup),
     logoUrlFor: (channelId) => rewriteStaticAssetUrl(`${hostUrl}/tv-logos/${channelId}.png`, cdnBase)
   });
 
@@ -885,6 +895,7 @@ app.get(['/tv.m3u', '/tv.m3u8', '/get.php'], async (req, res) => {
   const body = buildAutoMirrorM3u({
     hostUrl,
     categoryFilter: requestCategoryFilter(req),
+    allGroup: !isFalseQuery(req.query.allgroup),
     logoUrlFor: (channelId) => rewriteStaticAssetUrl(`${hostUrl}/tv-logos/${channelId}.png`, cdnBase)
   });
 
@@ -1556,10 +1567,7 @@ function sendAppHtml(req, res, fileName) {
 
   const prefix = req._privatePrefix || '';
   if (prefix) {
-    html = html.replace(
-      /(href|src)="\/(tv-app\.css|tv-app\.js|traffic\.css|traffic\.js|profile\.css|profile\.js|logo\.svg|logo\.png|favicon\.ico)/g,
-      `$1="${prefix}/$2`
-    );
+    html = applyPrivatePrefix(html, prefix);
     res.setHeader('Cache-Control', 'private, no-store');
   } else {
     res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=300');
@@ -1567,6 +1575,17 @@ function sendAppHtml(req, res, fileName) {
 
   html = html.replace('<head>', `<head>\n  <script>window.__BASE_PREFIX=${JSON.stringify(prefix)};</script>`);
   return res.type('html').send(html);
+}
+
+/**
+ * Rewrites every root-relative href/src (and CSS url(/...)) to the optional
+ * ACCESS_KEY prefix, so all internal links keep working behind /p/<key>/.
+ */
+function applyPrivatePrefix(html, prefix) {
+  if (!prefix) return html;
+  let out = String(html).replace(/(href|src|action)="\/(?!\/)/g, `$1="${prefix}/`);
+  out = out.replace(/url\((['"]?)\//g, `url($1${prefix}/`);
+  return out;
 }
 
 let cachedIndexHtml = null;
@@ -1580,10 +1599,8 @@ function sendConfiguratorHtml(req, res) {
     return res.type('html').send(cachedIndexHtml);
   }
   res.setHeader('Cache-Control', 'private, no-store');
-  const rewritten = cachedIndexHtml.replace(
-    /(href|src)="\/(logo\.svg|logo\.png|favicon\.ico|configure|playlist\.xspf|playlist\.m3u|live_stream_speed_benchmark\.xlsx|live_tv_1080p_audit\.xlsx)/g,
-    `$1="${prefix}/$2`
-  );
+  const rewritten = applyPrivatePrefix(cachedIndexHtml, prefix)
+    .replace('<head>', `<head>\n  <script>window.__BASE_PREFIX=${JSON.stringify(prefix)};</script>`);
   return res.type('html').send(rewritten);
 }
 

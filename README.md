@@ -217,6 +217,7 @@ https://example.com/live.m3u8
 Ha a szerveren be van állítva az `ACCESS_KEY` env (pl. `ACCESS_KEY=sajat-kulcs`), minden végpont a **`/p/<kulcs>/`** prefix alá kerül (az upstream új funkciója). Az új oldalak és a lejátszási listák is prefix-tudatosak:
 
 - `/p/<kulcs>/tv`, `/p/<kulcs>/traffic`, `/p/<kulcs>/profile` — az asset- és API-hívások automatikusan a prefixre íródnak
+- A **főoldal, a `/uj-link.html`, `/tamogatas.html` és minden belső link** is prefixelt (a generált manifest/M3U/EPG URL-ekkel együtt), így ACCESS_KEY mögött nincs 404
 - `/p/<kulcs>/tv.m3u`, `/p/<kulcs>/xmltv.php`, `/p/<kulcs>/pf/<kategóriák>/…` — a generált URL-ek is tartalmazzák a prefixet
 - `GET /api/health` prefix nélkül is elérhető (health checkhez)
 
