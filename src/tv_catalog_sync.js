@@ -14,9 +14,13 @@ const {
 } = require('./scrapers/onlinestream');
 const { ensureLoaded, mergeWithLocals, getLocalSummary, getLocalChannels, getLocalSignature } = require('./local_channels');
 
+const GIT_OWNER = String(process.env.GIT_OWNER || 'nairdam88').trim();
+const GIT_REPO = String(process.env.GIT_REPO || 'nuvio-magyar-http').trim();
+const GIT_BRANCH = String(process.env.GIT_BRANCH || 'main').trim();
+
 const DEFAULT_SOURCES = [
-  'https://raw.githubusercontent.com/Player798xy/nuvio-magyar-http/main/public/tv-channels.json',
-  'https://cdn.jsdelivr.net/gh/Player798xy/nuvio-magyar-http@main/public/tv-channels.json'
+  `https://raw.githubusercontent.com/${GIT_OWNER}/${GIT_REPO}/${GIT_BRANCH}/public/tv-channels.json`,
+  `https://cdn.jsdelivr.net/gh/${GIT_OWNER}/${GIT_REPO}@${GIT_BRANCH}/public/tv-channels.json`
 ];
 
 const FETCH_TIMEOUT_MS = 12000;

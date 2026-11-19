@@ -62,7 +62,10 @@ const DEFAULT_CONFIG = {
 };
 
 const DEFAULT_RENDER_MIGRATION_URL = '';
-const DEFAULT_CDN_PUBLIC_BASE = 'https://cdn.jsdelivr.net/gh/Player798xy/nuvio-magyar-http@main/public';
+const CDN_GIT_OWNER = String(process.env.GIT_OWNER || 'nairdam88').trim();
+const CDN_GIT_REPO = String(process.env.GIT_REPO || 'nuvio-magyar-http').trim();
+const CDN_GIT_BRANCH = String(process.env.GIT_BRANCH || 'main').trim();
+const DEFAULT_CDN_PUBLIC_BASE = `https://cdn.jsdelivr.net/gh/${CDN_GIT_OWNER}/${CDN_GIT_REPO}@${CDN_GIT_BRANCH}/public`;
 const VOD_STREAM_CACHE = new Map();
 const INFLIGHT_VOD_SCRAPES = new Map();
 const VOD_CACHE_TTL_MS = 60 * 60 * 1000;

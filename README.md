@@ -229,7 +229,7 @@ A futó szerver **12 óránként automatikusan letölti** a `public/tv-channels.
 - Új csatorna hozzáadása: `ALL_CHANNELS` szerkesztés → `npm run assets` → commit + push → a futó szerver legkésőbb 12 órán belül (vagy a következő kérésnél, ha elavult) felveszi, **újradeploy nélkül**.
 - Azonnali kényszerítés: `GET /api/tv/sync?force=1`; állapot: `GET /api/tv/sync` (forrás, utolsó sync, csatornaszám, hiba).
 - Hibatűrés: hibás/üres letöltés esetén a korábbi lista marad (a kódban lévő katalógus a visszaállítási alap), a health cache-ek automatikusan ürülnek frissítéskor.
-- A ciklus állítható: `TV_CATALOG_SYNC_MS` (alap: 12 óra), a forrás felülírható: `TV_CATALOG_URL` (vesszővel elválasztott URL lista).
+- A ciklus állítható: `TV_CATALOG_SYNC_MS` (alap: 12 óra), a forrás felülírható: `TV_CATALOG_URL` (vesszővel elválasztott URL lista). Forknál állítsd be: `GIT_OWNER`, `GIT_REPO`, `GIT_BRANCH` (alap: `nairdam88`, `nuvio-magyar-http`, `main`), a publikus hostot pedig: `PUBLIC_BASE_URL`.
 - A webes néző jobb oldali panelján látszik: `Git szinkron: aktív · 14:20 · 162 csatorna / 12h`.
 
 A letöltési/Xtream kártya a csatornalista alatt, összecsukható blokkban van (nincs jobb oldali sáv), és tartalmazza az **EPG · XMLTV** letöltést, valamint a **📋 EPG URL másolása** gombot (`<host>/xmltv.php` — ezt kell a TiviMate EPG-forrás mezőjébe illeszteni). Fejlesztői fájlok: `public/tv.html`, `public/tv-app.css`, `public/tv-app.js`, `public/traffic.*`, `public/profile.*`, `src/tv_health.js`, `src/tv_relay.js`, `src/tv_channels.js`, `src/tv_profiles.js`, `src/tv_epg.js`, `src/local_channels.js`, `src/traffic.js`, `src/xtream.js`. A Git-snapshot frissítése: `npm run assets`.

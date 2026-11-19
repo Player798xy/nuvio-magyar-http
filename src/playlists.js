@@ -6,7 +6,8 @@
 
 const { ALL_CHANNELS, ONLINESTREAM_CATEGORIES } = require('./scrapers/onlinestream');
 
-const DEFAULT_LOGO_BASE = 'https://nuvio-magyar-http.onrender.com/tv-logos';
+const DEFAULT_PUBLIC_HOST = String(process.env.PUBLIC_BASE_URL || 'https://nuvio-magyar-http.onrender.com').replace(/\/+$/, '');
+const DEFAULT_LOGO_BASE = `${DEFAULT_PUBLIC_HOST}/tv-logos`;
 // Hír TV publishes the same live feed on videa.hu, which is the most stable mirror for the channel.
 const HIRTV_MIRROR = 'https://videa.hu/static/live/8.3754346.2530409.1.0.1.1/index.m3u8';
 const DEFAULT_GROUP = 'Magyar TV';

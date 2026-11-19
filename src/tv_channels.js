@@ -8,7 +8,7 @@ const { ALL_CHANNELS, ONLINESTREAM_CATEGORIES } = require('./scrapers/onlinestre
 const { getStreamTargets } = require('./playlists');
 const { filterCategories } = require('./tv_profiles');
 
-const PUBLIC_HOST = 'https://nuvio-magyar-http.onrender.com';
+const PUBLIC_HOST = String(process.env.PUBLIC_BASE_URL || 'https://nuvio-magyar-http.onrender.com').replace(/\/+$/, '');
 
 /**
  * Artwork uses the dynamic /tv-logo|/tv-poster|/tv-background routes: they serve

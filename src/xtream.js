@@ -10,7 +10,7 @@
 const { ONLINESTREAM_CATEGORIES } = require('./scrapers/onlinestream');
 const { buildChannelPayload } = require('./tv_channels');
 
-const PUBLIC_HOST = 'https://nuvio-magyar-http.onrender.com';
+const PUBLIC_HOST = String(process.env.PUBLIC_BASE_URL || 'https://nuvio-magyar-http.onrender.com').replace(/\/+$/, '');
 const CATEGORY_INDEX = new Map(ONLINESTREAM_CATEGORIES.map((category, index) => [category.id, String(index + 1)]));
 
 let payloadCache = null;
