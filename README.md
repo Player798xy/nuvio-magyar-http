@@ -20,6 +20,31 @@ Közvetlen **Direct HTTP** magyar szinkronos és feliratos film-, sorozat-, mese
 
 ---
 
+### ▶️ Gyors indítás (ACCESS_KEY-vel)
+
+```bash
+./run.sh            # előtérben indít, ACCESS_KEY automatikusan generálva/olvasva (.access-key)
+./run.sh bg         # háttérben (PID: .run.pid, log: /tmp/nuvio-magyar-tv.log)
+./run.sh status     # fut-e + prefixelt URL-ek
+./run.sh stop       # leállítás
+./run.sh restart    # stop + bg
+./run.sh logs       # élő log
+./run.sh key        # az ACCESS_KEY és a használható URL-ek
+
+NO_ACCESS_KEY=1 ./run.sh bg   # nyilvános mód (bárki elérheti — nem ajánlott)
+```
+
+`ACCESS_KEY` használatakor minden végpont a **`/p/<kulcs>/`** prefix alatt érhető el (kivéve `/api/health`), és a playlistek is prefixelt URL-eket generálnak. A kulcs a `.access-key` fájlba kerül (gitignore-olva), így újraindítás után ugyanaz marad.
+
+TiviMate ilyenkor:
+
+```text
+Host:      http://<IP>:7000/p/<kulcs>
+User/pass: bármi
+M3U:       http://<IP>:7000/p/<kulcs>/tv.m3u
+EPG:       http://<IP>:7000/p/<kulcs>/xmltv.php
+```
+
 ## 🆕 Új eszközök és oldalak (v2.8)
 
 | Oldal / végpont | Mit tud? | Részletek |
