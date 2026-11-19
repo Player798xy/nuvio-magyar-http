@@ -14,7 +14,7 @@ const {
 } = require('./scrapers/onlinestream');
 const { ensureLoaded, mergeWithLocals, getLocalSummary, getLocalChannels, getLocalSignature } = require('./local_channels');
 
-const GIT_OWNER = String(process.env.GIT_OWNER || 'nairdam88').trim();
+const GIT_OWNER = String(process.env.GIT_OWNER || 'Player798xy').trim();
 const GIT_REPO = String(process.env.GIT_REPO || 'nuvio-magyar-http').trim();
 const GIT_BRANCH = String(process.env.GIT_BRANCH || 'main').trim();
 

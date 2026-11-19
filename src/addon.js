@@ -62,7 +62,7 @@ const DEFAULT_CONFIG = {
 };
 
 const DEFAULT_RENDER_MIGRATION_URL = '';
-const CDN_GIT_OWNER = String(process.env.GIT_OWNER || 'nairdam88').trim();
+const CDN_GIT_OWNER = String(process.env.GIT_OWNER || 'Player798xy').trim();
 const CDN_GIT_REPO = String(process.env.GIT_REPO || 'nuvio-magyar-http').trim();
 const CDN_GIT_BRANCH = String(process.env.GIT_BRANCH || 'main').trim();
 const DEFAULT_CDN_PUBLIC_BASE = `https://cdn.jsdelivr.net/gh/${CDN_GIT_OWNER}/${CDN_GIT_REPO}@${CDN_GIT_BRANCH}/public`;
